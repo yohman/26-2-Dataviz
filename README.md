@@ -7,11 +7,15 @@ and choose the repository root.
 ## Edit the course
 
 - Page content is in the root \`.html\` files.
-- The 14-week sequence, form configuration, and gallery logic are in
-  \`assets/site.js\`.
+- Each week's bilingual agenda, assignment, materials, date, suggested tools,
+  and optional image live in its own Markdown file under \`content/weeks/\`.
+  Edit that week's file only; the Agenda and homepage NEXT WEEK card load it
+  directly. See \`content/README.md\` for the field guide.
+- \`assets/site.js\` loads and renders the weekly Markdown, and contains the
+  form configuration and gallery logic.
 - Shared visual styles are in \`assets/styles.css\`.
-- Japanese interface copy is centralized in \`assets/i18n.js\`; the 14-week
-  Japanese copy lives beside its English source in \`assets/site.js\`.
+- Japanese interface copy is centralized in \`assets/i18n.js\`; each week’s
+  Japanese content is beside its English equivalent in the same Markdown file.
 
 ## Configure submissions
 
@@ -34,7 +38,7 @@ In \`assets/site.js\`, replace only these three placeholder values in
 
 - \`GOOGLE_FORM_URL\` — the form's public **viewform** URL.
 - \`GOOGLE_FORM_WEEK_ENTRY_ID\` — the Google Form field ID for the week
-  question, such as \`entry.123456789\`. Every MAKE button pre-fills it.
+  question, such as \`entry.123456789\`. Each expanded homework card pre-fills it.
 - \`GALLERY_API_URL\` — a public, read-only Apps Script web-app (or equivalent)
   JSON feed. Never put spreadsheet credentials or a private sheet URL here.
 
