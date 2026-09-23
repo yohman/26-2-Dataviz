@@ -1,73 +1,48 @@
 # 2026–2 Data Visualization
 
-Static, bilingual course site for GitHub Pages. It has no build step: upload this
-folder to a repository, then enable **Settings → Pages → Deploy from a branch**
-and choose the repository root.
+Static, bilingual course site for GitHub Pages. There is no build step: enable
+Pages for the repository root.
 
 ## Edit the course
 
-- Page content is in the root \`.html\` files.
-- Each week's bilingual agenda, assignment, materials, date, suggested tools,
-  and optional image live in its own Markdown file under \`content/weeks/\`.
-  Edit that week's file only; the Agenda and homepage NEXT WEEK card load it
-  directly. See \`content/README.md\` for the field guide.
-- \`assets/site.js\` loads and renders the weekly Markdown, and contains the
-  form configuration and gallery logic.
-- Shared visual styles are in \`assets/styles.css\`.
-- Japanese interface copy is centralized in \`assets/i18n.js\`; each week’s
-  Japanese content is beside its English equivalent in the same Markdown file.
+- Page content is in the root `.html` files.
+- Each week's bilingual agenda, assignment, materials, date, and tools live in
+  one Markdown file under `content/weeks/`. Edit that week's file only. See
+  `content/README.md` for the field guide.
+- `assets/site.js` loads the weekly Markdown and renders the Agenda, homepage
+  next-week card, and gallery.
+- Shared visual styles are in `assets/styles.css`. Static Japanese interface
+  translations are in `assets/i18n.js`.
 
-## Configure submissions
+## Weekly submissions
 
-Create one Google Form and collect at minimum:
+The Japanese Google Form collects student ID, email, name, week, title, tools,
+project link, a required image screenshot, a short explanation, and gallery
+consent. Each homework card opens the same form with its week prefilled.
 
-1. Timestamp (automatic)
-2. Student email or another stable, non-public student ID
-3. Student name
-4. Week number
-5. Challenge title
-6. Submission title
-7. Short description / what the work reveals
-8. Tools used
-9. Project URL
-10. Image URL or uploaded-image link, if available
-11. Consent to display the work publicly
+The form URL and week field are configured in `COURSE_CONFIG` in
+`assets/site.js`. Its response sheet stays private.
 
-In \`assets/site.js\`, replace only these three placeholder values in
-\`COURSE_CONFIG\`:
+## Gallery feed
 
-- \`GOOGLE_FORM_URL\` — the form's public **viewform** URL.
-- \`GOOGLE_FORM_WEEK_ENTRY_ID\` — the Google Form field ID for the week
-  question, such as \`entry.123456789\`. Each expanded homework card pre-fills it.
-- \`GALLERY_API_URL\` — a public, read-only Apps Script web-app (or equivalent)
-  JSON feed. Never put spreadsheet credentials or a private sheet URL here.
+`google-apps-script/gallery-feed.gs` is the source for a script bound to the
+private response sheet. It reads the sheet through Google's Spreadsheet service
+and makes a read-only feed for the GitHub Pages gallery. It is deployed as a
+web app running as the owner, with access for everyone. Its published `/exec`
+URL is configured as `GALLERY_API_URL` in `assets/site.js`. After editing the
+script, deploy a new version of that same web app so the URL stays stable.
 
-Until the endpoint is configured, the Gallery deliberately displays sample work.
+The script selects the newest response for each **student ID + week**, then
+checks its gallery consent. A newer private response removes an earlier public
+one. Student IDs and email addresses never leave the script. Its output has
+the public fields `week`, `challenge`, `submittedAt`, `studentName`, `title`,
+`tools`, `projectUrl`, `description`, and `imageIndex`. Screenshots load through
+a separate call only when their cards come into view. The original uploaded
+Drive files stay private, and private submissions cannot request an image.
 
-## Gallery feed contract
+The feed uses a fixed JSONP callback, `courseGalleryReceive`, because the site
+is hosted on GitHub Pages. If the feed is unavailable, the gallery shows an
+unavailable message rather than sample student work.
 
-The endpoint must return a JSON array. Each object should use these names:
-
-\`\`\`json
-{
-  "timestamp": "2026-10-13T10:00:00Z",
-  "studentId": "stable-nonpublic-id",
-  "studentName": "Aiko S.",
-  "week": 3,
-  "challenge": "Data Into Form",
-  "title": "After the Rain",
-  "description": "What the work reveals.",
-  "tools": "Tableau, Excel",
-  "projectUrl": "https://example.org/work",
-  "imageUrl": "https://example.org/thumbnail.jpg",
-  "consent": true
-}
-\`\`\`
-
-The client shows only rows with \`consent: true\`, never displays the student ID
-or email, and deduplicates records by **studentId + week**. When a student
-submits more than once, the newest valid timestamp is the one shown; older form
-rows remain intact in the spreadsheet.
-
-Use a separate Apps Script deployment that reads only the intended public
-fields. Test its URL in a private browser window before publishing the site.
+Run `node --test tests/gallery-feed.test.cjs` to check the latest-response and
+privacy rules before deploying changes to the script.

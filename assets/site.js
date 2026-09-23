@@ -2,7 +2,7 @@
 const COURSE_CONFIG = {
   GOOGLE_FORM_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSctVgkCDhtkaG8UscBrVJVteqBiCFXHCB_tlQFscdM8wU4xAg/viewform',
   GOOGLE_FORM_WEEK_ENTRY_ID: 'entry.155622460',
-  GALLERY_API_URL: 'https://script.google.com/macros/s/REPLACE_WITH_WEB_APP_ID/exec'
+  GALLERY_API_URL: 'https://script.google.com/macros/s/AKfycbyMs5EMzHkKXnHGE0LH-H4r1RnrZXYw77WiWO_vhb7gHL9ZFGzDYpJIwVhsookMCSmjsA/exec'
 };
 
 const acts = {
@@ -21,12 +21,8 @@ const weekFiles = [
 ];
 
 let weeks = [];
-
-const sampleSubmissions = [
-  { timestamp: '2026-10-13T10:00:00Z', studentId: 'demo-a', studentName: 'Aiko S.', week: 3, title: 'After the Rain', description: 'A comparison of evacuation-center capacity after severe rainfall.', tools: 'Tableau', projectUrl: '#', imageUrl: '', consent: true },
-  { timestamp: '2026-10-21T10:00:00Z', studentId: 'demo-b', studentName: 'Ren K.', week: 4, title: 'Same summary, different city', description: 'A Datasaurus-inspired look at neighborhood averages.', tools: 'Python', projectUrl: '#', imageUrl: '', consent: true },
-  { timestamp: '2026-11-11T10:00:00Z', studentId: 'demo-c', studentName: 'Mina T.', week: 7, title: 'Five minutes from shade', description: 'Walking access to cool public places in summer.', tools: 'Kepler.gl, GeoJSON', projectUrl: '#', imageUrl: '', consent: true }
-];
+let galleryItemsPromise;
+const galleryImageCache = new Map();
 
 const escapeHtml = value => String(value || '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const isJapanese = () => window.courseLanguage === 'ja';
@@ -145,7 +141,7 @@ function renderAgenda() {
     const submission = configuredFormUrl()
       ? `<div class="assignment-submit"><a class="button" target="_blank" rel="noopener" href="${formUrl(week.week, week.challenge_ja || week.challenge)}">${copy('Submit homework', '宿題を提出する')}</a></div>`
       : `<p class="assignment-note">${copy('The submission link will appear here.', '提出リンクはここに表示されます。')}</p>`;
-    html += `<details class="week" id="week-${week.week}"${week.week === focusedWeek?.week ? ' open' : ''}><summary class="week-summary"><span class="week-index"><span class="week-number">${no}</span><span class="week-date">${escapeHtml(copy(week.date, week.date_ja))}</span></span><span class="week-summary-main"><span class="week-meta"><span>${week.act}</span><span>${copy(`Week ${week.week}`, `第${week.week}週`)}</span>${status}</span><span class="week-title">${escapeHtml(copy(week.title, week.title_ja))}</span>${preview}</span><span class="week-toggle"><span class="week-toggle-closed">${copy('Open week', '週の内容を見る')}</span><span class="week-toggle-open">${copy('Close week', '週の内容を閉じる')}</span><b aria-hidden="true">↓</b></span></summary><div class="week-body">${route}<section class="week-lecture"><div class="week-section-heading"><div><p class="week-section-label">${copy('LECTURE', '講義')}</p><h3>${copy('What to expect', '今週の講義')}</h3></div><p>${copy('Start here before you begin the work.', 'まずここから始めましょう。')}</p></div><div class="week-heading"><div class="week-grid"><div><h3>${copy('WE WILL LOOK AT', '見るもの')}</h3><p>${escapeHtml(copy(week.look, week.look_ja))}</p></div><div><h3>${copy('WE WILL PRACTICE', '実践すること')}</h3><p>${escapeHtml(copy(week.learn, week.learn_ja))}</p></div></div>${media}</div><aside class="week-tools"><p>${copy('TOOLS YOU’LL USE', '使うツール')}</p><strong>${escapeHtml(copy(week.tools, week.tools_ja))}</strong></aside><div class="week-materials"><span>${copy('START HERE', 'まず開く')}</span>${materialLinks(week.materials)}</div></section><section class="week-assignments"><div class="week-assignment-heading"><div><p class="week-section-label">${copy('ASSIGNMENTS', '課題')}</p><h3>${copy('Try it together, then continue at home.', '一緒に試して、授業後に続けよう。')}</h3></div><p>${copy('The left card is for class. The right card is your next step after class.', '左のカードは授業内、右のカードは授業後の次のステップです。')}</p></div><div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p><dl class="assignment-details"><div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${copy('Visualization, title, concise explanation, and source link.', '可視化、タイトル、短い説明、出典リンク。')}</dd></div><div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}</article></div></section></div></details>`;
+    html += `<details class="week" id="week-${week.week}"${week.week === focusedWeek?.week ? ' open' : ''}><summary class="week-summary"><span class="week-index"><span class="week-number">${no}</span><span class="week-date">${escapeHtml(copy(week.date, week.date_ja))}</span></span><span class="week-summary-main"><span class="week-meta"><span>${week.act}</span><span>${copy(`Week ${week.week}`, `第${week.week}週`)}</span>${status}</span><span class="week-title">${escapeHtml(copy(week.title, week.title_ja))}</span>${preview}</span><span class="week-toggle"><span class="week-toggle-closed">${copy('Open week', '週の内容を見る')}</span><span class="week-toggle-open">${copy('Close week', '週の内容を閉じる')}</span><b aria-hidden="true">↓</b></span></summary><div class="week-body">${route}<section class="week-lecture"><div class="week-section-heading"><div><p class="week-section-label">${copy('LECTURE', '講義')}</p><h3>${copy('What to expect', '今週の講義')}</h3></div><p>${copy('Start here before you begin the work.', 'まずここから始めましょう。')}</p></div><div class="week-heading"><div class="week-grid"><div><h3>${copy('WE WILL LOOK AT', '見るもの')}</h3><p>${escapeHtml(copy(week.look, week.look_ja))}</p></div><div><h3>${copy('WE WILL PRACTICE', '実践すること')}</h3><p>${escapeHtml(copy(week.learn, week.learn_ja))}</p></div></div>${media}</div><aside class="week-tools"><p>${copy('TOOLS YOU’LL USE', '使うツール')}</p><strong>${escapeHtml(copy(week.tools, week.tools_ja))}</strong></aside><div class="week-materials"><span>${copy('START HERE', 'まず開く')}</span>${materialLinks(week.materials)}</div></section><section class="week-assignments"><div class="week-assignment-heading"><div><p class="week-section-label">${copy('ASSIGNMENTS', '課題')}</p><h3>${copy('Try it together, then continue at home.', '一緒に試して、授業後に続けよう。')}</h3></div><p>${copy('The left card is for class. The right card is your next step after class.', '左のカードは授業内、右のカードは授業後の次のステップです。')}</p></div><div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p><dl class="assignment-details"><div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${copy('Visualization, title, concise explanation, project link, and one screenshot.', '可視化、タイトル、短い説明、作品リンク、スクリーンショット1枚。')}</dd></div><div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}</article></div></section></div></details>`;
     if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
   });
   root.innerHTML = html;
@@ -176,46 +172,73 @@ function renderHome() {
   root.innerHTML = `<p class="eyebrow">${copy('NEXT WEEK', '次の週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(next.challenge, next.challenge_ja))}</h2><p>${escapeHtml(copy(next.homework, next.homework_ja))}</p><a href="agenda.html#week-${next.week}">${copy('Open this week →', 'この週を開く →')}</a>`;
 }
 
-function normalizeSubmission(item) {
-  return { ...item, week: Number(item.week), consent: item.consent === true || String(item.consent).toLowerCase() === 'true' };
-}
-
-function latestPublic(rows) {
-  const latest = new Map();
-  rows.map(normalizeSubmission).filter(item => item.consent && item.studentId && item.week).forEach(item => {
-    const key = `${item.studentId}-${item.week}`;
-    const previous = latest.get(key);
-    if (!previous || new Date(item.timestamp) > new Date(previous.timestamp)) latest.set(key, item);
-  });
-  return [...latest.values()];
-}
-
 function option(value, label) { const item = document.createElement('option'); item.value = value; item.textContent = label; return item; }
 function safeUrl(value) {
-  if (value === '#') return '#';
   try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) ? url.href : ''; } catch { return ''; }
 }
 function element(tag, text, className) { const node = document.createElement(tag); if (text) node.textContent = text; if (className) node.className = className; return node; }
+
+function loadGalleryItems() {
+  if (!galleryItemsPromise) galleryItemsPromise = new Promise((resolve, reject) => {
+    if (COURSE_CONFIG.GALLERY_API_URL.includes('REPLACE')) return reject(new Error('Gallery feed is not configured'));
+    const script = document.createElement('script');
+    const timer = setTimeout(() => finish(new Error('Gallery feed timed out')), 15000);
+    function finish(error, payload) {
+      clearTimeout(timer);
+      script.remove();
+      delete window.courseGalleryReceive;
+      if (error || !Array.isArray(payload?.items)) reject(error || new Error('Invalid gallery data'));
+      else resolve(payload.items);
+    }
+    window.courseGalleryReceive = payload => finish(null, payload);
+    script.onerror = () => finish(new Error('Gallery feed unavailable'));
+    script.src = `${COURSE_CONFIG.GALLERY_API_URL}?callback=courseGalleryReceive`;
+    document.head.append(script);
+  }).catch(error => { galleryItemsPromise = null; throw error; });
+  return galleryItemsPromise;
+}
+
+function loadGalleryImage(index) {
+  if (!Number.isInteger(index) || index < 0) return Promise.resolve('');
+  if (galleryImageCache.has(index)) return galleryImageCache.get(index);
+  const promise = new Promise((resolve, reject) => {
+    const callback = `courseGalleryImageReceive_${index}`;
+    const script = document.createElement('script');
+    const timer = setTimeout(() => finish(new Error('Screenshot timed out')), 20000);
+    function finish(error, payload) {
+      clearTimeout(timer);
+      script.remove();
+      delete window[callback];
+      if (error || payload?.index !== index) reject(error || new Error('Invalid screenshot'));
+      else resolve(payload.data || '');
+    }
+    window[callback] = payload => finish(null, payload);
+    script.onerror = () => finish(new Error('Screenshot unavailable'));
+    script.src = `${COURSE_CONFIG.GALLERY_API_URL}?image=${index}&callback=${callback}`;
+    document.head.append(script);
+  }).catch(() => { galleryImageCache.delete(index); return ''; });
+  galleryImageCache.set(index, promise);
+  if (galleryImageCache.size > 24) galleryImageCache.delete(galleryImageCache.keys().next().value);
+  return promise;
+}
 
 async function renderGallery() {
   const root = document.querySelector('[data-gallery]');
   if (!root || root.dataset.rendering === 'true') return;
   root.dataset.rendering = 'true';
   const status = document.querySelector('[data-gallery-status]');
-  let items = sampleSubmissions;
   status.textContent = copy('Loading student work…', '学生作品を読み込んでいます…');
+  let items;
   try {
-    if (!COURSE_CONFIG.GALLERY_API_URL.includes('REPLACE')) {
-      const response = await fetch(COURSE_CONFIG.GALLERY_API_URL);
-      if (!response.ok) throw new Error('Endpoint unavailable');
-      items = await response.json();
-      status.textContent = copy('Latest public student work.', '最新の公開許可済み学生作品。');
-    } else status.textContent = copy('Demo gallery: connect the read-only endpoint to show this semester’s work.', 'デモギャラリー：この学期の作品を表示するには読み取り専用エンドポイントを接続してください。');
+    items = await loadGalleryItems();
+    status.textContent = copy(`${items.length} latest public works.`, `最新の公開作品 ${items.length} 点。`);
   } catch {
-    status.textContent = copy('Gallery endpoint unavailable. Showing demo work.', 'ギャラリーのエンドポイントに接続できません。デモ作品を表示しています。');
+    status.textContent = copy('Student work could not be loaded. Please try again shortly.', '学生作品を読み込めませんでした。少し待ってからもう一度お試しください。');
+    root.replaceChildren();
+    root.dataset.rendering = '';
+    return;
   }
   root.dataset.rendering = '';
-  items = latestPublic(Array.isArray(items) ? items : []);
   const controls = document.querySelector('[data-gallery-filters]');
   controls.replaceChildren();
   const filters = [
@@ -231,26 +254,45 @@ async function renderGallery() {
     values.forEach(([value, text]) => select.append(option(value, text)));
     wrapper.append(select); controls.append(wrapper); selects[name] = select;
   });
+  let imageObserver;
   function paint() {
+    imageObserver?.disconnect();
     const shown = items.filter(item => (selects.week.value === 'all' || String(item.week) === selects.week.value)
       && (selects.challenge.value === 'all' || String(item.week) === selects.challenge.value)
       && (selects.tool.value === 'all' || String(item.tools).split(',').map(tool => tool.trim()).includes(selects.tool.value))
       && (selects.act.value === 'all' || actForWeek(item.week) === selects.act.value));
     root.replaceChildren();
     if (!shown.length) { root.append(element('p', copy('No public submissions match these filters yet.', 'このフィルターに一致する公開作品はまだありません。'), 'gallery-status')); return; }
-    shown.forEach(item => {
+    const showImage = async (placeholder, item) => {
+      const data = await loadGalleryImage(Number(item.imageIndex));
+      if (!placeholder.isConnected) return;
+      if (/^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(data)) {
+        const image = document.createElement('img'); image.src = data;
+        image.alt = copy(`Screenshot of ${item.title || 'student work'}`, `${item.title || '学生作品'}のスクリーンショット`);
+        image.loading = 'lazy'; placeholder.replaceWith(image);
+      } else placeholder.textContent = copy('Screenshot unavailable', '画像を表示できません');
+    };
+    if ('IntersectionObserver' in window) imageObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      imageObserver.unobserve(entry.target);
+      showImage(entry.target, shown[Number(entry.target.dataset.itemIndex)]);
+    }), { rootMargin: '400px' });
+    shown.forEach((item, index) => {
       const card = element('article', '', 'gallery-card'); card.dataset.week = item.week; card.dataset.act = actForWeek(item.week);
-      const imageUrl = safeUrl(item.imageUrl);
-      if (imageUrl) { const image = document.createElement('img'); image.src = imageUrl; image.alt = `${item.title || challengeForWeek(item.week)} student visualization`; card.append(image); }
-      else card.append(element('div', '', 'gallery-placeholder'));
-      card.append(element('p', `${copy(`WEEK ${item.week}`, `第${item.week}週`)} · ${challengeForWeek(item.week)}`, 'meta'));
+      const placeholder = element('div', copy('Loading screenshot…', '画像を読み込んでいます…'), 'gallery-placeholder');
+      placeholder.dataset.itemIndex = index; card.append(placeholder);
+      const weekLink = element('a', `${copy(`WEEK ${item.week}`, `第${item.week}週`)} · ${challengeForWeek(item.week)}`, 'meta');
+      weekLink.href = `agenda.html#week-${item.week}`; card.append(weekLink);
       card.append(element('h2', item.title || copy('Untitled work', '無題の作品')));
       card.append(element('p', item.studentName || copy('Student', '学生')));
       card.append(element('p', item.description || ''));
       card.append(element('p', `${copy('Tools:', 'ツール:')} ${item.tools || '—'}`));
+      if (item.submittedAt) card.append(element('p', `${copy('Submitted:', '提出日:')} ${item.submittedAt}`, 'gallery-date'));
       const projectUrl = safeUrl(item.projectUrl);
       if (projectUrl) { const link = element('a', copy('Open work ↗', '作品を開く ↗')); link.href = projectUrl; link.target = '_blank'; link.rel = 'noopener'; card.append(link); }
       root.append(card);
+      if (imageObserver) imageObserver.observe(placeholder);
+      else showImage(placeholder, item);
     });
   }
   Object.values(selects).forEach(select => select.addEventListener('change', paint));
