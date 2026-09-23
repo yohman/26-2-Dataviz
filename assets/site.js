@@ -28,7 +28,7 @@ const escapeHtml = value => String(value || '').replace(/[&<>"']/g, char => ({ '
 const isJapanese = () => window.courseLanguage === 'ja';
 const copy = (english, japanese) => isJapanese() ? japanese : english;
 const weekFor = number => weeks.find(week => week.week === Number(number));
-const actForWeek = number => weekFor(number)?.act || '';
+const actForWeek = number => weekFor(number)?.act || (number <= 2 ? 'SEE' : number <= 7 ? 'MAKE' : number <= 12 ? 'QUESTION' : 'REVEAL');
 const challengeForWeek = number => {
   const week = weekFor(number);
   return week ? copy(week.challenge, week.challenge_ja) : '';
@@ -112,6 +112,7 @@ function setupShell() {
     languageButton.setAttribute('aria-label', language === 'ja' ? 'Switch to English' : '日本語に切り替える');
     try { localStorage.setItem('dv-language', language); } catch { /* Storage may be blocked. */ }
     if (weeks.length) renderCourse();
+    if (document.querySelector('[data-gallery]')) renderGallery();
   }
 
   let language = 'en';
@@ -178,12 +179,14 @@ function safeUrl(value) {
 }
 function element(tag, text, className) { const node = document.createElement(tag); if (text) node.textContent = text; if (className) node.className = className; return node; }
 
-function loadGalleryItems() {
-  if (!galleryItemsPromise) galleryItemsPromise = new Promise((resolve, reject) => {
-    if (COURSE_CONFIG.GALLERY_API_URL.includes('REPLACE')) return reject(new Error('Gallery feed is not configured'));
+function requestGalleryItems() {
+  return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    const timer = setTimeout(() => finish(new Error('Gallery feed timed out')), 15000);
+    let settled = false;
+    const timer = setTimeout(() => finish(new Error('Gallery feed timed out')), 12000);
     function finish(error, payload) {
+      if (settled) return;
+      settled = true;
       clearTimeout(timer);
       script.remove();
       delete window.courseGalleryReceive;
@@ -194,18 +197,32 @@ function loadGalleryItems() {
     script.onerror = () => finish(new Error('Gallery feed unavailable'));
     script.src = `${COURSE_CONFIG.GALLERY_API_URL}?callback=courseGalleryReceive`;
     document.head.append(script);
-  }).catch(error => { galleryItemsPromise = null; throw error; });
+  });
+}
+
+function loadGalleryItems() {
+  if (!galleryItemsPromise) galleryItemsPromise = (async () => {
+    if (COURSE_CONFIG.GALLERY_API_URL.includes('REPLACE')) throw new Error('Gallery feed is not configured');
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try { return await requestGalleryItems(); }
+      catch (error) {
+        if (attempt === 2) throw error;
+        await new Promise(resolve => setTimeout(resolve, 300 * (attempt + 1)));
+      }
+    }
+  })().catch(error => { galleryItemsPromise = null; throw error; });
   return galleryItemsPromise;
 }
 
-function loadGalleryImage(index) {
-  if (!Number.isInteger(index) || index < 0) return Promise.resolve('');
-  if (galleryImageCache.has(index)) return galleryImageCache.get(index);
-  const promise = new Promise((resolve, reject) => {
+function requestGalleryImage(index) {
+  return new Promise((resolve, reject) => {
     const callback = `courseGalleryImageReceive_${index}`;
     const script = document.createElement('script');
-    const timer = setTimeout(() => finish(new Error('Screenshot timed out')), 20000);
+    let settled = false;
+    const timer = setTimeout(() => finish(new Error('Screenshot timed out')), 15000);
     function finish(error, payload) {
+      if (settled) return;
+      settled = true;
       clearTimeout(timer);
       script.remove();
       delete window[callback];
@@ -216,7 +233,27 @@ function loadGalleryImage(index) {
     script.onerror = () => finish(new Error('Screenshot unavailable'));
     script.src = `${COURSE_CONFIG.GALLERY_API_URL}?image=${index}&callback=${callback}`;
     document.head.append(script);
-  }).catch(() => { galleryImageCache.delete(index); return ''; });
+  });
+}
+
+function loadGalleryImage(index) {
+  if (!Number.isInteger(index) || index < 0) return Promise.resolve('');
+  if (galleryImageCache.has(index)) return galleryImageCache.get(index);
+  const promise = (async () => {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const data = await requestGalleryImage(index);
+        if (data) return data;
+      } catch (error) {
+        if (attempt === 2) console.error('Gallery screenshot:', error);
+      }
+      if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 300 * (attempt + 1)));
+    }
+    return '';
+  })().then(data => {
+    if (!data) galleryImageCache.delete(index);
+    return data;
+  });
   galleryImageCache.set(index, promise);
   if (galleryImageCache.size > 24) galleryImageCache.delete(galleryImageCache.keys().next().value);
   return promise;
@@ -232,18 +269,23 @@ async function renderGallery() {
   try {
     items = await loadGalleryItems();
     status.textContent = copy(`${items.length} latest public works.`, `最新の公開作品 ${items.length} 点。`);
-  } catch {
-    status.textContent = copy('Student work could not be loaded. Please try again shortly.', '学生作品を読み込めませんでした。少し待ってからもう一度お試しください。');
+  } catch (error) {
+    status.replaceChildren(element('span', copy('Student work is temporarily unavailable. ', '学生作品を読み込めませんでした。')));
+    const retry = element('button', copy('Try again', '再読み込み'), 'gallery-retry');
+    retry.type = 'button';
+    retry.addEventListener('click', renderGallery);
+    status.append(retry);
     root.replaceChildren();
     root.dataset.rendering = '';
+    console.error('Gallery feed:', error);
     return;
   }
   root.dataset.rendering = '';
   const controls = document.querySelector('[data-gallery-filters]');
   controls.replaceChildren();
   const filters = [
-    ['week', copy('Week', '週'), [['all', copy('All weeks', 'すべての週')], ...weeks.map(week => [String(week.week), copy(`Week ${week.week}`, `第${week.week}週`)])]],
-    ['challenge', copy('Challenge', '課題'), [['all', copy('All challenges', 'すべての課題')], ...weeks.map(week => [String(week.week), copy(week.title, week.title_ja)])]],
+    ['week', copy('Week', '週'), [['all', copy('All weeks', 'すべての週')], ...Array.from({ length: 14 }, (_, index) => [String(index + 1), copy(`Week ${index + 1}`, `第${index + 1}週`)])]],
+    ['challenge', copy('Challenge', '課題'), [['all', copy('All challenges', 'すべての課題')], ...[...new Map(items.map(item => [item.week, item.challenge])).entries()].sort((a, b) => a[0] - b[0]).map(([week, challenge]) => [String(week), challenge])]],
     ['tool', copy('Tool', 'ツール'), [['all', copy('All tools', 'すべてのツール')], ...[...new Set(items.flatMap(item => String(item.tools || '').split(',').map(tool => tool.trim()).filter(Boolean)))].sort().map(tool => [tool, tool])]],
     ['act', copy('Course act', '授業の段階'), [['all', copy('All acts', 'すべての段階')], ...Object.keys(acts).map(act => [act, act])]]
   ];
@@ -270,7 +312,17 @@ async function renderGallery() {
         const image = document.createElement('img'); image.src = data;
         image.alt = copy(`Screenshot of ${item.title || 'student work'}`, `${item.title || '学生作品'}のスクリーンショット`);
         image.loading = 'lazy'; placeholder.replaceWith(image);
-      } else placeholder.textContent = copy('Screenshot unavailable', '画像を表示できません');
+      } else {
+        placeholder.replaceChildren(element('span', copy('Screenshot unavailable. ', '画像を表示できません。')));
+        const retry = element('button', copy('Try again', '再読み込み'), 'gallery-retry');
+        retry.type = 'button';
+        retry.addEventListener('click', () => {
+          retry.remove();
+          placeholder.firstChild.textContent = copy('Loading screenshot…', '画像を読み込んでいます…');
+          showImage(placeholder, item);
+        });
+        placeholder.append(retry);
+      }
     };
     if ('IntersectionObserver' in window) imageObserver = new IntersectionObserver(entries => entries.forEach(entry => {
       if (!entry.isIntersecting) return;
@@ -281,7 +333,7 @@ async function renderGallery() {
       const card = element('article', '', 'gallery-card'); card.dataset.week = item.week; card.dataset.act = actForWeek(item.week);
       const placeholder = element('div', copy('Loading screenshot…', '画像を読み込んでいます…'), 'gallery-placeholder');
       placeholder.dataset.itemIndex = index; card.append(placeholder);
-      const weekLink = element('a', `${copy(`WEEK ${item.week}`, `第${item.week}週`)} · ${challengeForWeek(item.week)}`, 'meta');
+      const weekLink = element('a', `${copy(`WEEK ${item.week}`, `第${item.week}週`)} · ${challengeForWeek(item.week) || String(item.challenge || '').replace(/^第\d+週｜/, '')}`, 'meta');
       weekLink.href = `agenda.html#week-${item.week}`; card.append(weekLink);
       card.append(element('h2', item.title || copy('Untitled work', '無題の作品')));
       card.append(element('p', item.studentName || copy('Student', '学生')));
@@ -302,11 +354,10 @@ async function renderGallery() {
 function renderCourse() {
   renderAgenda();
   renderHome();
-  renderGallery();
 }
 
 async function loadWeeks() {
-  if (!document.querySelector('[data-agenda], [data-gallery], [data-next-week]')) return;
+  if (!document.querySelector('[data-agenda], [data-next-week]')) return;
   document.querySelectorAll('[data-agenda]').forEach(root => {
     root.innerHTML = `<p class="gallery-status">${copy('Loading course content…', '授業内容を読み込んでいます…')}</p>`;
   });
