@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 
 const feed = 'https://script.google.com/macros/s/AKfycbyMs5EMzHkKXnHGE0LH-H4r1RnrZXYw77WiWO_vhb7gHL9ZFGzDYpJIwVhsookMCSmjsA/exec';
@@ -46,5 +46,13 @@ for (const original of payload.items) {
   item.imageUrl = `assets/gallery/${filename}`;
   items.push(item);
 }
-await writeFile(join(root, 'data/gallery-public.json'), JSON.stringify({ generatedAt: new Date().toISOString(), items }));
+const snapshot = JSON.stringify({ generatedAt: new Date().toISOString(), items });
+await writeFile(join(root, 'data/gallery-public.json'), snapshot);
+const galleryPath = join(root, 'gallery.html');
+const gallery = await readFile(galleryPath, 'utf8');
+const marker = '<script id="gallery-snapshot" type="application/json"></script>';
+if (!gallery.includes(marker)) throw new Error('Gallery page is missing its snapshot placeholder');
+const inline = snapshot.replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
+const preloads = items.slice(0, 3).map(item => `<link rel="preload" as="image" href="${item.imageUrl}">`).join('');
+await writeFile(galleryPath, gallery.replace(marker, `${preloads}<script id="gallery-snapshot" type="application/json">${inline}</script>`));
 console.log(`Published ${items.length} gallery works without IDs or email addresses.`);

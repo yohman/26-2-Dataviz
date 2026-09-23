@@ -268,9 +268,13 @@ async function renderGallery() {
   let items;
   let snapshot;
   try {
-    const response = await fetch(`data/gallery-public.json?t=${Date.now()}`, { cache: 'no-store' });
-    if (!response.ok) throw new Error(`Gallery snapshot HTTP ${response.status}`);
-    snapshot = await response.json();
+    const embedded = document.querySelector('#gallery-snapshot')?.textContent.trim();
+    if (embedded) snapshot = JSON.parse(embedded);
+    else {
+      const response = await fetch('data/gallery-public.json', { cache: 'default' });
+      if (!response.ok) throw new Error(`Gallery snapshot HTTP ${response.status}`);
+      snapshot = await response.json();
+    }
     if (!Array.isArray(snapshot.items)) throw new Error('Invalid gallery snapshot');
     items = snapshot.items;
     status.textContent = copy(`${items.length} works · refreshed about every 5–10 minutes.`, `${items.length} 点の作品 · 約5〜10分ごとに更新。`);
