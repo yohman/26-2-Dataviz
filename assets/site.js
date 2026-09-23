@@ -1,7 +1,7 @@
 /* Weekly teaching content is edited in content/weeks/*.md. */
 const COURSE_CONFIG = {
-  GOOGLE_FORM_URL: 'https://docs.google.com/forms/d/e/REPLACE_WITH_FORM_ID/viewform',
-  GOOGLE_FORM_WEEK_ENTRY_ID: 'entry.REPLACE_WITH_WEEK_FIELD_ID',
+  GOOGLE_FORM_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSctVgkCDhtkaG8UscBrVJVteqBiCFXHCB_tlQFscdM8wU4xAg/viewform',
+  GOOGLE_FORM_WEEK_ENTRY_ID: 'entry.155622460',
   GALLERY_API_URL: 'https://script.google.com/macros/s/REPLACE_WITH_WEB_APP_ID/exec'
 };
 
@@ -143,7 +143,7 @@ function renderAgenda() {
     const route = `<section class="week-route" aria-label="${copy('This week at a glance', '今週の流れ')}"><div><span>01</span><p><b>${copy('LECTURE', '講義')}</b><small>${copy('Look and learn', '見る・学ぶ')}</small></p></div><div><span>02</span><p><b>${copy('TOOLS', 'ツール')}</b><small>${escapeHtml(copy(week.tools, week.tools_ja))}</small></p></div><div><span>03</span><p><b>${copy('IN CLASS', '授業内')}</b><small>${copy('Try it together', '一緒に試す')}</small></p></div><div><span>04</span><p><b>${copy('HOMEWORK', '宿題')}</b><small>${copy('Continue after class', '授業後に続ける')}</small></p></div></section>`;
     const inClass = week.in_class ? `<article class="assignment-card assignment-card--in-class"><p class="assignment-label">${copy('IN CLASS', '授業内課題')}</p><h4>${copy('Try it with the class', 'クラスで試す')}</h4><p>${escapeHtml(copy(week.in_class, week.in_class_ja))}</p></article>` : '';
     const submission = configuredFormUrl()
-      ? `<div class="assignment-submit"><a class="button" target="_blank" rel="noopener" href="${formUrl(week.week, week.challenge)}">${copy('Submit homework', '宿題を提出する')}</a></div>`
+      ? `<div class="assignment-submit"><a class="button" target="_blank" rel="noopener" href="${formUrl(week.week, week.challenge_ja || week.challenge)}">${copy('Submit homework', '宿題を提出する')}</a></div>`
       : `<p class="assignment-note">${copy('The submission link will appear here.', '提出リンクはここに表示されます。')}</p>`;
     html += `<details class="week" id="week-${week.week}"${week.week === focusedWeek?.week ? ' open' : ''}><summary class="week-summary"><span class="week-index"><span class="week-number">${no}</span><span class="week-date">${escapeHtml(copy(week.date, week.date_ja))}</span></span><span class="week-summary-main"><span class="week-meta"><span>${week.act}</span><span>${copy(`Week ${week.week}`, `第${week.week}週`)}</span>${status}</span><span class="week-title">${escapeHtml(copy(week.title, week.title_ja))}</span>${preview}</span><span class="week-toggle"><span class="week-toggle-closed">${copy('Open week', '週の内容を見る')}</span><span class="week-toggle-open">${copy('Close week', '週の内容を閉じる')}</span><b aria-hidden="true">↓</b></span></summary><div class="week-body">${route}<section class="week-lecture"><div class="week-section-heading"><div><p class="week-section-label">${copy('LECTURE', '講義')}</p><h3>${copy('What to expect', '今週の講義')}</h3></div><p>${copy('Start here before you begin the work.', 'まずここから始めましょう。')}</p></div><div class="week-heading"><div class="week-grid"><div><h3>${copy('WE WILL LOOK AT', '見るもの')}</h3><p>${escapeHtml(copy(week.look, week.look_ja))}</p></div><div><h3>${copy('WE WILL PRACTICE', '実践すること')}</h3><p>${escapeHtml(copy(week.learn, week.learn_ja))}</p></div></div>${media}</div><aside class="week-tools"><p>${copy('TOOLS YOU’LL USE', '使うツール')}</p><strong>${escapeHtml(copy(week.tools, week.tools_ja))}</strong></aside><div class="week-materials"><span>${copy('START HERE', 'まず開く')}</span>${materialLinks(week.materials)}</div></section><section class="week-assignments"><div class="week-assignment-heading"><div><p class="week-section-label">${copy('ASSIGNMENTS', '課題')}</p><h3>${copy('Try it together, then continue at home.', '一緒に試して、授業後に続けよう。')}</h3></div><p>${copy('The left card is for class. The right card is your next step after class.', '左のカードは授業内、右のカードは授業後の次のステップです。')}</p></div><div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p><dl class="assignment-details"><div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${copy('Visualization, title, concise explanation, and source link.', '可視化、タイトル、短い説明、出典リンク。')}</dd></div><div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}</article></div></section></div></details>`;
     if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
@@ -155,9 +155,9 @@ function configuredFormUrl() {
   return /^https:\/\/docs\.google\.com\/forms\//.test(COURSE_CONFIG.GOOGLE_FORM_URL) && !COURSE_CONFIG.GOOGLE_FORM_URL.includes('REPLACE');
 }
 
-function formUrl(week, challenge) {
+function formUrl(week, challengeJa) {
   const params = new URLSearchParams();
-  params.set(COURSE_CONFIG.GOOGLE_FORM_WEEK_ENTRY_ID, `Week ${week}: ${challenge}`);
+  params.set(COURSE_CONFIG.GOOGLE_FORM_WEEK_ENTRY_ID, `第${week}週｜${challengeJa}`);
   return `${COURSE_CONFIG.GOOGLE_FORM_URL}?usp=pp_url&${params}`;
 }
 
