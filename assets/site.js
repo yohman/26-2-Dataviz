@@ -266,19 +266,30 @@ async function renderGallery() {
   const status = document.querySelector('[data-gallery-status]');
   status.textContent = copy('Loading student work…', '学生作品を読み込んでいます…');
   let items;
+  let snapshot;
   try {
-    items = await loadGalleryItems();
-    status.textContent = copy(`${items.length} latest public works.`, `最新の公開作品 ${items.length} 点。`);
+    const response = await fetch(`data/gallery-public.json?t=${Date.now()}`, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`Gallery snapshot HTTP ${response.status}`);
+    snapshot = await response.json();
+    if (!Array.isArray(snapshot.items)) throw new Error('Invalid gallery snapshot');
+    items = snapshot.items;
+    status.textContent = copy(`${items.length} works · refreshed about every 5–10 minutes.`, `${items.length} 点の作品 · 約5〜10分ごとに更新。`);
   } catch (error) {
-    status.replaceChildren(element('span', copy('Student work is temporarily unavailable. ', '学生作品を読み込めませんでした。')));
-    const retry = element('button', copy('Try again', '再読み込み'), 'gallery-retry');
-    retry.type = 'button';
-    retry.addEventListener('click', renderGallery);
-    status.append(retry);
-    root.replaceChildren();
-    root.dataset.rendering = '';
-    console.error('Gallery feed:', error);
-    return;
+    console.warn('Gallery snapshot:', error);
+    try {
+      items = await loadGalleryItems();
+      status.textContent = copy(`${items.length} latest works.`, `最新の作品 ${items.length} 点。`);
+    } catch (feedError) {
+      status.replaceChildren(element('span', copy('Student work is temporarily unavailable. ', '学生作品を読み込めませんでした。')));
+      const retry = element('button', copy('Try again', '再読み込み'), 'gallery-retry');
+      retry.type = 'button';
+      retry.addEventListener('click', renderGallery);
+      status.append(retry);
+      root.replaceChildren();
+      root.dataset.rendering = '';
+      console.error('Gallery feed:', feedError);
+      return;
+    }
   }
   root.dataset.rendering = '';
   const controls = document.querySelector('[data-gallery-filters]');
@@ -306,9 +317,9 @@ async function renderGallery() {
     root.replaceChildren();
     if (!shown.length) { root.append(element('p', copy('No public submissions match these filters yet.', 'このフィルターに一致する公開作品はまだありません。'), 'gallery-status')); return; }
     const showImage = async (placeholder, item) => {
-      const data = await loadGalleryImage(Number(item.imageIndex));
+      const data = item.imageUrl || await loadGalleryImage(Number(item.imageIndex));
       if (!placeholder.isConnected) return;
-      if (/^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(data)) {
+      if (/^assets\/gallery\/[a-f0-9]{24}\.(?:png|jpg|webp|gif)$/.test(data) || /^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(data)) {
         const image = document.createElement('img'); image.src = data;
         image.alt = copy(`Screenshot of ${item.title || 'student work'}`, `${item.title || '学生作品'}のスクリーンショット`);
         image.loading = 'lazy'; placeholder.replaceWith(image);
