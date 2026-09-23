@@ -17,8 +17,10 @@ Pages for the repository root.
 ## Weekly submissions
 
 The Japanese Google Form collects student ID, email, name, week, title, tools,
-project link, a required image screenshot, a short explanation, and gallery
-consent. Each homework card opens the same form with its week prefilled.
+project link, a required image screenshot, and a short explanation. It tells
+students that their names and work appear in the gallery, while IDs and email
+addresses stay private. Each homework card opens the same form with its week
+prefilled.
 
 The form URL and week field are configured in `COURSE_CONFIG` in
 `assets/site.js`. Its response sheet stays private.
@@ -32,13 +34,14 @@ web app running as the owner, with access for everyone. Its published `/exec`
 URL is configured as `GALLERY_API_URL` in `assets/site.js`. After editing the
 script, deploy a new version of that same web app so the URL stays stable.
 
-The script selects the newest response for each **student ID + week**, then
-checks its gallery consent. A newer private response removes an earlier public
-one. Student IDs and email addresses never leave the script. Its output has
+The script selects the newest response for each **student ID + week**. Students
+can resubmit; the latest submission replaces the earlier one in the gallery.
+Student IDs and email addresses never leave the script. Its output has
 the public fields `week`, `challenge`, `submittedAt`, `studentName`, `title`,
 `tools`, `projectUrl`, `description`, and `imageIndex`. Screenshots load through
 a separate call only when their cards come into view. The original uploaded
-Drive files stay private, and private submissions cannot request an image.
+Drive files stay private, and images from superseded submissions cannot be
+requested through the feed.
 
 The feed uses a fixed JSONP callback, `courseGalleryReceive`, because the site
 is hosted on GitHub Pages. If the feed is unavailable, the gallery shows an

@@ -33,7 +33,6 @@ window.COURSE_TRANSLATIONS = { ja: {
 
   'MAKE a claim visible.': '主張を見えるようにする。',
   'Small individual visualizations accumulate into sharper questions, shared critique, and a final public argument. Submit the newest version for each week; it is the one that counts.': '個人の小さな可視化は、より鋭い問い、共有する講評、最後の公共的な主張へと積み重なります。毎週、最新版を提出してください。それが評価対象になります。',
-  'A submission includes: stable student ID or email, name, week, challenge, title, what it reveals, tools, project URL, image link when possible, and consent for public display.': '提出には、固定の学生IDまたはメール、氏名、週、課題、タイトル、明らかにすること、ツール、作品URL、可能なら画像リンク、公開同意を含めます。',
 
   'Visual vocabulary': '視覚の語彙', 'Borrow with your eyes open.': 'よく見て、借りる。',
   'An atlas is a field of references: not templates to copy, but choices to notice, test, credit, and transform.': 'アトラスは参考事例のフィールドです。コピーするテンプレートではなく、気づき、試し、クレジットし、変えるべき選択を集めます。',
@@ -45,7 +44,6 @@ window.COURSE_TRANSLATIONS = { ja: {
   'The final project is a clear, responsible visualization of a shared question: public enough to inspect, specific enough to challenge.': '最終プロジェクトは、共有する問いを明瞭かつ責任をもって可視化するものです。人が検証でき、議論できる具体性を持たせます。',
   'EXHIBITION CHECKLIST': '展示チェックリスト', 'Before the room opens.': '会場を開く前に。',
   'Accumulating student work': '積み重なる学生作品', 'A distribution of ways to see.': '見る方法の分布。',
-  'This gallery grows throughout the semester. It shows the latest public submission for each student and weekly challenge, never private email addresses.': 'このギャラリーは学期を通して育ちます。学生ごとの各週の課題について、公開が許可された最新提出だけを表示し、非公開のメールアドレスは表示しません。',
 
   'Read, view, test': '読む、見る、試す', 'References for a more critical eye.': 'より批判的な目のための資料。',
   'Use each source to sharpen a visual decision, not to decorate a bibliography.': '参考文献を飾るためではなく、視覚的な判断を鋭くするために、それぞれの資料を使いましょう。',
@@ -106,7 +104,6 @@ Object.assign(window.COURSE_TRANSLATIONS.ja, {
   'Brief': '課題', 'Deliverables': '提出物', 'Suggested tools': 'おすすめのツール',
   'Submission': '提出', 'Start here': 'ここから始める',
   'Visualization, title, concise explanation, and source link.': '可視化、タイトル、短い説明、出典リンク。',
-  'Title, what it reveals, tools, project URL, image link, and public-display consent.': 'タイトル、明らかにすること、ツール、作品URL、画像リンク、公開同意。',
   'Submit this assignment': 'このMAKEを提出する',
 
   'Start here. Open this week’s agenda to find the lecture, in-class work, homework, and materials together.': 'ここから始めましょう。今週のAGENDAを開くと、講義、授業内課題、宿題、資料をまとめて確認できます。',
@@ -120,8 +117,8 @@ Object.assign(window.COURSE_TRANSLATIONS.ja, {
   'Your weekly work': '毎週の課題は', 'now lives in the': 'にまとまりました：', 'Agenda.': 'AGENDA。',
   'For each week, the Agenda brings the lecture, any in-class assignment, homework, materials, and submission link together.': '各週のAGENDAには、講義、授業内課題、宿題、資料、提出リンクがまとまっています。',
 
-  'see.': '見る。', 'The latest public version of each student’s weekly work. Explore patterns across the course, not private student data.': '学生ごとの週課題について、公開が許可された最新バージョンを表示します。個人情報ではなく、授業全体のパターンを探りましょう。',
-  'Preparing gallery…': 'GALLERYを準備しています…', 'Public work with consent.': '公開同意を得た作品。',
+  'see.': '見る。', 'Each student’s latest submission for each week. Students can revise and resubmit; their newest work takes its place here. Student IDs and email addresses stay private.': '学生ごと・週ごとの最新の提出作品を表示します。何度でも改訂して再提出でき、いちばん新しい作品がここに反映されます。学籍番号とメールアドレスは公開しません。',
+  'Preparing gallery…': 'GALLERYを準備しています…', 'Latest weekly work · IDs and emails private.': '各週の最新作品 · 学籍番号とメールアドレスは非公開。',
   'Submit a MAKE': 'MAKEを提出する',
 
   'Course material,': '授業資料を、', 'ready to use.': 'すぐ使える形で。',

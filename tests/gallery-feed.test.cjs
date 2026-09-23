@@ -3,18 +3,20 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const test = require('node:test');
 
-test('the public feed uses the latest student/week response and excludes private fields', () => {
+test('the feed publishes one latest response per student and week without IDs or emails', () => {
   const headers = ['タイムスタンプ', 'メールアドレス', '学籍番号', '氏名', '週・チャレンジ', '作品タイトル',
     '使用したツール', '作品のリンク', '作品のスクリーンショット（必須・画像1枚）',
-    'この可視化から何が見えますか？', 'この作品を授業サイトのギャラリーに掲載してもよいですか？'];
-  const row = (date, email, id, week, title, consent) =>
+    'この可視化から何が見えますか？'];
+  const row = (date, email, id, week, title, image = 'https://drive.google.com/open?id=imageFile') =>
     [new Date(date), email, id, 'Student', `第${week}週｜課題`, title, 'Python',
-      'https://example.com/work', 'https://drive.google.com/open?id=imageFile', 'A pattern', consent];
+      'https://example.com/work', image, 'A pattern'];
   const values = [headers,
-    row('2026-09-25T01:00:00Z', 'private@example.com', 'private-id', 1, 'Older', 'はい（作品を掲載してよい）'),
-    row('2026-09-26T01:00:00Z', 'private@example.com', 'private-id', 1, 'Withdrawn', 'いいえ（非公開にする）'),
-    row('2026-09-26T02:00:00Z', 'other@example.com', 'other-id', 1, 'Public', 'はい（作品を掲載してよい）'),
-    row('2026-10-02T01:00:00Z', 'private@example.com', 'private-id', 2, 'Week two', 'はい（作品を掲載してよい）')];
+    row('2026-09-25T01:00:00Z', 'first@example.com', 'first-id', 1, 'Older'),
+    row('2026-09-26T01:00:00Z', 'first@example.com', 'first-id', 1, 'Revision'),
+    row('2026-09-26T01:00:00Z', 'first@example.com', 'first-id', 1, 'Latest revision'),
+    row('2026-09-26T02:00:00Z', 'second@example.com', 'second-id', 1, 'Another student'),
+    row('2026-10-02T01:00:00Z', 'first@example.com', 'first-id', 2, 'Week two'),
+    row('2026-10-02T02:00:00Z', 'third@example.com', 'third-id', 1, 'No screenshot yet', '')];
   const context = {
     SpreadsheetApp: { getActiveSpreadsheet: () => ({ getSheetByName: () => ({ getDataRange: () => ({ getValues: () => values.map(row => [...row]) }) }) }) },
     DriveApp: { getFileById: () => ({ getThumbnail: () => ({ getContentType: () => 'image/png', getBytes: () => [1, 2, 3] }) }) },
@@ -30,15 +32,17 @@ test('the public feed uses the latest student/week response and excludes private
   const response = context.doGet({ parameter: { callback: 'courseGalleryReceive' } });
   assert.equal(response.mimeType, 'js');
   assert.match(response.text, /^courseGalleryReceive\(/);
-  assert.doesNotMatch(response.text, /private-id|other-id|private@example.com|other@example.com|Withdrawn|Older/);
+  assert.doesNotMatch(response.text, /-id|@example\.com|Older|"Revision"/);
   const items = JSON.parse(response.text.slice('courseGalleryReceive('.length, -2)).items;
-  assert.equal(items.length, 2);
-  assert.deepEqual(items.map(item => item.title).sort(), ['Public', 'Week two']);
+  assert.equal(items.length, 4);
+  assert.deepEqual(items.map(item => item.title).sort(), ['Another student', 'Latest revision', 'No screenshot yet', 'Week two']);
   assert.ok(items.every(item => Number.isInteger(item.imageIndex)));
   assert.ok(items.every(item => !Object.hasOwn(item, 'imageData')));
   const imageResponse = context.doGet({ parameter: { image: '2', callback: 'courseGalleryImageReceive_2' } });
   const image = JSON.parse(imageResponse.text.slice('courseGalleryImageReceive_2('.length, -2));
   assert.match(image.data, /^data:image\/png;base64,/);
-  const privateImage = context.doGet({ parameter: { image: '1', callback: 'courseGalleryImageReceive_1' } });
-  assert.equal(JSON.parse(privateImage.text.slice('courseGalleryImageReceive_1('.length, -2)).data, '');
+  const oldImage = context.doGet({ parameter: { image: '0', callback: 'courseGalleryImageReceive_0' } });
+  assert.equal(JSON.parse(oldImage.text.slice('courseGalleryImageReceive_0('.length, -2)).data, '');
+  const missingImage = context.doGet({ parameter: { image: '5', callback: 'courseGalleryImageReceive_5' } });
+  assert.equal(JSON.parse(missingImage.text.slice('courseGalleryImageReceive_5('.length, -2)).data, '');
 });

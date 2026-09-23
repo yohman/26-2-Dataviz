@@ -31,22 +31,18 @@ function doGet(request) {
     }
   });
 
-  const publicRows = [...latest.values()].filter(item => {
-    const row = item.row;
-    return get(row, 'この作品を授業サイトのギャラリーに掲載してもよいですか？')
-      .startsWith('はい') && imageColumn && get(row, imageColumn);
-  });
+  const latestRows = [...latest.values()];
 
   if (request?.parameter?.image !== undefined) {
     const index = Number(request.parameter.image);
-    const item = publicRows.find(row => row.index === index);
-    const data = item ? imageDataFor(get(item.row, imageColumn)) : '';
+    const item = latestRows.find(row => row.index === index);
+    const data = item && imageColumn ? imageDataFor(get(item.row, imageColumn)) : '';
     const callback = /^courseGalleryImageReceive_\d+$/.test(request.parameter.callback || '')
       ? request.parameter.callback : null;
     return output({ index, data }, callback);
   }
 
-  const items = publicRows.map(item => {
+  const items = latestRows.map(item => {
     const row = item.row;
     return {
       week: item.week,
