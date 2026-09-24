@@ -13,11 +13,21 @@ function doGet(request) {
   const headers = rows.shift().map(value => String(value).trim());
   const column = name => headers.indexOf(name);
   const get = (row, name) => String(row[column(name)] || '').trim();
-  const imageColumn = headers.find(name => name.startsWith('作品のスクリーンショット（必須'))
+  const getAny = (row, names) => {
+    for (const name of names) {
+      const value = get(row, name);
+      if (value) return value;
+    }
+    return '';
+  };
+  const imageColumn = headers.find(name => name.startsWith('作品のスクリーンショット 1（必須'))
+    || headers.find(name => name.startsWith('作品のスクリーンショット（必須'))
     || headers.find(name => name.startsWith('スクリーンショット／画像リンク'));
+  const consentColumn = headers.find(name => name.startsWith('この作品を授業サイトのギャラリーに掲載してもよいですか'));
   const latest = new Map();
 
   rows.forEach((row, index) => {
+    if (consentColumn && !/^はい/.test(get(row, consentColumn))) return;
     const studentId = get(row, '学籍番号');
     const challenge = get(row, '週・チャレンジ');
     const week = Number(challenge.match(/第\s*(\d+)\s*週/)?.[1]);
@@ -51,8 +61,8 @@ function doGet(request) {
       studentName: get(row, '氏名'),
       title: get(row, '作品タイトル'),
       tools: get(row, '使用したツール'),
-      projectUrl: get(row, '作品のリンク'),
-      description: get(row, 'この可視化から何が見えますか？'),
+      projectUrl: getAny(row, ['課題で使用したデータ、ウェブサイト、またはドキュメントへのリンク', '作品のリンク']),
+      description: getAny(row, ['作品について説明してください', 'この可視化から何が見えますか？']),
       imageIndex: item.index
     };
   }).sort((a, b) => b.week - a.week || a.studentName.localeCompare(b.studentName, 'ja'));

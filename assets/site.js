@@ -221,8 +221,8 @@ function setupShell() {
     if (document.querySelector('[data-gallery]')) renderGallery();
   }
 
-  let language = 'en';
-  try { language = localStorage.getItem('dv-language') || 'en'; } catch { /* English remains the fallback. */ }
+  let language = 'ja';
+  try { language = localStorage.getItem('dv-language') || 'ja'; } catch { /* Japanese remains the fallback. */ }
   applyLanguage(language);
   languageButton.addEventListener('click', () => applyLanguage(language = language === 'en' ? 'ja' : 'en'));
 }
@@ -406,7 +406,7 @@ function requestGalleryItems() {
     }
     window.courseGalleryReceive = payload => finish(null, payload);
     script.onerror = () => finish(new Error('Gallery feed unavailable'));
-    script.src = `${COURSE_CONFIG.GALLERY_API_URL}?callback=courseGalleryReceive`;
+    script.src = `${COURSE_CONFIG.GALLERY_API_URL}?callback=courseGalleryReceive&t=${Date.now()}`;
     document.head.append(script);
   });
 }
@@ -509,6 +509,14 @@ async function renderGallery() {
   root.dataset.rendering = '';
   const controls = document.querySelector('[data-gallery-filters]');
   controls.replaceChildren();
+  const controlBar = controls.closest('.gallery-controls');
+  if (!items.length) {
+    controlBar?.setAttribute('hidden', '');
+    status.textContent = copy('No submissions yet.', '提出作品はまだありません。');
+    root.replaceChildren();
+    return;
+  }
+  controlBar?.removeAttribute('hidden');
   const filters = [
     ['week', copy('Week', '週'), [['all', copy('All weeks', 'すべての週')], ...Array.from({ length: 14 }, (_, index) => [String(index + 1), copy(`Week ${index + 1}`, `第${index + 1}週`)])]],
     ['challenge', copy('Challenge', '課題'), [['all', copy('All challenges', 'すべての課題')], ...[...new Map(items.map(item => [item.week, item.challenge])).entries()].sort((a, b) => a[0] - b[0]).map(([week, challenge]) => [String(week), challenge])]],
@@ -604,7 +612,87 @@ async function loadWeeks() {
   }
 }
 
+function setupMapViewer() {
+  const trigger = document.querySelector('.history-map-trigger');
+  if (!trigger) return;
+  const source = trigger.querySelector('.history-map-image');
+  const overlay = element('div', '', 'map-lightbox');
+  overlay.hidden = true;
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.innerHTML = `<div class="map-lightbox-toolbar"><strong class="map-lightbox-title"></strong><button type="button" data-map-zoom-out>−</button><span class="map-lightbox-level">100%</span><button type="button" data-map-zoom-in>+</button><button type="button" data-map-reset></button><button type="button" data-map-close></button></div><div class="map-lightbox-viewport"><img class="map-lightbox-image" alt=""></div>`;
+  document.body.append(overlay);
+  const viewport = overlay.querySelector('.map-lightbox-viewport');
+  const image = overlay.querySelector('.map-lightbox-image');
+  const level = overlay.querySelector('.map-lightbox-level');
+  const closeButton = overlay.querySelector('[data-map-close]');
+  const pageContent = [...document.body.children].filter(node => node !== overlay && !['SCRIPT', 'STYLE'].includes(node.tagName));
+  let scale = 1, offsetX = 0, offsetY = 0, dragging = false, startX = 0, startY = 0;
+
+  const applyTransform = () => {
+    image.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+    level.textContent = `${Math.round(scale * 100)}%`;
+  };
+  const reset = () => { scale = 1; offsetX = 0; offsetY = 0; applyTransform(); };
+  const zoom = amount => { scale = Math.min(6, Math.max(.6, scale * amount)); applyTransform(); };
+  const updateLabels = () => {
+    overlay.setAttribute('aria-label', copy('Zoomable Minard map', '拡大・移動できるミナールの地図'));
+    overlay.querySelector('.map-lightbox-title').textContent = copy('Napoleon’s 1812 campaign · Minard, 1869', 'ナポレオンの1812年ロシア遠征 · ミナール、1869年');
+    overlay.querySelector('[data-map-zoom-out]').setAttribute('aria-label', copy('Zoom out', '縮小'));
+    overlay.querySelector('[data-map-zoom-in]').setAttribute('aria-label', copy('Zoom in', '拡大'));
+    overlay.querySelector('[data-map-reset]').textContent = copy('Reset', 'リセット');
+    closeButton.textContent = copy('Close', '閉じる');
+    trigger.setAttribute('aria-label', copy('Open the Minard map in a zoomable full-screen viewer', 'ミナールの地図を全画面で開き、拡大・移動する'));
+  };
+  const open = () => {
+    updateLabels();
+    image.src = source.src;
+    image.alt = source.alt;
+    overlay.hidden = false;
+    document.body.classList.add('map-lightbox-open');
+    pageContent.forEach(node => { node.inert = true; });
+    reset();
+    closeButton.focus();
+  };
+  const close = () => {
+    overlay.hidden = true;
+    document.body.classList.remove('map-lightbox-open');
+    pageContent.forEach(node => { node.inert = false; });
+    trigger.focus();
+  };
+
+  trigger.addEventListener('click', open);
+  closeButton.addEventListener('click', close);
+  overlay.querySelector('[data-map-zoom-in]').addEventListener('click', () => zoom(1.25));
+  overlay.querySelector('[data-map-zoom-out]').addEventListener('click', () => zoom(.8));
+  overlay.querySelector('[data-map-reset]').addEventListener('click', reset);
+  viewport.addEventListener('wheel', event => { event.preventDefault(); zoom(event.deltaY < 0 ? 1.12 : .89); }, { passive: false });
+  viewport.addEventListener('pointerdown', event => {
+    dragging = true; startX = event.clientX - offsetX; startY = event.clientY - offsetY;
+    viewport.classList.add('is-dragging'); viewport.setPointerCapture(event.pointerId);
+  });
+  viewport.addEventListener('pointermove', event => {
+    if (!dragging) return;
+    offsetX = event.clientX - startX; offsetY = event.clientY - startY; applyTransform();
+  });
+  const stopDragging = event => {
+    dragging = false; viewport.classList.remove('is-dragging');
+    if (viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
+  };
+  viewport.addEventListener('pointerup', stopDragging);
+  viewport.addEventListener('pointercancel', stopDragging);
+  document.addEventListener('keydown', event => {
+    if (overlay.hidden) return;
+    if (event.key === 'Escape') close();
+    if (event.key === '+' || event.key === '=') zoom(1.25);
+    if (event.key === '-') zoom(.8);
+    if (event.key === '0') reset();
+  });
+  updateLabels();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   setupShell();
+  setupMapViewer();
   loadWeeks();
 });
