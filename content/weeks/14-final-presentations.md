@@ -24,3 +24,16 @@ tools_ja: 発表スライドと最終プロジェクトのリンク
 
 - [Lecture slides](lectures/w14.pdf) {slides}
 - [Gallery](gallery.html) {reference}
+
+## Mori's Corner
+
+title:
+title_ja:
+text:
+text_ja:
+link:
+link_label:
+link_label_ja:
+file:
+file_label:
+file_label_ja:

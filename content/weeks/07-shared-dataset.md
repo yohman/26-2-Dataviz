@@ -26,3 +26,16 @@ image: assets/images/lecture/week07.png
 - [Lecture slides](lectures/w07.pdf) {slides}
 - [Gapminder data](data/gapminder.csv) {data}
 - [Disaster data](data/disasters.csv) {data}
+
+## Mori's Corner
+
+title:
+title_ja:
+text:
+text_ja:
+link:
+link_label:
+link_label_ja:
+file:
+file_label:
+file_label_ja:

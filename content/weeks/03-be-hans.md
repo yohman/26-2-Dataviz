@@ -27,3 +27,16 @@ image: assets/images/lecture/hans.png
 - [Gapminder data](data/gapminder/gapdata.ipynb) {data}
 - [Hans CSV](data/gapminder/hans.csv) {data}
 - [Tableau for students](https://www.tableau.com/academic/students) {reference}
+
+## Mori's Corner
+
+title:
+title_ja:
+text:
+text_ja:
+link:
+link_label:
+link_label_ja:
+file:
+file_label:
+file_label_ja:

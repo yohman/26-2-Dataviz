@@ -23,3 +23,16 @@ tools_ja: プロジェクトのツールと発表スライド
 ## Materials
 
 - [Project checklist](resources.html#project-help) {reference}
+
+## Mori's Corner
+
+title:
+title_ja:
+text:
+text_ja:
+link:
+link_label:
+link_label_ja:
+file:
+file_label:
+file_label_ja:

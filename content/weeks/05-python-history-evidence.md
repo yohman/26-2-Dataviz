@@ -26,3 +26,16 @@ image: assets/images/lecture/week05.png
 - [Lecture slides](lectures/w05.pdf) {slides}
 - [Python notebook](data/wrangle.ipynb) {data}
 - [Nightingale mortality diagram](https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg) {reference}
+
+## Mori's Corner
+
+title:
+title_ja:
+text:
+text_ja:
+link:
+link_label:
+link_label_ja:
+file:
+file_label:
+file_label_ja:

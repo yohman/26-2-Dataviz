@@ -27,3 +27,16 @@ image: assets/images/lecture/week04.png
 - [Datasaurus CSV](data/datasaurus.csv) {data}
 - [Anscombe CSV](data/anscombe.csv) {data}
 - [Datasaurus paper](https://www.nature.com/articles/497186a) {reference}
+
+## Mori's Corner
+
+title:
+title_ja:
+text:
+text_ja:
+link:
+link_label:
+link_label_ja:
+file:
+file_label:
+file_label_ja:

@@ -25,3 +25,16 @@ image: assets/images/lecture/week09.png
 
 - [Lecture slides](lectures/w09.pdf) {slides}
 - [Padlet course wall](https://padlet.com/yohda/dataviz) {reference}
+
+## Mori's Corner
+
+title:
+title_ja:
+text:
+text_ja:
+link:
+link_label:
+link_label_ja:
+file:
+file_label:
+file_label_ja:

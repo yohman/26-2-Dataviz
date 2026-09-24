@@ -40,6 +40,16 @@ function parseMaterials(source) {
     .map(([, label, href, type]) => ({ label: label.trim(), href: href.trim(), type: type || '' }));
 }
 
+function parseMoriCorner(source) {
+  const block = source.match(/^##\s+Mori's Corner\s*\n([\s\S]*?)(?=^##\s+|$(?![\s\S]))/mi)?.[1] || '';
+  const fields = {};
+  block.split('\n').forEach(line => {
+    const match = line.match(/^(title|title_ja|text|text_ja|link|link_label|link_label_ja|file|file_label|file_label_ja):\s*(.*)$/);
+    if (match) fields[match[1]] = match[2].trim();
+  });
+  return fields;
+}
+
 function parseWeek(source, file) {
   const match = source.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
   if (!match) throw new Error(`${file}: missing front matter`);
@@ -53,13 +63,14 @@ function parseWeek(source, file) {
   if (missing.length) throw new Error(`${file}: missing ${missing.join(', ')}`);
   if (Boolean(meta.in_class) !== Boolean(meta.in_class_ja)) throw new Error(`${file}: in_class and in_class_ja must be provided together`);
   if (!acts[meta.act]) throw new Error(`${file}: unknown act ${meta.act}`);
-  return { ...meta, week: Number(meta.week), materials: parseMaterials(match[2]) };
+  return { ...meta, week: Number(meta.week), materials: parseMaterials(match[2]), mori: parseMoriCorner(match[2]) };
 }
 
 function safeResourceHref(value) {
   const href = String(value || '').trim();
   if (/^https?:\/\//i.test(href)) return encodeURI(href);
-  if (/^(?:assets|data|lectures)\//.test(href) || /^[a-z-]+\.html(?:#[-\w]+)?$/i.test(href)) return encodeURI(href);
+  if (/^(?:assets|content|data|lectures)\//.test(href) && !href.split('/').includes('..')) return encodeURI(href);
+  if (/^[a-z-]+\.html(?:#[-\w]+)?$/i.test(href)) return encodeURI(href);
   return '';
 }
 
@@ -71,6 +82,34 @@ function materialLinks(materials) {
     const external = /^https?:\/\//i.test(href) ? ' target="_blank" rel="noopener"' : '';
     return `<a class="material-link material-link--${type}" href="${escapeHtml(href)}"${external}>${escapeHtml(material.label)} ↗</a>`;
   }).join('');
+}
+
+function createMoriCorner(week) {
+  const note = week.mori || {};
+  const corner = element('aside', '', 'mori-corner');
+  corner.setAttribute('aria-label', copy("Mori's corner", 'モリのコーナー'));
+  const avatar = document.createElement('img');
+  avatar.src = 'assets/images/mori-avatar.webp';
+  avatar.alt = copy('Illustrated portrait of Mori, the teaching assistant', 'TAのモリのイラスト');
+  avatar.width = 96; avatar.height = 96; avatar.loading = 'lazy';
+  corner.append(avatar);
+  const content = element('div', '', 'mori-content');
+  content.append(element('p', copy("MORI'S CORNER · YOUR TA", 'モリのコーナー · TA'), 'mori-kicker'));
+  content.append(element('h3', copy(note.title || 'A note from Mori', note.title_ja || 'モリからのお知らせ')));
+  content.append(element('p', copy(note.text || 'A tip, link, or handout for this week will appear here.', note.text_ja || '今週のヒント・リンク・配布資料は、ここに追加されます。'), 'mori-text'));
+  const links = element('div', '', 'mori-links');
+  const link = safeUrl(note.link) || safeResourceHref(note.link);
+  const file = safeResourceHref(note.file);
+  [[link, copy(note.link_label || 'Explore the link ↗', note.link_label_ja || 'リンクを開く ↗')],
+    [file, copy(note.file_label || 'Open the file ↗', note.file_label_ja || 'ファイルを開く ↗')]].forEach(([href, label]) => {
+    if (!href) return;
+    const anchor = element('a', label); anchor.href = href;
+    if (/^https?:\/\//.test(href)) { anchor.target = '_blank'; anchor.rel = 'noopener'; }
+    links.append(anchor);
+  });
+  if (links.childElementCount) content.append(links);
+  corner.append(content);
+  return corner;
 }
 
 function setupShell() {
@@ -125,27 +164,60 @@ function renderAgenda() {
   const root = document.querySelector('[data-agenda]');
   if (!root) return;
   const today = todayInTokyo();
+  const previewAll = new URLSearchParams(location.search).get('preview') === 'all';
   const focusedWeek = weeks.find(week => week.course_date >= today) || weeks.at(-1);
   let html = '', active = '';
   weeks.forEach((week, index) => {
     if (week.act !== active) {
       active = week.act;
-      html += `<div class="act-band" data-act="${active}"><div class="wrap"><h2>${active}</h2><p>${copy(...acts[active])}</p></div></div><section class="wrap week-list">`;
+      if (index) html += `<div class="act-band" data-act="${active}"><div class="wrap"><h2>${active}</h2><p>${copy(...acts[active])}</p></div></div>`;
+      html += '<section class="wrap week-list">';
     }
     const no = String(week.week).padStart(2, '0');
+    const locked = !previewAll && today < availabilityDate(week.course_date);
+    const classTime = week.date.match(/\d{1,2}:\d{2}\s*[–-]\s*\d{1,2}:\d{2}/)?.[0] || '';
+    const weekIndex = `<span class="week-index"><span class="week-number">${no}</span><span class="week-date"><span>${escapeHtml(compactDate(week.course_date))}</span><span>${escapeHtml(classTime)}</span></span></span>`;
     const image = safeResourceHref(week.image);
-    const media = image ? `<figure class="week-visual"><img src="${escapeHtml(image)}" alt="" loading="lazy"><figcaption>${copy('From the lecture slides', '講義スライドより')}</figcaption></figure>` : `<figure class="week-visual week-visual--placeholder"><figcaption>${copy('Add a project image, prototype, or dataset preview here.', 'プロジェクト画像、プロトタイプ、データのプレビューをここに追加。')}</figcaption></figure>`;
+    const media = image ? `<figure class="week-visual"><img src="${escapeHtml(image)}" alt="" loading="lazy"><figcaption>${copy('From the lecture slides', '講義スライドより')}</figcaption></figure>` : '';
+    const slideMaterials = week.materials.filter(material => material.type === 'slides' || material.href.startsWith('lectures/'));
+    const activityMaterials = week.materials.filter(material => !slideMaterials.includes(material));
+    const slides = slideMaterials.length ? `<div class="lecture-slides">${materialLinks(slideMaterials.map(material => ({ ...material, label: copy('Open lecture slides', '講義スライドを開く') })))}</div>` : '';
+    const activityLinks = activityMaterials.length ? `<div class="activity-materials"><p>${copy('MATERIALS FOR THIS ACTIVITY', 'この課題で使う資料')}</p><div>${materialLinks(activityMaterials)}</div></div>` : '';
     const status = week.week === focusedWeek?.week ? `<span class="week-status">${copy(week.course_date === today ? 'TODAY' : 'START HERE', week.course_date === today ? '今日' : 'ここから')}</span>` : '';
     const preview = `<span class="week-preview"><span><b>${copy('PRACTICE', '実践')}</b>${escapeHtml(copy(week.learn, week.learn_ja))}</span><span><b>${copy('TOOLS', 'ツール')}</b>${escapeHtml(copy(week.tools, week.tools_ja))}</span></span>`;
+    const weekMain = `<span class="week-summary-main"><span class="week-meta"><span>${week.act}</span><span>${copy(`Week ${week.week}`, `第${week.week}週`)}</span>${locked ? '' : status}</span><span class="week-title">${escapeHtml(copy(week.title, week.title_ja))}</span>${locked ? '' : preview}</span>`;
+    if (locked) {
+      const opens = compactDate(availabilityDate(week.course_date));
+      html += `<section class="week week--locked" id="week-${week.week}" aria-label="${escapeHtml(copy(`Week ${week.week}, available ${opens}`, `第${week.week}週、${opens}公開`))}"><div class="week-summary">${weekIndex}${weekMain}<span class="week-toggle week-toggle--locked">${escapeHtml(copy(`Opens ${opens}`, `${opens} 公開`))}</span></div></section>`;
+      if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
+      return;
+    }
     const route = `<section class="week-route" aria-label="${copy('This week at a glance', '今週の流れ')}"><div><span>01</span><p><b>${copy('LECTURE', '講義')}</b><small>${copy('Look and learn', '見る・学ぶ')}</small></p></div><div><span>02</span><p><b>${copy('TOOLS', 'ツール')}</b><small>${escapeHtml(copy(week.tools, week.tools_ja))}</small></p></div><div><span>03</span><p><b>${copy('IN CLASS', '授業内')}</b><small>${copy('Try it together', '一緒に試す')}</small></p></div><div><span>04</span><p><b>${copy('HOMEWORK', '宿題')}</b><small>${copy('Continue after class', '授業後に続ける')}</small></p></div></section>`;
-    const inClass = week.in_class ? `<article class="assignment-card assignment-card--in-class"><p class="assignment-label">${copy('IN CLASS', '授業内課題')}</p><h4>${copy('Try it with the class', 'クラスで試す')}</h4><p>${escapeHtml(copy(week.in_class, week.in_class_ja))}</p></article>` : '';
+    const inClass = week.in_class ? `<article class="assignment-card assignment-card--in-class"><p class="assignment-label">${copy('IN CLASS', '授業内課題')}</p><h4>${copy('Try it with the class', 'クラスで試す')}</h4><p>${escapeHtml(copy(week.in_class, week.in_class_ja))}</p>${activityLinks}<div class="activity-tools"><span>${copy('TOOLS', '使うツール')}</span><strong>${escapeHtml(copy(week.tools, week.tools_ja))}</strong></div></article>` : '';
     const submission = configuredFormUrl()
       ? `<div class="assignment-submit"><a class="button" target="_blank" rel="noopener" href="${formUrl(week.week, week.challenge_ja || week.challenge)}">${copy('Submit homework', '宿題を提出する')}</a></div>`
       : `<p class="assignment-note">${copy('The submission link will appear here.', '提出リンクはここに表示されます。')}</p>`;
-    html += `<details class="week" id="week-${week.week}"${week.week === focusedWeek?.week ? ' open' : ''}><summary class="week-summary"><span class="week-index"><span class="week-number">${no}</span><span class="week-date">${escapeHtml(copy(week.date, week.date_ja))}</span></span><span class="week-summary-main"><span class="week-meta"><span>${week.act}</span><span>${copy(`Week ${week.week}`, `第${week.week}週`)}</span>${status}</span><span class="week-title">${escapeHtml(copy(week.title, week.title_ja))}</span>${preview}</span><span class="week-toggle"><span class="week-toggle-closed">${copy('Open week', '週の内容を見る')}</span><span class="week-toggle-open">${copy('Close week', '週の内容を閉じる')}</span><b aria-hidden="true">↓</b></span></summary><div class="week-body">${route}<section class="week-lecture"><div class="week-section-heading"><div><p class="week-section-label">${copy('LECTURE', '講義')}</p><h3>${copy('What to expect', '今週の講義')}</h3></div><p>${copy('Start here before you begin the work.', 'まずここから始めましょう。')}</p></div><div class="week-heading"><div class="week-grid"><div><h3>${copy('WE WILL LOOK AT', '見るもの')}</h3><p>${escapeHtml(copy(week.look, week.look_ja))}</p></div><div><h3>${copy('WE WILL PRACTICE', '実践すること')}</h3><p>${escapeHtml(copy(week.learn, week.learn_ja))}</p></div></div>${media}</div><aside class="week-tools"><p>${copy('TOOLS YOU’LL USE', '使うツール')}</p><strong>${escapeHtml(copy(week.tools, week.tools_ja))}</strong></aside><div class="week-materials"><span>${copy('START HERE', 'まず開く')}</span>${materialLinks(week.materials)}</div></section><section class="week-assignments"><div class="week-assignment-heading"><div><p class="week-section-label">${copy('ASSIGNMENTS', '課題')}</p><h3>${copy('Try it together, then continue at home.', '一緒に試して、授業後に続けよう。')}</h3></div><p>${copy('The left card is for class. The right card is your next step after class.', '左のカードは授業内、右のカードは授業後の次のステップです。')}</p></div><div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p><dl class="assignment-details"><div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${copy('Visualization, title, concise explanation, project link, and one screenshot.', '可視化、タイトル、短い説明、作品リンク、スクリーンショット1枚。')}</dd></div><div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}</article></div></section></div></details>`;
+    html += `<details class="week" id="week-${week.week}"${week.week === focusedWeek?.week ? ' open' : ''}>
+      <summary class="week-summary">${weekIndex}${weekMain}<span class="week-toggle"><span class="week-toggle-closed">${copy('Open week', '週の内容を見る')}</span><span class="week-toggle-open">${copy('Close week', '週の内容を閉じる')}</span><b aria-hidden="true">↓</b></span></summary>
+      <div class="week-body">${route}
+        <section class="week-lecture"><div class="week-section-heading"><div><p class="week-section-label">${copy('LECTURE', '講義')}</p><h3>${copy('What to expect', '今週の講義')}</h3></div></div>
+          <div class="week-heading"><p class="lecture-summary">${escapeHtml(copy(week.look, week.look_ja))}</p><div class="week-lecture-aside">${media}${slides}</div></div>
+        </section>
+        <section class="week-assignments" aria-label="${copy('Assignments', '課題')}">
+          <div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p><dl class="assignment-details"><div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${copy('Visualization, title, concise explanation, project link, and one screenshot.', '可視化、タイトル、短い説明、作品リンク、スクリーンショット1枚。')}</dd></div><div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}</article></div>
+        </section>
+      </div></details>`;
     if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
   });
   root.innerHTML = html;
+  const requestedWeek = location.hash.match(/^#week-(\d+)$/)?.[1];
+  if (requestedWeek) {
+    const requestedPanel = root.querySelector(`details#week-${requestedWeek}`);
+    if (requestedPanel) requestedPanel.open = true;
+  }
+  root.querySelectorAll('details.week').forEach(node => {
+    node.querySelector('.week-lecture-aside').append(createMoriCorner(weekFor(node.id.replace('week-', ''))));
+  });
 }
 
 function configuredFormUrl() {
@@ -164,13 +236,31 @@ function todayInTokyo() {
   return `${value('year')}-${value('month')}-${value('day')}`;
 }
 
+function availabilityDate(courseDate) {
+  const [year, month, day] = courseDate.split('-').map(Number);
+  return new Date(Date.UTC(year, month - 1, day - 1)).toISOString().slice(0, 10);
+}
+
+function compactDate(isoDate) {
+  const [year, month, day] = isoDate.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  const englishDay = new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: 'UTC' }).format(date).toUpperCase();
+  const japaneseDay = new Intl.DateTimeFormat('ja-JP', { weekday: 'short', timeZone: 'UTC' }).format(date);
+  return copy(`${month}/${day} ${englishDay}`, `${month}/${day} ${japaneseDay}`);
+}
+
 function renderHome() {
   const root = document.querySelector('[data-next-week]');
   if (!root) return;
   const next = weeks.find(week => week.course_date >= todayInTokyo()) || weeks.at(-1);
   if (!next) return;
   const no = String(next.week).padStart(2, '0');
-  root.innerHTML = `<p class="eyebrow">${copy('NEXT WEEK', '次の週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(next.challenge, next.challenge_ja))}</h2><p>${escapeHtml(copy(next.homework, next.homework_ja))}</p><a href="agenda.html#week-${next.week}">${copy('Open this week →', 'この週を開く →')}</a>`;
+  const previewAll = new URLSearchParams(location.search).get('preview') === 'all';
+  const locked = !previewAll && todayInTokyo() < availabilityDate(next.course_date);
+  const href = `agenda.html${previewAll ? '?preview=all' : ''}#week-${next.week}`;
+  root.innerHTML = locked
+    ? `<p class="eyebrow">${copy('NEXT WEEK', '次の週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(next.title, next.title_ja))}</h2><p>${escapeHtml(copy(`Details open ${compactDate(availabilityDate(next.course_date))}.`, `内容は${compactDate(availabilityDate(next.course_date))}に公開します。`))}</p><a href="${href}">${copy('See the schedule →', '日程を見る →')}</a>`
+    : `<p class="eyebrow">${copy('NEXT WEEK', '次の週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(next.challenge, next.challenge_ja))}</h2><p>${escapeHtml(copy(next.homework, next.homework_ja))}</p><a href="${href}">${copy('Open this week →', 'この週を開く →')}</a>`;
 }
 
 function option(value, label) { const item = document.createElement('option'); item.value = value; item.textContent = label; return item; }

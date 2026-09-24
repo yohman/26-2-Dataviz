@@ -24,3 +24,16 @@ tools_ja: スライドとプロジェクトのツール
 
 - [Lecture slides](lectures/w10.pdf) {slides}
 - [Critique prompt](resources.html#project-help) {reference}
+
+## Mori's Corner
+
+title:
+title_ja:
+text:
+text_ja:
+link:
+link_label:
+link_label_ja:
+file:
+file_label:
+file_label_ja:

@@ -25,3 +25,16 @@ image: assets/images/lecture/dubois-portrait.png
 
 - [Lecture slides](lectures/w06_lores.pdf) {slides}
 - [Library of Congress Du Bois collection](https://www.loc.gov/collections/african-american-photographs-1900-paris-exposition/) {reference}
+
+## Mori's Corner
+
+title:
+title_ja:
+text:
+text_ja:
+link:
+link_label:
+link_label_ja:
+file:
+file_label:
+file_label_ja:

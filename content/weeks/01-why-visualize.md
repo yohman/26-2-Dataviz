@@ -26,3 +26,16 @@ image: assets/images/lecture/playfair.png
 - [Lecture slides](lectures/w01.pdf) {slides}
 - [Datasaurus CSV](data/datasaurus.csv) {data}
 - [Anscombe CSV](data/anscombe.csv) {data}
+
+## Mori's Corner
+
+title:
+title_ja:
+text:
+text_ja:
+link:
+link_label:
+link_label_ja:
+file:
+file_label:
+file_label_ja:

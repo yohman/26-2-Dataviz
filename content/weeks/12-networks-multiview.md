@@ -26,3 +26,16 @@ image: assets/images/lecture/week12.png
 - [Lecture slides](lectures/w12.pdf) {slides}
 - [Gephi Lite](https://lite.gephi.org/) {reference}
 - [Network tutorial](https://medium.com/@vespinozag/gephi-lite-v1-0-1-complete-beginners-tutorial-200eaa4b9d0d) {reference}
+
+## Mori's Corner
+
+title:
+title_ja:
+text:
+text_ja:
+link:
+link_label:
+link_label_ja:
+file:
+file_label:
+file_label_ja:

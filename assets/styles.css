@@ -59,3 +59,92 @@ details.week{display:block;padding:0;border-bottom:1px solid var(--ink);scroll-m
 .week-assignments{padding:1.5rem}.week-assignment-heading{align-items:end}.week-assignment-heading .week-section-label{margin-bottom:.55rem}.week-assignment-heading>p:last-child{color:#d8d8e4}.assignment-card{min-height:245px;padding:1.5rem}.assignment-card--in-class{border-top:5px solid var(--teal)}.assignment-card--homework{border-top:5px solid var(--signal)}.assignment-card h4{font-size:clamp(1.7rem,2.6vw,2.2rem)}.assignment-details{margin-top:auto;padding-top:1.1rem}.assignment-card{display:flex;flex-direction:column}.assignment-note{margin-top:auto}
 @media(max-width:900px){.week-preview{grid-template-columns:1fr}.week-preview span:last-child{max-width:none;width:max-content}.week-route{grid-template-columns:repeat(2,minmax(0,1fr))}.week-route>div:nth-child(2){border-right:0}.week-route>div:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.2)}.week-section-heading{align-items:start}.week-section-heading>p{text-align:left}.week-tools{align-items:flex-start;flex-direction:column}.week-tools strong{text-align:left}}
 @media(max-width:560px){.week-summary:hover{padding-inline:0;margin-inline:0}.week-preview{display:none}.week-route{grid-template-columns:1fr}.week-route>div{border-right:0;border-bottom:1px solid rgba(255,255,255,.2)}.week-route>div:last-child{border-bottom:0}.week-route>div:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.2)}.week-lecture,.week-assignments{padding:1.15rem}.week-section-heading{display:grid;gap:.6rem}.week-section-heading>p{max-width:none}.assignment-card{min-height:0;padding:1.2rem}}
+
+/* Agenda begins with the work. Color identifies a task, not a new visual theme. */
+.agenda-page [data-agenda]>.week-list:first-child{padding-top:.65rem}
+.mori-corner{display:grid;grid-template-columns:64px minmax(0,1fr);gap:.7rem;align-items:start;min-width:0;margin:0;padding:1rem 0 0;border-top:1px solid var(--line)}
+.mori-corner>img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:1px solid var(--ink);background:var(--paper)}
+.mori-content{min-width:0}.mori-kicker{margin:0 0 .35rem;color:var(--muted);font:700 .62rem "DM Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+.mori-content h3{margin:0 0 .35rem;font:700 clamp(1.3rem,2.1vw,1.85rem)/1.1 var(--serif)}.mori-text{max-width:62ch;margin:0;font-size:.86rem;line-height:1.5}
+.mori-links{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.8rem}.mori-links a{display:inline-block;padding:.35rem 0;border-bottom:1px solid currentColor;font:700 .7rem var(--sans);text-decoration:none}.mori-links a:hover,.mori-links a:focus-visible{color:var(--cobalt)}
+.week-lecture .week-heading{grid-template-columns:minmax(0,1fr) minmax(240px,285px);gap:1rem}
+.week-lecture-aside{display:grid;align-content:start;gap:.8rem;min-width:0}
+.week-lecture-aside .week-visual{width:100%;max-width:none;min-height:0;height:auto}
+.week-lecture-aside .mori-content h3{font-size:1.25rem}
+.week-lecture-aside .mori-text{font-size:.78rem}
+@media(max-width:900px){.week-lecture .week-heading{grid-template-columns:1fr}.week-lecture-aside{grid-template-columns:minmax(180px,220px) minmax(0,1fr);align-items:start}}
+@media(max-width:560px){.week-lecture-aside{grid-template-columns:1fr}.mori-corner{grid-template-columns:68px minmax(0,1fr)}.mori-corner>img{width:68px;height:68px}}
+
+/* Lecture = blue rule; in-class = teal rule; homework = amber rule.
+   All large surfaces stay neutral so the content remains the focus. */
+.agenda-page .week-number{color:var(--orange)}
+.agenda-page .week-preview b,.agenda-page .week-section-label,.agenda-page .week-lecture .week-grid h3{color:var(--cobalt)}
+.agenda-page .week-summary{transition:background-color .18s ease}
+.agenda-page .week-summary:hover{background:#f5f6f8;padding-inline:0;margin-inline:0}
+.agenda-page .week-status{background:var(--ink);color:white}
+.agenda-page .week-route{background:var(--navy);color:white;border-top:0;border-bottom:0}
+.agenda-page .week-route>div{border-color:rgba(255,255,255,.18)}
+.agenda-page .week-route>div>span{color:#aebeff}
+.agenda-page .week-route small{color:#d8dce9}
+.agenda-page .week-lecture{background:#f3f4f5;border-top:0;border-left:3px solid var(--cobalt)}
+.agenda-page .week-lecture .week-grid>div{background:var(--paper)}
+.agenda-page .week-tools{background:var(--paper);border-left:0;border-top:1px solid var(--line)}
+.agenda-page .week-tools p{color:var(--muted)}
+.agenda-page .week-assignments{margin-top:0;padding:0;background:transparent;color:var(--ink);border:0}
+.agenda-page .week-assignment-heading .week-section-label,.agenda-page .week-assignment-heading>p:last-child{color:var(--muted)}
+.agenda-page .assignment-grid{gap:1rem;background:transparent}
+.agenda-page .assignment-card,.agenda-page .assignment-card--in-class,.agenda-page .assignment-card--homework{background:var(--paper)}
+.agenda-page .assignment-card--in-class{border-top:0;border-left:3px solid var(--teal)}
+.agenda-page .assignment-card--homework{background:#fff8eb;border-top:0;border-left:3px solid #a66b19}
+.agenda-page .assignment-card--in-class .assignment-label{color:var(--teal)}
+.agenda-page .assignment-card--homework .assignment-label{color:#89570e}
+.agenda-page .assignment-submit .button{border-radius:0;background:var(--ink)}
+.agenda-page .assignment-submit .button:hover,.agenda-page .assignment-submit .button:focus-visible{background:var(--cobalt)}
+.agenda-page .material-link--slides,.agenda-page .material-link--data,.agenda-page .material-link--reference{background:transparent;border-color:var(--line);color:var(--ink)}
+.agenda-page .material-link:hover,.agenda-page .material-link:focus-visible{background:var(--ink);border-color:var(--ink);color:white}
+
+/* Across the site, blue marks navigation and action. Large editorial panels
+   remain neutral; the agenda's small rules carry the teaching-stage colors. */
+:root{--paper:#fff;--line:#e3e6ea;--signal:var(--cobalt)}
+body{background:#fff}
+.site-header{background:rgba(255,255,255,.94);border-bottom:1px solid var(--line)}
+.button{border-radius:0}
+.act-cards a,.act-cards a:nth-child(2),.act-cards a:nth-child(3),.act-cards a:nth-child(4){background:var(--navy);border-right-color:rgba(255,255,255,.2)}
+.act-cards a:hover,.act-cards a:focus-visible{background:var(--cobalt)}
+.next-make,.resource-strip{background:#f3f4f5}
+.material-link--slides,.material-link--data,.material-link--reference{background:transparent;border-color:var(--line);color:var(--ink)}
+.material-link:hover,.material-link:focus-visible{background:var(--cobalt);border-color:var(--cobalt);color:white}
+
+/* Materials live where students use them: slides with the lecture, datasets
+   and references with the in-class activity. */
+.lecture-summary{align-self:start;max-width:46ch;margin:0;padding:1.4rem 0;font:500 clamp(1.25rem,2vw,1.65rem)/1.5 var(--sans)}
+.lecture-slides{padding:.15rem 0 .25rem}
+.lecture-slides .material-link{display:block;width:max-content;max-width:100%;border:0;border-bottom:1px solid currentColor;padding:.3rem 0;color:var(--cobalt);font-size:.78rem}
+.lecture-slides .material-link:hover,.lecture-slides .material-link:focus-visible{background:transparent;color:var(--ink);border-color:var(--ink)}
+.activity-materials{margin-top:1.3rem;padding-top:1rem;border-top:1px solid var(--line)}
+.activity-materials>p{margin:0 0 .6rem;color:var(--teal);font:700 .62rem "DM Mono",monospace;letter-spacing:.06em}
+.activity-materials>div{display:flex;flex-wrap:wrap;gap:.45rem}
+.activity-materials .material-link{background:white;border-color:#a9c7c4;color:var(--ink)}
+.activity-materials .material-link:hover,.activity-materials .material-link:focus-visible{background:var(--teal);border-color:var(--teal);color:white}
+.agenda-page .assignment-card--in-class{background:#edf7f5}
+.activity-tools{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1rem;margin-top:1rem;color:var(--muted);font-size:.75rem}
+.activity-tools span{font:700 .58rem "DM Mono",monospace;letter-spacing:.06em}
+.activity-tools strong{color:var(--ink);font-size:.8rem}
+@media(max-width:900px){.lecture-summary{max-width:65ch;padding:.2rem 0}}
+
+/* Two deliberate schedule lines replace the long free-form date label. */
+.agenda-page .week-summary{grid-template-columns:110px minmax(0,1fr) auto}
+.agenda-page .week-body{margin-left:calc(110px + clamp(1rem,3vw,2.25rem))}
+.agenda-page .week-date{display:grid;gap:.18rem;margin:0;color:var(--muted);font:700 .65rem/1.25 var(--sans);white-space:nowrap}
+.agenda-page .week-index{gap:.6rem}
+.agenda-page .week.week--locked{display:block;padding:0;border-bottom:1px solid var(--line)}
+.agenda-page .week--locked .week-summary{cursor:default}
+.agenda-page .week--locked .week-summary:hover{background:transparent}
+.agenda-page .week--locked .week-toggle{color:var(--muted);font-weight:600}
+@media(max-width:900px){.agenda-page .week-body{margin-left:0}}
+@media(max-width:560px){.agenda-page .week-summary{grid-template-columns:86px minmax(0,1fr)}.agenda-page .week-date{font-size:.6rem}}
+
+/* Use whitespace for grouping; reserve light rules for actual separations. */
+details.week{border-bottom:1px solid var(--line)}
+.quick-links{border-top-color:var(--line)}
+.assignment-details>div{border-top-color:var(--line)}
