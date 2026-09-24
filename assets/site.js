@@ -22,6 +22,7 @@ const weekFiles = [
 
 let weeks = [];
 let galleryItemsPromise;
+let submissionDeadlineTimer;
 const galleryImageCache = new Map();
 
 const escapeHtml = value => String(value || '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -38,6 +39,25 @@ function parseMaterials(source) {
   const block = source.match(/^##\s+Materials\s*\n([\s\S]*?)(?=^##\s+|$(?![\s\S]))/mi)?.[1] || '';
   return [...block.matchAll(/^-\s+\[([^\]]+)\]\(([^)]+)\)\s*(?:\{(slides|data|reference)\})?\s*$/gmi)]
     .map(([, label, href, type]) => ({ label: label.trim(), href: href.trim(), type: type || '' }));
+}
+
+function parseInClassActivities(source) {
+  const block = source.match(/^##\s+In Class Activities\s*\n([\s\S]*?)(?=^##\s+|$(?![\s\S]))/mi)?.[1] || '';
+  return block.split(/^###\s+Activity\s+/gmi).slice(1).map(chunk => {
+    const lines = chunk.split('\n');
+    const number = Number(lines.shift()?.trim());
+    const activity = { number, steps: [], steps_ja: [] };
+    let list = '';
+    lines.forEach(line => {
+      const field = line.match(/^(title|title_ja|text|text_ja|link|link_label|link_label_ja):\s*(.*)$/);
+      if (field) { activity[field[1]] = field[2].trim(); list = ''; return; }
+      const listStart = line.match(/^(steps|steps_ja):\s*$/);
+      if (listStart) { list = listStart[1]; return; }
+      const item = line.match(/^\s*-\s+(.+)$/);
+      if (item && list) activity[list].push(item[1].trim());
+    });
+    return activity;
+  }).filter(activity => activity.number && activity.title && activity.title_ja && activity.text && activity.text_ja && activity.steps.length && activity.steps_ja.length);
 }
 
 function parseMoriCorner(source) {
@@ -62,8 +82,9 @@ function parseWeek(source, file) {
   const missing = required.filter(key => !meta[key]);
   if (missing.length) throw new Error(`${file}: missing ${missing.join(', ')}`);
   if (Boolean(meta.in_class) !== Boolean(meta.in_class_ja)) throw new Error(`${file}: in_class and in_class_ja must be provided together`);
+  if (Boolean(meta.deliverables) !== Boolean(meta.deliverables_ja)) throw new Error(`${file}: deliverables and deliverables_ja must be provided together`);
   if (!acts[meta.act]) throw new Error(`${file}: unknown act ${meta.act}`);
-  return { ...meta, week: Number(meta.week), materials: parseMaterials(match[2]), mori: parseMoriCorner(match[2]) };
+  return { ...meta, week: Number(meta.week), materials: parseMaterials(match[2]), activities: parseInClassActivities(match[2]), mori: parseMoriCorner(match[2]) };
 }
 
 function safeResourceHref(value) {
@@ -74,13 +95,17 @@ function safeResourceHref(value) {
   return '';
 }
 
-function materialLinks(materials) {
+function materialLinks(materials, context = {}) {
   return [...materials].sort((first, second) => Number(second.type === 'slides') - Number(first.type === 'slides')).map(material => {
     const href = safeResourceHref(material.href);
     if (!href) return '';
     const type = material.type || (href.includes('lectures/') ? 'slides' : href.startsWith('data/') ? 'data' : 'reference');
-    const external = /^https?:\/\//i.test(href) ? ' target="_blank" rel="noopener"' : '';
-    return `<a class="material-link material-link--${type}" href="${escapeHtml(href)}"${external}>${escapeHtml(material.label)} ↗</a>`;
+    const previewableSlides = type === 'slides' && /^lectures\/[A-Za-z0-9._-]+\.pdf$/i.test(href) && context.week;
+    const linkHref = previewableSlides
+      ? `viewer.html?file=${encodeURIComponent(href)}&title=${encodeURIComponent(material.label)}&week=${encodeURIComponent(`Week ${context.week}`)}&return=${encodeURIComponent(context.returnTo || `agenda.html#week-${context.week}`)}`
+      : href;
+    const external = /^https?:\/\//i.test(linkHref) ? ' target="_blank" rel="noopener"' : '';
+    return `<a class="material-link material-link--${type}" href="${escapeHtml(linkHref)}"${external}>${escapeHtml(material.label)} ${external ? '↗' : '→'}</a>`;
   }).join('');
 }
 
@@ -110,6 +135,48 @@ function createMoriCorner(week) {
   if (links.childElementCount) content.append(links);
   corner.append(content);
   return corner;
+}
+
+function activityTabs(week) {
+  if (!week.activities?.length) return '';
+  const tabs = week.activities.map((activity, index) => `<button type="button" role="tab" id="week-${week.week}-activity-${activity.number}-tab" aria-controls="week-${week.week}-activity-${activity.number}" aria-selected="${index === 0}" tabindex="${index === 0 ? '0' : '-1'}">${copy(`Activity ${activity.number}`, `アクティビティ ${activity.number}`)}</button>`).join('');
+  const panels = week.activities.map((activity, index) => {
+    const href = safeUrl(activity.link) || safeResourceHref(activity.link);
+    const external = /^https?:\/\//i.test(href) ? ' target="_blank" rel="noopener"' : '';
+    const download = /^data\/[A-Za-z0-9._/-]+\.csv$/i.test(href) ? ' download' : '';
+    const link = href ? `<a class="button activity-link" href="${escapeHtml(href)}"${external}${download}>${escapeHtml(copy(activity.link_label, activity.link_label_ja))}${external ? ' ↗' : ' ↓'}</a>` : '';
+    const steps = copy(activity.steps, activity.steps_ja).map(step => `<li>${escapeHtml(step)}</li>`).join('');
+    return `<section class="activity-panel" role="tabpanel" id="week-${week.week}-activity-${activity.number}" aria-labelledby="week-${week.week}-activity-${activity.number}-tab"${index === 0 ? '' : ' hidden'}>
+      <p class="assignment-label">${copy('IN CLASS', '授業内')} · ${copy(`ACTIVITY ${activity.number}`, `アクティビティ ${activity.number}`)}</p>
+      <h4>${escapeHtml(copy(activity.title, activity.title_ja))}</h4>
+      <p>${escapeHtml(copy(activity.text, activity.text_ja))}</p>
+      <ol class="activity-steps">${steps}</ol>${link}
+    </section>`;
+  }).join('');
+  return `<article class="assignment-card assignment-card--in-class activity-tabs-card" data-activity-tabs><div class="activity-tab-list" role="tablist" aria-label="${copy('In-class activities', '授業内アクティビティ')}">${tabs}</div>${panels}</article>`;
+}
+
+function setupActivityTabs(root) {
+  root.querySelectorAll('[data-activity-tabs]').forEach(component => {
+    const tabs = [...component.querySelectorAll('[role="tab"]')];
+    const select = selected => {
+      tabs.forEach(tab => {
+        const active = tab === selected;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+        component.querySelector(`#${tab.getAttribute('aria-controls')}`).hidden = !active;
+      });
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', event => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+        select(tabs[nextIndex]); tabs[nextIndex].focus();
+      });
+    });
+  });
 }
 
 function setupShell() {
@@ -181,7 +248,8 @@ function renderAgenda() {
     const media = image ? `<figure class="week-visual"><img src="${escapeHtml(image)}" alt="" loading="lazy"><figcaption>${copy('From the lecture slides', '講義スライドより')}</figcaption></figure>` : '';
     const slideMaterials = week.materials.filter(material => material.type === 'slides' || material.href.startsWith('lectures/'));
     const activityMaterials = week.materials.filter(material => !slideMaterials.includes(material));
-    const slides = slideMaterials.length ? `<div class="lecture-slides">${materialLinks(slideMaterials.map(material => ({ ...material, label: copy('Open lecture slides', '講義スライドを開く') })))}</div>` : '';
+    const returnTo = `agenda.html${previewAll ? '?preview=all' : ''}#week-${week.week}`;
+    const slides = slideMaterials.length ? `<div class="lecture-slides">${materialLinks(slideMaterials.map(material => ({ ...material, label: copy('Preview lecture slides', '講義スライドをプレビュー') })), { week: week.week, returnTo })}</div>` : '';
     const activityLinks = activityMaterials.length ? `<div class="activity-materials"><p>${copy('MATERIALS FOR THIS ACTIVITY', 'この課題で使う資料')}</p><div>${materialLinks(activityMaterials)}</div></div>` : '';
     const status = week.week === focusedWeek?.week ? `<span class="week-status">${copy(week.course_date === today ? 'TODAY' : 'START HERE', week.course_date === today ? '今日' : 'ここから')}</span>` : '';
     const preview = `<span class="week-preview"><span><b>${copy('PRACTICE', '実践')}</b>${escapeHtml(copy(week.learn, week.learn_ja))}</span><span><b>${copy('TOOLS', 'ツール')}</b>${escapeHtml(copy(week.tools, week.tools_ja))}</span></span>`;
@@ -193,10 +261,13 @@ function renderAgenda() {
       return;
     }
     const route = `<section class="week-route" aria-label="${copy('This week at a glance', '今週の流れ')}"><div><span>01</span><p><b>${copy('LECTURE', '講義')}</b><small>${copy('Look and learn', '見る・学ぶ')}</small></p></div><div><span>02</span><p><b>${copy('TOOLS', 'ツール')}</b><small>${escapeHtml(copy(week.tools, week.tools_ja))}</small></p></div><div><span>03</span><p><b>${copy('IN CLASS', '授業内')}</b><small>${copy('Try it together', '一緒に試す')}</small></p></div><div><span>04</span><p><b>${copy('HOMEWORK', '宿題')}</b><small>${copy('Continue after class', '授業後に続ける')}</small></p></div></section>`;
-    const inClass = week.in_class ? `<article class="assignment-card assignment-card--in-class"><p class="assignment-label">${copy('IN CLASS', '授業内課題')}</p><h4>${copy('Try it with the class', 'クラスで試す')}</h4><p>${escapeHtml(copy(week.in_class, week.in_class_ja))}</p>${activityLinks}<div class="activity-tools"><span>${copy('TOOLS', '使うツール')}</span><strong>${escapeHtml(copy(week.tools, week.tools_ja))}</strong></div></article>` : '';
+    const inClass = activityTabs(week) || (week.in_class ? `<article class="assignment-card assignment-card--in-class"><p class="assignment-label">${copy('IN CLASS', '授業内課題')}</p><h4>${copy('Try it with the class', 'クラスで試す')}</h4><p>${escapeHtml(copy(week.in_class, week.in_class_ja))}</p>${activityLinks}<div class="activity-tools"><span>${copy('TOOLS', '使うツール')}</span><strong>${escapeHtml(copy(week.tools, week.tools_ja))}</strong></div></article>` : '');
+    const nextClassDate = weeks[index + 1]?.course_date || addDays(week.course_date, 7);
+    const deadlineMs = submissionDeadlineMs(nextClassDate);
+    const deadline = formatSubmissionDeadline(deadlineMs);
     const submission = configuredFormUrl()
-      ? `<div class="assignment-submit"><a class="button" target="_blank" rel="noopener" href="${formUrl(week.week, week.challenge_ja || week.challenge)}">${copy('Submit homework', '宿題を提出する')}</a></div>`
-      : `<p class="assignment-note">${copy('The submission link will appear here.', '提出リンクはここに表示されます。')}</p>`;
+      ? `<div class="assignment-submit" data-submission-deadline="${deadlineMs}" data-submit-url="${escapeHtml(formUrl(week.week, week.challenge_ja || week.challenge))}"><a class="button" target="_blank" rel="noopener" href="${escapeHtml(formUrl(week.week, week.challenge_ja || week.challenge))}">${copy('Submit homework', '宿題を提出する')}</a><p class="assignment-deadline"><strong>${copy('DEADLINE', '締切')}</strong> ${escapeHtml(deadline)}</p><p class="assignment-resubmit">${copy('Made a mistake or want to submit a better version? Submit again before the deadline. Your newest submission will be used.', '間違えた場合や、よりよい作品を提出したい場合は、締切まで何度でも再提出できます。最新の提出を使用します。')}</p></div>`
+      : `<div class="assignment-submit"><p class="assignment-note">${copy('The submission link will appear here.', '提出リンクはここに表示されます。')}</p><p class="assignment-deadline"><strong>${copy('DEADLINE', '締切')}</strong> ${escapeHtml(deadline)}</p></div>`;
     html += `<details class="week" id="week-${week.week}"${week.week === focusedWeek?.week ? ' open' : ''}>
       <summary class="week-summary">${weekIndex}${weekMain}<span class="week-toggle"><span class="week-toggle-closed">${copy('Open week', '週の内容を見る')}</span><span class="week-toggle-open">${copy('Close week', '週の内容を閉じる')}</span><b aria-hidden="true">↓</b></span></summary>
       <div class="week-body">${route}
@@ -204,7 +275,7 @@ function renderAgenda() {
           <div class="week-heading"><p class="lecture-summary">${escapeHtml(copy(week.look, week.look_ja))}</p><div class="week-lecture-aside">${media}${slides}</div></div>
         </section>
         <section class="week-assignments" aria-label="${copy('Assignments', '課題')}">
-          <div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p><dl class="assignment-details"><div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${copy('Visualization, title, concise explanation, project link, and one screenshot.', '可視化、タイトル、短い説明、作品リンク、スクリーンショット1枚。')}</dd></div><div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}</article></div>
+          <div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p><dl class="assignment-details"><div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${escapeHtml(copy(week.deliverables || 'Visualization, title, concise explanation, project link, and one screenshot.', week.deliverables_ja || '可視化、タイトル、短い説明、作品リンク、スクリーンショット1枚。'))}</dd></div><div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}</article></div>
         </section>
       </div></details>`;
     if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
@@ -218,6 +289,8 @@ function renderAgenda() {
   root.querySelectorAll('details.week').forEach(node => {
     node.querySelector('.week-lecture-aside').append(createMoriCorner(weekFor(node.id.replace('week-', ''))));
   });
+  setupActivityTabs(root);
+  startSubmissionDeadlineClock(root);
 }
 
 function configuredFormUrl() {
@@ -239,6 +312,54 @@ function todayInTokyo() {
 function availabilityDate(courseDate) {
   const [year, month, day] = courseDate.split('-').map(Number);
   return new Date(Date.UTC(year, month - 1, day - 1)).toISOString().slice(0, 10);
+}
+
+function addDays(isoDate, numberOfDays) {
+  const [year, month, day] = isoDate.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day + numberOfDays));
+  return date.toISOString().slice(0, 10);
+}
+
+function submissionDeadlineMs(nextClassDate) {
+  return new Date(`${nextClassDate}T00:00:00+09:00`).getTime() - 60_000;
+}
+
+function formatSubmissionDeadline(deadlineMs) {
+  const options = { timeZone: 'Asia/Tokyo', weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+  const locale = isJapanese() ? 'ja-JP' : 'en-US';
+  return `${new Intl.DateTimeFormat(locale, { ...options, hour12: !isJapanese() }).format(new Date(deadlineMs))} JST`;
+}
+
+function submissionIsOpen(deadlineMs, nowMs = Date.now()) {
+  return nowMs < deadlineMs;
+}
+
+function updateSubmissionDeadlines(root = document) {
+  root.querySelectorAll('[data-submission-deadline]').forEach(wrapper => {
+    const button = wrapper.querySelector('.button');
+    if (!button) return;
+    const open = submissionIsOpen(Number(wrapper.dataset.submissionDeadline));
+    button.textContent = open ? copy('Submit homework', '宿題を提出する') : copy('Submissions closed', '提出は締め切りました');
+    button.classList.toggle('button--disabled', !open);
+    button.setAttribute('aria-disabled', String(!open));
+    if (open) {
+      button.href = wrapper.dataset.submitUrl;
+      button.target = '_blank';
+      button.rel = 'noopener';
+      button.removeAttribute('tabindex');
+    } else {
+      button.removeAttribute('href');
+      button.removeAttribute('target');
+      button.removeAttribute('rel');
+      button.setAttribute('tabindex', '-1');
+    }
+  });
+}
+
+function startSubmissionDeadlineClock(root) {
+  if (submissionDeadlineTimer) clearInterval(submissionDeadlineTimer);
+  updateSubmissionDeadlines(root);
+  submissionDeadlineTimer = setInterval(() => updateSubmissionDeadlines(root), 30_000);
 }
 
 function compactDate(isoDate) {

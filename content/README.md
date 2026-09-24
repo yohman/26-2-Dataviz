@@ -25,6 +25,8 @@ in_class: Optional work students complete during class
 in_class_ja: 任意：授業内で取り組むこと
 homework: Work students complete after class
 homework_ja: 学生が授業後に取り組むこと
+deliverables: Optional custom deliverables for this week's homework
+deliverables_ja: 任意：今週の宿題に合わせた提出物
 challenge: Short assignment name
 challenge_ja: 短い課題名
 tools: Suggested tools
@@ -52,7 +54,11 @@ file_label: Open Mori's handout
 file_label_ja: モリの配布資料を開く
 ```
 
-`in_class` and `in_class_ja` are optional, but always add or remove them together. `homework` and `homework_ja` are required. When a weekly card is expanded, `look` / `look_ja` becomes the short lecture overview. The slide image (`image`, if supplied) and any `{slides}` link appear with the lecture and Mori's Corner. `{data}` and `{reference}` links appear inside the **IN CLASS** card alongside its tools, so list resources there that students will use for that activity. The **HOMEWORK** card remains separate. Keep `learn` / `learn_ja` as the brief practice preview visible before a week is expanded.
+`in_class` and `in_class_ja` are optional, but always add or remove them together. `homework` and `homework_ja` are required. `deliverables` and `deliverables_ja` are optional paired fields; when omitted, the standard course deliverables are shown. When a weekly card is expanded, `look` / `look_ja` becomes the short lecture overview. The slide image (`image`, if supplied) and any `{slides}` link appear with the lecture and Mori's Corner. `{data}` and `{reference}` links appear inside the **IN CLASS** card alongside its tools, so list resources there that students will use for that activity. The **HOMEWORK** card remains separate. Keep `learn` / `learn_ja` as the brief practice preview visible before a week is expanded.
+
+Homework closes automatically at 11:59 PM Japan time on the night before the next scheduled class. The deadline is calculated from the following week's `course_date`, so holiday gaps are handled correctly. The final week uses seven days after its own class date as the fallback next-class date. Students may resubmit before the deadline; the site tells them that their newest submission will be used.
+
+When a week needs multiple in-class tasks, add an `## In Class Activities` section with consecutive `### Activity 1`, `### Activity 2`, and so on. Each activity requires paired `title` / `title_ja`, `text` / `text_ja`, `steps` / `steps_ja` bullet lists, and may include `link`, `link_label`, and `link_label_ja`. These activities appear as tabs and replace the single `in_class` card for that week.
 
 Future weeks stay collapsed and cannot be opened until the calendar day before `course_date` in Japan time. To inspect every week while preparing materials, add `?preview=all` to the Agenda URL (for example, `agenda.html?preview=all#week-2`). This also works for Mori, but it is only a preview convenience, not a private login: anyone with that URL can use it, and published Markdown files are publicly accessible. Do not put genuinely private or embargoed material in the published site.
 

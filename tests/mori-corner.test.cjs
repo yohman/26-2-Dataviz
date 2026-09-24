@@ -39,3 +39,20 @@ test('weekly content opens on the calendar day before class, including month bou
   assert.equal(vm.runInContext("availabilityDate('2026-10-02')", context), '2026-10-01');
   assert.equal(vm.runInContext("availabilityDate('2027-01-01')", context), '2026-12-31');
 });
+
+test('Week 1 homework defines its data link and screenshot deliverables in both languages', () => {
+  const source = fs.readFileSync(path.join(__dirname, '../content/weeks/01-why-visualize.md'), 'utf8');
+  context.source = source;
+  const week = vm.runInContext("parseWeek(source, '01-why-visualize.md')", context);
+  assert.match(week.deliverables, /Google Sheets or Google Docs/);
+  assert.match(week.deliverables, /screenshot/);
+  assert.match(week.deliverables_ja, /Googleスプレッドシート/);
+});
+
+test('homework closes at 11:59 PM JST before the next actual class', () => {
+  const deadline = vm.runInContext("submissionDeadlineMs('2026-10-02')", context);
+  assert.equal(new Date(deadline).toISOString(), '2026-10-01T14:59:00.000Z');
+  context.deadline = deadline;
+  assert.equal(vm.runInContext('submissionIsOpen(deadline, deadline - 1)', context), true);
+  assert.equal(vm.runInContext('submissionIsOpen(deadline, deadline)', context), false);
+});

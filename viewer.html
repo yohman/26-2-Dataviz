@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Lecture slides · 2026–2 Data Visualization</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css?v=fullscreen-viewer-20260924">
+</head>
+<body class="viewer-page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="wordmark" href="index.html"><span>DV / 26–2</span> Seeing Data</a>
+    <nav class="site-nav" aria-label="Course navigation">
+      <a href="agenda.html">AGENDA</a><a href="gallery.html">GALLERY</a><a href="resources.html">COURSE GUIDE</a>
+      <button class="language-toggle" type="button" data-language-toggle>JP</button>
+    </nav>
+  </header>
+  <main id="main" class="viewer-main wrap">
+    <a class="viewer-back" data-viewer-back href="agenda.html">← <span data-copy="back">Back to the Agenda</span></a>
+    <header class="viewer-heading">
+      <div><p class="eyebrow" data-copy="eyebrow">LECTURE SLIDE PREVIEW</p><h1 data-viewer-title>Lecture slides</h1></div>
+      <a class="viewer-download" data-download href="#" download><span data-copy="download">Download PDF</span> ↓</a>
+    </header>
+    <section class="pdf-viewer" aria-label="Lecture slide preview">
+      <div class="pdf-toolbar">
+        <button type="button" data-previous><span data-copy="previous">Previous</span></button>
+        <label><span data-copy="page">Page</span> <input data-page-input type="number" min="1" value="1" inputmode="numeric"> <span data-page-total>/ —</span></label>
+        <div class="pdf-toolbar-actions">
+          <button type="button" data-next><span data-copy="next">Next</span></button>
+          <button type="button" data-fullscreen aria-pressed="false"><span data-fullscreen-label>Full screen</span> ⛶</button>
+        </div>
+      </div>
+      <div class="pdf-stage" data-pdf-stage>
+        <p class="pdf-loading" data-status><span data-copy="loading">Loading slides…</span></p>
+        <canvas class="pdf-canvas" data-pdf-canvas hidden></canvas>
+      </div>
+    </section>
+  </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    const parameters = new URLSearchParams(location.search);
+    const requestedFile = parameters.get('file') || '';
+    const file = /^lectures\/[A-Za-z0-9._-]+\.pdf$/i.test(requestedFile) ? requestedFile : '';
+    const title = parameters.get('title') || 'Lecture slides';
+    const week = parameters.get('week') || '';
+    const requestedReturn = parameters.get('return') || '';
+    const returnTo = /^agenda\.html(?:\?preview=all)?#week-\d+$/.test(requestedReturn) ? requestedReturn : 'agenda.html';
+    const strings = {
+      back: ['Back to the Agenda', 'AGENDAに戻る'], eyebrow: ['LECTURE SLIDE PREVIEW', '講義スライドのプレビュー'],
+      download: ['Download PDF', 'PDFをダウンロード'], previous: ['Previous', '前へ'], next: ['Next', '次へ'],
+      page: ['Page', 'ページ'], fullscreen: ['Full screen', '全画面'], exitFullscreen: ['Exit full screen', '全画面を終了'],
+      loading: ['Loading slides…', 'スライドを読み込んでいます…'],
+      failed: ['The preview could not load. Download the PDF instead.', 'プレビューを読み込めませんでした。PDFをダウンロードしてください。']
+    };
+    let language = 'en';
+    try { language = localStorage.getItem('dv-language') || 'en'; } catch { /* English fallback. */ }
+    const copy = key => strings[key][language === 'ja' ? 1 : 0];
+    const applyLanguage = () => {
+      document.documentElement.lang = language;
+      document.querySelectorAll('[data-copy]').forEach(node => { node.textContent = copy(node.dataset.copy); });
+      const button = document.querySelector('[data-language-toggle]');
+      button.textContent = language === 'ja' ? 'EN' : 'JP';
+      button.setAttribute('aria-label', language === 'ja' ? 'Switch to English' : '日本語に切り替える');
+      const fullscreenLabel = document.querySelector('[data-fullscreen-label]');
+      fullscreenLabel.textContent = copy(document.querySelector('.pdf-viewer')?.classList.contains('is-fullscreen') ? 'exitFullscreen' : 'fullscreen');
+    };
+    document.querySelector('[data-language-toggle]').addEventListener('click', () => {
+      language = language === 'ja' ? 'en' : 'ja';
+      try { localStorage.setItem('dv-language', language); } catch { /* Continue without persistence. */ }
+      applyLanguage();
+    });
+    applyLanguage();
+
+    const fullTitle = week ? `${week} · ${title}` : title;
+    document.title = `${fullTitle} · Preview`;
+    document.querySelector('[data-viewer-title]').textContent = fullTitle;
+    document.querySelector('[data-viewer-back]').href = returnTo;
+    document.querySelector('[data-download]').href = file ? encodeURI(file) : '#';
+
+    const stage = document.querySelector('[data-pdf-stage]');
+    const canvas = document.querySelector('[data-pdf-canvas]');
+    const status = document.querySelector('[data-status]');
+    const previous = document.querySelector('[data-previous]');
+    const next = document.querySelector('[data-next]');
+    const fullscreen = document.querySelector('[data-fullscreen]');
+    const pageInput = document.querySelector('[data-page-input]');
+    const pageTotal = document.querySelector('[data-page-total]');
+    let pdf;
+    let activePage = Math.max(1, Number(parameters.get('page')) || 1);
+    let renderTask;
+
+    const showFailure = () => {
+      status.hidden = false;
+      status.textContent = copy('failed');
+      canvas.hidden = true;
+      previous.disabled = true; next.disabled = true; pageInput.disabled = true;
+    };
+    const updateUrl = () => {
+      const url = new URL(location.href);
+      if (activePage === 1) url.searchParams.delete('page'); else url.searchParams.set('page', activePage);
+      history.replaceState(null, '', url);
+    };
+    async function renderPage(requestedPage) {
+      if (!pdf) return;
+      activePage = Math.min(pdf.numPages, Math.max(1, Number(requestedPage) || 1));
+      if (renderTask) { try { renderTask.cancel(); } catch { /* The prior render already finished. */ } }
+      const page = await pdf.getPage(activePage);
+      const base = page.getViewport({ scale: 1 });
+      const availableWidth = Math.max(280, Math.min(1280, stage.clientWidth - 32));
+      const viewport = page.getViewport({ scale: availableWidth / base.width });
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(viewport.width * pixelRatio);
+      canvas.height = Math.floor(viewport.height * pixelRatio);
+      canvas.style.width = `${Math.floor(viewport.width)}px`;
+      canvas.style.height = `${Math.floor(viewport.height)}px`;
+      const context = canvas.getContext('2d');
+      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      renderTask = page.render({ canvasContext: context, viewport });
+      try { await renderTask.promise; } catch (error) { if (error?.name !== 'RenderingCancelledException') throw error; }
+      canvas.hidden = false; status.hidden = true;
+      pageInput.value = activePage; pageInput.max = pdf.numPages; pageTotal.textContent = `/ ${pdf.numPages}`;
+      previous.disabled = activePage === 1; next.disabled = activePage === pdf.numPages;
+      updateUrl();
+    }
+    previous.addEventListener('click', () => renderPage(activePage - 1));
+    next.addEventListener('click', () => renderPage(activePage + 1));
+    const viewer = document.querySelector('.pdf-viewer');
+    const setFullscreen = active => {
+      viewer.classList.toggle('is-fullscreen', active);
+      document.body.classList.toggle('viewer-fullscreen', active);
+      fullscreen.setAttribute('aria-pressed', String(active));
+      document.querySelector('[data-fullscreen-label]').textContent = copy(active ? 'exitFullscreen' : 'fullscreen');
+      setTimeout(() => renderPage(activePage), 100);
+    };
+    fullscreen.addEventListener('click', () => setFullscreen(!viewer.classList.contains('is-fullscreen')));
+    pageInput.addEventListener('change', () => renderPage(pageInput.value));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && viewer.classList.contains('is-fullscreen')) { setFullscreen(false); return; }
+      if (event.target.matches('input,textarea,select') || event.altKey || event.ctrlKey || event.metaKey) return;
+      if (event.key === 'ArrowLeft') { event.preventDefault(); renderPage(activePage - 1); }
+      if (event.key === 'ArrowRight') { event.preventDefault(); renderPage(activePage + 1); }
+    });
+    let resizeTimer;
+    addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => renderPage(activePage), 150); });
+
+    (async () => {
+      try {
+        if (!file || !window.pdfjsLib) throw new Error('PDF preview unavailable');
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const response = await fetch(encodeURI(file));
+        if (!response.ok) throw new Error('PDF unavailable');
+        pdf = await window.pdfjsLib.getDocument({ data: await response.arrayBuffer() }).promise;
+        await renderPage(activePage);
+      } catch (error) {
+        console.error(error);
+        showFailure();
+      }
+    })();
+  </script>
+</body>
+</html>
