@@ -338,3 +338,22 @@ a{color:var(--playfair-crimson)}
 .map-lightbox-image{display:block;width:min(92vw,1800px);max-width:none;height:auto;transform-origin:center;will-change:transform;pointer-events:none;box-shadow:0 12px 42px rgba(68,59,50,.14)}
 .map-lightbox-open{overflow:hidden}
 @media(max-width:650px){.map-lightbox-toolbar{flex-wrap:wrap;padding:.55rem}.map-lightbox-title{width:100%;font-size:.86rem}.map-lightbox-toolbar button{flex:1;padding:.45rem .35rem}.map-lightbox-image{width:96vw}}
+
+/* Course outcomes and participation expectations are part of the course contract. */
+.course-outcomes,.course-expectations{padding-block:1rem 3.5rem}
+.course-guide-heading{display:grid;grid-template-columns:minmax(180px,.35fr) minmax(0,1fr);gap:.5rem 2rem;align-items:start;margin-bottom:1.75rem}
+.course-guide-heading .eyebrow{margin:.45rem 0 0}
+.course-guide-heading h2{margin:0;font:600 clamp(2rem,3.4vw,3.2rem)/1.02 var(--serif);letter-spacing:-.04em;text-wrap:balance}
+.course-guide-heading>p:last-child:not(.eyebrow){grid-column:2;max-width:650px;margin:.35rem 0 0;color:var(--muted);line-height:1.55}
+.outcome-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line)}
+.outcome-grid article{min-height:270px;padding:1.35rem;background:var(--paper)}
+.outcome-grid span,.expectation-list>article>span{color:var(--playfair-crimson);font:600 1.15rem var(--serif)}
+.outcome-grid h3{margin:3rem 0 .75rem;font:600 1.35rem/1.08 var(--serif)}
+.outcome-grid p{margin:0;color:var(--muted);font-size:.84rem;line-height:1.55}
+.course-expectations{padding-top:2rem}
+.expectation-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 3rem;border-top:1px solid var(--line)}
+.expectation-list article{display:grid;grid-template-columns:42px minmax(0,1fr);gap:1rem;padding:1.35rem 0;border-bottom:1px solid var(--line)}
+.expectation-list h3{margin:0 0 .35rem;font:600 1.25rem/1.1 var(--serif)}
+.expectation-list p{margin:0;color:var(--muted);font-size:.86rem;line-height:1.5}
+@media(max-width:900px){.outcome-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.course-guide-heading{grid-template-columns:1fr;gap:.45rem}.course-guide-heading .eyebrow{margin:0}.course-guide-heading>p:last-child:not(.eyebrow){grid-column:1}}
+@media(max-width:560px){.outcome-grid,.expectation-list{grid-template-columns:1fr}.outcome-grid article{min-height:0}.outcome-grid h3{margin-top:1.75rem}.expectation-list{gap:0}}
