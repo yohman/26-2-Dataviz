@@ -116,7 +116,7 @@ Object.assign(window.COURSE_TRANSLATIONS.ja, {
   'Submit this assignment': 'このMAKEを提出する',
 
   'Start here. Open this week’s agenda to find the lecture, in-class work, homework, and materials together.': 'ここから始めましょう。今週のAGENDAを開くと、講義、授業内課題、宿題、資料をまとめて確認できます。',
-  'NEXT WEEK': '次の週', 'Open this week →': 'この週を開く →',
+  'NEXT WEEK': '次の週', 'THIS WEEK': '今週', 'Open this week →': 'この週を開く →',
   'LECTURE': '講義', 'ASSIGNMENTS': '課題', 'IN CLASS': '授業内', 'HOMEWORK': '宿題',
   'Make during class': '授業中につくる', 'Complete the relevant work during class and after class.': '授業内と授業後に、該当する課題に取り組みます。',
   'DELIVERABLES': '提出物', 'SUGGESTED TOOLS': 'おすすめのツール',

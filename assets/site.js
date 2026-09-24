@@ -371,17 +371,19 @@ function compactDate(isoDate) {
 }
 
 function renderHome() {
-  const root = document.querySelector('[data-next-week]');
+  const root = document.querySelector('[data-this-week]');
   if (!root) return;
-  const next = weeks.find(week => week.course_date >= todayInTokyo()) || weeks.at(-1);
-  if (!next) return;
-  const no = String(next.week).padStart(2, '0');
+  const current = weeks.find(week => week.course_date >= todayInTokyo()) || weeks.at(-1);
+  if (!current) return;
+  const no = String(current.week).padStart(2, '0');
   const previewAll = new URLSearchParams(location.search).get('preview') === 'all';
-  const locked = !previewAll && todayInTokyo() < availabilityDate(next.course_date);
-  const href = `agenda.html${previewAll ? '?preview=all' : ''}#week-${next.week}`;
+  const locked = !previewAll && todayInTokyo() < availabilityDate(current.course_date);
+  const href = `agenda.html${previewAll ? '?preview=all' : ''}#week-${current.week}`;
+  root.href = href;
+  root.setAttribute('aria-label', copy(`Open week ${current.week}`, `第${current.week}週を開く`));
   root.innerHTML = locked
-    ? `<p class="eyebrow">${copy('NEXT WEEK', '次の週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(next.title, next.title_ja))}</h2><p>${escapeHtml(copy(`Details open ${compactDate(availabilityDate(next.course_date))}.`, `内容は${compactDate(availabilityDate(next.course_date))}に公開します。`))}</p><a href="${href}">${copy('See the schedule →', '日程を見る →')}</a>`
-    : `<p class="eyebrow">${copy('NEXT WEEK', '次の週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(next.challenge, next.challenge_ja))}</h2><p>${escapeHtml(copy(next.homework, next.homework_ja))}</p><a href="${href}">${copy('Open this week →', 'この週を開く →')}</a>`;
+    ? `<p class="eyebrow">${copy('THIS WEEK', '今週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(current.title, current.title_ja))}</h2><p>${escapeHtml(copy(`Details open ${compactDate(availabilityDate(current.course_date))}.`, `内容は${compactDate(availabilityDate(current.course_date))}に公開します。`))}</p><span class="next-cta">${copy('See the schedule →', '日程を見る →')}</span>`
+    : `<p class="eyebrow">${copy('THIS WEEK', '今週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(current.challenge, current.challenge_ja))}</h2><p>${escapeHtml(copy(current.homework, current.homework_ja))}</p><span class="next-cta">${copy('Open this week →', 'この週を開く →')}</span>`;
 }
 
 function option(value, label) { const item = document.createElement('option'); item.value = value; item.textContent = label; return item; }
@@ -591,7 +593,7 @@ function renderCourse() {
 }
 
 async function loadWeeks() {
-  if (!document.querySelector('[data-agenda], [data-next-week]')) return;
+  if (!document.querySelector('[data-agenda], [data-this-week]')) return;
   document.querySelectorAll('[data-agenda]').forEach(root => {
     root.innerHTML = `<p class="gallery-status">${copy('Loading course content…', '授業内容を読み込んでいます…')}</p>`;
   });
