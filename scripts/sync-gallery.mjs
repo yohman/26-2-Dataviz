@@ -2,7 +2,8 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 
-const feed = 'https://script.google.com/macros/s/AKfycbyMs5EMzHkKXnHGE0LH-H4r1RnrZXYw77WiWO_vhb7gHL9ZFGzDYpJIwVhsookMCSmjsA/exec';
+const feed = process.env.GALLERY_FEED_URL || 'https://script.google.com/macros/s/AKfycbyMs5EMzHkKXnHGE0LH-H4r1RnrZXYw77WiWO_vhb7gHL9ZFGzDYpJIwVhsookMCSmjsA/exec';
+const publishedSite = 'https://yohman.github.io/26-2-Dataviz/';
 const root = resolve(process.argv[2] || '.');
 const fields = ['week', 'challenge', 'submittedAt', 'studentName', 'title', 'tools', 'projectUrl', 'description', 'imageIndex'];
 
@@ -25,26 +26,68 @@ async function request(params, callback) {
   throw failure;
 }
 
-const payload = await request({}, 'gallerySnapshotReceive');
-if (!Array.isArray(payload.items)) throw new Error('Gallery feed has no items array');
-const items = [];
+async function publishedSnapshot() {
+  const response = await fetch(new URL('gallery.html', publishedSite), { signal: AbortSignal.timeout(20000) });
+  if (!response.ok) throw new Error(`Published gallery HTTP ${response.status}`);
+  const html = await response.text();
+  const inline = html.match(/<script id="gallery-snapshot" type="application\/json">([\s\S]*?)<\/script>/)?.[1];
+  if (!inline) throw new Error('Published gallery has no snapshot');
+  const snapshot = JSON.parse(inline);
+  if (!Array.isArray(snapshot.items)) throw new Error('Published gallery has no items array');
+  return snapshot;
+}
+
+let payload;
+let usePublishedSnapshot = false;
+try {
+  payload = await request({}, 'gallerySnapshotReceive');
+  if (!Array.isArray(payload.items)) throw new Error('Gallery feed has no items array');
+} catch (error) {
+  console.warn(`Gallery feed unavailable (${error.message}); reusing the published snapshot.`);
+  payload = await publishedSnapshot();
+  usePublishedSnapshot = true;
+}
 await mkdir(join(root, 'assets/gallery'), { recursive: true });
 await mkdir(join(root, 'data'), { recursive: true });
-for (const original of payload.items) {
-  const item = Object.fromEntries(fields.map(field => [field, original[field] ?? '']));
-  if (!Number.isInteger(Number(item.week)) || Number(item.week) < 1 || Number(item.week) > 14) throw new Error('Invalid week');
-  if (!Number.isInteger(Number(item.imageIndex)) || Number(item.imageIndex) < 0) throw new Error('Invalid image index');
-  const image = await request({ image: item.imageIndex }, 'gallerySnapshotImageReceive');
-  if (Number(image.index) !== Number(item.imageIndex)) throw new Error('Image index mismatch');
-  const match = String(image.data || '').match(/^data:image\/(png|jpeg|webp|gif);base64,([A-Za-z0-9+/=]+)$/);
-  if (!match) throw new Error('Invalid gallery image');
-  const bytes = Buffer.from(match[2], 'base64');
-  if (!bytes.length || bytes.length > 15_000_000) throw new Error('Invalid gallery image size');
-  const extension = match[1] === 'jpeg' ? 'jpg' : match[1];
-  const filename = `${createHash('sha256').update(bytes).digest('hex').slice(0, 24)}.${extension}`;
-  await writeFile(join(root, 'assets/gallery', filename), bytes);
-  item.imageUrl = `assets/gallery/${filename}`;
-  items.push(item);
+async function buildItems(source, fromPublishedSite) {
+  const items = [];
+  for (const original of source.items) {
+    const item = Object.fromEntries(fields.map(field => [field, original[field] ?? '']));
+    if (!Number.isInteger(Number(item.week)) || Number(item.week) < 1 || Number(item.week) > 14) throw new Error('Invalid week');
+    if (!Number.isInteger(Number(item.imageIndex)) || Number(item.imageIndex) < 0) throw new Error('Invalid image index');
+    let bytes;
+    let extension;
+    if (fromPublishedSite) {
+      const path = String(original.imageUrl || '');
+      if (!/^assets\/gallery\/[a-f0-9]{24}\.(png|jpg|webp|gif)$/.test(path)) throw new Error('Invalid published gallery image path');
+      const response = await fetch(new URL(path, publishedSite), { signal: AbortSignal.timeout(20000) });
+      if (!response.ok) throw new Error(`Published gallery image HTTP ${response.status}`);
+      bytes = Buffer.from(await response.arrayBuffer());
+      extension = path.split('.').at(-1);
+    } else {
+      const image = await request({ image: item.imageIndex }, 'gallerySnapshotImageReceive');
+      if (Number(image.index) !== Number(item.imageIndex)) throw new Error('Image index mismatch');
+      const match = String(image.data || '').match(/^data:image\/(png|jpeg|webp|gif);base64,([A-Za-z0-9+/=]+)$/);
+      if (!match) throw new Error('Invalid gallery image');
+      bytes = Buffer.from(match[2], 'base64');
+      extension = match[1] === 'jpeg' ? 'jpg' : match[1];
+    }
+    if (!bytes.length || bytes.length > 15_000_000) throw new Error('Invalid gallery image size');
+    const filename = `${createHash('sha256').update(bytes).digest('hex').slice(0, 24)}.${extension}`;
+    await writeFile(join(root, 'assets/gallery', filename), bytes);
+    item.imageUrl = `assets/gallery/${filename}`;
+    items.push(item);
+  }
+  return items;
+}
+
+let items;
+try {
+  items = await buildItems(payload, usePublishedSnapshot);
+} catch (error) {
+  if (usePublishedSnapshot) throw error;
+  console.warn(`Gallery images unavailable (${error.message}); reusing the published snapshot.`);
+  items = await buildItems(await publishedSnapshot(), true);
 }
 const snapshot = JSON.stringify({ generatedAt: new Date().toISOString(), items });
 await writeFile(join(root, 'data/gallery-public.json'), snapshot);
