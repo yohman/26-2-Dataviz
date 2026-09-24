@@ -120,8 +120,8 @@ function createMoriCorner(week) {
   corner.append(avatar);
   const content = element('div', '', 'mori-content');
   content.append(element('p', copy("MORI'S CORNER · YOUR TA", 'モリのコーナー · TA'), 'mori-kicker'));
-  content.append(element('h3', copy(note.title || 'A note from Mori', note.title_ja || 'モリからのお知らせ')));
-  content.append(element('p', copy(note.text || 'A tip, link, or handout for this week will appear here.', note.text_ja || '今週のヒント・リンク・配布資料は、ここに追加されます。'), 'mori-text'));
+  content.append(element('h3', copy(note.title || "Mori’s quiet suspicion", note.title_ja || 'モリの小さな疑い')));
+  content.append(element('p', copy(note.text || 'Charts can be shy. If one looks obvious, ask it one more question—the interesting part may be hiding behind the average.', note.text_ja || 'グラフは少し人見知りです。「当たり前」に見えたら、もう一つ質問してみよう。面白いところは、平均値の後ろに隠れているかもしれません。'), 'mori-text'));
   const links = element('div', '', 'mori-links');
   const link = safeUrl(note.link) || safeResourceHref(note.link);
   const file = safeResourceHref(note.file);

@@ -123,6 +123,9 @@ Object.assign(window.COURSE_TRANSLATIONS.ja, {
 
   'Course material,': '授業資料を、', 'ready to use.': 'すぐ使える形で。',
   'The actual datasets, lecture slides, references, and tools behind this course. Use the links in each week’s Agenda to find the right place to start.': 'この授業で使う実際のデータセット、Lecture slides、参考資料、ツールです。各週のAGENDAにあるリンクから、必要な場所へ進めます。',
+  'GRADING': '成績評価', 'How your work adds up.': '成績評価の内訳。',
+  'Regular making matters most. The presentations show how those experiments develop into a clear visual argument.': '毎回つくり続けることを最も重視します。中間・最終プレゼンでは、その試行が明確な視覚的主張へどう発展したかを示します。',
+  'Weekly assignments': '毎回の課題提出', 'Midterm presentation': '中間プレゼン', 'Final presentation': '最終プレゼン',
   'LOOK AT THIS': 'まず見る', 'Visual references': '視覚的な参考例',
   'DATA TO EXPLORE': '探索するDATA', 'Download locally': 'ローカルでダウンロード',
   'PROJECT HELP': 'プロジェクト支援', 'Make it together': '一緒につくる',

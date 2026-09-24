@@ -149,7 +149,18 @@ body{background:#fff}
 .activity-steps li{padding-left:.25rem;font-size:.9rem;line-height:1.45}
 .activity-link{margin-top:.25rem;background:var(--teal)}
 .activity-link:hover,.activity-link:focus-visible{background:var(--ink)}
-@media(max-width:560px){.activity-tab-list{grid-template-columns:1fr}.activity-tab-list button{border-right:0;border-bottom:1px solid #a9c7c4}.activity-tab-list button:last-child{border-bottom:0}.activity-panel{padding:1.2rem}}
+@media(max-width:560px){.activity-tab-list{grid-template-columns:repeat(2,minmax(0,1fr))}.activity-tab-list button{min-height:52px;border-right:1px solid #a9c7c4;border-bottom:0;padding:.8rem .75rem;text-align:center}.activity-tab-list button:last-child{border-right:0}.activity-panel{padding:1.2rem}}
+
+/* Grading is a visible part of the course contract, not a footnote. */
+.grading{margin-bottom:2rem;padding:clamp(1.4rem,3vw,2.25rem);background:var(--navy);color:white}
+.grading-heading{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.7fr);gap:2rem;align-items:end;margin-bottom:1.5rem}
+.grading-heading .eyebrow{margin-bottom:.55rem;color:#aebeff}.grading-heading h2{margin:0;font:700 clamp(2rem,4vw,3.5rem)/.95 var(--serif);letter-spacing:-.045em}.grading-heading>p{margin:0;color:#d8dce9;font-size:.9rem;line-height:1.55}
+.grading-breakdown{display:grid;grid-template-columns:5fr 2fr 3fr;gap:1px;background:rgba(255,255,255,.24)}
+.grading-item{min-height:190px;padding:1.2rem;background:white;color:var(--ink);border-top:5px solid var(--cobalt)}
+.grading-item--midterm{border-top-color:var(--teal)}.grading-item--final{border-top-color:var(--orange)}
+.grading-item span{display:block;margin-bottom:2rem;color:var(--cobalt);font:700 clamp(2.8rem,6vw,5rem)/.85 var(--serif);letter-spacing:-.06em}.grading-item--midterm span{color:var(--teal)}.grading-item--final span{color:var(--orange)}
+.grading-item h3{margin:0;font:700 1rem/1.2 var(--sans)}.grading-item p{margin:.35rem 0 0;color:var(--muted);font-size:.75rem}
+@media(max-width:700px){.grading-heading{grid-template-columns:1fr;gap:.8rem}.grading-breakdown{grid-template-columns:1fr}.grading-item{min-height:0;display:grid;grid-template-columns:90px minmax(0,1fr);align-items:center;column-gap:1rem}.grading-item span{grid-row:1/3;margin:0}.grading-item h3,.grading-item p{grid-column:2}}
 
 /* Two deliberate schedule lines replace the long free-form date label. */
 .agenda-page .week-summary{grid-template-columns:110px minmax(0,1fr) auto}
