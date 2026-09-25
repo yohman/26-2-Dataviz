@@ -252,12 +252,18 @@ function renderAgenda() {
     const locked = !previewAll && today < availabilityDate(week.course_date);
     const classTime = week.date.match(/\d{1,2}:\d{2}\s*[–-]\s*\d{1,2}:\d{2}/)?.[0] || '';
     const weekIndex = `<span class="week-index"><span class="week-number">${no}</span><span class="week-date"><span>${escapeHtml(compactDate(week.course_date))}</span><span>${escapeHtml(classTime)}</span></span></span>`;
-    const image = safeResourceHref(week.image);
-    const media = image ? `<figure class="week-visual"><img src="${escapeHtml(image)}" alt="" loading="lazy"><figcaption>${copy('From the lecture slides', '講義スライドより')}</figcaption></figure>` : '';
     const slideMaterials = week.materials.filter(material => material.type === 'slides' || material.href.startsWith('lectures/'));
     const activityMaterials = week.materials.filter(material => !slideMaterials.includes(material));
     const returnTo = `agenda.html${previewAll ? '?preview=all' : ''}#week-${week.week}`;
-    const slides = slideMaterials.length ? `<div class="lecture-slides">${materialLinks(slideMaterials.map(material => ({ ...material, label: copy('Preview lecture slides', '講義スライドをプレビュー') })), { week: week.week, returnTo })}</div>` : '';
+    const image = safeResourceHref(week.image);
+    const slideMaterial = slideMaterials[0];
+    const slideFile = safeResourceHref(slideMaterial?.href);
+    const slideLabel = copy('Preview lecture slides', '講義スライドをプレビュー');
+    const slideHref = slideFile && /^lectures\/[A-Za-z0-9._-]+\.pdf$/i.test(slideFile)
+      ? `viewer.html?file=${encodeURIComponent(slideFile)}&title=${encodeURIComponent(slideLabel)}&week=${encodeURIComponent(`Week ${week.week}`)}&return=${encodeURIComponent(returnTo)}`
+      : '';
+    const media = image ? `${slideHref ? `<a class="week-visual-link" href="${escapeHtml(slideHref)}" aria-label="${escapeHtml(slideLabel)}">` : ''}<figure class="week-visual"><img src="${escapeHtml(image)}" alt="" loading="lazy"><figcaption>${escapeHtml(slideLabel)}${slideHref ? '<b aria-hidden="true">→</b>' : ''}</figcaption></figure>${slideHref ? '</a>' : ''}` : '';
+    const slides = !image && slideMaterials.length ? `<div class="lecture-slides">${materialLinks(slideMaterials.map(material => ({ ...material, label: slideLabel })), { week: week.week, returnTo })}</div>` : '';
     const activityLinks = activityMaterials.length ? `<div class="activity-materials"><p>${copy('MATERIALS FOR THIS ACTIVITY', 'この課題で使う資料')}</p><div>${materialLinks(activityMaterials)}</div></div>` : '';
     const status = week.week === focusedWeek?.week ? `<span class="week-status">${copy(week.course_date === today ? 'TODAY' : 'START HERE', week.course_date === today ? '今日' : 'ここから')}</span>` : '';
     const preview = `<span class="week-preview"><span><b>${copy('PRACTICE', '実践')}</b>${escapeHtml(copy(week.learn, week.learn_ja))}</span><span><b>${copy('TOOLS', 'ツール')}</b>${escapeHtml(copy(week.tools, week.tools_ja))}</span></span>`;
@@ -268,7 +274,6 @@ function renderAgenda() {
       if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
       return;
     }
-    const route = `<section class="week-route" aria-label="${copy('This week at a glance', '今週の流れ')}"><div><span>01</span><p><b>${copy('LECTURE', '講義')}</b><small>${copy('Look and learn', '見る・学ぶ')}</small></p></div><div><span>02</span><p><b>${copy('TOOLS', 'ツール')}</b><small>${escapeHtml(copy(week.tools, week.tools_ja))}</small></p></div><div><span>03</span><p><b>${copy('IN CLASS', '授業内')}</b><small>${copy('Try it together', '一緒に試す')}</small></p></div><div><span>04</span><p><b>${copy('HOMEWORK', '宿題')}</b><small>${copy('Continue after class', '授業後に続ける')}</small></p></div></section>`;
     const inClass = activityTabs(week) || (week.in_class ? `<article class="assignment-card assignment-card--in-class"><p class="assignment-label">${copy('IN CLASS', '授業内課題')}</p><h4>${copy('Try it with the class', 'クラスで試す')}</h4><p>${escapeHtml(copy(week.in_class, week.in_class_ja))}</p>${activityLinks}<div class="activity-tools"><span>${copy('TOOLS', '使うツール')}</span><strong>${escapeHtml(copy(week.tools, week.tools_ja))}</strong></div></article>` : '');
     const timing = classAgenda(week);
     const nextClassDate = weeks[index + 1]?.course_date || addDays(week.course_date, 7);
@@ -279,7 +284,7 @@ function renderAgenda() {
       : `<div class="assignment-submit"><p class="assignment-note">${copy('The submission link will appear here.', '提出リンクはここに表示されます。')}</p><p class="assignment-deadline"><strong>${copy('DEADLINE', '締切')}</strong> ${escapeHtml(deadline)}</p></div>`;
     html += `<details class="week" id="week-${week.week}"${week.week === focusedWeek?.week ? ' open' : ''}>
       <summary class="week-summary">${weekIndex}${weekMain}<span class="week-toggle"><span class="week-toggle-closed">${copy('Open week', '週の内容を見る')}</span><span class="week-toggle-open">${copy('Close week', '週の内容を閉じる')}</span><b aria-hidden="true">↓</b></span></summary>
-      <div class="week-body">${route}
+      <div class="week-body">
         <section class="week-lecture"><div class="week-section-heading"><div><p class="week-section-label">${copy('LECTURE', '講義')}</p><h3>${copy('What to expect', '今週の講義')}</h3></div></div>
           ${timing}
           <div class="week-heading"><p class="lecture-summary">${escapeHtml(copy(week.look, week.look_ja))}</p><div class="week-lecture-aside">${media}${slides}</div></div>
