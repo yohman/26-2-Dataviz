@@ -120,6 +120,7 @@ body{background:#fff}
 /* Materials live where students use them: slides with the lecture, datasets
    and references with the in-class activity. */
 .lecture-summary{align-self:start;max-width:46ch;margin:0;padding:1.4rem 0;font:500 clamp(1.25rem,2vw,1.65rem)/1.5 var(--sans)}
+.class-agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin:0 0 1.25rem;padding:0;background:var(--line);list-style:none}.class-agenda li{display:grid;align-content:start;gap:.35rem;min-height:132px;padding:1rem;background:var(--paper)}.class-agenda time{color:var(--playfair-crimson);font:600 .68rem "DM Mono",monospace;letter-spacing:.02em}.class-agenda strong{font:700 1rem/1.15 var(--serif)}.class-agenda span{color:var(--muted);font-size:.74rem;line-height:1.4}
 .lecture-slides{padding:.15rem 0 .25rem}
 .lecture-slides .material-link{display:block;width:max-content;max-width:100%;border:0;border-bottom:1px solid currentColor;padding:.3rem 0;color:var(--cobalt);font-size:.78rem}
 .lecture-slides .material-link:hover,.lecture-slides .material-link:focus-visible{background:transparent;color:var(--ink);border-color:var(--ink)}
@@ -132,7 +133,8 @@ body{background:#fff}
 .activity-tools{display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1rem;margin-top:1rem;color:var(--muted);font-size:.75rem}
 .activity-tools span{font:700 .58rem "DM Mono",monospace;letter-spacing:.06em}
 .activity-tools strong{color:var(--ink);font-size:.8rem}
-@media(max-width:900px){.lecture-summary{max-width:65ch;padding:.2rem 0}}
+@media(max-width:900px){.lecture-summary{max-width:65ch;padding:.2rem 0}.class-agenda{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.class-agenda{grid-template-columns:1fr}.class-agenda li{min-height:0}}
 
 /* Multiple in-class activities stay in one card and switch without losing the week. */
 .activity-tabs-card{display:block;padding:0;overflow:hidden}
@@ -199,7 +201,11 @@ details.week{border-bottom:1px solid var(--line)}
 .pdf-toolbar input{width:4rem;border:1px solid rgba(255,255,255,.65);background:white;color:var(--ink);padding:.4rem;text-align:center;font:700 .75rem var(--sans)}
 .pdf-stage{min-height:55vh;padding:1rem;display:grid;place-items:center;background:#dfe3e8;overflow:auto}
 .pdf-loading{margin:4rem 1rem;color:var(--muted);font:700 .8rem var(--sans)}
+.pdf-page{position:relative;flex:0 0 auto}
 .pdf-canvas{display:block;max-width:none;background:white;box-shadow:0 12px 35px rgba(23,24,28,.18)}
+.pdf-link-layer{position:absolute;inset:0;pointer-events:none}
+.pdf-link-layer a{position:absolute;z-index:1;display:block;pointer-events:auto;cursor:pointer}
+.pdf-link-layer a:hover,.pdf-link-layer a:focus-visible{background:rgba(179,58,70,.08);box-shadow:inset 0 0 0 2px var(--playfair-crimson);outline:0}
 .viewer-fullscreen{overflow:hidden}
 .pdf-viewer.is-fullscreen{position:fixed;inset:0;z-index:1000;display:grid;grid-template-rows:auto minmax(0,1fr);width:100vw;height:100vh;border:0;background:#dfe3e8}
 .pdf-viewer.is-fullscreen .pdf-toolbar{position:static}
@@ -281,7 +287,7 @@ a{color:var(--playfair-crimson)}
 .dashboard--history{display:block;padding-block:clamp(4.5rem,9vw,8rem) 2.5rem}
 .history-feature{margin:0;background:transparent}
 .history-map{position:relative;overflow:visible;background:#fff;box-shadow:0 16px 42px rgba(68,59,50,.1)}
-.history-map-trigger{position:relative;display:block;width:100%;border:0;padding:0;background:transparent;color:inherit;cursor:zoom-in;text-align:left}
+.history-map-trigger{position:relative;display:block;width:100%;border:0;padding:0;background:transparent;color:inherit;cursor:pointer;text-align:left}
 .history-map-trigger:focus-visible{outline:3px solid var(--playfair-crimson);outline-offset:5px}
 .history-feature .history-map-image{display:block;width:100%;aspect-ratio:2.23/1;object-fit:contain;background:#fff}
 .history-feature .minard-icon{position:absolute;z-index:2;right:-1rem;top:-2.8rem;width:clamp(84px,9vw,116px);height:clamp(84px,9vw,116px);border:0;border-radius:50%;background:var(--paper);box-shadow:0 0 0 7px rgba(250,247,240,.95),0 12px 28px rgba(68,59,50,.2);object-fit:cover;object-position:50% 22%}

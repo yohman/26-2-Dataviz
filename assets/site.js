@@ -109,6 +109,14 @@ function materialLinks(materials, context = {}) {
   }).join('');
 }
 
+function classAgenda(week) {
+  const raw = copy(week.schedule, week.schedule_ja);
+  if (!raw) return '';
+  const items = raw.split(';').map(item => item.split('|').map(part => part.trim())).filter(item => item.length === 3);
+  if (!items.length) return '';
+  return `<ol class="class-agenda" aria-label="${copy('Class timing', '授業の時間配分')}">${items.map(([time, title, description]) => `<li><time>${escapeHtml(time)}</time><strong>${escapeHtml(title)}</strong><span>${escapeHtml(description)}</span></li>`).join('')}</ol>`;
+}
+
 function createMoriCorner(week) {
   const note = week.mori || {};
   const corner = element('aside', '', 'mori-corner');
@@ -262,6 +270,7 @@ function renderAgenda() {
     }
     const route = `<section class="week-route" aria-label="${copy('This week at a glance', '今週の流れ')}"><div><span>01</span><p><b>${copy('LECTURE', '講義')}</b><small>${copy('Look and learn', '見る・学ぶ')}</small></p></div><div><span>02</span><p><b>${copy('TOOLS', 'ツール')}</b><small>${escapeHtml(copy(week.tools, week.tools_ja))}</small></p></div><div><span>03</span><p><b>${copy('IN CLASS', '授業内')}</b><small>${copy('Try it together', '一緒に試す')}</small></p></div><div><span>04</span><p><b>${copy('HOMEWORK', '宿題')}</b><small>${copy('Continue after class', '授業後に続ける')}</small></p></div></section>`;
     const inClass = activityTabs(week) || (week.in_class ? `<article class="assignment-card assignment-card--in-class"><p class="assignment-label">${copy('IN CLASS', '授業内課題')}</p><h4>${copy('Try it with the class', 'クラスで試す')}</h4><p>${escapeHtml(copy(week.in_class, week.in_class_ja))}</p>${activityLinks}<div class="activity-tools"><span>${copy('TOOLS', '使うツール')}</span><strong>${escapeHtml(copy(week.tools, week.tools_ja))}</strong></div></article>` : '');
+    const timing = classAgenda(week);
     const nextClassDate = weeks[index + 1]?.course_date || addDays(week.course_date, 7);
     const deadlineMs = submissionDeadlineMs(nextClassDate);
     const deadline = formatSubmissionDeadline(deadlineMs);
@@ -272,6 +281,7 @@ function renderAgenda() {
       <summary class="week-summary">${weekIndex}${weekMain}<span class="week-toggle"><span class="week-toggle-closed">${copy('Open week', '週の内容を見る')}</span><span class="week-toggle-open">${copy('Close week', '週の内容を閉じる')}</span><b aria-hidden="true">↓</b></span></summary>
       <div class="week-body">${route}
         <section class="week-lecture"><div class="week-section-heading"><div><p class="week-section-label">${copy('LECTURE', '講義')}</p><h3>${copy('What to expect', '今週の講義')}</h3></div></div>
+          ${timing}
           <div class="week-heading"><p class="lecture-summary">${escapeHtml(copy(week.look, week.look_ja))}</p><div class="week-lecture-aside">${media}${slides}</div></div>
         </section>
         <section class="week-assignments" aria-label="${copy('Assignments', '課題')}">
@@ -617,6 +627,7 @@ async function loadWeeks() {
 function setupMapViewer() {
   const trigger = document.querySelector('.history-map-trigger');
   if (!trigger) return;
+  if (trigger.matches('a[href]')) return;
   const source = trigger.querySelector('.history-map-image');
   const overlay = element('div', '', 'map-lightbox');
   overlay.hidden = true;

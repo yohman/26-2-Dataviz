@@ -75,9 +75,11 @@ Object.assign(window.COURSE_TRANSLATIONS.ja, {
   'HISTORICAL VISUALIZATION · 1869': '歴史的な可視化 · 1869年',
   'Napoleon’s 1812 campaign': 'ナポレオンの1812年ロシア遠征',
   'Charles Joseph Minard': 'シャルル・ジョゼフ・ミナール',
+  'The best statistical graphic ever drawn?': '史上最高の統計グラフィック？',
+  'Edward Tufte, on Minard’s map': 'エドワード・タフテによるミナールの地図評',
   'One image joins geography, direction, distance, temperature, time, and the devastating loss of soldiers.': '地理、進行方向、距離、気温、時間、そして兵士の壊滅的な減少を、一枚の図に重ねています。',
   'Explore it in Week 1 →': '第1週で詳しく見る →',
-  'View full screen ↗': '全画面で見る ↗',
+  'View full screen ↗': '全画面で見る ↗', 'View on Wikimedia ↗': 'Wikimediaで見る ↗',
 
   'this week?': '見よう？',
   'Start here. Look at this week’s agenda, make the next thing, and bring a question.': 'ここから始めましょう。今週のAGENDAを確認し、次のMAKEに取り組み、問いを一つ持ってきてください。',

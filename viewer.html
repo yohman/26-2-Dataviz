@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400..800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css?v=minard-viewer-20260925">
+  <link rel="stylesheet" href="assets/styles.css?v=pdf-links-20260925">
 </head>
 <body class="viewer-page">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -36,7 +36,10 @@
       </div>
       <div class="pdf-stage" data-pdf-stage>
         <p class="pdf-loading" data-status><span data-copy="loading">Loading slides…</span></p>
-        <canvas class="pdf-canvas" data-pdf-canvas hidden></canvas>
+        <div class="pdf-page" data-pdf-page hidden>
+          <canvas class="pdf-canvas" data-pdf-canvas></canvas>
+          <div class="pdf-link-layer" data-pdf-links></div>
+        </div>
       </div>
     </section>
   </main>
@@ -54,6 +57,7 @@
       download: ['Download PDF', 'PDFをダウンロード'], previous: ['Previous', '前へ'], next: ['Next', '次へ'],
       page: ['Page', 'ページ'], fullscreen: ['Full screen', '全画面'], exitFullscreen: ['Exit full screen', '全画面を終了'],
       loading: ['Loading slides…', 'スライドを読み込んでいます…'],
+      openSource: ['Open linked source', '出典を開く'],
       failed: ['The preview could not load. Download the PDF instead.', 'プレビューを読み込めませんでした。PDFをダウンロードしてください。']
     };
     let language = 'ja';
@@ -82,7 +86,9 @@
     document.querySelector('[data-download]').href = file ? encodeURI(file) : '#';
 
     const stage = document.querySelector('[data-pdf-stage]');
+    const pdfPage = document.querySelector('[data-pdf-page]');
     const canvas = document.querySelector('[data-pdf-canvas]');
+    const linkLayer = document.querySelector('[data-pdf-links]');
     const status = document.querySelector('[data-status]');
     const previous = document.querySelector('[data-previous]');
     const next = document.querySelector('[data-next]');
@@ -92,11 +98,12 @@
     let pdf;
     let activePage = Math.max(1, Number(parameters.get('page')) || 1);
     let renderTask;
+    let renderRevision = 0;
 
     const showFailure = () => {
       status.hidden = false;
       status.textContent = copy('failed');
-      canvas.hidden = true;
+      pdfPage.hidden = true;
       previous.disabled = true; next.disabled = true; pageInput.disabled = true;
     };
     const updateUrl = () => {
@@ -106,6 +113,7 @@
     };
     async function renderPage(requestedPage) {
       if (!pdf) return;
+      const revision = ++renderRevision;
       activePage = Math.min(pdf.numPages, Math.max(1, Number(requestedPage) || 1));
       if (renderTask) { try { renderTask.cancel(); } catch { /* The prior render already finished. */ } }
       const page = await pdf.getPage(activePage);
@@ -117,11 +125,35 @@
       canvas.height = Math.floor(viewport.height * pixelRatio);
       canvas.style.width = `${Math.floor(viewport.width)}px`;
       canvas.style.height = `${Math.floor(viewport.height)}px`;
+      pdfPage.style.width = `${Math.floor(viewport.width)}px`;
+      pdfPage.style.height = `${Math.floor(viewport.height)}px`;
+      linkLayer.replaceChildren();
       const context = canvas.getContext('2d');
       context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       renderTask = page.render({ canvasContext: context, viewport });
       try { await renderTask.promise; } catch (error) { if (error?.name !== 'RenderingCancelledException') throw error; }
-      canvas.hidden = false; status.hidden = true;
+      if (revision !== renderRevision) return;
+      const annotations = await page.getAnnotations({ intent: 'display' });
+      annotations.forEach((annotation, index) => {
+        if (annotation.subtype !== 'Link' || !annotation.url || !annotation.rect) return;
+        let target;
+        try {
+          target = new URL(annotation.url);
+          if (!['http:', 'https:'].includes(target.protocol)) return;
+        } catch { return; }
+        const [x1, y1, x2, y2] = viewport.convertToViewportRectangle(annotation.rect);
+        const link = document.createElement('a');
+        link.href = target.href;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.setAttribute('aria-label', `${copy('openSource')} ${index + 1}`);
+        link.style.left = `${Math.min(x1, x2)}px`;
+        link.style.top = `${Math.min(y1, y2)}px`;
+        link.style.width = `${Math.abs(x2 - x1)}px`;
+        link.style.height = `${Math.abs(y2 - y1)}px`;
+        linkLayer.append(link);
+      });
+      pdfPage.hidden = false; status.hidden = true;
       pageInput.value = activePage; pageInput.max = pdf.numPages; pageTotal.textContent = `/ ${pdf.numPages}`;
       previous.disabled = activePage === 1; next.disabled = activePage === pdf.numPages;
       updateUrl();

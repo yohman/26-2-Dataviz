@@ -10,6 +10,8 @@ look: Playfair and Minard, then Anscombe’s Quartet and the Datasaurus Dozen: s
 look_ja: PlayfairとMinard、そしてアンスコムの四重奏とDatasaurus Dozen：同じ統計量、異なる物語
 learn: plot, compare, and discuss what summary statistics hide
 learn_ja: プロットして比較し、要約統計が隠すものを話し合う
+schedule: 10:40–11:10|Lecture|Lecture and Mori’s Corner;11:10–11:50|Activity 1|Find, compare, vote, and share;11:50–12:10|Activity 2|Explore the Datasaurus Dozen independently;12:10–12:20|Closing|Homework and final questions
+schedule_ja: 10:40–11:10|講義|講義とモリのコーナー;11:10–11:50|アクティビティ1|探す・比べる・投票する・共有する;11:50–12:10|アクティビティ2|Datasaurus Dozenを各自で探索する;12:10–12:20|まとめ|宿題の説明と最後の質問
 in_class: In pairs, plot the Anscombe and Datasaurus examples; write one sentence about a pattern a summary statistic hides.
 in_class_ja: ペアでアンスコムとDatasaurusの例をプロットし、要約統計が隠すパターンを一文で書く。
 homework: Create or find a dataset, large or small, and visualize it. You may draw by hand or use any digital tool, but your visualization must represent the data you chose. This is your opportunity to show what you can produce on your own.
