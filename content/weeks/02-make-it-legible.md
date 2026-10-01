@@ -12,14 +12,14 @@ learn: use hierarchy, encoding, annotation, and context to make a consequential 
 learn_ja: 階層、エンコーディング、注釈、文脈を使い、重要なパターンを見えるようにする
 in_class: Visualize the O-ring evidence, compare approaches, then revise the group chart using today's design principles.
 in_class_ja: Oリングの証拠を可視化し、表現を比較した後、今日のデザイン原則を使ってグループのチャートを改訂する。
-homework: Return to your Week 1 submission and upgrade it using today's lessons. Make the hierarchy clearer, improve the encoding, reveal the key pattern, and add useful context. You may choose an entirely new direction, but it must still visualize a dataset you created or found and meet the same assignment requirements.
-homework_ja: 第1週の提出作品に戻り、今日学んだことを使ってアップグレードしてください。視覚的な階層を明確にし、エンコーディングを改善し、重要なパターンを見せ、必要な文脈を加えます。まったく新しい方向を選んでも構いませんが、自分で作成または見つけたデータセットを可視化し、同じ課題要件を満たしてください。
+homework: Return to your Week 1 submission and upgrade it using today's lessons. Make the hierarchy clearer, improve the encoding, reveal the key pattern, and add useful context. You may use a new tool, whether you revise your Week 1 work or choose an entirely new direction. Your work must still visualize a dataset you created or found and meet the same assignment requirements.
+homework_ja: 第1週の提出作品に戻り、今日学んだことを使ってアップグレードしてください。視覚的な階層を明確にし、エンコーディングを改善し、重要なパターンを見せ、必要な文脈を加えます。第1週の作品を改訂する場合も、まったく新しい方向を選ぶ場合も、新しいツールを使って構いません。自分で作成または見つけたデータセットを可視化し、同じ課題要件を満たしてください。
 deliverables: A link to the data, website, or document used; one required image of the revised visualization (a second image is optional); and a concise explanation of what you changed, why, and what the viewer should now notice.
 deliverables_ja: 使用したデータ、ウェブサイト、または資料へのリンク、改訂した可視化の画像1枚（2枚目は任意）、そして何を・なぜ変更し、見る人に何に気づいてほしいかを説明する短い文章。
 challenge: Upgrade your Week 1 visualization
 challenge_ja: 第1週の可視化をアップグレード
-tools: Paper and drawing tools, or the digital tool you used in Week 1
-tools_ja: 紙と画材、または第1週に使ったデジタルツール
+tools: Paper and drawing tools, your Week 1 digital tool, or a new tool of your choice
+tools_ja: 紙と画材、第1週に使ったデジタルツール、または自分で選んだ新しいツール
 image: assets/images/lecture/week02-challenger.webp
 ---
 
