@@ -1,6 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <title>Yoh — Data Visualization</title>
+  <title>Yoh — Seeing Data</title>
   <path d="M4 14h10l10 15 9-15h10L29 37v6c0 11-7 17-20 17H4V50h5c7 0 9-3 9-8v-5Z" fill="#2b211d"/>
-  <path d="M46 26c6 0 9-6 12-17l4 2c-3 13-8 20-16 20Z" fill="#b64045"/>
-  <circle cx="58" cy="8" r="5" fill="#b64045"/>
+  <rect x="40" y="40" width="6" height="13" rx="1.5" fill="#d09531"/>
+  <rect x="48" y="31" width="6" height="22" rx="1.5" fill="#b9792d"/>
+  <rect x="56" y="22" width="6" height="31" rx="1.5" fill="#ad3f4c"/>
+  <circle cx="59" cy="9" r="4.5" fill="#ad3f4c"/>
 </svg>
