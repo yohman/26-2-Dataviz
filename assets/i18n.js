@@ -8,6 +8,7 @@ window.COURSE_TRANSLATIONS = { ja: {
   'Tools · 2026-2 Data Visualization': 'ツール · 2026-2 データビジュアライゼーション',
   'Studio · 2026-2 Data Visualization': 'スタジオ · 2026-2 データビジュアライゼーション',
   'Gallery · 2026-2 Data Visualization': 'ギャラリー · 2026-2 データビジュアライゼーション',
+  'Gallery work · 2026–2 Data Visualization': '学生作品 · 2026–2 データビジュアライゼーション',
   'Resources · 2026-2 Data Visualization': '資料 · 2026-2 データビジュアライゼーション',
   'Skip to content': '本文へ移動', 'Menu': 'メニュー', 'AGENDA': '授業計画', 'ATLAS': 'アトラス',
   'MAKE': 'つくる', 'TOOLS': 'ツール', 'STUDIO': 'スタジオ', 'GALLERY': 'ギャラリー',

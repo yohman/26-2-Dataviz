@@ -24,6 +24,8 @@ let weeks = [];
 let galleryItemsPromise;
 let submissionDeadlineTimer;
 const galleryImageCache = new Map();
+let galleryWorkItems;
+let galleryWorkRefreshStarted = false;
 
 const escapeHtml = value => String(value || '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const isJapanese = () => window.courseLanguage === 'ja';
@@ -200,7 +202,7 @@ function setupShell() {
   });
   const current = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.site-nav a').forEach(link => {
-    if (link.getAttribute('href') === current) link.setAttribute('aria-current', 'page');
+    if (link.getAttribute('href') === current || (current === 'gallery-work.html' && link.getAttribute('href') === 'gallery.html')) link.setAttribute('aria-current', 'page');
   });
 
   const translations = window.COURSE_TRANSLATIONS?.ja || {};
@@ -231,6 +233,7 @@ function setupShell() {
     try { localStorage.setItem('dv-language', language); } catch { /* Storage may be blocked. */ }
     if (weeks.length) renderCourse();
     if (document.querySelector('[data-gallery]')) renderGallery();
+    if (document.querySelector('[data-gallery-work]')) renderGalleryWork();
   }
 
   let language = 'ja';
@@ -479,19 +482,21 @@ function appendGalleryText(node, value) {
   node.append(document.createTextNode(text.slice(position)));
 }
 
-function enlargeGalleryImage(src, alt) {
-  let dialog = document.querySelector('#gallery-image-dialog');
-  if (!dialog) {
-    dialog = document.createElement('dialog'); dialog.id = 'gallery-image-dialog'; dialog.className = 'gallery-image-dialog';
-    const close = element('button', copy('Close image', '画像を閉じる'), 'gallery-image-close'); close.type = 'button';
-    close.addEventListener('click', () => dialog.close());
-    const image = document.createElement('img');
-    dialog.append(close, image);
-    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
-    document.body.append(dialog);
-  }
-  const image = dialog.querySelector('img'); image.src = src; image.alt = alt;
-  dialog.showModal();
+const galleryItemKey = item => `${item.week}-${item.imageIndex}`;
+
+function galleryFilterItems(items, week, tool, chart) {
+  const form = galleryForms.find(entry => entry.id === chart);
+  return items.filter(item =>
+    (week === 'all' || String(item.week) === String(week)) &&
+    (!tool || matchedGalleryTools(item.tools).some(entry => entry.name === tool)) &&
+    (!form || matchesGalleryForm(item, form)));
+}
+
+function galleryPageUrl(item, week, tool, chart) {
+  const params = new URLSearchParams({ id: galleryItemKey(item), week: String(week) });
+  if (tool) params.set('tool', tool);
+  if (chart) params.set('chart', chart);
+  return `gallery-work.html?${params}`;
 }
 
 function requestGalleryItems() {
@@ -608,6 +613,182 @@ function galleryFormLabel(form) {
 
 function matchesGalleryForm(item, form) {
   return form.pattern.test(`${item.title || ''} ${item.description || ''}`);
+}
+
+function setupGalleryImagePanZoom(viewport, image, level, controls) {
+  let scale = 1, offsetX = 0, offsetY = 0, pointerId = null, startX = 0, startY = 0;
+  const apply = () => {
+    image.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+    level.textContent = `${Math.round(scale * 100)}%`;
+    viewport.classList.toggle('is-zoomed', scale > 1);
+  };
+  const zoom = (factor, clientX, clientY) => {
+    const next = Math.min(8, Math.max(1, scale * factor));
+    const ratio = next / scale;
+    const box = viewport.getBoundingClientRect();
+    const x = clientX === undefined ? 0 : clientX - box.left - box.width / 2;
+    const y = clientY === undefined ? 0 : clientY - box.top - box.height / 2;
+    offsetX = x - (x - offsetX) * ratio;
+    offsetY = y - (y - offsetY) * ratio;
+    scale = next;
+    apply();
+  };
+  const reset = () => { scale = 1; offsetX = 0; offsetY = 0; apply(); };
+  controls.querySelector('[data-gallery-zoom-in]').addEventListener('click', () => zoom(1.3));
+  controls.querySelector('[data-gallery-zoom-out]').addEventListener('click', () => zoom(1 / 1.3));
+  controls.querySelector('[data-gallery-zoom-reset]').addEventListener('click', reset);
+  viewport.addEventListener('wheel', event => {
+    event.preventDefault();
+    zoom(event.deltaY < 0 ? 1.15 : 1 / 1.15, event.clientX, event.clientY);
+  }, { passive: false });
+  viewport.addEventListener('dblclick', event => zoom(1.5, event.clientX, event.clientY));
+  viewport.addEventListener('pointerdown', event => {
+    if (event.button !== 0) return;
+    pointerId = event.pointerId;
+    startX = event.clientX - offsetX; startY = event.clientY - offsetY;
+    viewport.setPointerCapture(pointerId);
+    viewport.classList.add('is-dragging');
+  });
+  viewport.addEventListener('pointermove', event => {
+    if (event.pointerId !== pointerId) return;
+    offsetX = event.clientX - startX; offsetY = event.clientY - startY; apply();
+  });
+  const endDrag = event => {
+    if (event.pointerId !== pointerId) return;
+    viewport.classList.remove('is-dragging');
+    if (viewport.hasPointerCapture(pointerId)) viewport.releasePointerCapture(pointerId);
+    pointerId = null;
+  };
+  viewport.addEventListener('pointerup', endDrag);
+  viewport.addEventListener('pointercancel', endDrag);
+  image.addEventListener('load', reset);
+  apply();
+}
+
+function paintGalleryWork(items) {
+  const root = document.querySelector('[data-gallery-work]');
+  if (!root) return;
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id') || '';
+  const item = items.find(entry => galleryItemKey(entry) === id);
+  if (!item) {
+    const back = element('a', copy('Back to gallery ←', 'ギャラリーに戻る ←'));
+    back.href = 'gallery.html';
+    root.replaceChildren(element('h1', copy('Work not found', '作品が見つかりません'), 'gallery-work-missing'), back);
+    return;
+  }
+  const week = params.get('week') === 'all' ? 'all' : /^\d+$/.test(params.get('week') || '') ? params.get('week') : String(item.week);
+  const tool = galleryTools.some(entry => entry.name === params.get('tool')) ? params.get('tool') : '';
+  const chart = galleryForms.some(entry => entry.id === params.get('chart')) ? params.get('chart') : '';
+  const shown = galleryFilterItems(items, week, tool, chart);
+  const index = shown.findIndex(entry => galleryItemKey(entry) === id);
+  const backParams = new URLSearchParams({ week });
+  if (tool) backParams.set('tool', tool);
+  if (chart) backParams.set('chart', chart);
+  const nav = element('nav', '', 'gallery-work-navigation');
+  nav.setAttribute('aria-label', copy('Work navigation', '作品の移動'));
+  const back = element('a', copy('← Back to gallery', '← ギャラリーに戻る'), 'gallery-work-back');
+  back.href = `gallery.html?${backParams}`;
+  nav.append(back);
+  nav.append(element('span', index < 0 ? '' : `${index + 1} / ${shown.length}`, 'gallery-work-position'));
+  const sequence = element('div', '', 'gallery-work-sequence');
+  [['prev', index - 1, copy('← Previous', '← 前の作品')], ['next', index + 1, copy('Next →', '次の作品 →')]].forEach(([direction, target, label]) => {
+    const available = index >= 0 && target >= 0 && target < shown.length;
+    const control = element(available ? 'a' : 'span', label, `gallery-work-${direction}${available ? '' : ' is-disabled'}`);
+    if (available) control.href = galleryPageUrl(shown[target], week, tool, chart);
+    sequence.append(control);
+  });
+  nav.append(sequence);
+
+  const layout = element('div', '', 'gallery-work-layout');
+  const art = element('section', '', 'gallery-work-art');
+  art.setAttribute('aria-label', copy('Zoomable visualization', '拡大・移動できる作品画像'));
+  const toolbar = element('div', '', 'gallery-work-toolbar');
+  const hint = element('span', copy('Scroll to zoom · drag to pan', 'スクロールで拡大 · ドラッグで移動'), 'gallery-work-hint');
+  const controls = element('div', '', 'gallery-work-zoom-controls');
+  const out = element('button', '−'); out.type = 'button'; out.dataset.galleryZoomOut = ''; out.setAttribute('aria-label', copy('Zoom out', '縮小'));
+  const level = element('span', '100%', 'gallery-work-zoom-level'); level.setAttribute('aria-live', 'polite');
+  const zoomIn = element('button', '+'); zoomIn.type = 'button'; zoomIn.dataset.galleryZoomIn = ''; zoomIn.setAttribute('aria-label', copy('Zoom in', '拡大'));
+  const reset = element('button', copy('Fit', '全体表示')); reset.type = 'button'; reset.dataset.galleryZoomReset = '';
+  controls.append(out, level, zoomIn, reset); toolbar.append(hint, controls);
+  const viewport = element('div', copy('Loading image…', '画像を読み込んでいます…'), 'gallery-work-viewport');
+  art.append(toolbar, viewport);
+
+  const details = element('aside', '', 'gallery-work-details');
+  const weekLink = element('a', `${copy(`WEEK ${item.week}`, `第${item.week}週`)} · ${challengeForWeek(item.week) || String(item.challenge || '').replace(/^第\d+週｜/, '')}`, 'gallery-work-week');
+  weekLink.href = `agenda.html#week-${item.week}`;
+  details.append(weekLink);
+  details.append(element('h1', item.title || copy('Untitled work', '無題の作品')));
+  details.append(element('p', item.studentName || '', 'gallery-work-author'));
+  const description = element('div', '', 'gallery-work-description'); appendGalleryText(description, item.description);
+  details.append(description);
+  const metadata = element('div', '', 'gallery-work-metadata');
+  const toolBlock = element('div', '', 'gallery-work-meta-block');
+  toolBlock.append(element('h2', copy('Tools', 'ツール')));
+  const matched = matchedGalleryTools(item.tools);
+  if (matched.length) matched.forEach(entry => {
+    const chip = element(entry.url ? 'a' : 'span', entry.name, 'gallery-tool-chip');
+    if (entry.url) { chip.href = entry.url; chip.target = '_blank'; chip.rel = 'noopener noreferrer'; }
+    toolBlock.append(chip);
+  });
+  else toolBlock.append(element('p', item.tools || '—'));
+  metadata.append(toolBlock);
+  const dateBlock = element('div', '', 'gallery-work-meta-block');
+  dateBlock.append(element('h2', copy('Submitted', '提出日')));
+  dateBlock.append(element('p', item.submittedAt || '—')); metadata.append(dateBlock);
+  const sourceBlock = element('div', '', 'gallery-work-meta-block');
+  sourceBlock.append(element('h2', copy('Data / sources', 'データ・出典')));
+  const sources = galleryUrls(item.projectUrl);
+  if (sources.length) sources.forEach((href, number) => {
+    const link = element('a', sources.length > 1 ? copy(`Source ${number + 1} ↗`, `出典 ${number + 1} ↗`) : copy('Open data / source ↗', 'データ・出典を開く ↗'));
+    link.href = href; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.title = href;
+    sourceBlock.append(link);
+  });
+  else sourceBlock.append(element('p', item.projectUrl || '—'));
+  metadata.append(sourceBlock); details.append(metadata);
+  layout.append(art, details); root.replaceChildren(nav, layout);
+
+  (async () => {
+    const data = item.imageUrl || await loadGalleryImage(Number(item.imageIndex));
+    if (!viewport.isConnected) return;
+    if (!/^assets\/gallery\/[a-f0-9]{24}\.(?:png|jpg|webp|gif)$/.test(data) && !/^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(data)) {
+      viewport.textContent = copy('Screenshot unavailable.', '画像を表示できません。');
+      controls.hidden = true;
+      return;
+    }
+    const image = document.createElement('img'); image.src = data;
+    image.alt = copy(`Visualization by ${item.studentName || 'a student'}: ${item.title || 'untitled'}`, `${item.studentName || '学生'}の作品：${item.title || '無題'}`);
+    image.draggable = false;
+    viewport.replaceChildren(image);
+    setupGalleryImagePanZoom(viewport, image, level, controls);
+  })();
+}
+
+async function renderGalleryWork() {
+  const root = document.querySelector('[data-gallery-work]');
+  if (!root) return;
+  if (galleryWorkItems) { paintGalleryWork(galleryWorkItems); return; }
+  try {
+    const response = await fetch('data/gallery-public.json', { cache: 'default' });
+    if (!response.ok) throw new Error(`Gallery snapshot HTTP ${response.status}`);
+    const snapshot = await response.json();
+    if (!Array.isArray(snapshot.items)) throw new Error('Invalid gallery snapshot');
+    galleryWorkItems = snapshot.items;
+    paintGalleryWork(galleryWorkItems);
+  } catch (error) {
+    console.warn('Gallery work snapshot:', error);
+    root.replaceChildren(element('p', copy('Loading the latest student work…', '最新の学生作品を読み込んでいます…'), 'gallery-status'));
+  }
+  if (galleryWorkRefreshStarted) return;
+  galleryWorkRefreshStarted = true;
+  loadGalleryItems().then(latest => {
+    const cachedImages = new Map((galleryWorkItems || []).map(item => [galleryItemKey(item), item.imageUrl]));
+    galleryWorkItems = latest.map(item => ({ ...item, imageUrl: cachedImages.get(galleryItemKey(item)) || '' }));
+    paintGalleryWork(galleryWorkItems);
+  }).catch(error => {
+    console.warn('Gallery work live refresh:', error);
+    if (!galleryWorkItems) root.replaceChildren(element('p', copy('Student work is temporarily unavailable.', '学生作品を読み込めませんでした。'), 'gallery-status'));
+  });
 }
 
 function renderGalleryInsights(items, selectedWeek, selectedTool, selectedForm, shownCount, onToolSelect, onFormSelect) {
@@ -753,10 +934,7 @@ async function renderGallery() {
   function paint() {
     imageObserver?.disconnect();
     const weekItems = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
-    const form = galleryForms.find(entry => entry.id === selectedForm);
-    const shown = weekItems.filter(item =>
-      (!selectedTool || matchedGalleryTools(item.tools).some(tool => tool.name === selectedTool)) &&
-      (!form || matchesGalleryForm(item, form)));
+    const shown = galleryFilterItems(items, weekSelect.value, selectedTool, selectedForm);
     root.replaceChildren();
     renderGalleryInsights(weekItems, weekSelect.value, selectedTool, selectedForm, shown.length, chooseTool, chooseForm);
     status.hidden = shown.length > 0;
@@ -768,10 +946,11 @@ async function renderGallery() {
         const image = document.createElement('img'); image.src = data;
         image.alt = copy(`Screenshot of ${item.title || 'student work'}`, `${item.title || '学生作品'}のスクリーンショット`);
         image.loading = 'lazy';
-        const button = element('button', '', 'gallery-image-button'); button.type = 'button';
-        button.setAttribute('aria-label', copy(`Enlarge screenshot of ${item.title || 'student work'}`, `${item.title || '学生作品'}の画像を拡大`));
-        button.append(image); button.addEventListener('click', () => enlargeGalleryImage(data, image.alt));
-        placeholder.replaceWith(button);
+        const link = element('a', '', 'gallery-image-button');
+        link.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm);
+        link.setAttribute('aria-label', copy(`View ${item.title || 'student work'}`, `${item.title || '学生作品'}を詳しく見る`));
+        link.append(image);
+        placeholder.replaceWith(link);
       } else {
         placeholder.replaceChildren(element('span', copy('Screenshot unavailable. ', '画像を表示できません。')));
         const retry = element('button', copy('Try again', '再読み込み'), 'gallery-retry');
@@ -795,7 +974,10 @@ async function renderGallery() {
       placeholder.dataset.itemIndex = index; card.append(placeholder);
       const weekLink = element('a', `${copy(`WEEK ${item.week}`, `第${item.week}週`)} · ${challengeForWeek(item.week) || String(item.challenge || '').replace(/^第\d+週｜/, '')}`, 'meta');
       weekLink.href = `agenda.html#week-${item.week}`; card.append(weekLink);
-      card.append(element('h2', item.title || copy('Untitled work', '無題の作品')));
+      const heading = element('h2');
+      const titleLink = element('a', item.title || copy('Untitled work', '無題の作品'), 'gallery-card-title-link');
+      titleLink.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm);
+      heading.append(titleLink); card.append(heading);
       card.append(element('p', item.studentName || '', 'gallery-student'));
       const description = element('div', '', 'gallery-description'); appendGalleryText(description, item.description); card.append(description);
       const footer = element('div', '', 'gallery-card-footer');
