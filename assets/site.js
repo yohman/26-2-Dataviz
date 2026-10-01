@@ -245,6 +245,14 @@ function renderAgenda() {
   const today = todayInTokyo();
   const previewAll = new URLSearchParams(location.search).get('preview') === 'all';
   const focusedWeek = weeks.find(week => week.course_date >= today) || weeks.at(-1);
+  const jumpLinks = weeks.map(week => {
+    const past = week.course_date < today;
+    const current = !past && week.week === focusedWeek?.week;
+    const state = past ? copy('CLASS HELD', '授業済') : current ? copy(week.course_date === today ? 'TODAY' : 'NEXT', week.course_date === today ? '今日' : '次回') : '';
+    const stateClass = past ? 'agenda-week-link--past' : current ? 'agenda-week-link--current' : 'agenda-week-link--future';
+    return `<a class="agenda-week-link ${stateClass}" href="#week-${week.week}" aria-label="${escapeHtml(copy(`Week ${week.week}, ${compactDate(week.course_date)}${state ? `, ${state}` : ''}`, `第${week.week}週、${compactDate(week.course_date)}${state ? `、${state}` : ''}`))}"${current ? ' aria-current="step"' : ''}><span class="agenda-week-no">${String(week.week).padStart(2, '0')}</span><time datetime="${week.course_date}">${escapeHtml(compactDate(week.course_date))}</time>${state ? `<span class="agenda-week-state">${state}</span>` : ''}</a>`;
+  }).join('');
+  const intro = `<section class="agenda-intro wrap" aria-labelledby="agenda-title"><div class="agenda-intro-heading"><div><p class="eyebrow">2026–2 / ${copy('14 WEEKS', '全14週')}</p><h1 id="agenda-title">${copy('Agenda', '授業の予定')}</h1></div><p>${copy('Choose a week to see its lecture, activities, and homework.', '週を選ぶと、講義・授業内課題・宿題を確認できます。')}</p></div><nav class="agenda-week-nav" aria-label="${copy('Jump to a week', '各週へのショートカット')}">${jumpLinks}</nav></section>`;
   let html = '', active = '';
   weeks.forEach((week, index) => {
     if (week.act !== active) {
@@ -299,7 +307,11 @@ function renderAgenda() {
       </div></details>`;
     if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
   });
-  root.innerHTML = html;
+  root.innerHTML = intro + html;
+  root.querySelectorAll('.agenda-week-link').forEach(link => link.addEventListener('click', () => {
+    const panel = root.querySelector(`details${link.getAttribute('href')}`);
+    if (panel) panel.open = true;
+  }));
   const requestedWeek = location.hash.match(/^#week-(\d+)$/)?.[1];
   if (requestedWeek) {
     const requestedPanel = root.querySelector(`details#week-${requestedWeek}`);
