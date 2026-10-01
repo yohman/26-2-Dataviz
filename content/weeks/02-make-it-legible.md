@@ -39,15 +39,18 @@ steps:
 - Work alone and silently for 3 minutes. Sketch one clear way to communicate the data.
 - Share in groups of four. Each person has 1 minute to explain their sketch.
 - Spend 5 minutes combining the strongest ideas into one group visualization.
-- Improve the color, layout, labels, and emphasis, then share the group version with the class.
+- Improve the color, layout, labels, and emphasis. Use one slide per group in the shared deck: photograph your drawing and add it to your group's numbered slide. We will look at these first versions together before revising.
 steps_ja:
 - 3分間、一人で静かに作業する。データを明確に伝える方法を一つスケッチする。
 - 4人グループで共有する。一人1分で自分のスケッチを説明する。
 - 5分間で、よいアイデアを一つのグループ可視化にまとめる。
-- 色、レイアウト、ラベル、強調を整え、グループ版をクラスで共有する。
+- 色、レイアウト、ラベル、強調を整える。共有スライドは1グループにつき1ページを使う。グループの図を撮影し、自分たちのグループ番号のページに貼る。改訂前に、最初の版をクラスで見比べる。
 link: viewer.html?file=lectures%2Fw02.pdf&title=O-ring+damage+data&week=Week+2&return=agenda.html%23week-2&page=5
 link_label: Open zoomable slide 5
 link_label_ja: 拡大できるスライド5を開く
+results_link: https://docs.google.com/presentation/d/1GVYfdQHmYIynoczJeUyChxo53YNdEYx-HqtFUXYQD38/edit?usp=sharing
+results_label: Add the first photo to the group slide deck
+results_label_ja: 共有スライドに最初の写真を貼る
 
 ### Activity 2
 title: Revise the group chart
@@ -58,12 +61,15 @@ steps:
 - Reopen the original group visualization and identify the message it should communicate first.
 - Clean up the layout and strengthen the visual hierarchy.
 - Highlight the key pattern and add the context, labels, or annotation needed to interpret it.
-- Place the revised version next to the original and explain what changed and why.
+- Photograph the revised drawing and add it beside the first photo on the same group slide; do not replace the first version. We will compare the before and after versions together and discuss what changed and why.
 steps_ja:
 - 最初のグループ可視化を開き、最初に伝えるべきメッセージを確認する。
 - レイアウトを整理し、視覚的な階層を強くする。
 - 重要なパターンを強調し、解釈に必要な文脈、ラベル、注釈を加える。
-- 改訂版を元の版の隣に置き、何をなぜ変更したかを説明する。
+- 改訂した図を撮影し、同じグループのスライドで最初の写真の隣に貼る。最初の版は消さない。前後をクラスで見比べ、何をなぜ変えたか話し合う。
+link: https://docs.google.com/presentation/d/1GVYfdQHmYIynoczJeUyChxo53YNdEYx-HqtFUXYQD38/edit?usp=sharing
+link_label: Add the revised photo to the group slide deck
+link_label_ja: 共有スライドに改訂版の写真を貼る
 
 ## Mori's Corner
 
