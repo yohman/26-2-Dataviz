@@ -2,7 +2,7 @@
 const COURSE_CONFIG = {
   GOOGLE_FORM_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSctVgkCDhtkaG8UscBrVJVteqBiCFXHCB_tlQFscdM8wU4xAg/viewform',
   GOOGLE_FORM_WEEK_ENTRY_ID: 'entry.155622460',
-  GALLERY_API_URL: 'https://script.google.com/macros/s/AKfycbyMs5EMzHkKXnHGE0LH-H4r1RnrZXYw77WiWO_vhb7gHL9ZFGzDYpJIwVhsookMCSmjsA/exec'
+  GALLERY_API_URL: 'https://script.google.com/macros/s/AKfycbx0QJbdytCdRNdCTGPsMhfkMC3HFRImz9-VUCebCoZ6XjdVlieGwDDzmpxuxg0ORVZb5Q/exec'
 };
 
 const acts = {

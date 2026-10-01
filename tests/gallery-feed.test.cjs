@@ -18,6 +18,7 @@ test('the feed publishes one latest response per student and week without IDs or
     row('2026-09-26T02:00:00Z', 'second@example.com', 'second-id', 1, 'Another student'),
     row('2026-10-02T01:00:00Z', 'first@example.com', 'first-id', 2, 'Week two'),
     row('2026-10-02T02:00:00Z', 'third@example.com', 'third-id', 1, 'No screenshot yet', ''),
+    row('2026-10-02T02:30:00Z', 'blank@example.com', 'blank-id', 1, 'Anonymous submission', undefined, ''),
     row('2026-10-02T03:00:00Z', 'private@example.com', 'private-id', 1, 'Private work', undefined, 'いいえ')];
   const context = {
     SpreadsheetApp: { getActiveSpreadsheet: () => ({ getSheetByName: () => ({ getDataRange: () => ({ getValues: () => values.map(row => [...row]) }) }) }) },
@@ -36,8 +37,9 @@ test('the feed publishes one latest response per student and week without IDs or
   assert.match(response.text, /^courseGalleryReceive\(/);
   assert.doesNotMatch(response.text, /-id|@example\.com|Older|"Revision"|Private work/);
   const items = JSON.parse(response.text.slice('courseGalleryReceive('.length, -2)).items;
-  assert.equal(items.length, 4);
-  assert.deepEqual(items.map(item => item.title).sort(), ['Another student', 'Latest revision', 'No screenshot yet', 'Week two']);
+  assert.equal(items.length, 5);
+  assert.deepEqual(items.map(item => item.title).sort(), ['Anonymous submission', 'Another student', 'Latest revision', 'No screenshot yet', 'Week two']);
+  assert.equal(items.find(item => item.title === 'Anonymous submission').studentName, '');
   assert.ok(items.every(item => Number.isInteger(item.imageIndex)));
   assert.ok(items.every(item => !Object.hasOwn(item, 'imageData')));
   const imageResponse = context.doGet({ parameter: { image: '2', callback: 'courseGalleryImageReceive_2' } });

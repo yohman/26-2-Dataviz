@@ -2,25 +2,25 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 
-const feed = process.env.GALLERY_FEED_URL || 'https://script.google.com/macros/s/AKfycbyMs5EMzHkKXnHGE0LH-H4r1RnrZXYw77WiWO_vhb7gHL9ZFGzDYpJIwVhsookMCSmjsA/exec';
+const feed = process.env.GALLERY_FEED_URL || 'https://script.google.com/macros/s/AKfycbx0QJbdytCdRNdCTGPsMhfkMC3HFRImz9-VUCebCoZ6XjdVlieGwDDzmpxuxg0ORVZb5Q/exec';
 const publishedSite = 'https://yohman.github.io/26-2-Dataviz/';
 const root = resolve(process.argv[2] || '.');
 const fields = ['week', 'challenge', 'submittedAt', 'studentName', 'title', 'tools', 'projectUrl', 'description', 'imageIndex'];
 
-async function request(params, callback) {
+async function request(params, callback, attempts = 3, timeoutMs = 20000) {
   const url = new URL(feed);
   Object.entries({ ...params, callback }).forEach(([key, value]) => url.searchParams.set(key, value));
   let failure;
-  for (let attempt = 0; attempt < 3; attempt++) {
+  for (let attempt = 0; attempt < attempts; attempt++) {
     try {
-      const response = await fetch(url, { signal: AbortSignal.timeout(20000) });
+      const response = await fetch(url, { signal: AbortSignal.timeout(timeoutMs) });
       if (!response.ok) throw new Error(`Gallery feed HTTP ${response.status}`);
       const source = await response.text();
       const match = source.match(new RegExp(`^\\s*${callback}\\((.*)\\);?\\s*$`, 's'));
       return JSON.parse(match ? match[1] : source);
     } catch (error) {
       failure = error;
-      if (attempt < 2) await new Promise(done => setTimeout(done, 800 * (attempt + 1)));
+      if (attempt < attempts - 1) await new Promise(done => setTimeout(done, 800 * (attempt + 1)));
     }
   }
   throw failure;
@@ -65,12 +65,19 @@ async function buildItems(source, fromPublishedSite) {
       bytes = Buffer.from(await response.arrayBuffer());
       extension = path.split('.').at(-1);
     } else {
-      const image = await request({ image: item.imageIndex }, 'gallerySnapshotImageReceive');
-      if (Number(image.index) !== Number(item.imageIndex)) throw new Error('Image index mismatch');
-      const match = String(image.data || '').match(/^data:image\/(png|jpeg|webp|gif);base64,([A-Za-z0-9+/=]+)$/);
-      if (!match) throw new Error('Invalid gallery image');
-      bytes = Buffer.from(match[2], 'base64');
-      extension = match[1] === 'jpeg' ? 'jpg' : match[1];
+      try {
+        const image = await request({ image: item.imageIndex }, 'gallerySnapshotImageReceive', 1, 12000);
+        if (Number(image.index) !== Number(item.imageIndex)) throw new Error('Image index mismatch');
+        const match = String(image.data || '').match(/^data:image\/(png|jpeg|webp|gif);base64,([A-Za-z0-9+/=]+)$/);
+        if (!match) throw new Error('Invalid gallery image');
+        bytes = Buffer.from(match[2], 'base64');
+        extension = match[1] === 'jpeg' ? 'jpg' : match[1];
+      } catch (error) {
+        console.warn(`Gallery image ${item.imageIndex} unavailable (${error.message}); publishing the card without a cached thumbnail.`);
+        item.imageUrl = '';
+        items.push(item);
+        continue;
+      }
     }
     if (!bytes.length || bytes.length > 15_000_000) throw new Error('Invalid gallery image size');
     const filename = `${createHash('sha256').update(bytes).digest('hex').slice(0, 24)}.${extension}`;
