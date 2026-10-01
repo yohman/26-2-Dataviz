@@ -435,13 +435,13 @@ a{color:var(--playfair-crimson)}
 .gallery-page .gallery-hero--simple{padding-block:2.7rem 1.3rem}
 .gallery-page .gallery-hero--simple h1{font-size:clamp(3.3rem,6vw,5.8rem)}
 .gallery-page .gallery-grid{gap:1rem;background:transparent;padding-bottom:5rem}
-.gallery-page .gallery-card{height:665px;display:grid;grid-template-rows:220px 24px 58px 36px minmax(0,1fr) 145px;overflow:hidden;background:#f1e9dc}
+.gallery-page .gallery-card{height:705px;display:grid;grid-template-rows:220px 24px 58px 36px minmax(0,1fr) 145px;overflow:hidden;background:#f1e9dc}
 .gallery-page .gallery-card .gallery-image-button,.gallery-page .gallery-card .gallery-placeholder{grid-row:1;height:220px;aspect-ratio:auto;overflow:hidden}
 .gallery-page .gallery-card .gallery-image-button img{height:220px;aspect-ratio:auto;object-fit:contain}
 .gallery-page .gallery-card>.meta{grid-row:2;align-self:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .gallery-page .gallery-card h2{grid-row:3;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;align-self:start;margin:.35rem 0 0;font-size:1.35rem;line-height:1.17}
 .gallery-page .gallery-card .gallery-student{grid-row:4;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;align-self:start;margin:.25rem 0 0;font-size:.82rem;line-height:1.35}
-.gallery-page .gallery-card .gallery-description{grid-row:5;min-height:0;overflow-y:scroll;overscroll-behavior:contain;padding:0 .65rem 0 0;margin:.45rem 0 .7rem;line-height:1.5;scrollbar-color:var(--playfair-crimson) #e3d8c8;scrollbar-width:thin}
+.gallery-page .gallery-card .gallery-description{grid-row:5;min-height:0;overflow-y:scroll;overscroll-behavior:contain;padding:0 .65rem 0 0;margin:.45rem 0 .7rem;font-size:.82rem;line-height:1.5;scrollbar-color:var(--playfair-crimson) #e3d8c8;scrollbar-width:thin}
 .gallery-card .gallery-description::-webkit-scrollbar{width:7px}
 .gallery-card .gallery-description::-webkit-scrollbar-thumb{background:var(--playfair-crimson)}
 .gallery-card .gallery-description::-webkit-scrollbar-track{background:#e3d8c8}
@@ -454,7 +454,7 @@ a.gallery-tool-chip:hover,a.gallery-tool-chip:focus-visible{background:var(--pla
 .gallery-card .gallery-date{grid-row:2;align-self:center;margin:0}
 .gallery-card .gallery-source-links{grid-row:3;align-self:end;margin:0;max-height:100%;overflow-y:auto}
 .gallery-card .gallery-source-note{margin:.3rem 0 0;font-size:.75rem}
-@media(max-width:700px){.gallery-insights{grid-template-columns:1fr;padding:1.3rem}.gallery-insights-tools{padding:1.2rem 0 0;border-left:0;border-top:1px solid var(--line)}.gallery-page .gallery-card{height:640px;grid-template-rows:205px 24px 56px 34px minmax(0,1fr) 145px}.gallery-page .gallery-card .gallery-image-button,.gallery-page .gallery-card .gallery-placeholder,.gallery-page .gallery-card .gallery-image-button img{height:205px}}
+@media(max-width:700px){.gallery-insights{grid-template-columns:1fr;padding:1.3rem}.gallery-insights-tools{padding:1.2rem 0 0;border-left:0;border-top:1px solid var(--line)}.gallery-page .gallery-card{height:680px;grid-template-rows:205px 24px 56px 34px minmax(0,1fr) 145px}.gallery-page .gallery-card .gallery-image-button,.gallery-page .gallery-card .gallery-placeholder,.gallery-page .gallery-card .gallery-image-button img{height:205px}}
 
 /* The week index makes the agenda navigable without hiding future dates. */
 .agenda-intro{padding-block:clamp(2rem,5vw,4rem) 2rem}
