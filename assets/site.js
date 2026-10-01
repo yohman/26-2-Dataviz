@@ -562,6 +562,70 @@ function loadGalleryImage(index) {
   return promise;
 }
 
+const galleryTools = [
+  { name: 'Excel', pattern: /excel|exel|エクセル/i, url: 'https://www.microsoft.com/microsoft-365/excel' },
+  { name: 'Google Sheets', pattern: /スプレッ[ドト]シート|sheets/i, url: 'https://workspace.google.com/products/sheets/' },
+  { name: 'Gemini', pattern: /gemini/i, url: 'https://gemini.google.com/' },
+  { name: 'Claude', pattern: /claude/i, url: 'https://claude.ai/' },
+  { name: 'Python', pattern: /python/i, url: 'https://www.python.org/' },
+  { name: 'Flourish', pattern: /flourish/i, url: 'https://flourish.studio/' },
+  { name: 'Datawrapper', pattern: /datawrapper/i, url: 'https://www.datawrapper.de/' },
+  { name: 'VS Code', pattern: /vs\s*(?:code|cord)/i, url: 'https://code.visualstudio.com/' },
+  { name: 'JavaScript', pattern: /javascript/i, url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript' },
+  { name: 'Codex', pattern: /codex/i, url: 'https://openai.com/codex/' },
+  { name: 'ChatGPT', pattern: /chatgpt/i, url: 'https://chatgpt.com/' },
+  { name: 'PowerPoint', pattern: /powerpoint/i, url: 'https://www.microsoft.com/microsoft-365/powerpoint' },
+  { name: copy('Paper and pen', '紙とペン'), pattern: /紙|ノート|ペン/ }
+];
+
+function matchedGalleryTools(raw) {
+  return galleryTools.filter(tool => tool.pattern.test(raw || ''));
+}
+
+function renderGalleryInsights(items, selectedWeek) {
+  const root = document.querySelector('[data-gallery-insights]');
+  if (!root) return;
+  root.replaceChildren();
+  root.hidden = !items.length;
+  if (!items.length) return;
+  const lead = element('div', '', 'gallery-insights-lead');
+  lead.append(element('p', selectedWeek === 'all' ? copy('ALL WEEKS / AT A GLANCE', '全週の作品 / ひと目で') : copy(`WEEK ${String(selectedWeek).padStart(2, '0')} / AT A GLANCE`, `第${selectedWeek}週の作品 / ひと目で`), 'eyebrow'));
+  lead.append(element('strong', String(items.length), 'gallery-insights-number'));
+  lead.append(element('span', copy('student works', '点の作品'), 'gallery-insights-unit'));
+  const sourceCount = items.filter(item => galleryUrls(item.projectUrl).length).length;
+  lead.append(element('p', copy(`${sourceCount} include a data or source link.`, `${sourceCount}点にデータ・出典リンクがあります。`), 'gallery-insights-note'));
+  root.append(lead);
+  const toolCounts = new Map();
+  items.forEach(item => matchedGalleryTools(item.tools).forEach(tool => toolCounts.set(tool.name, (toolCounts.get(tool.name) || 0) + 1)));
+  const popular = [...toolCounts].sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const panel = element('div', '', 'gallery-insights-tools');
+  panel.append(element('h2', copy('Tools students used', 'みんなが使ったツール')));
+  panel.append(element('p', copy('Mentions across submissions · multiple tools per work', '提出作品での言及数 · 1作品で複数使用あり'), 'gallery-insights-caption'));
+  const max = popular[0]?.[1] || 1;
+  popular.forEach(([name, count]) => {
+    const row = element('div', '', 'gallery-tool-bar');
+    const label = element('span', name); const value = element('b', String(count));
+    const track = element('span', '', 'gallery-tool-track');
+    const fill = element('span', '', 'gallery-tool-fill'); fill.style.width = `${Math.round(count / max * 100)}%`;
+    track.append(fill); row.append(label, track, value); panel.append(row);
+  });
+  const forms = [
+    [copy('Bar charts', '棒グラフ'), /棒グラフ|縦棒|横棒|bar chart/i],
+    [copy('Maps', '地図'), /地図|マップ|\bmap\b/i],
+    [copy('Line charts', '折れ線グラフ'), /折れ線|line chart/i],
+    [copy('Pie charts', '円グラフ'), /円グラフ|pie chart/i],
+    [copy('Scatterplots', '散布図'), /散布図|scatter\s*plot/i]
+  ].map(([label, pattern]) => [label, items.filter(item => pattern.test(`${item.title || ''} ${item.description || ''}`)).length])
+    .filter(([, count]) => count > 0).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  if (forms.length) {
+    const formsBlock = element('div', '', 'gallery-insights-forms');
+    formsBlock.append(element('p', copy('Also mentioned in the work', '作品の説明に登場した表現'), 'gallery-insights-caption'));
+    forms.forEach(([label, count]) => formsBlock.append(element('span', `${label} ${count}`, 'gallery-form-chip')));
+    panel.append(formsBlock);
+  }
+  root.append(panel);
+}
+
 async function renderGallery() {
   const root = document.querySelector('[data-gallery]');
   if (!root || root.dataset.rendering === 'true') return;
@@ -613,7 +677,8 @@ async function renderGallery() {
     weekSelect.replaceChildren(option('all', copy(`All weeks (${items.length})`, `すべての週（${items.length}点）`)));
     [...counts].sort(([a], [b]) => a - b).forEach(([week, count]) =>
       weekSelect.append(option(String(week), copy(`Week ${week} (${count})`, `第${week}週（${count}点）`))));
-    weekSelect.value = counts.has(Number(selected)) ? selected : 'all';
+    const latestWeek = Math.max(...counts.keys());
+    weekSelect.value = selected === 'all' || counts.has(Number(selected)) ? selected : String(latestWeek);
     controlBar?.toggleAttribute('hidden', !items.length);
   }
   updateWeekOptions();
@@ -622,6 +687,8 @@ async function renderGallery() {
     imageObserver?.disconnect();
     const shown = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
     root.replaceChildren();
+    renderGalleryInsights(shown, weekSelect.value);
+    status.hidden = shown.length > 0;
     if (!shown.length) { root.append(element('p', copy('No submissions yet.', '提出作品はまだありません。'), 'gallery-status')); return; }
     const showImage = async (placeholder, item) => {
       const data = item.imageUrl || await loadGalleryImage(Number(item.imageIndex));
@@ -659,9 +726,19 @@ async function renderGallery() {
       weekLink.href = `agenda.html#week-${item.week}`; card.append(weekLink);
       card.append(element('h2', item.title || copy('Untitled work', '無題の作品')));
       if (item.studentName) card.append(element('p', item.studentName, 'gallery-student'));
-      const description = element('p', '', 'gallery-description'); appendGalleryText(description, item.description); card.append(description);
-      card.append(element('p', `${copy('Tools:', 'ツール:')} ${item.tools || '—'}`));
-      if (item.submittedAt) card.append(element('p', `${copy('Submitted:', '提出日:')} ${item.submittedAt}`, 'gallery-date'));
+      const description = element('div', '', 'gallery-description'); appendGalleryText(description, item.description); card.append(description);
+      const footer = element('div', '', 'gallery-card-footer');
+      const tools = element('div', '', 'gallery-card-tools'); tools.title = item.tools || '';
+      tools.append(element('span', copy('Tools', 'ツール'), 'gallery-card-label'));
+      const matches = matchedGalleryTools(item.tools);
+      if (matches.length) matches.forEach(tool => {
+        const chip = element(tool.url ? 'a' : 'span', tool.name, 'gallery-tool-chip');
+        if (tool.url) { chip.href = tool.url; chip.target = '_blank'; chip.rel = 'noopener noreferrer'; }
+        tools.append(chip);
+      });
+      else tools.append(element('span', item.tools || '—', 'gallery-tool-raw'));
+      footer.append(tools);
+      if (item.submittedAt) footer.append(element('p', `${copy('Submitted:', '提出日:')} ${item.submittedAt}`, 'gallery-date'));
       const sources = galleryUrls(item.projectUrl);
       if (sources.length) {
         const links = element('div', '', 'gallery-source-links');
@@ -672,8 +749,9 @@ async function renderGallery() {
           const link = element('a', label); link.href = href; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.title = href;
           links.append(link);
         });
-        card.append(links);
-      } else if (item.projectUrl) card.append(element('p', `${copy('Data / source:', 'データ・出典:')} ${item.projectUrl}`, 'gallery-source-note'));
+        footer.append(links);
+      } else if (item.projectUrl) footer.append(element('p', `${copy('Data / source:', 'データ・出典:')} ${item.projectUrl}`, 'gallery-source-note'));
+      card.append(footer);
       root.append(card);
       if (imageObserver) imageObserver.observe(placeholder);
       else showImage(placeholder, item);

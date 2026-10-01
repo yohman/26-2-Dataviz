@@ -403,3 +403,41 @@ a{color:var(--playfair-crimson)}
 .expectation-list p{margin:0;color:var(--muted);font-size:.86rem;line-height:1.5}
 @media(max-width:900px){.outcome-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.course-guide-heading{grid-template-columns:1fr;gap:.45rem}.course-guide-heading .eyebrow{margin:0}.course-guide-heading>p:last-child:not(.eyebrow){grid-column:1}}
 @media(max-width:560px){.outcome-grid,.expectation-list{grid-template-columns:1fr}.outcome-grid article{min-height:0}.outcome-grid h3{margin-top:1.75rem}.expectation-list{gap:0}}
+
+/* A compact weekly portrait of the submissions, using the course's chart palette. */
+.gallery-insights{display:grid;grid-template-columns:minmax(185px,.68fr) minmax(0,1.32fr);gap:clamp(1.5rem,4vw,4rem);align-items:stretch;margin:0 0 2rem;padding:1.7rem 2rem;background:var(--paper);border-top:3px solid var(--playfair-crimson)}
+.gallery-insights[hidden]{display:none}
+.gallery-insights-lead{display:flex;flex-wrap:wrap;align-content:start;align-items:baseline;column-gap:.65rem}
+.gallery-insights-lead .eyebrow{flex-basis:100%;margin:0 0 .5rem;color:var(--playfair-crimson)}
+.gallery-insights-number{font:600 clamp(4rem,8vw,7rem)/.9 var(--serif);letter-spacing:-.075em;color:var(--ink)}
+.gallery-insights-unit{font-weight:700}
+.gallery-insights-note{flex-basis:100%;margin:1rem 0 0;color:var(--muted);font-size:.85rem}
+.gallery-insights-tools{padding-left:clamp(1.5rem,4vw,4rem);border-left:1px solid var(--line)}
+.gallery-insights-tools h2{margin:0;font:600 clamp(1.35rem,2vw,1.8rem)/1.1 var(--serif)}
+.gallery-insights-caption{margin:.35rem 0 1.1rem;color:var(--muted);font-size:.75rem}
+.gallery-tool-bar{display:grid;grid-template-columns:minmax(94px,125px) minmax(0,1fr) 2ch;gap:.8rem;align-items:center;margin:.45rem 0;font:.78rem var(--sans)}
+.gallery-tool-bar b{font-weight:700;text-align:right}
+.gallery-tool-track{height:8px;background:#e9ddcc;overflow:hidden}
+.gallery-tool-fill{display:block;height:100%;background:var(--playfair-crimson)}
+.gallery-tool-bar:nth-of-type(2) .gallery-tool-fill{background:var(--playfair-gold)}
+.gallery-tool-bar:nth-of-type(3) .gallery-tool-fill{background:var(--playfair-olive)}
+.gallery-insights-forms{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--line)}
+.gallery-insights-forms .gallery-insights-caption{width:100%;margin:0 0 .15rem}
+.gallery-form-chip{padding:.25rem .5rem;background:#e9ddcc;font:600 .72rem var(--sans)}
+.gallery-card{height:590px;display:flex;flex-direction:column;overflow:hidden}
+.gallery-card h2{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;line-height:1.18;flex:none}
+.gallery-card .gallery-student{margin:.15rem 0 .55rem;flex:none}
+.gallery-card .gallery-description{flex:1;min-height:52px;overflow-y:scroll;overscroll-behavior:contain;padding:0 .65rem 0 0;margin:.2rem 0 .65rem;line-height:1.5;scrollbar-color:var(--playfair-crimson) #e3d8c8;scrollbar-width:thin}
+.gallery-card .gallery-description::-webkit-scrollbar{width:7px}
+.gallery-card .gallery-description::-webkit-scrollbar-thumb{background:var(--playfair-crimson)}
+.gallery-card .gallery-description::-webkit-scrollbar-track{background:#e3d8c8}
+.gallery-card-footer{flex:none;border-top:1px solid var(--line);padding-top:.65rem}
+.gallery-card-tools{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem;max-height:3.9rem;overflow-y:auto}
+.gallery-card-label{width:100%;font:700 .65rem var(--sans);color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.gallery-tool-chip{display:inline-block;padding:.2rem .45rem;background:#e5d8c4;color:var(--ink);font:700 .7rem var(--sans);text-decoration:none}
+a.gallery-tool-chip:hover,a.gallery-tool-chip:focus-visible{background:var(--playfair-crimson);color:white}
+.gallery-tool-raw{font-size:.75rem;overflow-wrap:anywhere}
+.gallery-card .gallery-date{margin:.55rem 0 .25rem}
+.gallery-card .gallery-source-links{margin:.25rem 0 0;max-height:3.4rem;overflow-y:auto}
+.gallery-card .gallery-source-note{margin:.3rem 0 0;font-size:.75rem}
+@media(max-width:700px){.gallery-insights{grid-template-columns:1fr;padding:1.3rem}.gallery-insights-tools{padding:1.2rem 0 0;border-left:0;border-top:1px solid var(--line)}}
