@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const test = require('node:test');
 
-test('the feed publishes one latest response per student and week without IDs or emails', () => {
+test('the feed publishes named latest responses without IDs, emails, or explicit refusals', () => {
   const headers = ['タイムスタンプ', 'メールアドレス', '学籍番号', '氏名', '週・チャレンジ', '作品タイトル',
     '使用したツール', '課題で使用したデータ、ウェブサイト、またはドキュメントへのリンク', '作品のスクリーンショット 1（必須）',
     '作品について説明してください', '作品のスクリーンショット 2（任意）',
@@ -39,7 +39,7 @@ test('the feed publishes one latest response per student and week without IDs or
   const items = JSON.parse(response.text.slice('courseGalleryReceive('.length, -2)).items;
   assert.equal(items.length, 5);
   assert.deepEqual(items.map(item => item.title).sort(), ['Anonymous submission', 'Another student', 'Latest revision', 'No screenshot yet', 'Week two']);
-  assert.equal(items.find(item => item.title === 'Anonymous submission').studentName, '');
+  assert.equal(items.find(item => item.title === 'Anonymous submission').studentName, 'Student');
   assert.ok(items.every(item => Number.isInteger(item.imageIndex)));
   assert.ok(items.every(item => !Object.hasOwn(item, 'imageData')));
   const imageResponse = context.doGet({ parameter: { image: '2', callback: 'courseGalleryImageReceive_2' } });

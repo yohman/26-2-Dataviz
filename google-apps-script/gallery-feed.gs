@@ -28,8 +28,7 @@ function doGet(request) {
 
   rows.forEach((row, index) => {
     // The current form has no gallery-publication question. Preserve any
-    // historical explicit refusal, while allowing unanswered rows to appear
-    // anonymously.
+    // historical explicit refusal while publishing the named submissions.
     if (consentColumn && /^いいえ/.test(get(row, consentColumn))) return;
     const studentId = get(row, '学籍番号');
     const challenge = get(row, '週・チャレンジ');
@@ -57,14 +56,11 @@ function doGet(request) {
 
   const items = latestRows.map(item => {
     const row = item.row;
-    const consent = consentColumn ? get(row, consentColumn) : '';
     return {
       week: item.week,
       challenge: item.challenge,
       submittedAt: Utilities.formatDate(new Date(item.time), 'Asia/Tokyo', 'yyyy-MM-dd'),
-      // Blank consent publishes the work anonymously. Only an explicit yes
-      // allows the student's name into the public feed.
-      studentName: /^はい/.test(consent) ? get(row, '氏名') : '',
+      studentName: get(row, '氏名'),
       title: get(row, '作品タイトル'),
       tools: get(row, '使用したツール'),
       projectUrl: getAny(row, ['課題で使用したデータ、ウェブサイト、またはドキュメントへのリンク', '作品のリンク']),

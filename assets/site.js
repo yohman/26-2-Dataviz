@@ -440,9 +440,47 @@ function renderHome() {
 
 function option(value, label) { const item = document.createElement('option'); item.value = value; item.textContent = label; return item; }
 function safeUrl(value) {
-  try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) ? url.href : ''; } catch { return ''; }
+  try { const url = new URL(/^www\./i.test(value) ? `https://${value}` : value); return ['http:', 'https:'].includes(url.protocol) ? url.href : ''; } catch { return ''; }
 }
 function element(tag, text, className) { const node = document.createElement(tag); if (text) node.textContent = text; if (className) node.className = className; return node; }
+
+const galleryUrlPattern = /(?:https?:\/\/|www\.)(?:(?!https?:\/\/)[^\s<>"'「」])+/gi;
+const trimGalleryUrl = value => value.replace(/[.,;:!?。、；：！？)\]}>」』]+$/u, '');
+
+function galleryUrls(value) {
+  return [...new Set([...String(value || '').matchAll(galleryUrlPattern)]
+    .map(match => safeUrl(trimGalleryUrl(match[0]))).filter(Boolean))];
+}
+
+function appendGalleryText(node, value) {
+  const text = String(value || '');
+  let position = 0;
+  for (const match of text.matchAll(galleryUrlPattern)) {
+    const label = trimGalleryUrl(match[0]);
+    const href = safeUrl(label);
+    if (!href) continue;
+    node.append(document.createTextNode(text.slice(position, match.index)));
+    const link = element('a', label); link.href = href; link.target = '_blank'; link.rel = 'noopener noreferrer';
+    node.append(link);
+    position = match.index + label.length;
+  }
+  node.append(document.createTextNode(text.slice(position)));
+}
+
+function enlargeGalleryImage(src, alt) {
+  let dialog = document.querySelector('#gallery-image-dialog');
+  if (!dialog) {
+    dialog = document.createElement('dialog'); dialog.id = 'gallery-image-dialog'; dialog.className = 'gallery-image-dialog';
+    const close = element('button', copy('Close image', '画像を閉じる'), 'gallery-image-close'); close.type = 'button';
+    close.addEventListener('click', () => dialog.close());
+    const image = document.createElement('img');
+    dialog.append(close, image);
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+    document.body.append(dialog);
+  }
+  const image = dialog.querySelector('img'); image.src = src; image.alt = alt;
+  dialog.showModal();
+}
 
 function requestGalleryItems() {
   return new Promise((resolve, reject) => {
@@ -591,7 +629,11 @@ async function renderGallery() {
       if (/^assets\/gallery\/[a-f0-9]{24}\.(?:png|jpg|webp|gif)$/.test(data) || /^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(data)) {
         const image = document.createElement('img'); image.src = data;
         image.alt = copy(`Screenshot of ${item.title || 'student work'}`, `${item.title || '学生作品'}のスクリーンショット`);
-        image.loading = 'lazy'; placeholder.replaceWith(image);
+        image.loading = 'lazy';
+        const button = element('button', '', 'gallery-image-button'); button.type = 'button';
+        button.setAttribute('aria-label', copy(`Enlarge screenshot of ${item.title || 'student work'}`, `${item.title || '学生作品'}の画像を拡大`));
+        button.append(image); button.addEventListener('click', () => enlargeGalleryImage(data, image.alt));
+        placeholder.replaceWith(button);
       } else {
         placeholder.replaceChildren(element('span', copy('Screenshot unavailable. ', '画像を表示できません。')));
         const retry = element('button', copy('Try again', '再読み込み'), 'gallery-retry');
@@ -616,12 +658,22 @@ async function renderGallery() {
       const weekLink = element('a', `${copy(`WEEK ${item.week}`, `第${item.week}週`)} · ${challengeForWeek(item.week) || String(item.challenge || '').replace(/^第\d+週｜/, '')}`, 'meta');
       weekLink.href = `agenda.html#week-${item.week}`; card.append(weekLink);
       card.append(element('h2', item.title || copy('Untitled work', '無題の作品')));
-      card.append(element('p', item.studentName || copy('Student', '学生')));
-      card.append(element('p', item.description || ''));
+      if (item.studentName) card.append(element('p', item.studentName, 'gallery-student'));
+      const description = element('p', '', 'gallery-description'); appendGalleryText(description, item.description); card.append(description);
       card.append(element('p', `${copy('Tools:', 'ツール:')} ${item.tools || '—'}`));
       if (item.submittedAt) card.append(element('p', `${copy('Submitted:', '提出日:')} ${item.submittedAt}`, 'gallery-date'));
-      const projectUrl = safeUrl(item.projectUrl);
-      if (projectUrl) { const link = element('a', copy('Open work ↗', '作品を開く ↗')); link.href = projectUrl; link.target = '_blank'; link.rel = 'noopener'; card.append(link); }
+      const sources = galleryUrls(item.projectUrl);
+      if (sources.length) {
+        const links = element('div', '', 'gallery-source-links');
+        sources.forEach((href, number) => {
+          const label = sources.length > 1
+            ? copy(`Data / source ${number + 1} ↗`, `データ・出典 ${number + 1} ↗`)
+            : copy('Open data / source ↗', 'データ・出典を開く ↗');
+          const link = element('a', label); link.href = href; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.title = href;
+          links.append(link);
+        });
+        card.append(links);
+      } else if (item.projectUrl) card.append(element('p', `${copy('Data / source:', 'データ・出典:')} ${item.projectUrl}`, 'gallery-source-note'));
       root.append(card);
       if (imageObserver) imageObserver.observe(placeholder);
       else showImage(placeholder, item);

@@ -1,11 +1,18 @@
 import { createHash } from 'node:crypto';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 
 const feed = process.env.GALLERY_FEED_URL || 'https://script.google.com/macros/s/AKfycbx0QJbdytCdRNdCTGPsMhfkMC3HFRImz9-VUCebCoZ6XjdVlieGwDDzmpxuxg0ORVZb5Q/exec';
 const publishedSite = 'https://yohman.github.io/26-2-Dataviz/';
 const root = resolve(process.argv[2] || '.');
 const fields = ['week', 'challenge', 'submittedAt', 'studentName', 'title', 'tools', 'projectUrl', 'description', 'imageIndex'];
+const cachedImages = new Map();
+try {
+  const previous = JSON.parse(await readFile(join(root, 'data/gallery-public.json'), 'utf8'));
+  for (const item of previous.items || []) {
+    if (item.imageUrl) cachedImages.set(`${item.week}:${item.imageIndex}:${item.title}`, item.imageUrl);
+  }
+} catch { /* A first build has no local snapshot. */ }
 
 async function request(params, callback, attempts = 3, timeoutMs = 20000) {
   const url = new URL(feed);
@@ -55,6 +62,16 @@ async function buildItems(source, fromPublishedSite) {
     const item = Object.fromEntries(fields.map(field => [field, original[field] ?? '']));
     if (!Number.isInteger(Number(item.week)) || Number(item.week) < 1 || Number(item.week) > 14) throw new Error('Invalid week');
     if (!Number.isInteger(Number(item.imageIndex)) || Number(item.imageIndex) < 0) throw new Error('Invalid image index');
+    const cached = cachedImages.get(`${item.week}:${item.imageIndex}:${item.title}`);
+    if (/^assets\/gallery\/[a-f0-9]{24}\.(png|jpg|webp|gif)$/.test(cached || '')) {
+      try {
+        if ((await stat(join(root, cached))).isFile()) {
+          item.imageUrl = cached;
+          items.push(item);
+          continue;
+        }
+      } catch { /* Rebuild a missing thumbnail. */ }
+    }
     let bytes;
     let extension;
     if (fromPublishedSite) {
@@ -103,6 +120,6 @@ const gallery = await readFile(galleryPath, 'utf8');
 const snapshotBlock = /(?:<link rel="preload" as="image" href="assets\/gallery\/[^"]+">)*<script id="gallery-snapshot" type="application\/json">[\s\S]*?<\/script>/;
 if (!snapshotBlock.test(gallery)) throw new Error('Gallery page is missing its snapshot block');
 const inline = snapshot.replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
-const preloads = items.slice(0, 3).map(item => `<link rel="preload" as="image" href="${item.imageUrl}">`).join('');
+const preloads = items.filter(item => item.imageUrl).slice(0, 3).map(item => `<link rel="preload" as="image" href="${item.imageUrl}">`).join('');
 await writeFile(galleryPath, gallery.replace(snapshotBlock, `${preloads}<script id="gallery-snapshot" type="application/json">${inline}</script>`));
 console.log(`Published ${items.length} gallery works without IDs or email addresses.`);
