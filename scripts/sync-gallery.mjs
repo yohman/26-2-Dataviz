@@ -100,9 +100,9 @@ const snapshot = JSON.stringify({ generatedAt: new Date().toISOString(), items }
 await writeFile(join(root, 'data/gallery-public.json'), snapshot);
 const galleryPath = join(root, 'gallery.html');
 const gallery = await readFile(galleryPath, 'utf8');
-const marker = '<script id="gallery-snapshot" type="application/json"></script>';
-if (!gallery.includes(marker)) throw new Error('Gallery page is missing its snapshot placeholder');
+const snapshotBlock = /(?:<link rel="preload" as="image" href="assets\/gallery\/[^"]+">)*<script id="gallery-snapshot" type="application\/json">[\s\S]*?<\/script>/;
+if (!snapshotBlock.test(gallery)) throw new Error('Gallery page is missing its snapshot block');
 const inline = snapshot.replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
 const preloads = items.slice(0, 3).map(item => `<link rel="preload" as="image" href="${item.imageUrl}">`).join('');
-await writeFile(galleryPath, gallery.replace(marker, `${preloads}<script id="gallery-snapshot" type="application/json">${inline}</script>`));
+await writeFile(galleryPath, gallery.replace(snapshotBlock, `${preloads}<script id="gallery-snapshot" type="application/json">${inline}</script>`));
 console.log(`Published ${items.length} gallery works without IDs or email addresses.`);
