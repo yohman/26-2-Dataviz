@@ -582,7 +582,7 @@ function matchedGalleryTools(raw) {
   return galleryTools.filter(tool => tool.pattern.test(raw || ''));
 }
 
-function renderGalleryInsights(items, selectedWeek) {
+function renderGalleryInsights(items, selectedWeek, selectedTool, onToolSelect) {
   const root = document.querySelector('[data-gallery-insights]');
   if (!root) return;
   root.replaceChildren();
@@ -594,16 +594,25 @@ function renderGalleryInsights(items, selectedWeek) {
   lead.append(element('span', copy('student works', '点の作品'), 'gallery-insights-unit'));
   const sourceCount = items.filter(item => galleryUrls(item.projectUrl).length).length;
   lead.append(element('p', copy(`${sourceCount} include a data or source link.`, `${sourceCount}点にデータ・出典リンクがあります。`), 'gallery-insights-note'));
+  if (selectedTool) {
+    const active = element('button', copy(`Showing ${selectedTool} works · Clear filter ×`, `${selectedTool} の作品を表示中 · 解除 ×`), 'gallery-active-tool');
+    active.type = 'button'; active.addEventListener('click', () => onToolSelect(''));
+    lead.append(active);
+  }
   root.append(lead);
   const toolCounts = new Map();
   items.forEach(item => matchedGalleryTools(item.tools).forEach(tool => toolCounts.set(tool.name, (toolCounts.get(tool.name) || 0) + 1)));
   const popular = [...toolCounts].sort((a, b) => b[1] - a[1]).slice(0, 5);
   const panel = element('div', '', 'gallery-insights-tools');
   panel.append(element('h2', copy('Tools students used', 'みんなが使ったツール')));
-  panel.append(element('p', copy('Mentions across submissions · multiple tools per work', '提出作品での言及数 · 1作品で複数使用あり'), 'gallery-insights-caption'));
+  panel.append(element('p', copy('Mentions across submissions · select a tool to filter', '提出作品での言及数 · クリックで絞り込み'), 'gallery-insights-caption'));
   const max = popular[0]?.[1] || 1;
   popular.forEach(([name, count]) => {
-    const row = element('div', '', 'gallery-tool-bar');
+    const row = element('button', '', 'gallery-tool-bar');
+    row.type = 'button';
+    row.setAttribute('aria-pressed', String(selectedTool === name));
+    row.setAttribute('aria-label', copy(`Filter to ${name}: ${count} works`, `${name} の作品 ${count}点に絞る`));
+    row.addEventListener('click', () => onToolSelect(selectedTool === name ? '' : name));
     const label = element('span', name); const value = element('b', String(count));
     const track = element('span', '', 'gallery-tool-track');
     const fill = element('span', '', 'gallery-tool-fill'); fill.style.width = `${Math.round(count / max * 100)}%`;
@@ -670,6 +679,8 @@ async function renderGallery() {
   const weekSelect = document.createElement('select'); weekSelect.name = 'week';
   wrapper.append(weekSelect); controls.append(wrapper);
   const requestedWeek = new URLSearchParams(location.search).get('week');
+  let selectedTool = new URLSearchParams(location.search).get('tool') || '';
+  if (!galleryTools.some(tool => tool.name === selectedTool)) selectedTool = '';
   let userChangedWeek = false;
   function updateWeekOptions() {
     const selected = userChangedWeek ? weekSelect.value : requestedWeek;
@@ -683,13 +694,22 @@ async function renderGallery() {
   }
   updateWeekOptions();
   let imageObserver;
+  function chooseTool(name) {
+    selectedTool = name;
+    const url = new URL(location.href);
+    if (name) url.searchParams.set('tool', name);
+    else url.searchParams.delete('tool');
+    history.replaceState(null, '', url);
+    paint();
+  }
   function paint() {
     imageObserver?.disconnect();
-    const shown = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
+    const weekItems = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
+    const shown = selectedTool ? weekItems.filter(item => matchedGalleryTools(item.tools).some(tool => tool.name === selectedTool)) : weekItems;
     root.replaceChildren();
-    renderGalleryInsights(shown, weekSelect.value);
+    renderGalleryInsights(weekItems, weekSelect.value, selectedTool, chooseTool);
     status.hidden = shown.length > 0;
-    if (!shown.length) { root.append(element('p', copy('No submissions yet.', '提出作品はまだありません。'), 'gallery-status')); return; }
+    if (!shown.length) { root.append(element('p', selectedTool ? copy(`No ${selectedTool} works this week.`, `この週に ${selectedTool} を使った作品はありません。`) : copy('No submissions yet.', '提出作品はまだありません。'), 'gallery-status')); return; }
     const showImage = async (placeholder, item) => {
       const data = item.imageUrl || await loadGalleryImage(Number(item.imageIndex));
       if (!placeholder.isConnected) return;
@@ -725,7 +745,7 @@ async function renderGallery() {
       const weekLink = element('a', `${copy(`WEEK ${item.week}`, `第${item.week}週`)} · ${challengeForWeek(item.week) || String(item.challenge || '').replace(/^第\d+週｜/, '')}`, 'meta');
       weekLink.href = `agenda.html#week-${item.week}`; card.append(weekLink);
       card.append(element('h2', item.title || copy('Untitled work', '無題の作品')));
-      if (item.studentName) card.append(element('p', item.studentName, 'gallery-student'));
+      card.append(element('p', item.studentName || '', 'gallery-student'));
       const description = element('div', '', 'gallery-description'); appendGalleryText(description, item.description); card.append(description);
       const footer = element('div', '', 'gallery-card-footer');
       const tools = element('div', '', 'gallery-card-tools'); tools.title = item.tools || '';
@@ -738,10 +758,10 @@ async function renderGallery() {
       });
       else tools.append(element('span', item.tools || '—', 'gallery-tool-raw'));
       footer.append(tools);
-      if (item.submittedAt) footer.append(element('p', `${copy('Submitted:', '提出日:')} ${item.submittedAt}`, 'gallery-date'));
+      footer.append(element('p', item.submittedAt ? `${copy('Submitted:', '提出日:')} ${item.submittedAt}` : '', 'gallery-date'));
       const sources = galleryUrls(item.projectUrl);
+      const links = element('div', '', 'gallery-source-links');
       if (sources.length) {
-        const links = element('div', '', 'gallery-source-links');
         sources.forEach((href, number) => {
           const label = sources.length > 1
             ? copy(`Data / source ${number + 1} ↗`, `データ・出典 ${number + 1} ↗`)
@@ -749,8 +769,8 @@ async function renderGallery() {
           const link = element('a', label); link.href = href; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.title = href;
           links.append(link);
         });
-        footer.append(links);
-      } else if (item.projectUrl) footer.append(element('p', `${copy('Data / source:', 'データ・出典:')} ${item.projectUrl}`, 'gallery-source-note'));
+      } else if (item.projectUrl) links.append(element('span', `${copy('Data / source:', 'データ・出典:')} ${item.projectUrl}`, 'gallery-source-note'));
+      footer.append(links);
       card.append(footer);
       root.append(card);
       if (imageObserver) imageObserver.observe(placeholder);
