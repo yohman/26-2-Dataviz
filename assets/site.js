@@ -117,7 +117,7 @@ function classAgenda(week) {
   if (!raw) return '';
   const items = raw.split(';').map(item => item.split('|').map(part => part.trim())).filter(item => item.length === 3);
   if (!items.length) return '';
-  return `<ol class="class-agenda" aria-label="${copy('Class timing', '授業の時間配分')}">${items.map(([time, title, description]) => `<li><time>${escapeHtml(time)}</time><strong>${escapeHtml(title)}</strong><span>${escapeHtml(description)}</span></li>`).join('')}</ol>`;
+  return `<ol class="class-agenda class-agenda--${items.length}" aria-label="${copy('Class timing', '授業の時間配分')}">${items.map(([time, title, description]) => `<li><time>${escapeHtml(time)}</time><strong>${escapeHtml(title)}</strong><span>${escapeHtml(description)}</span></li>`).join('')}</ol>`;
 }
 
 function createMoriCorner(week) {

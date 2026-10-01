@@ -122,6 +122,7 @@ body{background:#fff}
    and references with the in-class activity. */
 .lecture-summary{align-self:start;max-width:46ch;margin:0;padding:1.4rem 0;font:500 clamp(1.25rem,2vw,1.65rem)/1.5 var(--sans)}
 .class-agenda{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin:0 0 1.25rem;padding:0;background:var(--line);list-style:none}.class-agenda li{display:grid;align-content:start;gap:.35rem;min-height:132px;padding:1rem;background:var(--paper)}.class-agenda time{color:var(--playfair-crimson);font:600 .68rem "DM Mono",monospace;letter-spacing:.02em}.class-agenda strong{font:700 1rem/1.15 var(--serif)}.class-agenda span{color:var(--muted);font-size:.74rem;line-height:1.4}
+@media(min-width:901px){.class-agenda--6{grid-template-columns:repeat(6,minmax(0,1fr))}.class-agenda--6 li{padding:.85rem}}
 .lecture-slides{padding:.15rem 0 .25rem}
 .lecture-slides .material-link{display:block;width:max-content;max-width:100%;border:0;border-bottom:1px solid currentColor;padding:.3rem 0;color:var(--cobalt);font-size:.78rem}
 .lecture-slides .material-link:hover,.lecture-slides .material-link:focus-visible{background:transparent;color:var(--ink);border-color:var(--ink)}
