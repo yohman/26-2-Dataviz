@@ -51,6 +51,9 @@ steps_ja:
 link: https://docs.google.com/spreadsheets/d/1Oa3cB_WWaB82c65ppnh3hQID-WKpSRJEJ0tZZsj7mig/edit?usp=drivesdk
 link_label: Open the group spreadsheet
 link_label_ja: グループ用スプレッドシートを開く
+results_link: week1-results.html
+results_label: View the activity gallery
+results_label_ja: アクティビティのギャラリーを見る
 
 ### Activity 2
 title: Make the unexpected visible

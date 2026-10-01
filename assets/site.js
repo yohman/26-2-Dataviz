@@ -49,7 +49,7 @@ function parseInClassActivities(source) {
     const activity = { number, steps: [], steps_ja: [] };
     let list = '';
     lines.forEach(line => {
-      const field = line.match(/^(title|title_ja|text|text_ja|link|link_label|link_label_ja):\s*(.*)$/);
+      const field = line.match(/^(title|title_ja|text|text_ja|link|link_label|link_label_ja|results_link|results_label|results_label_ja):\s*(.*)$/);
       if (field) { activity[field[1]] = field[2].trim(); list = ''; return; }
       const listStart = line.match(/^(steps|steps_ja):\s*$/);
       if (listStart) { list = listStart[1]; return; }
@@ -91,7 +91,8 @@ function safeResourceHref(value) {
   const href = String(value || '').trim();
   if (/^https?:\/\//i.test(href)) return encodeURI(href);
   if (/^(?:assets|content|data|lectures)\//.test(href) && !href.split('/').includes('..')) return encodeURI(href);
-  if (/^[a-z-]+\.html(?:#[-\w]+)?$/i.test(href)) return encodeURI(href);
+  if (/^[a-z0-9-]+\.html(?:#[-\w]+)?$/i.test(href)) return encodeURI(href);
+  if (/^[a-z0-9-]+\.html\?[-a-z0-9_~.%=&+]+$/i.test(href)) return href;
   return '';
 }
 
@@ -153,12 +154,15 @@ function activityTabs(week) {
     const external = /^https?:\/\//i.test(href) ? ' target="_blank" rel="noopener"' : '';
     const download = /^data\/[A-Za-z0-9._/-]+\.csv$/i.test(href) ? ' download' : '';
     const link = href ? `<a class="button activity-link" href="${escapeHtml(href)}"${external}${download}>${escapeHtml(copy(activity.link_label, activity.link_label_ja))}${external ? ' ↗' : ' ↓'}</a>` : '';
+    const resultsHref = safeUrl(activity.results_link) || safeResourceHref(activity.results_link);
+    const resultsExternal = /^https?:\/\//i.test(resultsHref) ? ' target="_blank" rel="noopener"' : '';
+    const resultsLink = resultsHref ? `<a class="button activity-link activity-link--secondary" href="${escapeHtml(resultsHref)}"${resultsExternal}>${escapeHtml(copy(activity.results_label, activity.results_label_ja))} →</a>` : '';
     const steps = copy(activity.steps, activity.steps_ja).map(step => `<li>${escapeHtml(step)}</li>`).join('');
     return `<section class="activity-panel" role="tabpanel" id="week-${week.week}-activity-${activity.number}" aria-labelledby="week-${week.week}-activity-${activity.number}-tab"${index === 0 ? '' : ' hidden'}>
       <p class="assignment-label">${copy('IN CLASS', '授業内')} · ${copy(`ACTIVITY ${activity.number}`, `アクティビティ ${activity.number}`)}</p>
       <h4>${escapeHtml(copy(activity.title, activity.title_ja))}</h4>
       <p>${escapeHtml(copy(activity.text, activity.text_ja))}</p>
-      <ol class="activity-steps">${steps}</ol>${link}
+      <ol class="activity-steps">${steps}</ol><div class="activity-actions">${link}${resultsLink}</div>
     </section>`;
   }).join('');
   return `<article class="assignment-card assignment-card--in-class activity-tabs-card" data-activity-tabs><div class="activity-tab-list" role="tablist" aria-label="${copy('In-class activities', '授業内アクティビティ')}">${tabs}</div>${panels}</article>`;
