@@ -582,7 +582,23 @@ function matchedGalleryTools(raw) {
   return galleryTools.filter(tool => tool.pattern.test(raw || ''));
 }
 
-function renderGalleryInsights(items, selectedWeek, selectedTool, onToolSelect) {
+const galleryForms = [
+  { id: 'bar', en: 'Bar charts', ja: '棒グラフ', pattern: /棒グラフ|縦棒|横棒|bar chart/i },
+  { id: 'map', en: 'Maps', ja: '地図', pattern: /地図|マップ|\bmap\b/i },
+  { id: 'line', en: 'Line charts', ja: '折れ線グラフ', pattern: /折れ線|line chart/i },
+  { id: 'pie', en: 'Pie charts', ja: '円グラフ', pattern: /円グラフ|pie chart/i },
+  { id: 'scatter', en: 'Scatterplots', ja: '散布図', pattern: /散布図|scatter\s*plot/i }
+];
+
+function galleryFormLabel(form) {
+  return copy(form.en, form.ja);
+}
+
+function matchesGalleryForm(item, form) {
+  return form.pattern.test(`${item.title || ''} ${item.description || ''}`);
+}
+
+function renderGalleryInsights(items, selectedWeek, selectedTool, selectedForm, shownCount, onToolSelect, onFormSelect) {
   const root = document.querySelector('[data-gallery-insights]');
   if (!root) return;
   root.replaceChildren();
@@ -599,6 +615,14 @@ function renderGalleryInsights(items, selectedWeek, selectedTool, onToolSelect) 
     active.type = 'button'; active.addEventListener('click', () => onToolSelect(''));
     lead.append(active);
   }
+  if (selectedForm) {
+    const form = galleryForms.find(entry => entry.id === selectedForm);
+    const label = galleryFormLabel(form);
+    const active = element('button', copy(`Showing ${label} · Clear filter ×`, `${label} の作品を表示中 · 解除 ×`), 'gallery-active-tool');
+    active.type = 'button'; active.addEventListener('click', () => onFormSelect(''));
+    lead.append(active);
+  }
+  if (selectedTool || selectedForm) lead.append(element('p', copy(`${shownCount} matching works`, `該当する作品 ${shownCount}点`), 'gallery-filter-count'));
   root.append(lead);
   const toolCounts = new Map();
   items.forEach(item => matchedGalleryTools(item.tools).forEach(tool => toolCounts.set(tool.name, (toolCounts.get(tool.name) || 0) + 1)));
@@ -618,18 +642,20 @@ function renderGalleryInsights(items, selectedWeek, selectedTool, onToolSelect) 
     const fill = element('span', '', 'gallery-tool-fill'); fill.style.width = `${Math.round(count / max * 100)}%`;
     track.append(fill); row.append(label, track, value); panel.append(row);
   });
-  const forms = [
-    [copy('Bar charts', '棒グラフ'), /棒グラフ|縦棒|横棒|bar chart/i],
-    [copy('Maps', '地図'), /地図|マップ|\bmap\b/i],
-    [copy('Line charts', '折れ線グラフ'), /折れ線|line chart/i],
-    [copy('Pie charts', '円グラフ'), /円グラフ|pie chart/i],
-    [copy('Scatterplots', '散布図'), /散布図|scatter\s*plot/i]
-  ].map(([label, pattern]) => [label, items.filter(item => pattern.test(`${item.title || ''} ${item.description || ''}`)).length])
-    .filter(([, count]) => count > 0).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  const forms = galleryForms.map(form => ({ ...form, count: items.filter(item => matchesGalleryForm(item, form)).length }))
+    .filter(form => form.count > 0).sort((a, b) => b.count - a.count).slice(0, 3);
   if (forms.length) {
     const formsBlock = element('div', '', 'gallery-insights-forms');
-    formsBlock.append(element('p', copy('Also mentioned in the work', '作品の説明に登場した表現'), 'gallery-insights-caption'));
-    forms.forEach(([label, count]) => formsBlock.append(element('span', `${label} ${count}`, 'gallery-form-chip')));
+    formsBlock.append(element('p', copy('Visual forms mentioned · select to filter', '作品の説明に登場した表現 · クリックで絞り込み'), 'gallery-insights-caption'));
+    forms.forEach(form => {
+      const label = galleryFormLabel(form);
+      const chip = element('button', `${label} ${form.count}`, 'gallery-form-chip');
+      chip.type = 'button';
+      chip.setAttribute('aria-pressed', String(selectedForm === form.id));
+      chip.setAttribute('aria-label', copy(`Filter to ${label}: ${form.count} works`, `${label} の作品 ${form.count}点に絞る`));
+      chip.addEventListener('click', () => onFormSelect(selectedForm === form.id ? '' : form.id));
+      formsBlock.append(chip);
+    });
     panel.append(formsBlock);
   }
   root.append(panel);
@@ -681,6 +707,8 @@ async function renderGallery() {
   const requestedWeek = new URLSearchParams(location.search).get('week');
   let selectedTool = new URLSearchParams(location.search).get('tool') || '';
   if (!galleryTools.some(tool => tool.name === selectedTool)) selectedTool = '';
+  let selectedForm = new URLSearchParams(location.search).get('chart') || '';
+  if (!galleryForms.some(form => form.id === selectedForm)) selectedForm = '';
   let userChangedWeek = false;
   function updateWeekOptions() {
     const selected = userChangedWeek ? weekSelect.value : requestedWeek;
@@ -702,14 +730,25 @@ async function renderGallery() {
     history.replaceState(null, '', url);
     paint();
   }
+  function chooseForm(id) {
+    selectedForm = id;
+    const url = new URL(location.href);
+    if (id) url.searchParams.set('chart', id);
+    else url.searchParams.delete('chart');
+    history.replaceState(null, '', url);
+    paint();
+  }
   function paint() {
     imageObserver?.disconnect();
     const weekItems = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
-    const shown = selectedTool ? weekItems.filter(item => matchedGalleryTools(item.tools).some(tool => tool.name === selectedTool)) : weekItems;
+    const form = galleryForms.find(entry => entry.id === selectedForm);
+    const shown = weekItems.filter(item =>
+      (!selectedTool || matchedGalleryTools(item.tools).some(tool => tool.name === selectedTool)) &&
+      (!form || matchesGalleryForm(item, form)));
     root.replaceChildren();
-    renderGalleryInsights(weekItems, weekSelect.value, selectedTool, chooseTool);
+    renderGalleryInsights(weekItems, weekSelect.value, selectedTool, selectedForm, shown.length, chooseTool, chooseForm);
     status.hidden = shown.length > 0;
-    if (!shown.length) { root.append(element('p', selectedTool ? copy(`No ${selectedTool} works this week.`, `この週に ${selectedTool} を使った作品はありません。`) : copy('No submissions yet.', '提出作品はまだありません。'), 'gallery-status')); return; }
+    if (!shown.length) { root.append(element('p', selectedTool || selectedForm ? copy('No works match these filters.', '条件に合う作品はありません。') : copy('No submissions yet.', '提出作品はまだありません。'), 'gallery-status')); return; }
     const showImage = async (placeholder, item) => {
       const data = item.imageUrl || await loadGalleryImage(Number(item.imageIndex));
       if (!placeholder.isConnected) return;
