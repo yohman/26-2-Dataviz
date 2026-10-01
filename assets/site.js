@@ -294,7 +294,7 @@ function renderAgenda() {
           <div class="week-heading"><p class="lecture-summary">${escapeHtml(copy(week.look, week.look_ja))}</p><div class="week-lecture-aside">${media}${slides}</div></div>
         </section>
         <section class="week-assignments" aria-label="${copy('Assignments', '課題')}">
-          <div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p><dl class="assignment-details"><div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${escapeHtml(copy(week.deliverables || 'Visualization, title, concise explanation, project link, and one screenshot.', week.deliverables_ja || '可視化、タイトル、短い説明、作品リンク、スクリーンショット1枚。'))}</dd></div><div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}</article></div>
+          <div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p><dl class="assignment-details"><div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${escapeHtml(copy(week.deliverables || 'Visualization, title, concise explanation, project link, and one screenshot.', week.deliverables_ja || '可視化、タイトル、短い説明、作品リンク、スクリーンショット1枚。'))}</dd></div><div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}<div class="homework-gallery-link" data-homework-gallery-week="${week.week}"></div></article></div>
         </section>
       </div></details>`;
     if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
@@ -310,6 +310,39 @@ function renderAgenda() {
   });
   setupActivityTabs(root);
   startSubmissionDeadlineClock(root);
+  syncHomeworkGalleryLinks(root);
+}
+
+function galleryWeekCounts(items) {
+  const counts = new Map();
+  items.forEach(item => {
+    const week = Number(item.week);
+    if (Number.isInteger(week) && week >= 1 && week <= weekFiles.length) counts.set(week, (counts.get(week) || 0) + 1);
+  });
+  return counts;
+}
+
+function updateHomeworkGalleryLinks(root, items) {
+  const counts = galleryWeekCounts(items);
+  root.querySelectorAll('[data-homework-gallery-week]').forEach(slot => {
+    const week = Number(slot.dataset.homeworkGalleryWeek);
+    slot.replaceChildren();
+    if (!counts.has(week)) return;
+    const link = element('a', copy(`View Week ${week} gallery (${counts.get(week)}) →`, `第${week}週のギャラリーを見る（${counts.get(week)}点）→`));
+    link.href = `gallery.html?week=${week}`;
+    slot.append(link);
+  });
+}
+
+async function syncHomeworkGalleryLinks(root) {
+  try {
+    const response = await fetch('data/gallery-public.json');
+    if (!response.ok) throw new Error(`Gallery snapshot HTTP ${response.status}`);
+    const snapshot = await response.json();
+    if (Array.isArray(snapshot.items)) updateHomeworkGalleryLinks(root, snapshot.items);
+  } catch (error) { console.warn('Homework gallery snapshot:', error); }
+  try { updateHomeworkGalleryLinks(root, await loadGalleryItems()); }
+  catch (error) { console.warn('Homework gallery refresh:', error); }
 }
 
 function configuredFormUrl() {
@@ -531,29 +564,27 @@ async function renderGallery() {
   const controls = document.querySelector('[data-gallery-filters]');
   controls.replaceChildren();
   const controlBar = controls.closest('.gallery-controls');
-  if (!items.length) {
-    controlBar?.setAttribute('hidden', '');
-    status.textContent = copy('No submissions yet.', '提出作品はまだありません。');
-    root.replaceChildren();
-    return;
+  const wrapper = element('label', copy('Week', '週'), 'gallery-filter');
+  const weekSelect = document.createElement('select'); weekSelect.name = 'week';
+  wrapper.append(weekSelect); controls.append(wrapper);
+  const requestedWeek = new URLSearchParams(location.search).get('week');
+  let userChangedWeek = false;
+  function updateWeekOptions() {
+    const selected = userChangedWeek ? weekSelect.value : requestedWeek;
+    const counts = galleryWeekCounts(items);
+    weekSelect.replaceChildren(option('all', copy(`All weeks (${items.length})`, `すべての週（${items.length}点）`)));
+    [...counts].sort(([a], [b]) => a - b).forEach(([week, count]) =>
+      weekSelect.append(option(String(week), copy(`Week ${week} (${count})`, `第${week}週（${count}点）`))));
+    weekSelect.value = counts.has(Number(selected)) ? selected : 'all';
+    controlBar?.toggleAttribute('hidden', !items.length);
   }
-  controlBar?.removeAttribute('hidden');
-  const filters = [
-    ['week', copy('Week', '週'), [['all', copy('All weeks', 'すべての週')], ...Array.from({ length: 14 }, (_, index) => [String(index + 1), copy(`Week ${index + 1}`, `第${index + 1}週`)])]]
-  ];
-  const selects = {};
-  filters.forEach(([name, label, values]) => {
-    const wrapper = element('label', label, 'gallery-filter');
-    const select = document.createElement('select'); select.name = name;
-    values.forEach(([value, text]) => select.append(option(value, text)));
-    wrapper.append(select); controls.append(wrapper); selects[name] = select;
-  });
+  updateWeekOptions();
   let imageObserver;
   function paint() {
     imageObserver?.disconnect();
-    const shown = items.filter(item => selects.week.value === 'all' || String(item.week) === selects.week.value);
+    const shown = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
     root.replaceChildren();
-    if (!shown.length) { root.append(element('p', copy('No public submissions match these filters yet.', 'このフィルターに一致する公開作品はまだありません。'), 'gallery-status')); return; }
+    if (!shown.length) { root.append(element('p', copy('No submissions yet.', '提出作品はまだありません。'), 'gallery-status')); return; }
     const showImage = async (placeholder, item) => {
       const data = item.imageUrl || await loadGalleryImage(Number(item.imageIndex));
       if (!placeholder.isConnected) return;
@@ -596,7 +627,14 @@ async function renderGallery() {
       else showImage(placeholder, item);
     });
   }
-  Object.values(selects).forEach(select => select.addEventListener('change', paint));
+  weekSelect.addEventListener('change', () => {
+    userChangedWeek = true;
+    const url = new URL(location.href);
+    if (weekSelect.value === 'all') url.searchParams.delete('week');
+    else url.searchParams.set('week', weekSelect.value);
+    history.replaceState(null, '', url);
+    paint();
+  });
   paint();
   // The embedded snapshot makes the gallery immediate. The public feed adds
   // submissions and revisions on every visit without rebuilding GitHub Pages.
@@ -604,6 +642,7 @@ async function renderGallery() {
     const cachedImages = new Map(items.map(item => [`${item.week}:${item.imageIndex}`, item.imageUrl]));
     items = latest.map(item => ({ ...item, imageUrl: cachedImages.get(`${item.week}:${item.imageIndex}`) || '' }));
     status.textContent = copy(`${items.length} latest works.`, `最新の作品 ${items.length} 点。`);
+    updateWeekOptions();
     paint();
   }).catch(error => console.warn('Gallery live refresh:', error));
 }
