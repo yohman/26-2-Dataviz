@@ -509,7 +509,7 @@ async function renderGallery() {
     }
     if (!Array.isArray(snapshot.items)) throw new Error('Invalid gallery snapshot');
     items = snapshot.items;
-    status.textContent = copy(`${items.length} works · refreshed about every 5–10 minutes.`, `${items.length} 点の作品 · 約5〜10分ごとに更新。`);
+    status.textContent = copy(`${items.length} works.`, `${items.length} 点の作品。`);
   } catch (error) {
     console.warn('Gallery snapshot:', error);
     try {
@@ -539,10 +539,7 @@ async function renderGallery() {
   }
   controlBar?.removeAttribute('hidden');
   const filters = [
-    ['week', copy('Week', '週'), [['all', copy('All weeks', 'すべての週')], ...Array.from({ length: 14 }, (_, index) => [String(index + 1), copy(`Week ${index + 1}`, `第${index + 1}週`)])]],
-    ['challenge', copy('Challenge', '課題'), [['all', copy('All challenges', 'すべての課題')], ...[...new Map(items.map(item => [item.week, item.challenge])).entries()].sort((a, b) => a[0] - b[0]).map(([week, challenge]) => [String(week), challenge])]],
-    ['tool', copy('Tool', 'ツール'), [['all', copy('All tools', 'すべてのツール')], ...[...new Set(items.flatMap(item => String(item.tools || '').split(',').map(tool => tool.trim()).filter(Boolean)))].sort().map(tool => [tool, tool])]],
-    ['act', copy('Course act', '授業の段階'), [['all', copy('All acts', 'すべての段階')], ...Object.keys(acts).map(act => [act, act])]]
+    ['week', copy('Week', '週'), [['all', copy('All weeks', 'すべての週')], ...Array.from({ length: 14 }, (_, index) => [String(index + 1), copy(`Week ${index + 1}`, `第${index + 1}週`)])]]
   ];
   const selects = {};
   filters.forEach(([name, label, values]) => {
@@ -554,10 +551,7 @@ async function renderGallery() {
   let imageObserver;
   function paint() {
     imageObserver?.disconnect();
-    const shown = items.filter(item => (selects.week.value === 'all' || String(item.week) === selects.week.value)
-      && (selects.challenge.value === 'all' || String(item.week) === selects.challenge.value)
-      && (selects.tool.value === 'all' || String(item.tools).split(',').map(tool => tool.trim()).includes(selects.tool.value))
-      && (selects.act.value === 'all' || actForWeek(item.week) === selects.act.value));
+    const shown = items.filter(item => selects.week.value === 'all' || String(item.week) === selects.week.value);
     root.replaceChildren();
     if (!shown.length) { root.append(element('p', copy('No public submissions match these filters yet.', 'このフィルターに一致する公開作品はまだありません。'), 'gallery-status')); return; }
     const showImage = async (placeholder, item) => {
@@ -604,6 +598,14 @@ async function renderGallery() {
   }
   Object.values(selects).forEach(select => select.addEventListener('change', paint));
   paint();
+  // The embedded snapshot makes the gallery immediate. The public feed adds
+  // submissions and revisions on every visit without rebuilding GitHub Pages.
+  loadGalleryItems().then(latest => {
+    const cachedImages = new Map(items.map(item => [`${item.week}:${item.imageIndex}`, item.imageUrl]));
+    items = latest.map(item => ({ ...item, imageUrl: cachedImages.get(`${item.week}:${item.imageIndex}`) || '' }));
+    status.textContent = copy(`${items.length} latest works.`, `最新の作品 ${items.length} 点。`);
+    paint();
+  }).catch(error => console.warn('Gallery live refresh:', error));
 }
 
 function renderCourse() {
