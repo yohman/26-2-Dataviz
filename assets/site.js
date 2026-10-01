@@ -26,6 +26,11 @@ let submissionDeadlineTimer;
 const galleryImageCache = new Map();
 let galleryWorkItems;
 let galleryWorkRefreshStarted = false;
+let galleryLikesPromise;
+let galleryLikesReady = false;
+let galleryLikesCounts = {};
+let galleryLikesMine = new Set();
+let galleryLikesRequestNumber = 0;
 
 const escapeHtml = value => String(value || '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const isJapanese = () => window.courseLanguage === 'ja';
@@ -484,6 +489,94 @@ function appendGalleryText(node, value) {
 
 const galleryItemKey = item => `${item.week}-${item.imageIndex}`;
 
+function galleryVisitorId() {
+  try {
+    const key = 'dataviz-gallery-browser-id';
+    let id = localStorage.getItem(key);
+    if (!id) { id = crypto.randomUUID(); localStorage.setItem(key, id); }
+    return id;
+  } catch (error) { return ''; }
+}
+
+function requestGalleryLikes(action, item = '') {
+  const visitor = galleryVisitorId();
+  if (!visitor) return Promise.reject(new Error('Browser storage unavailable'));
+  return new Promise((resolve, reject) => {
+    const callback = `courseGalleryLikesReceive_${++galleryLikesRequestNumber}`;
+    const script = document.createElement('script');
+    const timer = setTimeout(() => finish(new Error('Likes timed out')), 12000);
+    let settled = false;
+    function finish(error, payload) {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      script.remove();
+      delete window[callback];
+      if (error || !payload || payload.error || !payload.counts || !Array.isArray(payload.mine)) reject(error || new Error(payload?.error || 'Invalid likes response'));
+      else resolve(payload);
+    }
+    window[callback] = payload => finish(null, payload);
+    script.onerror = () => finish(new Error('Likes unavailable'));
+    const params = new URLSearchParams({ action, visitor, callback, t: String(Date.now()) });
+    if (item) params.set('item', item);
+    script.src = `${COURSE_CONFIG.GALLERY_API_URL}?${params}`;
+    document.head.append(script);
+  });
+}
+
+function updateGalleryLikeButtons() {
+  document.querySelectorAll('[data-gallery-like]').forEach(button => {
+    const key = button.dataset.galleryLike;
+    const liked = galleryLikesMine.has(key);
+    const count = Number(galleryLikesCounts[key] || 0);
+    button.disabled = !galleryLikesReady || liked || button.dataset.pending === 'true';
+    button.setAttribute('aria-pressed', String(liked));
+    button.setAttribute('aria-label', copy(liked ? `You liked this work · ${count} likes` : `Like this work · ${count} likes`, liked ? `この作品にいいね済み · ${count}件` : `この作品にいいね · ${count}件`));
+    button.title = !galleryLikesReady ? copy('Likes temporarily unavailable', 'いいねを読み込めません') : button.dataset.likeError ? copy('Could not save your like. Please try again.', 'いいねを保存できませんでした。もう一度お試しください。') : copy(liked ? 'You liked this work' : 'One like per browser', liked ? 'この作品にいいね済み' : '1ブラウザにつき1回');
+    button.querySelector('.gallery-like-count').textContent = galleryLikesReady ? String(count) : '—';
+    button.querySelector('.gallery-like-heart').textContent = liked ? '♥' : '♡';
+    button.classList.toggle('is-liked', liked);
+  });
+}
+
+function galleryLikeButton(item) {
+  const button = element('button', '', 'gallery-like');
+  button.type = 'button';
+  button.disabled = true;
+  button.dataset.galleryLike = galleryItemKey(item);
+  const heart = element('span', '♥', 'gallery-like-heart'); heart.setAttribute('aria-hidden', 'true');
+  button.append(heart, element('span', '—', 'gallery-like-count'));
+  button.addEventListener('click', async () => {
+    const key = button.dataset.galleryLike;
+    if (!galleryLikesReady || galleryLikesMine.has(key)) return;
+    button.dataset.pending = 'true';
+    updateGalleryLikeButtons();
+    try {
+      const payload = await requestGalleryLikes('like', key);
+      galleryLikesCounts = payload.counts;
+      galleryLikesMine = new Set(payload.mine);
+      delete button.dataset.likeError;
+    } catch (error) {
+      console.warn('Gallery like:', error);
+      button.dataset.likeError = 'true';
+    } finally {
+      delete button.dataset.pending;
+      updateGalleryLikeButtons();
+    }
+  });
+  return button;
+}
+
+function loadGalleryLikes() {
+  if (!galleryLikesPromise) galleryLikesPromise = requestGalleryLikes('likes').then(payload => {
+    galleryLikesCounts = payload.counts;
+    galleryLikesMine = new Set(payload.mine);
+    galleryLikesReady = true;
+    updateGalleryLikeButtons();
+  }).catch(error => { console.warn('Gallery likes:', error); updateGalleryLikeButtons(); });
+  return galleryLikesPromise;
+}
+
 function galleryFilterItems(items, week, tool, chart) {
   const form = galleryForms.find(entry => entry.id === chart);
   return items.filter(item =>
@@ -745,8 +838,9 @@ function paintGalleryWork(items) {
     sourceBlock.append(link);
   });
   else sourceBlock.append(element('p', item.projectUrl || '—'));
-  metadata.append(sourceBlock); details.append(metadata);
+  metadata.append(sourceBlock); details.append(metadata, galleryLikeButton(item));
   layout.append(art, details); root.replaceChildren(nav, layout);
+  updateGalleryLikeButtons();
 
   (async () => {
     const data = item.imageUrl || await loadGalleryImage(Number(item.imageIndex));
@@ -781,6 +875,7 @@ async function renderGalleryWork() {
   }
   if (galleryWorkRefreshStarted) return;
   galleryWorkRefreshStarted = true;
+  loadGalleryLikes();
   loadGalleryItems().then(latest => {
     const cachedImages = new Map((galleryWorkItems || []).map(item => [galleryItemKey(item), item.imageUrl]));
     galleryWorkItems = latest.map(item => ({ ...item, imageUrl: cachedImages.get(galleryItemKey(item)) || '' }));
@@ -1003,12 +1098,13 @@ async function renderGallery() {
           links.append(link);
         });
       } else if (item.projectUrl) links.append(element('span', `${copy('Data / source:', 'データ・出典:')} ${item.projectUrl}`, 'gallery-source-note'));
-      footer.append(links);
+      footer.append(links, galleryLikeButton(item));
       card.append(footer);
       root.append(card);
       if (imageObserver) imageObserver.observe(placeholder);
       else showImage(placeholder, item);
     });
+    updateGalleryLikeButtons();
   }
   weekSelect.addEventListener('change', () => {
     userChangedWeek = true;
@@ -1019,6 +1115,7 @@ async function renderGallery() {
     paint();
   });
   paint();
+  loadGalleryLikes();
   // The embedded snapshot makes the gallery immediate. The public feed adds
   // submissions and revisions on every visit without rebuilding GitHub Pages.
   loadGalleryItems().then(latest => {
