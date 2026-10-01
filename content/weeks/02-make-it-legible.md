@@ -10,6 +10,8 @@ look: The Challenger disaster: how O-ring evidence was presented, omitted, and r
 look_ja: チャレンジャー号事故：Oリングの証拠がどのように提示され、欠落し、再設計されたか
 learn: use hierarchy, encoding, annotation, and context to make a consequential pattern visible
 learn_ja: 階層、エンコーディング、注釈、文脈を使い、重要なパターンを見えるようにする
+schedule: 10:40–10:50|Week 1 review|Revisit last week’s work;10:50–11:05|Human error|A short lecture on the Challenger decision;11:05–11:45|Activity 1|Draw, upload, and compare the first charts;11:45–12:00|Visual clarity|A short lecture on making evidence legible;12:00–12:15|Activity 2|Revise and compare before and after;12:15–12:20|Wrap-up|Homework and final questions
+schedule_ja: 10:40–10:50|第1週の振り返り|先週の作品を見返す;10:50–11:05|ヒューマンエラー|チャレンジャー号の判断についての短い講義;11:05–11:45|アクティビティ1|最初の図を描き、写真を貼って見比べる;11:45–12:00|視覚的な明瞭さ|証拠を読み取りやすくする短い講義;12:00–12:15|アクティビティ2|改訂し、前後を比較する;12:15–12:20|まとめ|宿題の説明と最後の質問
 in_class: Visualize the O-ring evidence, compare approaches, then revise the group chart using today's design principles.
 in_class_ja: Oリングの証拠を可視化し、表現を比較した後、今日のデザイン原則を使ってグループのチャートを改訂する。
 homework: Return to your Week 1 submission and upgrade it using today's lessons. Make the hierarchy clearer, improve the encoding, reveal the key pattern, and add useful context. You may use a new tool, whether you revise your Week 1 work or choose an entirely new direction. Your work must still visualize a dataset you created or found and meet the same assignment requirements.
