@@ -45,12 +45,9 @@ steps_ja:
 - 4人グループで共有する。一人1分で自分のスケッチを説明する。
 - 5分間で、よいアイデアを一つのグループ可視化にまとめる。
 - 色、レイアウト、ラベル、強調を整える。共有スライドは1グループにつき1ページを使う。グループの図を撮影し、自分たちのグループ番号のページに貼る。改訂前に、最初の版をクラスで見比べる。
-link: viewer.html?file=lectures%2Fw02.pdf&title=O-ring+damage+data&week=Week+2&return=agenda.html%23week-2&page=5
-link_label: Open zoomable slide 5
-link_label_ja: 拡大できるスライド5を開く
-results_link: https://docs.google.com/presentation/d/1GVYfdQHmYIynoczJeUyChxo53YNdEYx-HqtFUXYQD38/edit?usp=sharing
-results_label: Add the first photo to the group slide deck
-results_label_ja: 共有スライドに最初の写真を貼る
+link: https://docs.google.com/presentation/d/1GVYfdQHmYIynoczJeUyChxo53YNdEYx-HqtFUXYQD38/edit?usp=sharing
+link_label: Add the first photo to the group slide deck
+link_label_ja: 共有スライドに最初の写真を貼る
 
 ### Activity 2
 title: Revise the group chart
