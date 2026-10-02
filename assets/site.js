@@ -27,16 +27,6 @@ const galleryImageCache = new Map();
 let galleryWorkItems;
 let galleryWorkRefreshStarted = false;
 let galleryWorkLiveStatus = 'pending';
-let galleryLikesPromise;
-let galleryLikesReady = false;
-let galleryLikesFailed = false;
-let galleryLikesError = null;
-let galleryLikesCounts = {};
-let galleryLikesMine = new Set();
-let galleryLikesRequestNumber = 0;
-let galleryVisitorPersistent = false;
-let galleryEphemeralVisitorId = '';
-let refreshGalleryAfterLikes = () => {};
 
 const escapeHtml = value => String(value || '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const isJapanese = () => window.courseLanguage === 'ja';
@@ -538,170 +528,6 @@ function galleryImageControls(count, onSelect) {
   } };
 }
 
-const galleryVisitorPattern = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
-function newGalleryVisitorId() {
-  if (globalThis.crypto?.randomUUID) return crypto.randomUUID();
-  const bytes = new Uint8Array(16);
-  if (globalThis.crypto?.getRandomValues) crypto.getRandomValues(bytes);
-  else for (let index = 0; index < bytes.length; index++) bytes[index] = Math.floor(Math.random() * 256);
-  bytes[6] = (bytes[6] & 0x0f) | 0x40;
-  bytes[8] = (bytes[8] & 0x3f) | 0x80;
-  const hex = [...bytes].map(byte => byte.toString(16).padStart(2, '0')).join('');
-  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
-}
-function galleryVisitorId() {
-  const key = 'dataviz-gallery-browser-id';
-  let saved = '';
-  try { saved = localStorage.getItem(key) || ''; } catch { /* Try a first-party cookie. */ }
-  if (!galleryVisitorPattern.test(saved)) {
-    try { saved = document.cookie.split(';').map(entry => entry.trim()).find(entry => entry.startsWith(`${key}=`))?.slice(key.length + 1) || ''; }
-    catch { saved = ''; }
-  }
-  const id = galleryVisitorPattern.test(saved) ? saved : galleryEphemeralVisitorId || newGalleryVisitorId();
-  galleryEphemeralVisitorId = id;
-  galleryVisitorPersistent = false;
-  try { localStorage.setItem(key, id); galleryVisitorPersistent = localStorage.getItem(key) === id; }
-  catch { /* Cookies may still work. */ }
-  try {
-    document.cookie = `${key}=${id}; Max-Age=31536000; Path=/; SameSite=Lax`;
-    galleryVisitorPersistent ||= document.cookie.split(';').map(entry => entry.trim()).includes(`${key}=${id}`);
-  } catch { /* Counts can still load with this tab's temporary ID. */ }
-  return id;
-}
-
-function requestGalleryLikesScript(action, visitor, item = '') {
-  return new Promise((resolve, reject) => {
-    const callback = `courseGalleryLikesReceive_${++galleryLikesRequestNumber}`;
-    const script = document.createElement('script');
-    const timer = setTimeout(() => finish(new Error('Likes timed out')), 12000);
-    let settled = false;
-    function finish(error, payload) {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timer);
-      script.remove();
-      delete window[callback];
-      if (error || !payload || payload.error || !payload.counts || !Array.isArray(payload.mine)) reject(error || new Error(payload?.error || 'Invalid likes response'));
-      else resolve(payload);
-    }
-    window[callback] = payload => finish(null, payload);
-    script.onerror = () => finish(new Error('Likes unavailable'));
-    const params = new URLSearchParams({ action, visitor, callback, t: String(Date.now()) });
-    if (item) params.set('item', item);
-    script.src = `${COURSE_CONFIG.GALLERY_API_URL}?${params}`;
-    document.head.append(script);
-  });
-}
-
-async function requestGalleryLikes(action, item = '') {
-  const visitor = galleryVisitorId();
-  if (action !== 'likes' && !galleryVisitorPersistent) throw new Error('Browser storage unavailable');
-  const params = new URLSearchParams({ action, visitor, t: String(Date.now()) });
-  if (item) params.set('item', item);
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 8000);
-  try {
-    const response = await fetch(`${COURSE_CONFIG.GALLERY_API_URL}?${params}`, { mode: 'cors', cache: 'no-store', signal: controller.signal });
-    if (!response.ok) throw new Error(`Likes HTTP ${response.status}`);
-    const payload = await response.json();
-    if (payload?.error || !payload?.counts || !Array.isArray(payload.mine)) throw new Error(payload?.error || 'Invalid likes response');
-    return payload;
-  } catch (error) {
-    // Some browsers cannot follow the Apps Script cross-origin redirect with
-    // fetch. JSONP is retained only as a compatibility fallback.
-    return requestGalleryLikesScript(action, visitor, item);
-  } finally { clearTimeout(timer); }
-}
-
-function updateGalleryLikesNotices() {
-  document.querySelectorAll('[data-gallery-likes-notice]').forEach(notice => {
-    notice.hidden = !galleryLikesFailed;
-    if (!galleryLikesFailed) { notice.replaceChildren(); return; }
-    const detail = galleryLikesError?.message === 'Likes unavailable'
-      ? copy('This browser blocked the likes service. Check content blockers or network settings.', 'このブラウザでいいねサービスへの接続が遮断されました。広告ブロックやネットワーク設定を確認してください。')
-      : copy('The likes service did not respond. Please try again.', 'いいねサービスから応答がありません。もう一度お試しください。');
-    const retry = element('button', copy('Retry likes', 'いいねを再読み込み'), 'gallery-likes-retry');
-    retry.type = 'button';
-    retry.addEventListener('click', () => loadGalleryLikes(true));
-    notice.replaceChildren(element('span', detail), retry);
-  });
-}
-
-function updateGalleryLikeButtons() {
-  document.querySelectorAll('[data-gallery-like]').forEach(button => {
-    const key = button.dataset.galleryLike;
-    const liked = galleryLikesMine.has(key);
-    const count = Number(galleryLikesCounts[key] || 0);
-    const loading = (!galleryLikesReady && !galleryLikesFailed) || button.dataset.pending === 'true';
-    button.disabled = !galleryLikesReady || !galleryVisitorPersistent || button.dataset.pending === 'true';
-    button.classList.toggle('is-loading', loading);
-    button.setAttribute('aria-busy', String(loading));
-    button.setAttribute('aria-pressed', String(liked));
-    button.setAttribute('aria-label', loading ? copy('Loading likes…', 'いいねを読み込んでいます…') : galleryLikesFailed ? copy('Likes unavailable', 'いいねを読み込めません') : copy(liked ? `Remove your like · ${count} likes` : `Like this work · ${count} likes`, liked ? `いいねを取り消す · ${count}件` : `この作品にいいね · ${count}件`));
-    button.title = loading ? copy('Loading likes…', 'いいねを読み込んでいます…') : galleryLikesFailed ? copy('Likes unavailable; use the retry button above', 'いいねを読み込めません。上の再読み込みボタンを使ってください') : !galleryVisitorPersistent ? copy('Likes require browser storage', 'いいねにはブラウザの保存機能が必要です') : button.dataset.likeError ? copy('Could not update your like. Please try again.', 'いいねを更新できませんでした。もう一度お試しください。') : copy(liked ? 'Remove your like' : 'Like this work', liked ? 'いいねを取り消す' : 'この作品にいいね');
-    button.querySelector('.gallery-like-count').textContent = galleryLikesReady ? String(count) : '';
-    button.classList.toggle('is-liked', liked);
-  });
-  updateGalleryLikesNotices();
-}
-
-function galleryLikeButton(item) {
-  const button = element('button', '', 'gallery-like');
-  button.type = 'button';
-  button.disabled = true;
-  button.dataset.galleryLike = galleryItemKey(item);
-  const heart = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  heart.setAttribute('class', 'gallery-like-heart');
-  heart.setAttribute('viewBox', '0 0 24 24');
-  heart.setAttribute('aria-hidden', 'true');
-  const shape = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  shape.setAttribute('d', 'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z');
-  heart.append(shape);
-  const spinner = element('span', '', 'gallery-work-spinner gallery-like-spinner');
-  spinner.setAttribute('aria-hidden', 'true');
-  button.append(heart, spinner, element('span', '', 'gallery-like-count'));
-  button.addEventListener('click', async () => {
-    const key = button.dataset.galleryLike;
-    if (!galleryLikesReady) return;
-    const action = galleryLikesMine.has(key) ? 'unlike' : 'like';
-    button.dataset.pending = 'true';
-    updateGalleryLikeButtons();
-    try {
-      const payload = await requestGalleryLikes(action, key);
-      galleryLikesCounts = payload.counts;
-      galleryLikesMine = new Set(payload.mine);
-      delete button.dataset.likeError;
-      refreshGalleryAfterLikes();
-    } catch (error) {
-      console.warn('Gallery like:', error);
-      button.dataset.likeError = 'true';
-    } finally {
-      delete button.dataset.pending;
-      updateGalleryLikeButtons();
-    }
-  });
-  return button;
-}
-
-function loadGalleryLikes(retry = false) {
-  if (retry) {
-    galleryLikesPromise = null;
-    galleryLikesFailed = false;
-    galleryLikesError = null;
-    galleryLikesReady = false;
-    updateGalleryLikeButtons();
-    refreshGalleryAfterLikes();
-  }
-  if (!galleryLikesPromise) galleryLikesPromise = requestGalleryLikes('likes').then(payload => {
-    galleryLikesCounts = payload.counts;
-    galleryLikesMine = new Set(payload.mine);
-    galleryLikesReady = true;
-    updateGalleryLikeButtons();
-    refreshGalleryAfterLikes();
-  }).catch(error => { galleryLikesFailed = true; galleryLikesError = error; console.warn('Gallery likes:', error); updateGalleryLikeButtons(); refreshGalleryAfterLikes(); });
-  return galleryLikesPromise;
-}
-
 function galleryFilterItems(items, week, tool, chart) {
   const form = galleryForms.find(entry => entry.id === chart);
   return items.filter(item =>
@@ -710,21 +536,14 @@ function galleryFilterItems(items, week, tool, chart) {
     (!form || matchesGalleryForm(item, form)));
 }
 
-function galleryVisibleItems(items, week, tool, chart, sort = '', likedOnly = false) {
-  const filtered = galleryFilterItems(items, week, tool, chart)
-    .filter(item => !likedOnly || galleryLikesMine.has(galleryItemKey(item)));
-  if (sort !== 'likes') return filtered;
-  return filtered.map((item, index) => ({ item, index }))
-    .sort((a, b) => (galleryLikesCounts[galleryItemKey(b.item)] || 0) - (galleryLikesCounts[galleryItemKey(a.item)] || 0) || a.index - b.index)
-    .map(entry => entry.item);
+function galleryVisibleItems(items, week, tool, chart) {
+  return galleryFilterItems(items, week, tool, chart);
 }
 
-function galleryPageUrl(item, week, tool, chart, sort = '', likedOnly = false) {
+function galleryPageUrl(item, week, tool, chart) {
   const params = new URLSearchParams({ id: galleryItemKey(item), week: String(week) });
   if (tool) params.set('tool', tool);
   if (chart) params.set('chart', chart);
-  if (sort === 'likes') params.set('sort', sort);
-  if (likedOnly) params.set('liked', '1');
   return `gallery-work.html?${params}`;
 }
 
@@ -929,15 +748,11 @@ function paintGalleryWork(items) {
   const week = params.get('week') === 'all' ? 'all' : /^\d+$/.test(params.get('week') || '') ? params.get('week') : String(item.week);
   const tool = galleryTools.some(entry => entry.name === params.get('tool')) ? params.get('tool') : '';
   const chart = galleryForms.some(entry => entry.id === params.get('chart')) ? params.get('chart') : '';
-  const sort = params.get('sort') === 'likes' ? 'likes' : '';
-  const likedOnly = params.get('liked') === '1';
-  const shown = galleryVisibleItems(items, week, tool, chart, sort, likedOnly);
+  const shown = galleryVisibleItems(items, week, tool, chart);
   const index = shown.findIndex(entry => galleryItemKey(entry) === id);
   const backParams = new URLSearchParams({ week });
   if (tool) backParams.set('tool', tool);
   if (chart) backParams.set('chart', chart);
-  if (sort) backParams.set('sort', sort);
-  if (likedOnly) backParams.set('liked', '1');
   const nav = element('nav', '', 'gallery-work-navigation');
   nav.setAttribute('aria-label', copy('Work navigation', '作品の移動'));
   const back = element('a', copy('← Back to gallery', '← ギャラリーに戻る'), 'gallery-work-back');
@@ -948,7 +763,7 @@ function paintGalleryWork(items) {
   [['prev', index - 1, copy('← Previous', '← 前の作品')], ['next', index + 1, copy('Next →', '次の作品 →')]].forEach(([direction, target, label]) => {
     const available = index >= 0 && target >= 0 && target < shown.length;
     const control = element(available ? 'a' : 'span', label, `gallery-work-${direction}${available ? '' : ' is-disabled'}`);
-    if (available) control.href = galleryPageUrl(shown[target], week, tool, chart, sort, likedOnly);
+    if (available) control.href = galleryPageUrl(shown[target], week, tool, chart);
     sequence.append(control);
   });
   nav.append(sequence);
@@ -1002,12 +817,8 @@ function paintGalleryWork(items) {
     sourceBlock.append(link);
   });
   else sourceBlock.append(element('p', item.projectUrl || '—'));
-  const likesNotice = element('div', '', 'gallery-likes-notice');
-  likesNotice.dataset.galleryLikesNotice = '';
-  likesNotice.hidden = true;
-  metadata.append(sourceBlock); details.append(metadata, likesNotice, galleryLikeButton(item));
+  metadata.append(sourceBlock); details.append(metadata);
   layout.append(art, details); root.replaceChildren(nav, layout);
-  updateGalleryLikeButtons();
 
   async function showWorkImage(slot) {
     const request = ++imageRequest;
@@ -1040,12 +851,6 @@ function paintGalleryWork(items) {
 async function renderGalleryWork() {
   const root = document.querySelector('[data-gallery-work]');
   if (!root) return;
-  refreshGalleryAfterLikes = () => {
-    const params = new URLSearchParams(location.search);
-    if (galleryWorkItems && (params.get('sort') === 'likes' || params.get('liked') === '1')) paintGalleryWork(galleryWorkItems);
-    else updateGalleryLikeButtons();
-  };
-  loadGalleryLikes();
   galleryWorkItems ||= recentGalleryItems();
   if (galleryWorkItems) paintGalleryWork(galleryWorkItems);
   try {
@@ -1080,7 +885,7 @@ async function renderGalleryWork() {
   });
 }
 
-function renderGalleryInsights(items, selectedWeek, selectedTool, selectedForm, selectedLiked, shownCount, onToolSelect, onFormSelect, onLikedSelect) {
+function renderGalleryInsights(items, selectedWeek, selectedTool, selectedForm, shownCount, onToolSelect, onFormSelect) {
   const root = document.querySelector('[data-gallery-insights]');
   if (!root) return;
   root.replaceChildren();
@@ -1104,12 +909,7 @@ function renderGalleryInsights(items, selectedWeek, selectedTool, selectedForm, 
     active.type = 'button'; active.addEventListener('click', () => onFormSelect(''));
     lead.append(active);
   }
-  if (selectedLiked) {
-    const active = element('button', copy('Liked by me · Clear filter ×', 'いいねした作品 · 解除 ×'), 'gallery-active-tool');
-    active.type = 'button'; active.addEventListener('click', () => onLikedSelect(false));
-    lead.append(active);
-  }
-  if (selectedTool || selectedForm || selectedLiked) lead.append(element('p', copy(`${shownCount} matching works`, `該当する作品 ${shownCount}点`), 'gallery-filter-count'));
+  if (selectedTool || selectedForm) lead.append(element('p', copy(`${shownCount} matching works`, `該当する作品 ${shownCount}点`), 'gallery-filter-count'));
   root.append(lead);
   const toolCounts = new Map();
   items.forEach(item => matchedGalleryTools(item.tools).forEach(tool => toolCounts.set(tool.name, (toolCounts.get(tool.name) || 0) + 1)));
@@ -1154,7 +954,6 @@ async function renderGallery() {
   root.dataset.rendering = 'true';
   const status = document.querySelector('[data-gallery-status]');
   status.textContent = copy('Loading student work…', '学生作品を読み込んでいます…');
-  loadGalleryLikes();
   let items;
   let snapshot;
   try {
@@ -1169,12 +968,6 @@ async function renderGallery() {
     items = snapshot.items;
     const saved = recentGalleryItems();
     if (saved && saved.length >= items.length) items = saved;
-    else if (Date.now() - Date.parse(snapshot.generatedAt) > 6 * 60 * 60 * 1000) {
-      status.replaceChildren(element('span', '', 'gallery-work-spinner'), document.createTextNode(copy('Loading the latest works…', '最新の作品を読み込んでいます…')));
-      const latest = await loadGalleryItems();
-      const cachedImages = new Map(items.map(item => [galleryItemKey(item), item.imageUrls || [item.imageUrl]]));
-      items = latest.map(item => ({ ...item, imageUrls: cachedImages.get(galleryItemKey(item)) || [], imageUrl: cachedImages.get(galleryItemKey(item))?.[0] || '' }));
-    }
     rememberGalleryItems(items);
     status.textContent = copy(`${items.length} works.`, `${items.length} 点の作品。`);
   } catch (error) {
@@ -1208,18 +1001,6 @@ async function renderGallery() {
   if (!galleryTools.some(tool => tool.name === selectedTool)) selectedTool = '';
   let selectedForm = params.get('chart') || '';
   if (!galleryForms.some(form => form.id === selectedForm)) selectedForm = '';
-  const sortWrapper = element('label', copy('Sort', '並べ替え'), 'gallery-filter');
-  const sortSelect = document.createElement('select'); sortSelect.name = 'sort';
-  sortSelect.append(option('', copy('Default order', '通常の順番')), option('likes', copy('Most liked', 'いいねが多い順')));
-  sortSelect.value = params.get('sort') === 'likes' ? 'likes' : '';
-  sortWrapper.append(sortSelect); controls.append(sortWrapper);
-  let likedOnly = params.get('liked') === '1';
-  const likedButton = element('button', '', 'gallery-liked-filter');
-  likedButton.type = 'button'; controls.append(likedButton);
-  const likesNotice = element('div', '', 'gallery-likes-notice');
-  likesNotice.dataset.galleryLikesNotice = '';
-  likesNotice.hidden = true;
-  controlBar.append(likesNotice);
   let userChangedWeek = false;
   function updateWeekOptions() {
     const selected = userChangedWeek ? weekSelect.value : requestedWeek;
@@ -1249,52 +1030,15 @@ async function renderGallery() {
     history.replaceState(null, '', url);
     paint();
   }
-  function chooseLiked(value) {
-    likedOnly = value;
-    const url = new URL(location.href);
-    if (value) url.searchParams.set('liked', '1');
-    else url.searchParams.delete('liked');
-    history.replaceState(null, '', url);
-    paint();
-  }
-  likedButton.addEventListener('click', () => chooseLiked(!likedOnly));
-  sortSelect.addEventListener('change', () => {
-    const url = new URL(location.href);
-    if (sortSelect.value === 'likes') url.searchParams.set('sort', 'likes');
-    else url.searchParams.delete('sort');
-    history.replaceState(null, '', url);
-    paint();
-  });
   function paint() {
     imageObserver?.disconnect();
     const weekItems = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
-    const likedCount = weekItems.filter(item => galleryLikesMine.has(galleryItemKey(item))).length;
-    likedButton.textContent = copy(`Liked by me (${likedCount})`, `いいねした作品（${likedCount}）`);
-    likedButton.disabled = !galleryLikesReady;
-    likedButton.setAttribute('aria-pressed', String(likedOnly));
-    const shown = galleryVisibleItems(items, weekSelect.value, selectedTool, selectedForm, sortSelect.value, likedOnly);
+    const shown = galleryVisibleItems(items, weekSelect.value, selectedTool, selectedForm);
     root.replaceChildren();
-    renderGalleryInsights(weekItems, weekSelect.value, selectedTool, selectedForm, likedOnly, shown.length, chooseTool, chooseForm, chooseLiked);
-    const waitingForLikes = !galleryLikesReady && !galleryLikesFailed && (sortSelect.value === 'likes' || likedOnly);
-    const likesUnavailable = galleryLikesFailed && (sortSelect.value === 'likes' || likedOnly);
-    status.hidden = shown.length > 0 || waitingForLikes;
-    if (waitingForLikes) {
-      const loading = element('div', '', 'gallery-work-loading');
-      loading.setAttribute('role', 'status');
-      loading.append(element('span', '', 'gallery-work-spinner'), element('p', copy('Loading likes…', 'いいねを読み込んでいます…')));
-      root.append(loading);
-      return;
-    }
-    if (likesUnavailable) {
-      status.hidden = true;
-      root.append(element('p', copy('Likes are unavailable; retry above to show this selection.', 'いいねを読み込めません。上のボタンから再読み込みしてください。'), 'gallery-status'));
-      return;
-    }
+    renderGalleryInsights(weekItems, weekSelect.value, selectedTool, selectedForm, shown.length, chooseTool, chooseForm);
+    status.hidden = shown.length > 0;
     if (!shown.length) {
-      const message = likedOnly && !galleryLikesReady
-        ? galleryLikesFailed ? copy('Likes are temporarily unavailable.', 'いいねを読み込めません。') : copy('Loading your likes…', 'いいねした作品を読み込んでいます…')
-        : likedOnly ? copy('You have not liked any works in this selection yet.', 'この条件でいいねした作品はまだありません。')
-        : selectedTool || selectedForm ? copy('No works match these filters.', '条件に合う作品はありません。')
+      const message = selectedTool || selectedForm ? copy('No works match these filters.', '条件に合う作品はありません。')
         : copy('No submissions yet.', '提出作品はまだありません。');
       root.append(element('p', message, 'gallery-status'));
       return;
@@ -1321,7 +1065,7 @@ async function renderGallery() {
         }
         if (!placeholder.isConnected) return;
         const link = element('a', '', 'gallery-image-button');
-        link.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm, sortSelect.value, likedOnly);
+        link.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm);
         link.setAttribute('aria-label', copy(`View ${item.title || 'student work'}`, `${item.title || '学生作品'}を詳しく見る`));
         link.append(image);
         const stage = element('div', '', 'gallery-image-stage');
@@ -1368,7 +1112,7 @@ async function renderGallery() {
       weekLink.href = `agenda.html#week-${item.week}`; card.append(weekLink);
       const heading = element('h2');
       const titleLink = element('a', item.title || copy('Untitled work', '無題の作品'), 'gallery-card-title-link');
-      titleLink.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm, sortSelect.value, likedOnly);
+      titleLink.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm);
       heading.append(titleLink); card.append(heading);
       card.append(element('p', item.studentName || '', 'gallery-student'));
       const description = element('div', '', 'gallery-description'); appendGalleryText(description, item.description); card.append(description);
@@ -1395,14 +1139,13 @@ async function renderGallery() {
           links.append(link);
         });
       } else if (item.projectUrl) links.append(element('span', `${copy('Data / source:', 'データ・出典:')} ${item.projectUrl}`, 'gallery-source-note'));
-      footer.append(links, galleryLikeButton(item));
+      footer.append(links);
       card.append(footer);
       root.append(card);
       if (index < 3) showImage(placeholder, item, true);
       else if (imageObserver) imageObserver.observe(placeholder);
       else showImage(placeholder, item);
     });
-    updateGalleryLikeButtons();
   }
   weekSelect.addEventListener('change', () => {
     userChangedWeek = true;
@@ -1412,13 +1155,6 @@ async function renderGallery() {
     history.replaceState(null, '', url);
     paint();
   });
-  refreshGalleryAfterLikes = () => {
-    const weekItems = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
-    const likedCount = weekItems.filter(item => galleryLikesMine.has(galleryItemKey(item))).length;
-    likedButton.textContent = copy(`Liked by me (${likedCount})`, `いいねした作品（${likedCount}）`);
-    likedButton.disabled = !galleryLikesReady;
-    if (sortSelect.value === 'likes' || likedOnly) paint();
-  };
   paint();
   // The embedded snapshot makes the gallery immediate. The public feed adds
   // submissions and revisions on every visit without rebuilding GitHub Pages.
