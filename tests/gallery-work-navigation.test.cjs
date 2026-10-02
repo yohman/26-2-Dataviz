@@ -53,3 +53,17 @@ test('two-image works use their distinct cached images and single-image works st
   })()`, context);
   assert.deepEqual([...images], [2, 'first.png', 'second.png', 1]);
 });
+
+test('an uncached work shows loading until the live feed confirms it is missing', () => {
+  const root = { replaceChildren(...children) { this.children = children; } };
+  context.document.querySelector = () => root;
+  context.document.createElement = tagName => ({ tagName, className: '', textContent: '', children: [],
+    setAttribute() {}, append(...children) { this.children.push(...children); } });
+  context.window.courseLanguage = 'ja';
+  context.location = { search: '?id=1-999999&week=1' };
+  vm.runInContext("galleryWorkLiveStatus = 'pending'; paintGalleryWork([])", context);
+  assert.equal(root.children[0].className, 'gallery-work-loading');
+  assert.equal(root.children[0].children[1].textContent, '作品を読み込んでいます…');
+  vm.runInContext("galleryWorkLiveStatus = 'loaded'; paintGalleryWork([])", context);
+  assert.equal(root.children[0].textContent, '作品が見つかりません');
+});

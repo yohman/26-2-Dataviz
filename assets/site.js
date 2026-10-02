@@ -26,6 +26,7 @@ let submissionDeadlineTimer;
 const galleryImageCache = new Map();
 let galleryWorkItems;
 let galleryWorkRefreshStarted = false;
+let galleryWorkLiveStatus = 'pending';
 let galleryLikesPromise;
 let galleryLikesReady = false;
 let galleryLikesFailed = false;
@@ -812,6 +813,24 @@ function setupGalleryImagePanZoom(viewport, image, level, controls) {
   return () => events.abort();
 }
 
+function paintGalleryWorkStatus(root, status) {
+  if (status === 'pending') {
+    const loading = element('div', '', 'gallery-work-loading');
+    loading.setAttribute('role', 'status');
+    const spinner = element('span', '', 'gallery-work-spinner');
+    spinner.setAttribute('aria-hidden', 'true');
+    loading.append(spinner, element('p', copy('Loading this work…', '作品を読み込んでいます…')));
+    root.replaceChildren(loading);
+    return;
+  }
+  const message = status === 'failed'
+    ? copy('This work could not be loaded right now.', '作品を読み込めませんでした。')
+    : copy('Work not found', '作品が見つかりません');
+  const back = element('a', copy('Back to gallery ←', 'ギャラリーに戻る ←'));
+  back.href = 'gallery.html';
+  root.replaceChildren(element('h1', message, 'gallery-work-missing'), back);
+}
+
 function paintGalleryWork(items) {
   const root = document.querySelector('[data-gallery-work]');
   if (!root) return;
@@ -819,9 +838,7 @@ function paintGalleryWork(items) {
   const id = params.get('id') || '';
   const item = items.find(entry => galleryItemKey(entry) === id);
   if (!item) {
-    const back = element('a', copy('Back to gallery ←', 'ギャラリーに戻る ←'));
-    back.href = 'gallery.html';
-    root.replaceChildren(element('h1', copy('Work not found', '作品が見つかりません'), 'gallery-work-missing'), back);
+    paintGalleryWorkStatus(root, galleryWorkLiveStatus);
     return;
   }
   const week = params.get('week') === 'all' ? 'all' : /^\d+$/.test(params.get('week') || '') ? params.get('week') : String(item.week);
@@ -945,7 +962,7 @@ async function renderGalleryWork() {
     paintGalleryWork(galleryWorkItems);
   } catch (error) {
     console.warn('Gallery work snapshot:', error);
-    root.replaceChildren(element('p', copy('Loading the latest student work…', '最新の学生作品を読み込んでいます…'), 'gallery-status'));
+    paintGalleryWorkStatus(root, 'pending');
   }
   if (galleryWorkRefreshStarted) return;
   galleryWorkRefreshStarted = true;
@@ -953,10 +970,12 @@ async function renderGalleryWork() {
   loadGalleryItems().then(latest => {
     const cachedImages = new Map((galleryWorkItems || []).map(item => [galleryItemKey(item), item.imageUrls || [item.imageUrl]]));
     galleryWorkItems = latest.map(item => ({ ...item, imageUrls: cachedImages.get(galleryItemKey(item)) || [], imageUrl: cachedImages.get(galleryItemKey(item))?.[0] || '' }));
+    galleryWorkLiveStatus = 'loaded';
     paintGalleryWork(galleryWorkItems);
   }).catch(error => {
     console.warn('Gallery work live refresh:', error);
-    if (!galleryWorkItems) root.replaceChildren(element('p', copy('Student work is temporarily unavailable.', '学生作品を読み込めませんでした。'), 'gallery-status'));
+    galleryWorkLiveStatus = 'failed';
+    paintGalleryWork(galleryWorkItems || []);
   });
 }
 
