@@ -28,9 +28,11 @@ let galleryWorkItems;
 let galleryWorkRefreshStarted = false;
 let galleryLikesPromise;
 let galleryLikesReady = false;
+let galleryLikesFailed = false;
 let galleryLikesCounts = {};
 let galleryLikesMine = new Set();
 let galleryLikesRequestNumber = 0;
+let refreshGalleryAfterLikes = () => {};
 
 const escapeHtml = value => String(value || '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const isJapanese = () => window.courseLanguage === 'ja';
@@ -529,12 +531,11 @@ function updateGalleryLikeButtons() {
     const key = button.dataset.galleryLike;
     const liked = galleryLikesMine.has(key);
     const count = Number(galleryLikesCounts[key] || 0);
-    button.disabled = !galleryLikesReady || liked || button.dataset.pending === 'true';
+    button.disabled = !galleryLikesReady || button.dataset.pending === 'true';
     button.setAttribute('aria-pressed', String(liked));
-    button.setAttribute('aria-label', copy(liked ? `You liked this work · ${count} likes` : `Like this work · ${count} likes`, liked ? `この作品にいいね済み · ${count}件` : `この作品にいいね · ${count}件`));
-    button.title = !galleryLikesReady ? copy('Likes temporarily unavailable', 'いいねを読み込めません') : button.dataset.likeError ? copy('Could not save your like. Please try again.', 'いいねを保存できませんでした。もう一度お試しください。') : copy(liked ? 'You liked this work' : 'One like per browser', liked ? 'この作品にいいね済み' : '1ブラウザにつき1回');
+    button.setAttribute('aria-label', copy(liked ? `Remove your like · ${count} likes` : `Like this work · ${count} likes`, liked ? `いいねを取り消す · ${count}件` : `この作品にいいね · ${count}件`));
+    button.title = !galleryLikesReady ? copy('Likes temporarily unavailable', 'いいねを読み込めません') : button.dataset.likeError ? copy('Could not update your like. Please try again.', 'いいねを更新できませんでした。もう一度お試しください。') : copy(liked ? 'Remove your like' : 'Like this work', liked ? 'いいねを取り消す' : 'この作品にいいね');
     button.querySelector('.gallery-like-count').textContent = galleryLikesReady ? String(count) : '—';
-    button.querySelector('.gallery-like-heart').textContent = liked ? '♥' : '♡';
     button.classList.toggle('is-liked', liked);
   });
 }
@@ -544,18 +545,26 @@ function galleryLikeButton(item) {
   button.type = 'button';
   button.disabled = true;
   button.dataset.galleryLike = galleryItemKey(item);
-  const heart = element('span', '♥', 'gallery-like-heart'); heart.setAttribute('aria-hidden', 'true');
+  const heart = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  heart.setAttribute('class', 'gallery-like-heart');
+  heart.setAttribute('viewBox', '0 0 24 24');
+  heart.setAttribute('aria-hidden', 'true');
+  const shape = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  shape.setAttribute('d', 'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z');
+  heart.append(shape);
   button.append(heart, element('span', '—', 'gallery-like-count'));
   button.addEventListener('click', async () => {
     const key = button.dataset.galleryLike;
-    if (!galleryLikesReady || galleryLikesMine.has(key)) return;
+    if (!galleryLikesReady) return;
+    const action = galleryLikesMine.has(key) ? 'unlike' : 'like';
     button.dataset.pending = 'true';
     updateGalleryLikeButtons();
     try {
-      const payload = await requestGalleryLikes('like', key);
+      const payload = await requestGalleryLikes(action, key);
       galleryLikesCounts = payload.counts;
       galleryLikesMine = new Set(payload.mine);
       delete button.dataset.likeError;
+      refreshGalleryAfterLikes();
     } catch (error) {
       console.warn('Gallery like:', error);
       button.dataset.likeError = 'true';
@@ -573,7 +582,8 @@ function loadGalleryLikes() {
     galleryLikesMine = new Set(payload.mine);
     galleryLikesReady = true;
     updateGalleryLikeButtons();
-  }).catch(error => { console.warn('Gallery likes:', error); updateGalleryLikeButtons(); });
+    refreshGalleryAfterLikes();
+  }).catch(error => { galleryLikesFailed = true; console.warn('Gallery likes:', error); updateGalleryLikeButtons(); refreshGalleryAfterLikes(); });
   return galleryLikesPromise;
 }
 
@@ -585,10 +595,21 @@ function galleryFilterItems(items, week, tool, chart) {
     (!form || matchesGalleryForm(item, form)));
 }
 
-function galleryPageUrl(item, week, tool, chart) {
+function galleryVisibleItems(items, week, tool, chart, sort = '', likedOnly = false) {
+  const filtered = galleryFilterItems(items, week, tool, chart)
+    .filter(item => !likedOnly || galleryLikesMine.has(galleryItemKey(item)));
+  if (sort !== 'likes') return filtered;
+  return filtered.map((item, index) => ({ item, index }))
+    .sort((a, b) => (galleryLikesCounts[galleryItemKey(b.item)] || 0) - (galleryLikesCounts[galleryItemKey(a.item)] || 0) || a.index - b.index)
+    .map(entry => entry.item);
+}
+
+function galleryPageUrl(item, week, tool, chart, sort = '', likedOnly = false) {
   const params = new URLSearchParams({ id: galleryItemKey(item), week: String(week) });
   if (tool) params.set('tool', tool);
   if (chart) params.set('chart', chart);
+  if (sort === 'likes') params.set('sort', sort);
+  if (likedOnly) params.set('liked', '1');
   return `gallery-work.html?${params}`;
 }
 
@@ -773,11 +794,15 @@ function paintGalleryWork(items) {
   const week = params.get('week') === 'all' ? 'all' : /^\d+$/.test(params.get('week') || '') ? params.get('week') : String(item.week);
   const tool = galleryTools.some(entry => entry.name === params.get('tool')) ? params.get('tool') : '';
   const chart = galleryForms.some(entry => entry.id === params.get('chart')) ? params.get('chart') : '';
-  const shown = galleryFilterItems(items, week, tool, chart);
+  const sort = params.get('sort') === 'likes' ? 'likes' : '';
+  const likedOnly = params.get('liked') === '1';
+  const shown = galleryVisibleItems(items, week, tool, chart, sort, likedOnly);
   const index = shown.findIndex(entry => galleryItemKey(entry) === id);
   const backParams = new URLSearchParams({ week });
   if (tool) backParams.set('tool', tool);
   if (chart) backParams.set('chart', chart);
+  if (sort) backParams.set('sort', sort);
+  if (likedOnly) backParams.set('liked', '1');
   const nav = element('nav', '', 'gallery-work-navigation');
   nav.setAttribute('aria-label', copy('Work navigation', '作品の移動'));
   const back = element('a', copy('← Back to gallery', '← ギャラリーに戻る'), 'gallery-work-back');
@@ -788,7 +813,7 @@ function paintGalleryWork(items) {
   [['prev', index - 1, copy('← Previous', '← 前の作品')], ['next', index + 1, copy('Next →', '次の作品 →')]].forEach(([direction, target, label]) => {
     const available = index >= 0 && target >= 0 && target < shown.length;
     const control = element(available ? 'a' : 'span', label, `gallery-work-${direction}${available ? '' : ' is-disabled'}`);
-    if (available) control.href = galleryPageUrl(shown[target], week, tool, chart);
+    if (available) control.href = galleryPageUrl(shown[target], week, tool, chart, sort, likedOnly);
     sequence.append(control);
   });
   nav.append(sequence);
@@ -861,6 +886,11 @@ function paintGalleryWork(items) {
 async function renderGalleryWork() {
   const root = document.querySelector('[data-gallery-work]');
   if (!root) return;
+  refreshGalleryAfterLikes = () => {
+    const params = new URLSearchParams(location.search);
+    if (galleryWorkItems && (params.get('sort') === 'likes' || params.get('liked') === '1')) paintGalleryWork(galleryWorkItems);
+    else updateGalleryLikeButtons();
+  };
   if (galleryWorkItems) { paintGalleryWork(galleryWorkItems); return; }
   try {
     const response = await fetch('data/gallery-public.json', { cache: 'default' });
@@ -886,7 +916,7 @@ async function renderGalleryWork() {
   });
 }
 
-function renderGalleryInsights(items, selectedWeek, selectedTool, selectedForm, shownCount, onToolSelect, onFormSelect) {
+function renderGalleryInsights(items, selectedWeek, selectedTool, selectedForm, selectedLiked, shownCount, onToolSelect, onFormSelect, onLikedSelect) {
   const root = document.querySelector('[data-gallery-insights]');
   if (!root) return;
   root.replaceChildren();
@@ -910,7 +940,12 @@ function renderGalleryInsights(items, selectedWeek, selectedTool, selectedForm, 
     active.type = 'button'; active.addEventListener('click', () => onFormSelect(''));
     lead.append(active);
   }
-  if (selectedTool || selectedForm) lead.append(element('p', copy(`${shownCount} matching works`, `該当する作品 ${shownCount}点`), 'gallery-filter-count'));
+  if (selectedLiked) {
+    const active = element('button', copy('Liked by me · Clear filter ×', 'いいねした作品 · 解除 ×'), 'gallery-active-tool');
+    active.type = 'button'; active.addEventListener('click', () => onLikedSelect(false));
+    lead.append(active);
+  }
+  if (selectedTool || selectedForm || selectedLiked) lead.append(element('p', copy(`${shownCount} matching works`, `該当する作品 ${shownCount}点`), 'gallery-filter-count'));
   root.append(lead);
   const toolCounts = new Map();
   items.forEach(item => matchedGalleryTools(item.tools).forEach(tool => toolCounts.set(tool.name, (toolCounts.get(tool.name) || 0) + 1)));
@@ -992,11 +1027,20 @@ async function renderGallery() {
   const wrapper = element('label', copy('Week', '週'), 'gallery-filter');
   const weekSelect = document.createElement('select'); weekSelect.name = 'week';
   wrapper.append(weekSelect); controls.append(wrapper);
-  const requestedWeek = new URLSearchParams(location.search).get('week');
-  let selectedTool = new URLSearchParams(location.search).get('tool') || '';
+  const params = new URLSearchParams(location.search);
+  const requestedWeek = params.get('week');
+  let selectedTool = params.get('tool') || '';
   if (!galleryTools.some(tool => tool.name === selectedTool)) selectedTool = '';
-  let selectedForm = new URLSearchParams(location.search).get('chart') || '';
+  let selectedForm = params.get('chart') || '';
   if (!galleryForms.some(form => form.id === selectedForm)) selectedForm = '';
+  const sortWrapper = element('label', copy('Sort', '並べ替え'), 'gallery-filter');
+  const sortSelect = document.createElement('select'); sortSelect.name = 'sort';
+  sortSelect.append(option('', copy('Default order', '通常の順番')), option('likes', copy('Most liked', 'いいねが多い順')));
+  sortSelect.value = params.get('sort') === 'likes' ? 'likes' : '';
+  sortWrapper.append(sortSelect); controls.append(sortWrapper);
+  let likedOnly = params.get('liked') === '1';
+  const likedButton = element('button', '', 'gallery-liked-filter');
+  likedButton.type = 'button'; controls.append(likedButton);
   let userChangedWeek = false;
   function updateWeekOptions() {
     const selected = userChangedWeek ? weekSelect.value : requestedWeek;
@@ -1026,14 +1070,42 @@ async function renderGallery() {
     history.replaceState(null, '', url);
     paint();
   }
+  function chooseLiked(value) {
+    likedOnly = value;
+    const url = new URL(location.href);
+    if (value) url.searchParams.set('liked', '1');
+    else url.searchParams.delete('liked');
+    history.replaceState(null, '', url);
+    paint();
+  }
+  likedButton.addEventListener('click', () => chooseLiked(!likedOnly));
+  sortSelect.addEventListener('change', () => {
+    const url = new URL(location.href);
+    if (sortSelect.value === 'likes') url.searchParams.set('sort', 'likes');
+    else url.searchParams.delete('sort');
+    history.replaceState(null, '', url);
+    paint();
+  });
   function paint() {
     imageObserver?.disconnect();
     const weekItems = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
-    const shown = galleryFilterItems(items, weekSelect.value, selectedTool, selectedForm);
+    const likedCount = weekItems.filter(item => galleryLikesMine.has(galleryItemKey(item))).length;
+    likedButton.textContent = copy(`Liked by me (${likedCount})`, `いいねした作品（${likedCount}）`);
+    likedButton.disabled = !galleryLikesReady;
+    likedButton.setAttribute('aria-pressed', String(likedOnly));
+    const shown = galleryVisibleItems(items, weekSelect.value, selectedTool, selectedForm, sortSelect.value, likedOnly);
     root.replaceChildren();
-    renderGalleryInsights(weekItems, weekSelect.value, selectedTool, selectedForm, shown.length, chooseTool, chooseForm);
+    renderGalleryInsights(weekItems, weekSelect.value, selectedTool, selectedForm, likedOnly, shown.length, chooseTool, chooseForm, chooseLiked);
     status.hidden = shown.length > 0;
-    if (!shown.length) { root.append(element('p', selectedTool || selectedForm ? copy('No works match these filters.', '条件に合う作品はありません。') : copy('No submissions yet.', '提出作品はまだありません。'), 'gallery-status')); return; }
+    if (!shown.length) {
+      const message = likedOnly && !galleryLikesReady
+        ? galleryLikesFailed ? copy('Likes are temporarily unavailable.', 'いいねを読み込めません。') : copy('Loading your likes…', 'いいねした作品を読み込んでいます…')
+        : likedOnly ? copy('You have not liked any works in this selection yet.', 'この条件でいいねした作品はまだありません。')
+        : selectedTool || selectedForm ? copy('No works match these filters.', '条件に合う作品はありません。')
+        : copy('No submissions yet.', '提出作品はまだありません。');
+      root.append(element('p', message, 'gallery-status'));
+      return;
+    }
     const showImage = async (placeholder, item) => {
       const data = item.imageUrl || await loadGalleryImage(Number(item.imageIndex));
       if (!placeholder.isConnected) return;
@@ -1042,7 +1114,7 @@ async function renderGallery() {
         image.alt = copy(`Screenshot of ${item.title || 'student work'}`, `${item.title || '学生作品'}のスクリーンショット`);
         image.loading = 'lazy';
         const link = element('a', '', 'gallery-image-button');
-        link.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm);
+        link.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm, sortSelect.value, likedOnly);
         link.setAttribute('aria-label', copy(`View ${item.title || 'student work'}`, `${item.title || '学生作品'}を詳しく見る`));
         link.append(image);
         placeholder.replaceWith(link);
@@ -1071,7 +1143,7 @@ async function renderGallery() {
       weekLink.href = `agenda.html#week-${item.week}`; card.append(weekLink);
       const heading = element('h2');
       const titleLink = element('a', item.title || copy('Untitled work', '無題の作品'), 'gallery-card-title-link');
-      titleLink.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm);
+      titleLink.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm, sortSelect.value, likedOnly);
       heading.append(titleLink); card.append(heading);
       card.append(element('p', item.studentName || '', 'gallery-student'));
       const description = element('div', '', 'gallery-description'); appendGalleryText(description, item.description); card.append(description);
@@ -1114,6 +1186,7 @@ async function renderGallery() {
     history.replaceState(null, '', url);
     paint();
   });
+  refreshGalleryAfterLikes = paint;
   paint();
   loadGalleryLikes();
   // The embedded snapshot makes the gallery immediate. The public feed adds

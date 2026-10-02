@@ -28,3 +28,20 @@ test('previous and next can use the same filtered item sequence as the gallery',
   ], '1', 'Excel', 'bar').map(galleryItemKey)`, context);
   assert.deepEqual([...selected], ['1-1', '1-5']);
 });
+
+test('most-liked sorting and my-likes filtering share the work-page sequence', () => {
+  const selected = vm.runInContext(`(() => {
+    galleryLikesCounts = { '1-2': 4, '1-3': 4, '1-1': 1 };
+    galleryLikesMine = new Set(['1-1', '1-3']);
+    return galleryVisibleItems([
+      { week: 1, imageIndex: 1 },
+      { week: 1, imageIndex: 2 },
+      { week: 1, imageIndex: 3 }
+    ], '1', '', '', 'likes', true).map(galleryItemKey);
+  })()`, context);
+  assert.deepEqual([...selected], ['1-3', '1-1']);
+  const href = vm.runInContext("galleryPageUrl({ week: 1, imageIndex: 3 }, '1', '', '', 'likes', true)", context);
+  const url = new URL(href, 'https://example.org/');
+  assert.equal(url.searchParams.get('sort'), 'likes');
+  assert.equal(url.searchParams.get('liked'), '1');
+});

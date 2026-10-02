@@ -1,6 +1,6 @@
 /* Add to the spreadsheet-bound Data Visualization Gallery Feed Apps Script.
  * In GalleryFeed.gs, put this at the top of doGet(request):
- * if (request && /^(likes|like)$/.test(request.parameter.action || '')) return galleryLikesApi(request);
+ * if (request && /^(likes|like|unlike)$/.test(request.parameter.action || '')) return galleryLikesApi(request);
  * Redeploy the existing web app after saving. The private sheet stores only
  * work keys and hashes of browser IDs, never names or email addresses.
  */
@@ -13,7 +13,7 @@ function galleryLikesApi(request) {
   const item = String(params.item || '');
   const validVisitor = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(visitor);
   const validItem = /^\d{1,2}-\d{1,6}$/.test(item);
-  if (!validVisitor || (params.action === 'like' && !validItem))
+  if (!validVisitor || (params.action !== 'likes' && !validItem))
     return output({ error: 'Invalid like request' }, callback);
 
   const digest = Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, visitor));
@@ -31,6 +31,13 @@ function galleryLikesApi(request) {
     if (params.action === 'like' && !rows.some(row => row[0] === item && row[1] === digest)) {
       sheet.appendRow([item, digest, new Date()]);
       rows.push([item, digest]);
+    }
+    if (params.action === 'unlike') {
+      const index = rows.findIndex(row => row[0] === item && row[1] === digest);
+      if (index >= 0) {
+        sheet.deleteRow(index + 2);
+        rows.splice(index, 1);
+      }
     }
     const counts = {};
     const mine = [];

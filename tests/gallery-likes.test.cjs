@@ -7,6 +7,7 @@ const vm = require('node:vm');
 const rows = [];
 const sheet = {
   appendRow(row) { rows.push(row); },
+  deleteRow(number) { rows.splice(number - 1, 1); },
   getDataRange() { return { getValues: () => rows.map(row => [...row]) }; },
   hideSheet() {}
 };
@@ -54,4 +55,14 @@ test('invalid browser and card IDs do not create likes', () => {
   assert.equal(call('like', 'not-an-id', '1-21').error, 'Invalid like request');
   assert.equal(call('like', first, 'other-sheet').error, 'Invalid like request');
   assert.equal(call('likes', first).counts['1-21'], 2);
+});
+
+test('unliking removes only that browser’s heart and allows liking again', () => {
+  const removed = call('unlike', first, '1-21');
+  assert.equal(removed.counts['1-21'], 1);
+  assert.deepEqual([...removed.mine], ['1-22']);
+  assert.equal(call('unlike', first, '1-21').counts['1-21'], 1);
+  const restored = call('like', first, '1-21');
+  assert.equal(restored.counts['1-21'], 2);
+  assert.deepEqual([...restored.mine].sort(), ['1-21', '1-22']);
 });
