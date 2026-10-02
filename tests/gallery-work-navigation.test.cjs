@@ -64,6 +64,33 @@ test('an unchanged live feed does not require repainting gallery images or cards
   assert.deepEqual([...result], [true, false]);
 });
 
+test('likes work when randomUUID is unavailable but browser storage works', () => {
+  const saved = new Map();
+  context.localStorage = { getItem: key => saved.get(key), setItem: (key, value) => saved.set(key, value) };
+  context.crypto = { getRandomValues: bytes => bytes.fill(7) };
+  context.document.cookie = '';
+  const result = vm.runInContext('({ id: galleryVisitorId(), persistent: galleryVisitorPersistent })', context);
+  assert.match(result.id, /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/);
+  assert.equal(result.persistent, true);
+  assert.equal(saved.get('dataviz-gallery-browser-id'), result.id);
+});
+
+test('likes use a first-party cookie when localStorage is unavailable', () => {
+  context.localStorage = { getItem() { throw new Error('blocked'); }, setItem() { throw new Error('blocked'); } };
+  context.document.cookie = '';
+  const result = vm.runInContext('({ id: galleryVisitorId(), persistent: galleryVisitorPersistent })', context);
+  assert.equal(result.persistent, true);
+  assert.match(context.document.cookie, new RegExp(`dataviz-gallery-browser-id=${result.id}`));
+});
+
+test('a temporary ID stays stable for counts when all browser storage is blocked', () => {
+  context.document.cookie = '';
+  Object.defineProperty(context.document, 'cookie', { configurable: true, get: () => '', set() {} });
+  const result = vm.runInContext('({ first: galleryVisitorId(), second: galleryVisitorId(), persistent: galleryVisitorPersistent })', context);
+  assert.equal(result.first, result.second);
+  assert.equal(result.persistent, false);
+});
+
 test('an uncached work shows loading until the live feed confirms it is missing', () => {
   const root = { replaceChildren(...children) { this.children = children; } };
   context.document.querySelector = () => root;

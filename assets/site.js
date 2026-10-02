@@ -33,6 +33,8 @@ let galleryLikesFailed = false;
 let galleryLikesCounts = {};
 let galleryLikesMine = new Set();
 let galleryLikesRequestNumber = 0;
+let galleryVisitorPersistent = false;
+let galleryEphemeralVisitorId = '';
 let refreshGalleryAfterLikes = () => {};
 
 const escapeHtml = value => String(value || '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -535,18 +537,40 @@ function galleryImageControls(count, onSelect) {
   } };
 }
 
+const galleryVisitorPattern = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
+function newGalleryVisitorId() {
+  if (globalThis.crypto?.randomUUID) return crypto.randomUUID();
+  const bytes = new Uint8Array(16);
+  if (globalThis.crypto?.getRandomValues) crypto.getRandomValues(bytes);
+  else for (let index = 0; index < bytes.length; index++) bytes[index] = Math.floor(Math.random() * 256);
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = [...bytes].map(byte => byte.toString(16).padStart(2, '0')).join('');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
 function galleryVisitorId() {
+  const key = 'dataviz-gallery-browser-id';
+  let saved = '';
+  try { saved = localStorage.getItem(key) || ''; } catch { /* Try a first-party cookie. */ }
+  if (!galleryVisitorPattern.test(saved)) {
+    try { saved = document.cookie.split(';').map(entry => entry.trim()).find(entry => entry.startsWith(`${key}=`))?.slice(key.length + 1) || ''; }
+    catch { saved = ''; }
+  }
+  const id = galleryVisitorPattern.test(saved) ? saved : galleryEphemeralVisitorId || newGalleryVisitorId();
+  galleryEphemeralVisitorId = id;
+  galleryVisitorPersistent = false;
+  try { localStorage.setItem(key, id); galleryVisitorPersistent = localStorage.getItem(key) === id; }
+  catch { /* Cookies may still work. */ }
   try {
-    const key = 'dataviz-gallery-browser-id';
-    let id = localStorage.getItem(key);
-    if (!id) { id = crypto.randomUUID(); localStorage.setItem(key, id); }
-    return id;
-  } catch (error) { return ''; }
+    document.cookie = `${key}=${id}; Max-Age=31536000; Path=/; SameSite=Lax`;
+    galleryVisitorPersistent ||= document.cookie.split(';').map(entry => entry.trim()).includes(`${key}=${id}`);
+  } catch { /* Counts can still load with this tab's temporary ID. */ }
+  return id;
 }
 
 function requestGalleryLikes(action, item = '') {
   const visitor = galleryVisitorId();
-  if (!visitor) return Promise.reject(new Error('Browser storage unavailable'));
+  if (action !== 'likes' && !galleryVisitorPersistent) return Promise.reject(new Error('Browser storage unavailable'));
   return new Promise((resolve, reject) => {
     const callback = `courseGalleryLikesReceive_${++galleryLikesRequestNumber}`;
     const script = document.createElement('script');
@@ -576,13 +600,13 @@ function updateGalleryLikeButtons() {
     const liked = galleryLikesMine.has(key);
     const count = Number(galleryLikesCounts[key] || 0);
     const loading = (!galleryLikesReady && !galleryLikesFailed) || button.dataset.pending === 'true';
-    button.disabled = !galleryLikesReady || button.dataset.pending === 'true';
+    button.disabled = (!galleryLikesReady && !galleryLikesFailed) || (galleryLikesReady && !galleryVisitorPersistent) || button.dataset.pending === 'true';
     button.classList.toggle('is-loading', loading);
     button.setAttribute('aria-busy', String(loading));
     button.setAttribute('aria-pressed', String(liked));
-    button.setAttribute('aria-label', loading ? copy('Loading likes…', 'いいねを読み込んでいます…') : copy(liked ? `Remove your like · ${count} likes` : `Like this work · ${count} likes`, liked ? `いいねを取り消す · ${count}件` : `この作品にいいね · ${count}件`));
-    button.title = loading ? copy('Loading likes…', 'いいねを読み込んでいます…') : !galleryLikesReady ? copy('Likes temporarily unavailable', 'いいねを読み込めません') : button.dataset.likeError ? copy('Could not update your like. Please try again.', 'いいねを更新できませんでした。もう一度お試しください。') : copy(liked ? 'Remove your like' : 'Like this work', liked ? 'いいねを取り消す' : 'この作品にいいね');
-    button.querySelector('.gallery-like-count').textContent = galleryLikesReady ? String(count) : '';
+    button.setAttribute('aria-label', loading ? copy('Loading likes…', 'いいねを読み込んでいます…') : galleryLikesFailed ? copy('Retry loading likes', 'いいねを再読み込み') : copy(liked ? `Remove your like · ${count} likes` : `Like this work · ${count} likes`, liked ? `いいねを取り消す · ${count}件` : `この作品にいいね · ${count}件`));
+    button.title = loading ? copy('Loading likes…', 'いいねを読み込んでいます…') : galleryLikesFailed ? copy('Retry loading likes', 'いいねを再読み込み') : !galleryVisitorPersistent ? copy('Likes require browser storage', 'いいねにはブラウザの保存機能が必要です') : button.dataset.likeError ? copy('Could not update your like. Please try again.', 'いいねを更新できませんでした。もう一度お試しください。') : copy(liked ? 'Remove your like' : 'Like this work', liked ? 'いいねを取り消す' : 'この作品にいいね');
+    button.querySelector('.gallery-like-count').textContent = galleryLikesReady ? String(count) : galleryLikesFailed ? '↻' : '';
     button.classList.toggle('is-liked', liked);
   });
 }
@@ -603,6 +627,7 @@ function galleryLikeButton(item) {
   spinner.setAttribute('aria-hidden', 'true');
   button.append(heart, spinner, element('span', '', 'gallery-like-count'));
   button.addEventListener('click', async () => {
+    if (galleryLikesFailed) { loadGalleryLikes(true); return; }
     const key = button.dataset.galleryLike;
     if (!galleryLikesReady) return;
     const action = galleryLikesMine.has(key) ? 'unlike' : 'like';
@@ -625,7 +650,14 @@ function galleryLikeButton(item) {
   return button;
 }
 
-function loadGalleryLikes() {
+function loadGalleryLikes(retry = false) {
+  if (retry) {
+    galleryLikesPromise = null;
+    galleryLikesFailed = false;
+    galleryLikesReady = false;
+    updateGalleryLikeButtons();
+    refreshGalleryAfterLikes();
+  }
   if (!galleryLikesPromise) galleryLikesPromise = requestGalleryLikes('likes').then(payload => {
     galleryLikesCounts = payload.counts;
     galleryLikesMine = new Set(payload.mine);
@@ -1184,7 +1216,7 @@ async function renderGallery() {
     history.replaceState(null, '', url);
     paint();
   }
-  likedButton.addEventListener('click', () => chooseLiked(!likedOnly));
+  likedButton.addEventListener('click', () => galleryLikesFailed ? loadGalleryLikes(true) : chooseLiked(!likedOnly));
   sortSelect.addEventListener('change', () => {
     const url = new URL(location.href);
     if (sortSelect.value === 'likes') url.searchParams.set('sort', 'likes');
@@ -1196,8 +1228,8 @@ async function renderGallery() {
     imageObserver?.disconnect();
     const weekItems = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
     const likedCount = weekItems.filter(item => galleryLikesMine.has(galleryItemKey(item))).length;
-    likedButton.textContent = copy(`Liked by me (${likedCount})`, `いいねした作品（${likedCount}）`);
-    likedButton.disabled = !galleryLikesReady;
+    likedButton.textContent = galleryLikesFailed ? copy('Retry loading likes', 'いいねを再読み込み') : copy(`Liked by me (${likedCount})`, `いいねした作品（${likedCount}）`);
+    likedButton.disabled = !galleryLikesReady && !galleryLikesFailed;
     likedButton.setAttribute('aria-pressed', String(likedOnly));
     const shown = galleryVisibleItems(items, weekSelect.value, selectedTool, selectedForm, sortSelect.value, likedOnly);
     root.replaceChildren();
@@ -1336,8 +1368,8 @@ async function renderGallery() {
   refreshGalleryAfterLikes = () => {
     const weekItems = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
     const likedCount = weekItems.filter(item => galleryLikesMine.has(galleryItemKey(item))).length;
-    likedButton.textContent = copy(`Liked by me (${likedCount})`, `いいねした作品（${likedCount}）`);
-    likedButton.disabled = !galleryLikesReady;
+    likedButton.textContent = galleryLikesFailed ? copy('Retry loading likes', 'いいねを再読み込み') : copy(`Liked by me (${likedCount})`, `いいねした作品（${likedCount}）`);
+    likedButton.disabled = !galleryLikesReady && !galleryLikesFailed;
     if (sortSelect.value === 'likes' || likedOnly) paint();
   };
   paint();
