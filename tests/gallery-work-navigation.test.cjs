@@ -54,6 +54,16 @@ test('two-image works use their distinct cached images and single-image works st
   assert.deepEqual([...images], [2, 'first.png', 'second.png', 1]);
 });
 
+test('an unchanged live feed does not require repainting gallery images or cards', () => {
+  const result = vm.runInContext(`(() => {
+    const cached = [{ week: 1, imageIndex: 7, title: 'A', imageUrl: 'cached.jpg', imageCount: 1 }];
+    const unchanged = [{ week: 1, imageIndex: 7, title: 'A', imageCount: 1 }];
+    const revised = [{ week: 1, imageIndex: 7, title: 'B', imageCount: 1 }];
+    return [sameGalleryItems(cached, unchanged), sameGalleryItems(cached, revised)];
+  })()`, context);
+  assert.deepEqual([...result], [true, false]);
+});
+
 test('an uncached work shows loading until the live feed confirms it is missing', () => {
   const root = { replaceChildren(...children) { this.children = children; } };
   context.document.querySelector = () => root;

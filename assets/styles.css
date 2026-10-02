@@ -522,6 +522,7 @@ a.gallery-tool-chip:hover,a.gallery-tool-chip:focus-visible{background:var(--pla
 .gallery-work-zoom-controls button:hover,.gallery-work-zoom-controls button:focus-visible{border-color:var(--playfair-crimson);color:var(--playfair-crimson)}
 .gallery-work-zoom-level{min-width:3.5rem;text-align:center;font:600 .66rem "DM Mono",monospace}
 .gallery-work-viewport{position:relative;display:grid;place-items:center;min-width:0;min-height:0;overflow:hidden;color:var(--muted);font-size:.85rem;cursor:grab;touch-action:none;user-select:none}
+.gallery-work-viewport.is-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.65rem;cursor:default}
 .gallery-work-viewport.is-dragging{cursor:grabbing}
 .gallery-work-viewport img{position:absolute;top:50%;left:50%;display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;transform-origin:center center;will-change:transform;pointer-events:none}
 .gallery-work-details{min-width:0;padding:.25rem 0 2rem}
@@ -546,6 +547,12 @@ a.gallery-tool-chip:hover,a.gallery-tool-chip:focus-visible{background:var(--pla
 .gallery-work-loading{display:flex;align-items:center;justify-content:center;gap:.9rem;min-height:45vh;color:var(--muted);font:600 .9rem var(--sans)}
 .gallery-work-loading p{margin:0}
 .gallery-work-spinner{width:1.35rem;height:1.35rem;border:2px solid #d9cbb9;border-top-color:var(--playfair-crimson);border-radius:50%;animation:gallery-work-spin .8s linear infinite}
+.gallery-status:has(.gallery-work-spinner){display:flex;align-items:center;gap:.7rem}
+.gallery-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.65rem;background:#e7edf0!important;color:var(--muted)}
+.gallery-like-spinner{display:none;width:1.15rem;height:1.15rem;flex:none}
+.gallery-like.is-loading .gallery-like-heart{display:none}
+.gallery-like.is-loading .gallery-like-spinner{display:block}
+.gallery-like:disabled.is-loading{opacity:1}
 @keyframes gallery-work-spin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.gallery-work-spinner{animation:none}}
 @media(max-width:900px){.gallery-work-layout{grid-template-columns:minmax(0,1fr) minmax(245px,300px);gap:1.2rem}.gallery-work-hint{display:none}}
