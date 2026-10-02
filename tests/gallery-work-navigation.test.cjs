@@ -91,6 +91,42 @@ test('a temporary ID stays stable for counts when all browser storage is blocked
   assert.equal(result.persistent, false);
 });
 
+test('likes prefer a readable browser request over an injected script', async () => {
+  const visitor = '123e4567-e89b-42d3-a456-426614174000';
+  let requestedUrl = '';
+  const storage = new Map();
+  const isolated = { document: { addEventListener() {}, cookie: '' }, window: {}, URLSearchParams,
+    AbortController, setTimeout, clearTimeout, crypto: { randomUUID: () => visitor },
+    localStorage: { getItem: key => storage.get(key), setItem: (key, value) => storage.set(key, value) },
+    fetch: async url => { requestedUrl = url; return { ok: true, json: async () => ({ counts: { '1-1': 2 }, mine: [] }) }; } };
+  vm.createContext(isolated);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '../assets/site.js'), 'utf8'), isolated);
+  const response = await vm.runInContext("requestGalleryLikes('likes')", isolated);
+  assert.equal(response.counts['1-1'], 2);
+  assert.match(requestedUrl, /action=likes/);
+  assert.match(requestedUrl, new RegExp(`visitor=${visitor}`));
+});
+
+test('likes retain the script fallback when a browser rejects the readable request', async () => {
+  const visitor = '123e4567-e89b-42d3-a456-426614174000';
+  const isolated = { window: {}, URLSearchParams, AbortController, setTimeout, clearTimeout,
+    crypto: { randomUUID: () => visitor },
+    localStorage: { getItem: () => visitor, setItem() {} },
+    fetch: async () => { throw new TypeError('blocked'); } };
+  let injected = 0;
+  isolated.document = { addEventListener() {}, cookie: '', createElement: () => ({ remove() {} }),
+    head: { append(script) {
+      injected++;
+      const callback = new URL(script.src).searchParams.get('callback');
+      queueMicrotask(() => isolated.window[callback]({ counts: { '1-1': 3 }, mine: [] }));
+    } } };
+  vm.createContext(isolated);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '../assets/site.js'), 'utf8'), isolated);
+  const response = await vm.runInContext("requestGalleryLikes('likes')", isolated);
+  assert.equal(response.counts['1-1'], 3);
+  assert.equal(injected, 1);
+});
+
 test('an uncached work shows loading until the live feed confirms it is missing', () => {
   const root = { replaceChildren(...children) { this.children = children; } };
   context.document.querySelector = () => root;

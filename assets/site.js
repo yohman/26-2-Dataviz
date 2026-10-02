@@ -30,6 +30,7 @@ let galleryWorkLiveStatus = 'pending';
 let galleryLikesPromise;
 let galleryLikesReady = false;
 let galleryLikesFailed = false;
+let galleryLikesError = null;
 let galleryLikesCounts = {};
 let galleryLikesMine = new Set();
 let galleryLikesRequestNumber = 0;
@@ -568,9 +569,7 @@ function galleryVisitorId() {
   return id;
 }
 
-function requestGalleryLikes(action, item = '') {
-  const visitor = galleryVisitorId();
-  if (action !== 'likes' && !galleryVisitorPersistent) return Promise.reject(new Error('Browser storage unavailable'));
+function requestGalleryLikesScript(action, visitor, item = '') {
   return new Promise((resolve, reject) => {
     const callback = `courseGalleryLikesReceive_${++galleryLikesRequestNumber}`;
     const script = document.createElement('script');
@@ -594,21 +593,56 @@ function requestGalleryLikes(action, item = '') {
   });
 }
 
+async function requestGalleryLikes(action, item = '') {
+  const visitor = galleryVisitorId();
+  if (action !== 'likes' && !galleryVisitorPersistent) throw new Error('Browser storage unavailable');
+  const params = new URLSearchParams({ action, visitor, t: String(Date.now()) });
+  if (item) params.set('item', item);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const response = await fetch(`${COURSE_CONFIG.GALLERY_API_URL}?${params}`, { mode: 'cors', cache: 'no-store', signal: controller.signal });
+    if (!response.ok) throw new Error(`Likes HTTP ${response.status}`);
+    const payload = await response.json();
+    if (payload?.error || !payload?.counts || !Array.isArray(payload.mine)) throw new Error(payload?.error || 'Invalid likes response');
+    return payload;
+  } catch (error) {
+    // Some browsers cannot follow the Apps Script cross-origin redirect with
+    // fetch. JSONP is retained only as a compatibility fallback.
+    return requestGalleryLikesScript(action, visitor, item);
+  } finally { clearTimeout(timer); }
+}
+
+function updateGalleryLikesNotices() {
+  document.querySelectorAll('[data-gallery-likes-notice]').forEach(notice => {
+    notice.hidden = !galleryLikesFailed;
+    if (!galleryLikesFailed) { notice.replaceChildren(); return; }
+    const detail = galleryLikesError?.message === 'Likes unavailable'
+      ? copy('This browser blocked the likes service. Check content blockers or network settings.', 'このブラウザでいいねサービスへの接続が遮断されました。広告ブロックやネットワーク設定を確認してください。')
+      : copy('The likes service did not respond. Please try again.', 'いいねサービスから応答がありません。もう一度お試しください。');
+    const retry = element('button', copy('Retry likes', 'いいねを再読み込み'), 'gallery-likes-retry');
+    retry.type = 'button';
+    retry.addEventListener('click', () => loadGalleryLikes(true));
+    notice.replaceChildren(element('span', detail), retry);
+  });
+}
+
 function updateGalleryLikeButtons() {
   document.querySelectorAll('[data-gallery-like]').forEach(button => {
     const key = button.dataset.galleryLike;
     const liked = galleryLikesMine.has(key);
     const count = Number(galleryLikesCounts[key] || 0);
     const loading = (!galleryLikesReady && !galleryLikesFailed) || button.dataset.pending === 'true';
-    button.disabled = (!galleryLikesReady && !galleryLikesFailed) || (galleryLikesReady && !galleryVisitorPersistent) || button.dataset.pending === 'true';
+    button.disabled = !galleryLikesReady || !galleryVisitorPersistent || button.dataset.pending === 'true';
     button.classList.toggle('is-loading', loading);
     button.setAttribute('aria-busy', String(loading));
     button.setAttribute('aria-pressed', String(liked));
-    button.setAttribute('aria-label', loading ? copy('Loading likes…', 'いいねを読み込んでいます…') : galleryLikesFailed ? copy('Retry loading likes', 'いいねを再読み込み') : copy(liked ? `Remove your like · ${count} likes` : `Like this work · ${count} likes`, liked ? `いいねを取り消す · ${count}件` : `この作品にいいね · ${count}件`));
-    button.title = loading ? copy('Loading likes…', 'いいねを読み込んでいます…') : galleryLikesFailed ? copy('Retry loading likes', 'いいねを再読み込み') : !galleryVisitorPersistent ? copy('Likes require browser storage', 'いいねにはブラウザの保存機能が必要です') : button.dataset.likeError ? copy('Could not update your like. Please try again.', 'いいねを更新できませんでした。もう一度お試しください。') : copy(liked ? 'Remove your like' : 'Like this work', liked ? 'いいねを取り消す' : 'この作品にいいね');
-    button.querySelector('.gallery-like-count').textContent = galleryLikesReady ? String(count) : galleryLikesFailed ? '↻' : '';
+    button.setAttribute('aria-label', loading ? copy('Loading likes…', 'いいねを読み込んでいます…') : galleryLikesFailed ? copy('Likes unavailable', 'いいねを読み込めません') : copy(liked ? `Remove your like · ${count} likes` : `Like this work · ${count} likes`, liked ? `いいねを取り消す · ${count}件` : `この作品にいいね · ${count}件`));
+    button.title = loading ? copy('Loading likes…', 'いいねを読み込んでいます…') : galleryLikesFailed ? copy('Likes unavailable; use the retry button above', 'いいねを読み込めません。上の再読み込みボタンを使ってください') : !galleryVisitorPersistent ? copy('Likes require browser storage', 'いいねにはブラウザの保存機能が必要です') : button.dataset.likeError ? copy('Could not update your like. Please try again.', 'いいねを更新できませんでした。もう一度お試しください。') : copy(liked ? 'Remove your like' : 'Like this work', liked ? 'いいねを取り消す' : 'この作品にいいね');
+    button.querySelector('.gallery-like-count').textContent = galleryLikesReady ? String(count) : '';
     button.classList.toggle('is-liked', liked);
   });
+  updateGalleryLikesNotices();
 }
 
 function galleryLikeButton(item) {
@@ -627,7 +661,6 @@ function galleryLikeButton(item) {
   spinner.setAttribute('aria-hidden', 'true');
   button.append(heart, spinner, element('span', '', 'gallery-like-count'));
   button.addEventListener('click', async () => {
-    if (galleryLikesFailed) { loadGalleryLikes(true); return; }
     const key = button.dataset.galleryLike;
     if (!galleryLikesReady) return;
     const action = galleryLikesMine.has(key) ? 'unlike' : 'like';
@@ -654,6 +687,7 @@ function loadGalleryLikes(retry = false) {
   if (retry) {
     galleryLikesPromise = null;
     galleryLikesFailed = false;
+    galleryLikesError = null;
     galleryLikesReady = false;
     updateGalleryLikeButtons();
     refreshGalleryAfterLikes();
@@ -664,7 +698,7 @@ function loadGalleryLikes(retry = false) {
     galleryLikesReady = true;
     updateGalleryLikeButtons();
     refreshGalleryAfterLikes();
-  }).catch(error => { galleryLikesFailed = true; console.warn('Gallery likes:', error); updateGalleryLikeButtons(); refreshGalleryAfterLikes(); });
+  }).catch(error => { galleryLikesFailed = true; galleryLikesError = error; console.warn('Gallery likes:', error); updateGalleryLikeButtons(); refreshGalleryAfterLikes(); });
   return galleryLikesPromise;
 }
 
@@ -968,7 +1002,10 @@ function paintGalleryWork(items) {
     sourceBlock.append(link);
   });
   else sourceBlock.append(element('p', item.projectUrl || '—'));
-  metadata.append(sourceBlock); details.append(metadata, galleryLikeButton(item));
+  const likesNotice = element('div', '', 'gallery-likes-notice');
+  likesNotice.dataset.galleryLikesNotice = '';
+  likesNotice.hidden = true;
+  metadata.append(sourceBlock); details.append(metadata, likesNotice, galleryLikeButton(item));
   layout.append(art, details); root.replaceChildren(nav, layout);
   updateGalleryLikeButtons();
 
@@ -1179,6 +1216,10 @@ async function renderGallery() {
   let likedOnly = params.get('liked') === '1';
   const likedButton = element('button', '', 'gallery-liked-filter');
   likedButton.type = 'button'; controls.append(likedButton);
+  const likesNotice = element('div', '', 'gallery-likes-notice');
+  likesNotice.dataset.galleryLikesNotice = '';
+  likesNotice.hidden = true;
+  controlBar.append(likesNotice);
   let userChangedWeek = false;
   function updateWeekOptions() {
     const selected = userChangedWeek ? weekSelect.value : requestedWeek;
@@ -1216,7 +1257,7 @@ async function renderGallery() {
     history.replaceState(null, '', url);
     paint();
   }
-  likedButton.addEventListener('click', () => galleryLikesFailed ? loadGalleryLikes(true) : chooseLiked(!likedOnly));
+  likedButton.addEventListener('click', () => chooseLiked(!likedOnly));
   sortSelect.addEventListener('change', () => {
     const url = new URL(location.href);
     if (sortSelect.value === 'likes') url.searchParams.set('sort', 'likes');
@@ -1228,19 +1269,25 @@ async function renderGallery() {
     imageObserver?.disconnect();
     const weekItems = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
     const likedCount = weekItems.filter(item => galleryLikesMine.has(galleryItemKey(item))).length;
-    likedButton.textContent = galleryLikesFailed ? copy('Retry loading likes', 'いいねを再読み込み') : copy(`Liked by me (${likedCount})`, `いいねした作品（${likedCount}）`);
-    likedButton.disabled = !galleryLikesReady && !galleryLikesFailed;
+    likedButton.textContent = copy(`Liked by me (${likedCount})`, `いいねした作品（${likedCount}）`);
+    likedButton.disabled = !galleryLikesReady;
     likedButton.setAttribute('aria-pressed', String(likedOnly));
     const shown = galleryVisibleItems(items, weekSelect.value, selectedTool, selectedForm, sortSelect.value, likedOnly);
     root.replaceChildren();
     renderGalleryInsights(weekItems, weekSelect.value, selectedTool, selectedForm, likedOnly, shown.length, chooseTool, chooseForm, chooseLiked);
     const waitingForLikes = !galleryLikesReady && !galleryLikesFailed && (sortSelect.value === 'likes' || likedOnly);
+    const likesUnavailable = galleryLikesFailed && (sortSelect.value === 'likes' || likedOnly);
     status.hidden = shown.length > 0 || waitingForLikes;
     if (waitingForLikes) {
       const loading = element('div', '', 'gallery-work-loading');
       loading.setAttribute('role', 'status');
       loading.append(element('span', '', 'gallery-work-spinner'), element('p', copy('Loading likes…', 'いいねを読み込んでいます…')));
       root.append(loading);
+      return;
+    }
+    if (likesUnavailable) {
+      status.hidden = true;
+      root.append(element('p', copy('Likes are unavailable; retry above to show this selection.', 'いいねを読み込めません。上のボタンから再読み込みしてください。'), 'gallery-status'));
       return;
     }
     if (!shown.length) {
@@ -1368,8 +1415,8 @@ async function renderGallery() {
   refreshGalleryAfterLikes = () => {
     const weekItems = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
     const likedCount = weekItems.filter(item => galleryLikesMine.has(galleryItemKey(item))).length;
-    likedButton.textContent = galleryLikesFailed ? copy('Retry loading likes', 'いいねを再読み込み') : copy(`Liked by me (${likedCount})`, `いいねした作品（${likedCount}）`);
-    likedButton.disabled = !galleryLikesReady && !galleryLikesFailed;
+    likedButton.textContent = copy(`Liked by me (${likedCount})`, `いいねした作品（${likedCount}）`);
+    likedButton.disabled = !galleryLikesReady;
     if (sortSelect.value === 'likes' || likedOnly) paint();
   };
   paint();
