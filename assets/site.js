@@ -1226,7 +1226,9 @@ async function renderGallery() {
       if (/^assets\/gallery\/[a-f0-9]{24}\.(?:png|jpg|webp|gif)$/.test(data) || /^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(data)) {
         const image = document.createElement('img'); image.src = data;
         image.alt = copy(`Image 1 of ${galleryImageCount(item)} for ${item.title || 'student work'}`, `${item.title || '学生作品'}の画像 1 / ${galleryImageCount(item)}`);
-        image.loading = eager ? 'eager' : 'lazy';
+        // The observer already defers offscreen cards. A detached lazy image
+        // will not start loading, so decode() would wait forever here.
+        image.loading = 'eager';
         if (eager && 'fetchPriority' in image) image.fetchPriority = 'high';
         try { await image.decode(); }
         catch {
