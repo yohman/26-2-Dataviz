@@ -45,3 +45,11 @@ test('most-liked sorting and my-likes filtering share the work-page sequence', (
   assert.equal(url.searchParams.get('sort'), 'likes');
   assert.equal(url.searchParams.get('liked'), '1');
 });
+
+test('two-image works use their distinct cached images and single-image works stay single', () => {
+  const images = vm.runInContext(`(() => {
+    const work = { imageIndex: 7, imageCount: 2, imageUrl: 'first.png', imageUrls: ['first.png', 'second.png'] };
+    return [galleryImageCount(work), galleryImageSource(work, 1), galleryImageSource(work, 2), galleryImageCount({ imageIndex: 8 })];
+  })()`, context);
+  assert.deepEqual([...images], [2, 'first.png', 'second.png', 1]);
+});

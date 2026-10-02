@@ -6,6 +6,7 @@ const RESPONSE_SHEET = 'フォームの回答 1';
 const CALLBACK = 'courseGalleryReceive';
 
 function doGet(request) {
+  if (request && /^(likes|like|unlike)$/.test(request.parameter.action || '')) return galleryLikesApi(request);
   const rows = SpreadsheetApp.getActiveSpreadsheet()
     .getSheetByName(RESPONSE_SHEET)
     .getDataRange()
@@ -23,6 +24,7 @@ function doGet(request) {
   const imageColumn = headers.find(name => name.startsWith('作品のスクリーンショット 1（必須'))
     || headers.find(name => name.startsWith('作品のスクリーンショット（必須'))
     || headers.find(name => name.startsWith('スクリーンショット／画像リンク'));
+  const secondImageColumn = headers.find(name => name.startsWith('作品のスクリーンショット 2（任意'));
   const consentColumn = headers.find(name => name.startsWith('この作品を授業サイトのギャラリーに掲載してもよいですか'));
   const latest = new Map();
 
@@ -47,11 +49,13 @@ function doGet(request) {
 
   if (request?.parameter?.image !== undefined) {
     const index = Number(request.parameter.image);
+    const slot = Number(request.parameter.slot || 1);
     const item = latestRows.find(row => row.index === index);
-    const data = item && imageColumn ? imageDataFor(get(item.row, imageColumn)) : '';
-    const callback = /^courseGalleryImageReceive_\d+$/.test(request.parameter.callback || '')
+    const selectedColumn = slot === 2 ? secondImageColumn : slot === 1 ? imageColumn : null;
+    const data = item && selectedColumn ? imageDataFor(get(item.row, selectedColumn)) : '';
+    const callback = /^courseGalleryImageReceive_\d+(?:_[12])?$/.test(request.parameter.callback || '')
       ? request.parameter.callback : null;
-    return output({ index, data }, callback);
+    return output({ index, slot, data }, callback);
   }
 
   const items = latestRows.map(item => {
@@ -65,7 +69,8 @@ function doGet(request) {
       tools: get(row, '使用したツール'),
       projectUrl: getAny(row, ['課題で使用したデータ、ウェブサイト、またはドキュメントへのリンク', '作品のリンク']),
       description: getAny(row, ['作品について説明してください', 'この可視化から何が見えますか？']),
-      imageIndex: item.index
+      imageIndex: item.index,
+      imageCount: secondImageColumn && get(row, secondImageColumn) ? 2 : 1
     };
   }).sort((a, b) => b.week - a.week || a.studentName.localeCompare(b.studentName, 'ja'));
 

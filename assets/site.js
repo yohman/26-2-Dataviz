@@ -490,6 +490,35 @@ function appendGalleryText(node, value) {
 }
 
 const galleryItemKey = item => `${item.week}-${item.imageIndex}`;
+const galleryImageCount = item => Number(item.imageCount) === 2 ? 2 : 1;
+const galleryImageSource = (item, slot) => item.imageUrls?.[slot - 1] || (slot === 1 ? item.imageUrl : '') || loadGalleryImage(Number(item.imageIndex), slot);
+
+function galleryImageControls(count, onSelect) {
+  if (count < 2) return { element: null, select: () => {} };
+  const controls = element('div', '', 'gallery-image-navigation');
+  const previous = element('button', '‹', 'gallery-image-arrow gallery-image-arrow--previous');
+  const next = element('button', '›', 'gallery-image-arrow gallery-image-arrow--next');
+  previous.type = next.type = 'button';
+  previous.setAttribute('aria-label', copy('Previous image', '前の画像'));
+  next.setAttribute('aria-label', copy('Next image', '次の画像'));
+  const dots = element('div', '', 'gallery-image-dots');
+  const buttons = Array.from({ length: count }, (_, index) => {
+    const dot = element('button', '', 'gallery-image-dot');
+    dot.type = 'button';
+    dot.setAttribute('aria-label', copy(`Image ${index + 1} of ${count}`, `画像 ${index + 1} / ${count}`));
+    dot.addEventListener('click', () => onSelect(index + 1));
+    dots.append(dot);
+    return dot;
+  });
+  let active = 1;
+  previous.addEventListener('click', () => onSelect(active === 1 ? count : active - 1));
+  next.addEventListener('click', () => onSelect(active === count ? 1 : active + 1));
+  controls.append(previous, dots, next);
+  return { element: controls, select(slot) {
+    active = slot;
+    buttons.forEach((dot, index) => dot.setAttribute('aria-current', String(index + 1 === slot)));
+  } };
+}
 
 function galleryVisitorId() {
   try {
@@ -648,9 +677,9 @@ function loadGalleryItems() {
   return galleryItemsPromise;
 }
 
-function requestGalleryImage(index) {
+function requestGalleryImage(index, slot = 1) {
   return new Promise((resolve, reject) => {
-    const callback = `courseGalleryImageReceive_${index}`;
+    const callback = `courseGalleryImageReceive_${index}_${slot}`;
     const script = document.createElement('script');
     let settled = false;
     const timer = setTimeout(() => finish(new Error('Screenshot timed out')), 15000);
@@ -660,23 +689,24 @@ function requestGalleryImage(index) {
       clearTimeout(timer);
       script.remove();
       delete window[callback];
-      if (error || payload?.index !== index) reject(error || new Error('Invalid screenshot'));
+      if (error || payload?.index !== index || payload?.slot !== slot) reject(error || new Error('Invalid screenshot'));
       else resolve(payload.data || '');
     }
     window[callback] = payload => finish(null, payload);
     script.onerror = () => finish(new Error('Screenshot unavailable'));
-    script.src = `${COURSE_CONFIG.GALLERY_API_URL}?image=${index}&callback=${callback}`;
+    script.src = `${COURSE_CONFIG.GALLERY_API_URL}?image=${index}&slot=${slot}&callback=${callback}`;
     document.head.append(script);
   });
 }
 
-function loadGalleryImage(index) {
+function loadGalleryImage(index, slot = 1) {
   if (!Number.isInteger(index) || index < 0) return Promise.resolve('');
-  if (galleryImageCache.has(index)) return galleryImageCache.get(index);
+  const key = `${index}-${slot}`;
+  if (galleryImageCache.has(key)) return galleryImageCache.get(key);
   const promise = (async () => {
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        const data = await requestGalleryImage(index);
+        const data = await requestGalleryImage(index, slot);
         if (data) return data;
       } catch (error) {
         if (attempt === 2) console.error('Gallery screenshot:', error);
@@ -685,10 +715,10 @@ function loadGalleryImage(index) {
     }
     return '';
   })().then(data => {
-    if (!data) galleryImageCache.delete(index);
+    if (!data) galleryImageCache.delete(key);
     return data;
   });
-  galleryImageCache.set(index, promise);
+  galleryImageCache.set(key, promise);
   if (galleryImageCache.size > 24) galleryImageCache.delete(galleryImageCache.keys().next().value);
   return promise;
 }
@@ -730,6 +760,8 @@ function matchesGalleryForm(item, form) {
 }
 
 function setupGalleryImagePanZoom(viewport, image, level, controls) {
+  const events = new AbortController();
+  const signal = events.signal;
   let scale = 1, offsetX = 0, offsetY = 0, pointerId = null, startX = 0, startY = 0;
   const apply = () => {
     image.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
@@ -748,35 +780,36 @@ function setupGalleryImagePanZoom(viewport, image, level, controls) {
     apply();
   };
   const reset = () => { scale = 1; offsetX = 0; offsetY = 0; apply(); };
-  controls.querySelector('[data-gallery-zoom-in]').addEventListener('click', () => zoom(1.3));
-  controls.querySelector('[data-gallery-zoom-out]').addEventListener('click', () => zoom(1 / 1.3));
-  controls.querySelector('[data-gallery-zoom-reset]').addEventListener('click', reset);
+  controls.querySelector('[data-gallery-zoom-in]').addEventListener('click', () => zoom(1.3), { signal });
+  controls.querySelector('[data-gallery-zoom-out]').addEventListener('click', () => zoom(1 / 1.3), { signal });
+  controls.querySelector('[data-gallery-zoom-reset]').addEventListener('click', reset, { signal });
   viewport.addEventListener('wheel', event => {
     event.preventDefault();
     zoom(event.deltaY < 0 ? 1.15 : 1 / 1.15, event.clientX, event.clientY);
-  }, { passive: false });
-  viewport.addEventListener('dblclick', event => zoom(1.5, event.clientX, event.clientY));
+  }, { passive: false, signal });
+  viewport.addEventListener('dblclick', event => zoom(1.5, event.clientX, event.clientY), { signal });
   viewport.addEventListener('pointerdown', event => {
     if (event.button !== 0) return;
     pointerId = event.pointerId;
     startX = event.clientX - offsetX; startY = event.clientY - offsetY;
     viewport.setPointerCapture(pointerId);
     viewport.classList.add('is-dragging');
-  });
+  }, { signal });
   viewport.addEventListener('pointermove', event => {
     if (event.pointerId !== pointerId) return;
     offsetX = event.clientX - startX; offsetY = event.clientY - startY; apply();
-  });
+  }, { signal });
   const endDrag = event => {
     if (event.pointerId !== pointerId) return;
     viewport.classList.remove('is-dragging');
     if (viewport.hasPointerCapture(pointerId)) viewport.releasePointerCapture(pointerId);
     pointerId = null;
   };
-  viewport.addEventListener('pointerup', endDrag);
-  viewport.addEventListener('pointercancel', endDrag);
-  image.addEventListener('load', reset);
+  viewport.addEventListener('pointerup', endDrag, { signal });
+  viewport.addEventListener('pointercancel', endDrag, { signal });
+  image.addEventListener('load', reset, { signal });
   apply();
+  return () => events.abort();
 }
 
 function paintGalleryWork(items) {
@@ -831,6 +864,10 @@ function paintGalleryWork(items) {
   controls.append(out, level, zoomIn, reset); toolbar.append(hint, controls);
   const viewport = element('div', copy('Loading image…', '画像を読み込んでいます…'), 'gallery-work-viewport');
   art.append(toolbar, viewport);
+  let imageRequest = 0;
+  let stopPanZoom = () => {};
+  const imageNavigation = galleryImageControls(galleryImageCount(item), slot => showWorkImage(slot));
+  if (imageNavigation.element) art.append(imageNavigation.element);
 
   const details = element('aside', '', 'gallery-work-details');
   const weekLink = element('a', `${copy(`WEEK ${item.week}`, `第${item.week}週`)} · ${challengeForWeek(item.week) || String(item.challenge || '').replace(/^第\d+週｜/, '')}`, 'gallery-work-week');
@@ -867,20 +904,27 @@ function paintGalleryWork(items) {
   layout.append(art, details); root.replaceChildren(nav, layout);
   updateGalleryLikeButtons();
 
-  (async () => {
-    const data = item.imageUrl || await loadGalleryImage(Number(item.imageIndex));
-    if (!viewport.isConnected) return;
+  async function showWorkImage(slot) {
+    const request = ++imageRequest;
+    imageNavigation.select(slot);
+    stopPanZoom();
+    stopPanZoom = () => {};
+    viewport.textContent = copy('Loading image…', '画像を読み込んでいます…');
+    const data = await galleryImageSource(item, slot);
+    if (!viewport.isConnected || request !== imageRequest) return;
     if (!/^assets\/gallery\/[a-f0-9]{24}\.(?:png|jpg|webp|gif)$/.test(data) && !/^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(data)) {
       viewport.textContent = copy('Screenshot unavailable.', '画像を表示できません。');
       controls.hidden = true;
       return;
     }
+    controls.hidden = false;
     const image = document.createElement('img'); image.src = data;
-    image.alt = copy(`Visualization by ${item.studentName || 'a student'}: ${item.title || 'untitled'}`, `${item.studentName || '学生'}の作品：${item.title || '無題'}`);
+    image.alt = copy(`Image ${slot} of ${galleryImageCount(item)} by ${item.studentName || 'a student'}: ${item.title || 'untitled'}`, `${item.studentName || '学生'}の作品 ${slot} / ${galleryImageCount(item)}：${item.title || '無題'}`);
     image.draggable = false;
     viewport.replaceChildren(image);
-    setupGalleryImagePanZoom(viewport, image, level, controls);
-  })();
+    stopPanZoom = setupGalleryImagePanZoom(viewport, image, level, controls);
+  }
+  showWorkImage(1);
 }
 
 async function renderGalleryWork() {
@@ -893,7 +937,7 @@ async function renderGalleryWork() {
   };
   if (galleryWorkItems) { paintGalleryWork(galleryWorkItems); return; }
   try {
-    const response = await fetch('data/gallery-public.json', { cache: 'default' });
+    const response = await fetch('data/gallery-public.json?v=gallery-two-images-20261002', { cache: 'no-cache' });
     if (!response.ok) throw new Error(`Gallery snapshot HTTP ${response.status}`);
     const snapshot = await response.json();
     if (!Array.isArray(snapshot.items)) throw new Error('Invalid gallery snapshot');
@@ -907,8 +951,8 @@ async function renderGalleryWork() {
   galleryWorkRefreshStarted = true;
   loadGalleryLikes();
   loadGalleryItems().then(latest => {
-    const cachedImages = new Map((galleryWorkItems || []).map(item => [galleryItemKey(item), item.imageUrl]));
-    galleryWorkItems = latest.map(item => ({ ...item, imageUrl: cachedImages.get(galleryItemKey(item)) || '' }));
+    const cachedImages = new Map((galleryWorkItems || []).map(item => [galleryItemKey(item), item.imageUrls || [item.imageUrl]]));
+    galleryWorkItems = latest.map(item => ({ ...item, imageUrls: cachedImages.get(galleryItemKey(item)) || [], imageUrl: cachedImages.get(galleryItemKey(item))?.[0] || '' }));
     paintGalleryWork(galleryWorkItems);
   }).catch(error => {
     console.warn('Gallery work live refresh:', error);
@@ -1107,17 +1151,34 @@ async function renderGallery() {
       return;
     }
     const showImage = async (placeholder, item) => {
-      const data = item.imageUrl || await loadGalleryImage(Number(item.imageIndex));
+      const data = await galleryImageSource(item, 1);
       if (!placeholder.isConnected) return;
       if (/^assets\/gallery\/[a-f0-9]{24}\.(?:png|jpg|webp|gif)$/.test(data) || /^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(data)) {
         const image = document.createElement('img'); image.src = data;
-        image.alt = copy(`Screenshot of ${item.title || 'student work'}`, `${item.title || '学生作品'}のスクリーンショット`);
+        image.alt = copy(`Image 1 of ${galleryImageCount(item)} for ${item.title || 'student work'}`, `${item.title || '学生作品'}の画像 1 / ${galleryImageCount(item)}`);
         image.loading = 'lazy';
         const link = element('a', '', 'gallery-image-button');
         link.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm, sortSelect.value, likedOnly);
         link.setAttribute('aria-label', copy(`View ${item.title || 'student work'}`, `${item.title || '学生作品'}を詳しく見る`));
         link.append(image);
-        placeholder.replaceWith(link);
+        const stage = element('div', '', 'gallery-image-stage');
+        stage.append(link);
+        let currentSlot = 1;
+        let imageRequest = 0;
+        const navigation = galleryImageControls(galleryImageCount(item), async slot => {
+          if (slot === currentSlot) return;
+          const request = ++imageRequest;
+          const next = await galleryImageSource(item, slot);
+          if (!stage.isConnected || request !== imageRequest) return;
+          if (!/^assets\/gallery\/[a-f0-9]{24}\.(?:png|jpg|webp|gif)$/.test(next) && !/^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(next)) return;
+          image.src = next;
+          image.alt = copy(`Image ${slot} of ${galleryImageCount(item)} for ${item.title || 'student work'}`, `${item.title || '学生作品'}の画像 ${slot} / ${galleryImageCount(item)}`);
+          currentSlot = slot;
+          navigation.select(slot);
+        });
+        if (navigation.element) stage.append(navigation.element);
+        navigation.select(1);
+        placeholder.replaceWith(stage);
       } else {
         placeholder.replaceChildren(element('span', copy('Screenshot unavailable. ', '画像を表示できません。')));
         const retry = element('button', copy('Try again', '再読み込み'), 'gallery-retry');
@@ -1192,8 +1253,8 @@ async function renderGallery() {
   // The embedded snapshot makes the gallery immediate. The public feed adds
   // submissions and revisions on every visit without rebuilding GitHub Pages.
   loadGalleryItems().then(latest => {
-    const cachedImages = new Map(items.map(item => [`${item.week}:${item.imageIndex}`, item.imageUrl]));
-    items = latest.map(item => ({ ...item, imageUrl: cachedImages.get(`${item.week}:${item.imageIndex}`) || '' }));
+    const cachedImages = new Map(items.map(item => [galleryItemKey(item), item.imageUrls || [item.imageUrl]]));
+    items = latest.map(item => ({ ...item, imageUrls: cachedImages.get(galleryItemKey(item)) || [], imageUrl: cachedImages.get(galleryItemKey(item))?.[0] || '' }));
     status.textContent = copy(`${items.length} latest works.`, `最新の作品 ${items.length} 点。`);
     updateWeekOptions();
     paint();

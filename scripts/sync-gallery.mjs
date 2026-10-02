@@ -5,12 +5,14 @@ import { join, resolve } from 'node:path';
 const feed = process.env.GALLERY_FEED_URL || 'https://script.google.com/macros/s/AKfycbx0QJbdytCdRNdCTGPsMhfkMC3HFRImz9-VUCebCoZ6XjdVlieGwDDzmpxuxg0ORVZb5Q/exec';
 const publishedSite = 'https://yohman.github.io/26-2-Dataviz/';
 const root = resolve(process.argv[2] || '.');
-const fields = ['week', 'challenge', 'submittedAt', 'studentName', 'title', 'tools', 'projectUrl', 'description', 'imageIndex'];
+const fields = ['week', 'challenge', 'submittedAt', 'studentName', 'title', 'tools', 'projectUrl', 'description', 'imageIndex', 'imageCount'];
 const cachedImages = new Map();
 try {
   const previous = JSON.parse(await readFile(join(root, 'data/gallery-public.json'), 'utf8'));
   for (const item of previous.items || []) {
-    if (item.imageUrl) cachedImages.set(`${item.week}:${item.imageIndex}:${item.title}`, item.imageUrl);
+    (item.imageUrls || [item.imageUrl]).forEach((path, index) => {
+      if (path) cachedImages.set(`${item.week}:${item.imageIndex}:${item.title}:${index + 1}`, path);
+    });
   }
 } catch { /* A first build has no local snapshot. */ }
 
@@ -62,44 +64,43 @@ async function buildItems(source, fromPublishedSite) {
     const item = Object.fromEntries(fields.map(field => [field, original[field] ?? '']));
     if (!Number.isInteger(Number(item.week)) || Number(item.week) < 1 || Number(item.week) > 14) throw new Error('Invalid week');
     if (!Number.isInteger(Number(item.imageIndex)) || Number(item.imageIndex) < 0) throw new Error('Invalid image index');
-    const cached = cachedImages.get(`${item.week}:${item.imageIndex}:${item.title}`);
-    if (/^assets\/gallery\/[a-f0-9]{24}\.(png|jpg|webp|gif)$/.test(cached || '')) {
+    item.imageCount = Number(original.imageCount) === 2 || original.imageUrls?.length === 2 ? 2 : 1;
+    item.imageUrls = [];
+    for (let slot = 1; slot <= item.imageCount; slot++) {
+      const cached = cachedImages.get(`${item.week}:${item.imageIndex}:${item.title}:${slot}`);
+      if (/^assets\/gallery\/[a-f0-9]{24}\.(png|jpg|webp|gif)$/.test(cached || '')) {
+        try {
+          if ((await stat(join(root, cached))).isFile()) { item.imageUrls.push(cached); continue; }
+        } catch { /* Rebuild a missing cached image. */ }
+      }
       try {
-        if ((await stat(join(root, cached))).isFile()) {
-          item.imageUrl = cached;
-          items.push(item);
-          continue;
+        let bytes;
+        let extension;
+        if (fromPublishedSite) {
+          const path = String(original.imageUrls?.[slot - 1] || (slot === 1 ? original.imageUrl : '') || '');
+          if (!/^assets\/gallery\/[a-f0-9]{24}\.(png|jpg|webp|gif)$/.test(path)) throw new Error('Invalid published gallery image path');
+          const response = await fetch(new URL(path, publishedSite), { signal: AbortSignal.timeout(20000) });
+          if (!response.ok) throw new Error(`Published gallery image HTTP ${response.status}`);
+          bytes = Buffer.from(await response.arrayBuffer());
+          extension = path.split('.').at(-1);
+        } else {
+          const image = await request({ image: item.imageIndex, slot }, 'gallerySnapshotImageReceive', 1, 12000);
+          if (Number(image.index) !== Number(item.imageIndex) || Number(image.slot) !== slot) throw new Error('Image index mismatch');
+          const match = String(image.data || '').match(/^data:image\/(png|jpeg|webp|gif);base64,([A-Za-z0-9+/=]+)$/);
+          if (!match) throw new Error('Invalid gallery image');
+          bytes = Buffer.from(match[2], 'base64');
+          extension = match[1] === 'jpeg' ? 'jpg' : match[1];
         }
-      } catch { /* Rebuild a missing thumbnail. */ }
-    }
-    let bytes;
-    let extension;
-    if (fromPublishedSite) {
-      const path = String(original.imageUrl || '');
-      if (!/^assets\/gallery\/[a-f0-9]{24}\.(png|jpg|webp|gif)$/.test(path)) throw new Error('Invalid published gallery image path');
-      const response = await fetch(new URL(path, publishedSite), { signal: AbortSignal.timeout(20000) });
-      if (!response.ok) throw new Error(`Published gallery image HTTP ${response.status}`);
-      bytes = Buffer.from(await response.arrayBuffer());
-      extension = path.split('.').at(-1);
-    } else {
-      try {
-        const image = await request({ image: item.imageIndex }, 'gallerySnapshotImageReceive', 1, 12000);
-        if (Number(image.index) !== Number(item.imageIndex)) throw new Error('Image index mismatch');
-        const match = String(image.data || '').match(/^data:image\/(png|jpeg|webp|gif);base64,([A-Za-z0-9+/=]+)$/);
-        if (!match) throw new Error('Invalid gallery image');
-        bytes = Buffer.from(match[2], 'base64');
-        extension = match[1] === 'jpeg' ? 'jpg' : match[1];
+        if (!bytes.length || bytes.length > 15_000_000) throw new Error('Invalid gallery image size');
+        const filename = `${createHash('sha256').update(bytes).digest('hex').slice(0, 24)}.${extension}`;
+        await writeFile(join(root, 'assets/gallery', filename), bytes);
+        item.imageUrls.push(`assets/gallery/${filename}`);
       } catch (error) {
-        console.warn(`Gallery image ${item.imageIndex} unavailable (${error.message}); publishing the card without a cached thumbnail.`);
-        item.imageUrl = '';
-        items.push(item);
-        continue;
+        console.warn(`Gallery image ${item.imageIndex}, slot ${slot} unavailable (${error.message}); leaving it to the live feed.`);
+        item.imageUrls.push('');
       }
     }
-    if (!bytes.length || bytes.length > 15_000_000) throw new Error('Invalid gallery image size');
-    const filename = `${createHash('sha256').update(bytes).digest('hex').slice(0, 24)}.${extension}`;
-    await writeFile(join(root, 'assets/gallery', filename), bytes);
-    item.imageUrl = `assets/gallery/${filename}`;
+    item.imageUrl = item.imageUrls[0];
     items.push(item);
   }
   return items;

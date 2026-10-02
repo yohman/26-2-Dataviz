@@ -20,6 +20,7 @@ test('the feed publishes named latest responses without IDs, emails, or explicit
     row('2026-10-02T02:00:00Z', 'third@example.com', 'third-id', 1, 'No screenshot yet', ''),
     row('2026-10-02T02:30:00Z', 'blank@example.com', 'blank-id', 1, 'Anonymous submission', undefined, ''),
     row('2026-10-02T03:00:00Z', 'private@example.com', 'private-id', 1, 'Private work', undefined, 'いいえ')];
+  values[4][10] = 'https://drive.google.com/open?id=secondImageFile';
   const context = {
     SpreadsheetApp: { getActiveSpreadsheet: () => ({ getSheetByName: () => ({ getDataRange: () => ({ getValues: () => values.map(row => [...row]) }) }) }) },
     DriveApp: { getFileById: () => ({ getThumbnail: () => ({ getContentType: () => 'image/png', getBytes: () => [1, 2, 3] }) }) },
@@ -41,10 +42,16 @@ test('the feed publishes named latest responses without IDs, emails, or explicit
   assert.deepEqual(items.map(item => item.title).sort(), ['Anonymous submission', 'Another student', 'Latest revision', 'No screenshot yet', 'Week two']);
   assert.equal(items.find(item => item.title === 'Anonymous submission').studentName, 'Student');
   assert.ok(items.every(item => Number.isInteger(item.imageIndex)));
+  assert.equal(items.find(item => item.title === 'Another student').imageCount, 2);
+  assert.equal(items.find(item => item.title === 'Latest revision').imageCount, 1);
   assert.ok(items.every(item => !Object.hasOwn(item, 'imageData')));
   const imageResponse = context.doGet({ parameter: { image: '2', callback: 'courseGalleryImageReceive_2' } });
   const image = JSON.parse(imageResponse.text.slice('courseGalleryImageReceive_2('.length, -2));
   assert.match(image.data, /^data:image\/png;base64,/);
+  const secondResponse = context.doGet({ parameter: { image: '3', slot: '2', callback: 'courseGalleryImageReceive_3_2' } });
+  const second = JSON.parse(secondResponse.text.slice('courseGalleryImageReceive_3_2('.length, -2));
+  assert.equal(second.slot, 2);
+  assert.match(second.data, /^data:image\/png;base64,/);
   const oldImage = context.doGet({ parameter: { image: '0', callback: 'courseGalleryImageReceive_0' } });
   assert.equal(JSON.parse(oldImage.text.slice('courseGalleryImageReceive_0('.length, -2)).data, '');
   const missingImage = context.doGet({ parameter: { image: '5', callback: 'courseGalleryImageReceive_5' } });

@@ -38,7 +38,9 @@ The script selects the newest response for each **student ID + week**. Students
 can resubmit; the latest submission replaces the earlier one in the gallery.
 Student IDs and email addresses never leave the script. Its output has
 the public fields `week`, `challenge`, `submittedAt`, `studentName`, `title`,
-`tools`, `projectUrl`, `description`, and `imageIndex`. Screenshots load through
+`tools`, `projectUrl`, `description`, `imageIndex`, and `imageCount`. The optional
+second screenshot uses the same private image endpoint with `slot=2`; the gallery
+shows arrows and dots only for two-image works. Screenshots load through
 a separate call only when their cards come into view. The original uploaded
 Drive files stay private, and images from superseded submissions cannot be
 requested through the feed.
