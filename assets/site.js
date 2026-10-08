@@ -94,8 +94,7 @@ function safeResourceHref(value) {
   const href = String(value || '').trim();
   if (/^https?:\/\//i.test(href)) return encodeURI(href);
   if (/^(?:assets|content|data|lectures)\//.test(href) && !href.split('/').includes('..')) return encodeURI(href);
-  if (/^[a-z0-9-]+\.html(?:#[-\w]+)?$/i.test(href)) return encodeURI(href);
-  if (/^[a-z0-9-]+\.html\?[-a-z0-9_~.%=&+]+$/i.test(href)) return href;
+  if (/^[a-z0-9-]+\.html(?:\?[-a-z0-9_~.%=&+]+)?(?:#[-\w]+)?$/i.test(href)) return href;
   return '';
 }
 
@@ -103,18 +102,18 @@ function materialLinks(materials, context = {}) {
   return [...materials].sort((first, second) => Number(second.type === 'slides') - Number(first.type === 'slides')).map(material => {
     const href = safeResourceHref(material.href);
     if (!href) return '';
-    const type = material.type || (href.includes('lectures/') ? 'slides' : href.startsWith('data/') ? 'data' : 'reference');
-    if (type === 'data' && /^data\/.+\.csv$/i.test(href)) {
-      const previewParams = new URLSearchParams({ file: href, title: material.label });
-      if (context.week) previewParams.set('return', context.returnTo || `agenda.html#week-${context.week}`);
-      return `<div class="material-csv"><strong>${escapeHtml(material.label)}</strong><a class="material-link material-link--preview" href="csv-preview.html?${previewParams}">${copy('Preview table', '表をプレビュー')} →</a><a class="material-link material-link--download" href="${escapeHtml(href)}" download>${copy('Download CSV', 'CSVをダウンロード')} ↓</a></div>`;
-    }
-    const previewableSlides = type === 'slides' && /^lectures\/[A-Za-z0-9._-]+\.pdf$/i.test(href) && context.week;
-    const linkHref = previewableSlides
-      ? `viewer.html?file=${encodeURIComponent(href)}&title=${encodeURIComponent(material.label)}&week=${encodeURIComponent(`Week ${context.week}`)}&return=${encodeURIComponent(context.returnTo || `agenda.html#week-${context.week}`)}`
-      : href;
-    const external = /^https?:\/\//i.test(linkHref) ? ' target="_blank" rel="noopener"' : '';
-    return `<a class="material-link material-link--${type}" href="${escapeHtml(linkHref)}"${external}>${escapeHtml(material.label)} ${external ? '↗' : '→'}</a>`;
+    const external = /^https?:\/\//i.test(href);
+    const extension = href.split(/[?#]/)[0].split('.').pop().toLowerCase();
+    const webpage = external || extension === 'html';
+    const fileType = webpage ? 'LINK' : extension.toUpperCase();
+    const params = new URLSearchParams({ file: href, title: material.label });
+    params.set('return', context.returnTo || (context.week ? `agenda.html#week-${context.week}` : 'agenda.html'));
+    if (context.week) params.set('week', `Week ${context.week}`);
+    const previewPage = extension === 'csv' ? 'csv-preview.html' : extension === 'ipynb' ? 'notebook-preview.html' : extension === 'pdf' ? 'viewer.html' : '';
+    const previewHref = !external && previewPage ? `${previewPage}?${params}` : href;
+    const label = copy(material.label, window.COURSE_TRANSLATIONS?.ja?.[material.label] || material.label);
+    const openLabel = external || !previewPage ? copy('Open', '開く') : copy('Preview', 'プレビュー');
+    return `<div class="course-resource" title="${escapeHtml(label)}"><strong class="course-resource-name">${escapeHtml(label)}</strong><span class="course-resource-type">${escapeHtml(fileType)}</span><div class="course-resource-actions"><a class="course-resource-preview" href="${escapeHtml(previewHref)}" aria-label="${escapeHtml(`${label} · ${openLabel}`)}"${external ? ' target="_blank" rel="noopener"' : ''}>${openLabel}${external ? ' ↗' : ''}</a>${webpage ? '' : `<a class="course-resource-download" href="${escapeHtml(href)}" download aria-label="${escapeHtml(label)} · ${copy('Download', 'ダウンロード')}">${copy('Download', 'ダウンロード')}</a>`}</div></div>`;
   }).join('');
 }
 
@@ -159,12 +158,9 @@ function activityTabs(week, sharedMaterials = '') {
   const tabs = week.activities.map((activity, index) => `<button type="button" role="tab" id="week-${week.week}-activity-${activity.number}-tab" aria-controls="week-${week.week}-activity-${activity.number}" aria-selected="${index === 0}" tabindex="${index === 0 ? '0' : '-1'}">${copy(`Activity ${activity.number}`, `アクティビティ ${activity.number}`)}</button>`).join('');
   const panels = week.activities.map((activity, index) => {
     const href = safeUrl(activity.link) || safeResourceHref(activity.link);
-    const external = /^https?:\/\//i.test(href) ? ' target="_blank" rel="noopener"' : '';
-    const download = /^data\/[A-Za-z0-9._/-]+\.csv$/i.test(href) ? ' download' : '';
-    const link = href ? `<a class="button activity-link" href="${escapeHtml(href)}"${external}${download}>${escapeHtml(copy(activity.link_label, activity.link_label_ja))}${external ? ' ↗' : ' ↓'}</a>` : '';
+    const link = href ? materialLinks([{ href, label: copy(activity.link_label, activity.link_label_ja) }], { week: week.week }) : '';
     const resultsHref = safeUrl(activity.results_link) || safeResourceHref(activity.results_link);
-    const resultsExternal = /^https?:\/\//i.test(resultsHref) ? ' target="_blank" rel="noopener"' : '';
-    const resultsLink = resultsHref ? `<a class="button activity-link activity-link--secondary" href="${escapeHtml(resultsHref)}"${resultsExternal}>${escapeHtml(copy(activity.results_label, activity.results_label_ja))} →</a>` : '';
+    const resultsLink = resultsHref ? materialLinks([{ href: resultsHref, label: copy(activity.results_label, activity.results_label_ja) }], { week: week.week }) : '';
     const steps = copy(activity.steps, activity.steps_ja).map(step => `<li>${escapeHtml(step)}</li>`).join('');
     return `<section class="activity-panel" role="tabpanel" id="week-${week.week}-activity-${activity.number}" aria-labelledby="week-${week.week}-activity-${activity.number}-tab"${index === 0 ? '' : ' hidden'}>
       <p class="assignment-label">${copy('IN CLASS', '授業内')} · ${copy(`ACTIVITY ${activity.number}`, `アクティビティ ${activity.number}`)}</p>
@@ -200,6 +196,12 @@ function setupActivityTabs(root) {
 }
 
 function setupShell() {
+  const guideGroups = [...document.querySelectorAll('.guide-grid--week article')].map(article => ({
+    article, materials: [...article.querySelectorAll('a')].map(anchor => ({
+      href: anchor.getAttribute('href')?.startsWith('viewer.html') ? new URL(anchor.href).searchParams.get('file') : anchor.getAttribute('href'),
+      label: anchor.textContent.trim().replace(/\s*[→↓↗]\s*$/, '').replace('Preview the lecture slides', 'Lecture slides').replace('Open the group spreadsheet', 'Group spreadsheet')
+    }))
+  }));
   const menuButton = document.querySelector('.menu-toggle');
   const nav = document.querySelector('.site-nav');
   menuButton?.addEventListener('click', () => {
@@ -241,6 +243,13 @@ function setupShell() {
     if (document.querySelector('[data-gallery]')) renderGallery();
     if (document.querySelector('[data-gallery-work]')) renderGalleryWork();
     if (document.querySelector('[data-csv-preview]')) renderCsvPreview();
+    if (document.querySelector('[data-notebook-preview]')) renderNotebookPreview();
+    guideGroups.forEach(({ article, materials }) => {
+      article.querySelectorAll('a, .guide-resource-list').forEach(node => node.remove());
+      const list = element('div', '', 'guide-resource-list');
+      list.innerHTML = materialLinks(materials, { week: 1, returnTo: 'resources.html' });
+      article.append(list);
+    });
   }
 
   let language = 'ja';
@@ -458,6 +467,37 @@ function renderHome() {
   root.innerHTML = locked
     ? `<p class="eyebrow">${copy('THIS WEEK', '今週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(current.title, current.title_ja))}</h2><p>${escapeHtml(copy(`Details open ${compactDate(availabilityDate(current.course_date))}.`, `内容は${compactDate(availabilityDate(current.course_date))}に公開します。`))}</p><span class="next-cta">${copy('See the schedule →', '日程を見る →')}</span>`
     : `<p class="eyebrow">${copy('THIS WEEK', '今週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(current.challenge, current.challenge_ja))}</h2><p>${escapeHtml(copy(current.homework, current.homework_ja))}</p><span class="next-cta">${copy('Open this week →', 'この週を開く →')}</span>`;
+}
+
+async function renderNotebookPreview() {
+  const root = document.querySelector('[data-notebook-preview]');
+  if (!root) return;
+  const params = new URLSearchParams(location.search);
+  const file = safeResourceHref(params.get('file'));
+  const title = params.get('title') || 'Notebook';
+  const back = safeResourceHref(params.get('return')) || 'agenda.html';
+  root.innerHTML = `<div class="csv-preview-status" role="status"><span class="gallery-work-spinner" aria-hidden="true"></span>${copy('Loading notebook…', 'ノートブックを読み込んでいます…')}</div>`;
+  try {
+    if (!file || !/^data\/.+\.ipynb$/i.test(file)) throw new Error('Invalid notebook');
+    const response = await fetch(file);
+    if (!response.ok) throw new Error(`Notebook HTTP ${response.status}`);
+    const notebook = await response.json();
+    if (!Array.isArray(notebook.cells)) throw new Error('Invalid notebook cells');
+    const text = value => Array.isArray(value) ? value.join('') : String(value || '');
+    const cells = notebook.cells.map((cell, index) => {
+      const output = (cell.outputs || []).map(item => {
+        const plain = text(item.text || item.data?.['text/plain'] || item.traceback);
+        const png = text(item.data?.['image/png']);
+        return `${plain ? `<pre class="notebook-output">${escapeHtml(plain)}</pre>` : ''}${png && /^[A-Za-z0-9+/=\s]+$/.test(png) ? `<img class="notebook-output-image" src="data:image/png;base64,${png.replace(/\s/g, '')}" alt="${copy('Notebook chart output', 'ノートブックのグラフ出力')}">` : ''}`;
+      }).join('');
+      return `<section class="notebook-cell"><span class="notebook-cell-label">${cell.cell_type === 'code' ? `In [${cell.execution_count ?? ' '}]` : copy('Text', 'テキスト')}</span><div><pre class="${cell.cell_type === 'code' ? 'notebook-code' : 'notebook-text'}">${escapeHtml(text(cell.source))}</pre>${output}</div></section>`;
+    }).join('');
+    root.innerHTML = `<header class="csv-preview-heading"><p class="eyebrow">JUPYTER NOTEBOOK</p><h1>${escapeHtml(title)}</h1><p class="csv-preview-summary">${notebook.cells.length} ${copy('cells', 'セル')}</p><div class="csv-preview-actions"><a class="button" href="${escapeHtml(file)}" download>${copy('Download', 'ダウンロード')}</a><a class="text-link" href="${escapeHtml(back)}">${copy('← Back to the week', '← 授業ページに戻る')}</a></div></header><article class="notebook-preview">${cells}</article>`;
+    document.title = `${title} · ${copy('Notebook preview', 'ノートブックプレビュー')}`;
+  } catch (error) {
+    console.error('Notebook preview:', error);
+    root.innerHTML = `<div class="csv-preview-error"><p>${copy('The notebook could not be loaded.', 'ノートブックを読み込めませんでした。')}</p><a href="${escapeHtml(back)}">${copy('Back to the week', '授業ページに戻る')}</a></div>`;
+  }
 }
 
 function parseCsvText(text) {

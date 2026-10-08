@@ -544,15 +544,29 @@ a.gallery-tool-chip:hover,a.gallery-tool-chip:focus-visible{background:var(--pla
 /* CSV preview: keep wide columns navigable without letting the page overflow. */
 .activity-tabs-card>.activity-materials{margin:0;padding:1.2rem 1.5rem 1.5rem}
 .activity-materials>div{display:grid;gap:.85rem}
-.agenda-page .activity-materials .material-link{width:fit-content;padding:.15rem 0;border:0;border-bottom:1px solid currentColor;background:transparent;color:var(--playfair-crimson);font-size:.75rem;font-weight:600}
-.agenda-page .activity-materials .material-link:hover,.agenda-page .activity-materials .material-link:focus-visible{background:transparent;color:var(--ink);border-color:currentColor}
-.activity-materials .material-csv{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:.5rem 1rem}
-.activity-materials .material-csv>strong{margin:0;font-size:.85rem}
-@media(max-width:560px){.activity-tabs-card>.activity-materials{padding:1rem 1.2rem 1.2rem}.activity-materials .material-csv{grid-template-columns:auto auto;justify-content:start}.activity-materials .material-csv>strong{grid-column:1/-1}}
-.material-csv{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem}
-.material-csv>strong{margin-right:.35rem;font-size:.76rem}
-.material-link--preview{background:#ead8b7;border-color:#b88437;color:var(--ink)}
-.material-link--download{background:var(--paper);border-color:var(--line);color:var(--ink)}
+.course-resource{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:.7rem;padding:.8rem;background:rgba(255,255,255,.4);min-width:0}
+.course-resource-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:700 .85rem/1.4 var(--sans)}
+.course-resource-type{width:3rem;padding:.18rem .3rem;background:#e8ddca;color:#6e5b40;font:600 .65rem/1.2 "DM Mono",monospace;text-align:center}
+.course-resource-actions{display:flex;justify-content:flex-end;gap:.5rem;width:11.5rem}
+.course-resource-actions a{display:flex;align-items:center;justify-content:center;min-height:44px;width:5.5rem;padding:.6rem .4rem;text-decoration:none;font:700 .72rem/1.3 var(--sans);text-align:center}
+.course-resource-preview{border:1px solid #cdbb9c;background:var(--paper);color:var(--playfair-crimson)}
+.course-resource-download{border:1px solid var(--playfair-crimson);background:var(--playfair-crimson);color:white}
+.course-resource-preview:hover,.course-resource-preview:focus-visible{border-color:var(--playfair-crimson);background:#f4e7dc}
+.course-resource-download:hover,.course-resource-download:focus-visible{background:var(--ink);border-color:var(--ink);color:white}
+.activity-actions{display:grid;gap:.65rem}
+.activity-actions:empty{display:none}
+.lecture-slides{width:100%}
+.activity-materials>div,.activity-actions,.lecture-slides,.guide-resource-list{container-type:inline-size;display:grid;gap:.65rem}
+.guide-resource-list{margin-top:1rem}
+@container(max-width:360px){.course-resource{grid-template-columns:minmax(0,1fr) auto}.course-resource-actions{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.course-resource-actions a{width:100%}.course-resource-actions a:only-child{grid-column:2}}
+.notebook-preview{display:grid;gap:1rem;margin-top:1.5rem}
+.notebook-cell{display:grid;grid-template-columns:5rem minmax(0,1fr);gap:1rem;padding:1rem;background:rgba(255,255,255,.6);border:1px solid var(--line)}
+.notebook-cell-label{color:var(--muted);font:.7rem "DM Mono",monospace}
+.notebook-code,.notebook-output{margin:0;padding:.8rem;overflow:auto;max-height:32rem;background:#eee9df;font:.75rem/1.6 "DM Mono",monospace}
+.notebook-output{margin-top:.6rem;background:var(--paper)}
+.notebook-text{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:.9rem/1.6 var(--sans)}
+.notebook-output-image{display:block;max-width:100%;height:auto;margin-top:.6rem}
+@media(max-width:560px){.activity-tabs-card>.activity-materials{padding:1rem 1.2rem 1.2rem}.course-resource{grid-template-columns:minmax(0,1fr) auto;gap:.6rem;padding:.75rem}.course-resource-actions{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.course-resource-actions a{width:100%;min-height:46px}.course-resource-actions a:only-child{grid-column:2}.notebook-cell{grid-template-columns:1fr;gap:.5rem}}
 .csv-preview-main{min-height:70vh;padding-block:clamp(2.5rem,6vw,5rem)}
 .csv-preview{display:grid;gap:1rem}
 .csv-preview-heading{display:grid;grid-template-columns:1fr auto;align-items:end;gap:.4rem 1.5rem;padding-bottom:1.2rem;border-bottom:1px solid var(--line)}
