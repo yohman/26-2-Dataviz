@@ -10,6 +10,8 @@ look: Hans Rosling and Gapminder’s moving relationship between health, income,
 look_ja: Hans RoslingとGapminder：健康、所得、人口の動く関係
 learn: Tableau: import, wrangle, and explore hans.csv
 learn_ja: Tableau：hans.csvの読み込み、整形、探索
+schedule: 10:40–11:00|Submission review|Look back at student work and share observations;11:00–11:20|Hans Rosling|A short lecture on Hans and Gapminder;11:20–11:50|Explore and share|Import the data, explore individually, then compare and revise in groups;11:50–12:20|Presentations and recap|Groups share a chosen chart, followed by discussion and homework
+schedule_ja: 10:40–11:00|提出作品のレビュー|学生の作品を見返し、気づきを共有する;11:00–11:20|ハンス・ロスリング|ハンスとGapminderについての短い講義;11:20–11:50|探索とグループ共有|データを読み込み、個人で探索した後、グループで比較・修正する;11:50–12:20|グループ発表とまとめ|選んだグラフを発表し、全体で振り返り、宿題を確認する
 in_class: Import hans.csv in Tableau, build one scatterplot, and share one question the view raises.
 in_class_ja: Tableauでhans.csvを読み込み、散布図を一つつくり、そのビューから生まれる問いを一つ共有する。
 homework: Create a Tableau view with a title, source, and one finding
