@@ -154,7 +154,7 @@ function createMoriCorner(week) {
   return corner;
 }
 
-function activityTabs(week) {
+function activityTabs(week, sharedMaterials = '') {
   if (!week.activities?.length) return '';
   const tabs = week.activities.map((activity, index) => `<button type="button" role="tab" id="week-${week.week}-activity-${activity.number}-tab" aria-controls="week-${week.week}-activity-${activity.number}" aria-selected="${index === 0}" tabindex="${index === 0 ? '0' : '-1'}">${copy(`Activity ${activity.number}`, `アクティビティ ${activity.number}`)}</button>`).join('');
   const panels = week.activities.map((activity, index) => {
@@ -173,7 +173,7 @@ function activityTabs(week) {
       <ol class="activity-steps">${steps}</ol><div class="activity-actions">${link}${resultsLink}</div>
     </section>`;
   }).join('');
-  return `<article class="assignment-card assignment-card--in-class activity-tabs-card" data-activity-tabs><div class="activity-tab-list" role="tablist" aria-label="${copy('In-class activities', '授業内アクティビティ')}">${tabs}</div>${panels}</article>`;
+  return `<article class="assignment-card assignment-card--in-class activity-tabs-card" data-activity-tabs><div class="activity-tab-list" role="tablist" aria-label="${copy('In-class activities', '授業内アクティビティ')}">${tabs}</div>${panels}${sharedMaterials}</article>`;
 }
 
 function setupActivityTabs(root) {
@@ -296,7 +296,7 @@ function renderAgenda() {
       if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
       return;
     }
-    const inClass = activityTabs(week) || (week.in_class ? `<article class="assignment-card assignment-card--in-class"><p class="assignment-label">${copy('IN CLASS', '授業内課題')}</p><h4>${copy('Try it with the class', 'クラスで試す')}</h4><p>${escapeHtml(copy(week.in_class, week.in_class_ja))}</p>${activityLinks}<div class="activity-tools"><span>${copy('TOOLS', '使うツール')}</span><strong>${escapeHtml(copy(week.tools, week.tools_ja))}</strong></div></article>` : '');
+    const inClass = activityTabs(week, activityLinks) || (week.in_class ? `<article class="assignment-card assignment-card--in-class"><p class="assignment-label">${copy('IN CLASS', '授業内課題')}</p><h4>${copy('Try it with the class', 'クラスで試す')}</h4><p>${escapeHtml(copy(week.in_class, week.in_class_ja))}</p>${activityLinks}<div class="activity-tools"><span>${copy('TOOLS', '使うツール')}</span><strong>${escapeHtml(copy(week.tools, week.tools_ja))}</strong></div></article>` : '');
     const timing = classAgenda(week);
     const nextClassDate = weeks[index + 1]?.course_date || addDays(week.course_date, 7);
     const deadlineMs = submissionDeadlineMs(nextClassDate);
