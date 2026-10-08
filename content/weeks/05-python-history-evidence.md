@@ -25,6 +25,7 @@ image: assets/images/lecture/week05.png
 
 - [Lecture slides](lectures/w05.pdf) {slides}
 - [Python notebook](data/wrangle.ipynb) {data}
+- [Gapminder Python notebook](data/gapminder/gapdata.ipynb) {data}
 - [Nightingale mortality diagram](https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg) {reference}
 
 ## Mori's Corner

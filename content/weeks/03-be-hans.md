@@ -26,10 +26,8 @@ image: assets/images/lecture/hans.png
 ## Materials
 
 - [Lecture slides](lectures/w03.pdf) {slides}
-- [Gapminder data](data/gapminder/gapdata.ipynb) {data}
 - [Hans CSV](data/gapminder/hans.csv) {data}
 - [Tableau for students](https://www.tableau.com/academic/students) {reference}
-- [Padlet course wall](https://padlet.com/yohda/dataviz) {reference}
 
 ## In Class Activities
 
@@ -43,13 +41,13 @@ steps:
 - Find and use Country, Year, Life expectancy, GDP, Population, and region; check that Tableau reads each field correctly.
 - Individual exploration · 10 minutes: try to recreate Hans's chart. Explore the data and note one pattern or question.
 - Group discussion · 10 minutes: share what you found, discuss what worked and what did not, and revise your charts.
-- Choose one revised chart to present and post it to Padlet.
+- Choose one revised chart to present. Explain one finding and one change you made after the group discussion.
 steps_ja:
 - Tableau Public（学生版）を開き、hans.csvを読み込みます。
 - Country、Year、Life expectancy、GDP、Population、regionの各項目を使います。Tableauが各項目を正しく読み取っているか確認しましょう。
 - 個人での探索・10分：ハンスのグラフの再現を試します。データを探索し、見つけたパターンか疑問を一つメモします。
 - グループでの話し合い・10分：発見を共有し、うまくいった点・いかなかった点を話し合い、グラフを修正します。
-- 修正版から一つを選んで発表し、Padletに投稿します。
+- 修正版から一つを選んで発表します。発見したことを一つと、グループでの話し合いを受けて変更した点を一つ説明しましょう。
 
 ## Mori's Corner
 

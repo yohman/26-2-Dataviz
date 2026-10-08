@@ -542,6 +542,13 @@ a.gallery-tool-chip:hover,a.gallery-tool-chip:focus-visible{background:var(--pla
 @media(max-width:700px){.gallery-work-navigation{top:66px;flex-wrap:wrap;gap:.4rem .8rem;padding:.55rem 0}.gallery-work-back{flex:1 0 auto}.gallery-work-sequence{width:100%;justify-content:space-between}.gallery-work-layout{grid-template-columns:1fr;padding-top:.8rem}.gallery-work-art{position:static;height:clamp(300px,45vh,420px);min-height:300px}.gallery-work-details{padding-top:.7rem}.gallery-work-description{font-size:.9rem}}
 
 /* CSV preview: keep wide columns navigable without letting the page overflow. */
+.activity-tabs-card>.activity-materials{margin:0;padding:1.2rem 1.5rem 1.5rem}
+.activity-materials>div{display:grid;gap:.85rem}
+.agenda-page .activity-materials .material-link{width:fit-content;padding:.15rem 0;border:0;border-bottom:1px solid currentColor;background:transparent;color:var(--playfair-crimson);font-size:.75rem;font-weight:600}
+.agenda-page .activity-materials .material-link:hover,.agenda-page .activity-materials .material-link:focus-visible{background:transparent;color:var(--ink);border-color:currentColor}
+.activity-materials .material-csv{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:.5rem 1rem}
+.activity-materials .material-csv>strong{margin:0;font-size:.85rem}
+@media(max-width:560px){.activity-tabs-card>.activity-materials{padding:1rem 1.2rem 1.2rem}.activity-materials .material-csv{grid-template-columns:auto auto;justify-content:start}.activity-materials .material-csv>strong{grid-column:1/-1}}
 .material-csv{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem}
 .material-csv>strong{margin-right:.35rem;font-size:.76rem}
 .material-link--preview{background:#ead8b7;border-color:#b88437;color:var(--ink)}
