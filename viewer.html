@@ -216,7 +216,7 @@
       try {
         if (!file || !window.pdfjsLib) throw new Error('PDF preview unavailable');
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        const response = await fetch(`${encodeURI(file)}?v=week3-dollar-street-20261008`);
+        const response = await fetch(`${encodeURI(file)}?v=week3-image-opening-20261008`);
         if (!response.ok) throw new Error('PDF unavailable');
         pdf = await window.pdfjsLib.getDocument({ data: await response.arrayBuffer() }).promise;
         await renderPage(activePage);
