@@ -819,6 +819,11 @@ function matchesGalleryForm(item, form) {
   return form.pattern.test(`${item.title || ''} ${item.description || ''}`);
 }
 
+function galleryScrollZoomFactor(deltaY, deltaMode = 0) {
+  const pixels = deltaY * (deltaMode === 1 ? 16 : deltaMode === 2 ? 400 : 1);
+  return Math.exp(-Math.max(-100, Math.min(100, pixels)) * 0.001);
+}
+
 function setupGalleryImagePanZoom(viewport, image, level, controls) {
   const events = new AbortController();
   const signal = events.signal;
@@ -845,7 +850,7 @@ function setupGalleryImagePanZoom(viewport, image, level, controls) {
   controls.querySelector('[data-gallery-zoom-reset]').addEventListener('click', reset, { signal });
   viewport.addEventListener('wheel', event => {
     event.preventDefault();
-    zoom(event.deltaY < 0 ? 1.15 : 1 / 1.15, event.clientX, event.clientY);
+    zoom(galleryScrollZoomFactor(event.deltaY, event.deltaMode), event.clientX, event.clientY);
   }, { passive: false, signal });
   viewport.addEventListener('dblclick', event => zoom(1.5, event.clientX, event.clientY), { signal });
   viewport.addEventListener('pointerdown', event => {

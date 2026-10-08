@@ -8,6 +8,16 @@ const context = { document: { addEventListener() {} }, window: {}, URL, URLSearc
 vm.createContext(context);
 vm.runInContext(fs.readFileSync(path.join(__dirname, '../assets/site.js'), 'utf8'), context);
 
+test('scroll zoom follows delta size gently, normalizes units, and caps jumps', () => {
+  const factor = (delta, mode = 0) => vm.runInContext(`galleryScrollZoomFactor(${delta}, ${mode})`, context);
+  assert.equal(factor(0), 1);
+  assert(factor(1) > .998 && factor(1) < 1);
+  assert(factor(-1) > 1 && factor(-1) < 1.002);
+  assert.equal(factor(1, 1), factor(16));
+  assert.equal(factor(10000), factor(100));
+  assert(Math.abs(factor(20) * factor(-20) - 1) < 1e-12);
+});
+
 test('gallery work links retain the active week, tool, and chart filters', () => {
   const href = vm.runInContext("galleryPageUrl({ week: 1, imageIndex: 21 }, 'all', 'Google Sheets', 'bar')", context);
   const url = new URL(href, 'https://example.org/');
