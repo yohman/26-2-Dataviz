@@ -1,0 +1,15 @@
+.gallery-comments{margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--line)}
+.gallery-comments h2{font:600 1.5rem var(--serif);margin:0 0 .6rem}
+.gallery-comments-note,.gallery-comments [role=status]{font-size:.75rem;line-height:1.5;color:var(--muted)}
+.gallery-comment-form{display:grid;gap:.8rem;margin:1rem 0 1.5rem}
+.gallery-comment-form label{display:grid;gap:.3rem;font-size:.75rem;font-weight:700}
+.gallery-comment-form input,.gallery-comment-form textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--paper);padding:.65rem;color:var(--ink);font:400 .85rem var(--sans)}
+.gallery-comment-form textarea{resize:vertical}
+.gallery-comments button{cursor:pointer;background:transparent;border:1px solid var(--line);padding:.5rem .7rem;color:var(--ink);font:600 .75rem var(--sans)}
+.gallery-comment-form button[type=submit]{background:var(--playfair-crimson);color:white;border:0;justify-self:start}
+.gallery-comments button:disabled{opacity:.6;cursor:wait}
+.gallery-comment{padding:1rem 0;border-top:1px solid var(--line);overflow-wrap:anywhere}
+.gallery-comment-heading{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:space-between;font-size:.75rem}
+.gallery-comment time{color:var(--muted);font-size:.65rem}
+.gallery-comment p{white-space:pre-wrap;font-size:.85rem;line-height:1.6}
+.gallery-comment-link{position:absolute;right:0;bottom:2.5rem;font-size:.65rem;color:var(--muted)}

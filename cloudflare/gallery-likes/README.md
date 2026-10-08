@@ -31,3 +31,14 @@ using another device permits another like. CORS is not authentication.
 Worker rate limiting permits 120 requests per browser identity per minute.
 Duplicate like and unlike operations have been tested on the deployed API.
 Still verify browser interactions and behavior on a second computer.
+
+## Public comments
+
+The same Worker exposes GET /comments for bulk card counts, GET
+/comments?submission=2-79 for 50 comments per page (nextCursor pagination),
+POST /comments with {id, submission, author, body}, and DELETE /comments
+with {id}. Delete is restricted to the originating browser identity.
+Comments publish immediately without moderation or verified names.
+Names are limited to 60 characters, comments to 1500. Text renders literally,
+never as HTML. Posting is limited to five per browser per minute.
+Browser storage clearing loses the ability to delete prior comments.
