@@ -849,7 +849,7 @@ function setupGalleryImagePanZoom(viewport, image, level, controls) {
   }, { passive: false, signal });
   viewport.addEventListener('dblclick', event => zoom(1.5, event.clientX, event.clientY), { signal });
   viewport.addEventListener('pointerdown', event => {
-    if (event.button !== 0) return;
+    if (event.button !== 0 || event.target.closest('button')) return;
     pointerId = event.pointerId;
     startX = event.clientX - offsetX; startY = event.clientY - offsetY;
     viewport.setPointerCapture(pointerId);
@@ -933,13 +933,29 @@ function paintGalleryWork(items) {
   const level = element('span', '100%', 'gallery-work-zoom-level'); level.setAttribute('aria-live', 'polite');
   const zoomIn = element('button', '+'); zoomIn.type = 'button'; zoomIn.dataset.galleryZoomIn = ''; zoomIn.setAttribute('aria-label', copy('Zoom in', '拡大'));
   const reset = element('button', copy('Fit', '全体表示')); reset.type = 'button'; reset.dataset.galleryZoomReset = '';
-  controls.append(out, level, zoomIn, reset); toolbar.append(hint, controls);
+  const fullscreen = element('button', '⛶'); fullscreen.type = 'button';
+  fullscreen.setAttribute('aria-label', copy('Full screen', '全画面表示'));
+  fullscreen.addEventListener('click', async () => {
+    if (document.fullscreenElement === art) { await document.exitFullscreen(); return; }
+    if (art.classList.contains('is-fullscreen')) { art.classList.remove('is-fullscreen'); return; }
+    try {
+      if (!art.requestFullscreen) throw new Error('Fullscreen unavailable');
+      await art.requestFullscreen();
+    } catch { art.classList.add('is-fullscreen'); }
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') art.classList.remove('is-fullscreen');
+  });
+  controls.append(out, level, zoomIn, reset, fullscreen); toolbar.append(hint, controls);
   const viewport = element('div', '', 'gallery-work-viewport');
   art.append(toolbar, viewport);
   let imageRequest = 0;
   let stopPanZoom = () => {};
   const imageNavigation = galleryImageControls(galleryImageCount(item), slot => showWorkImage(slot));
-  if (imageNavigation.element) art.append(imageNavigation.element);
+  const replaceImageContents = (...nodes) => {
+    viewport.replaceChildren(...nodes);
+    if (imageNavigation.element) viewport.append(imageNavigation.element);
+  };
 
   const details = element('aside', '', 'gallery-work-details');
   const weekLink = element('a', `${copy(`WEEK ${item.week}`, `第${item.week}週`)} · ${challengeForWeek(item.week) || String(item.challenge || '').replace(/^第\d+週｜/, '')}`, 'gallery-work-week');
@@ -980,12 +996,12 @@ function paintGalleryWork(items) {
     imageNavigation.select(slot);
     stopPanZoom();
     stopPanZoom = () => {};
-    viewport.replaceChildren(element('span', '', 'gallery-work-spinner'), element('span', copy('Loading image…', '画像を読み込んでいます…')));
+    replaceImageContents(element('span', '', 'gallery-work-spinner'), element('span', copy('Loading image…', '画像を読み込んでいます…')));
     viewport.classList.add('is-loading');
     const data = await galleryImageSource(item, slot);
     if (!viewport.isConnected || request !== imageRequest) return;
     if (!/^assets\/gallery\/[a-f0-9]{24}\.(?:png|jpg|webp|gif)$/.test(data) && !/^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(data)) {
-      viewport.textContent = copy('Screenshot unavailable.', '画像を表示できません。');
+      replaceImageContents(element('span', copy('Screenshot unavailable.', '画像を表示できません。')));
       controls.hidden = true;
       return;
     }
@@ -994,10 +1010,10 @@ function paintGalleryWork(items) {
     image.alt = copy(`Image ${slot} of ${galleryImageCount(item)} by ${item.studentName || 'a student'}: ${item.title || 'untitled'}`, `${item.studentName || '学生'}の作品 ${slot} / ${galleryImageCount(item)}：${item.title || '無題'}`);
     image.draggable = false;
     try { await image.decode(); }
-    catch { if (request === imageRequest) viewport.textContent = copy('Screenshot unavailable.', '画像を表示できません。'); return; }
+    catch { if (request === imageRequest) replaceImageContents(element('span', copy('Screenshot unavailable.', '画像を表示できません。'))); return; }
     if (!viewport.isConnected || request !== imageRequest) return;
     viewport.classList.remove('is-loading');
-    viewport.replaceChildren(image);
+    replaceImageContents(image);
     stopPanZoom = setupGalleryImagePanZoom(viewport, image, level, controls);
   }
   showWorkImage(1);
