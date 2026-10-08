@@ -60,7 +60,7 @@ await mkdir(join(root, 'assets/gallery'), { recursive: true });
 await mkdir(join(root, 'data'), { recursive: true });
 async function buildItems(source, fromPublishedSite) {
   const items = [];
-  for (const original of source.items) {
+  async function buildItem(original) {
     const item = Object.fromEntries(fields.map(field => [field, original[field] ?? '']));
     if (!Number.isInteger(Number(item.week)) || Number(item.week) < 1 || Number(item.week) > 14) throw new Error('Invalid week');
     if (!Number.isInteger(Number(item.imageIndex)) || Number(item.imageIndex) < 0) throw new Error('Invalid image index');
@@ -101,8 +101,15 @@ async function buildItems(source, fromPublishedSite) {
       }
     }
     item.imageUrl = item.imageUrls[0];
-    items.push(item);
+    return item;
   }
+  let cursor = 0;
+  await Promise.all(Array.from({ length: 4 }, async () => {
+    while (cursor < source.items.length) {
+      const index = cursor++;
+      items[index] = await buildItem(source.items[index]);
+    }
+  }));
   return items;
 }
 

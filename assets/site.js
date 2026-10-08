@@ -828,11 +828,18 @@ function loadGalleryImage(index, slot = 1) {
   if (!Number.isInteger(index) || index < 0) return Promise.resolve('');
   const key = `${index}-${slot}`;
   if (galleryImageCache.has(key)) return galleryImageCache.get(key);
+  try {
+    const cached = sessionStorage.getItem(`gallery-image-${key}`);
+    if (cached && /^data:image\/(png|jpeg|webp|gif);base64,/.test(cached)) return Promise.resolve(cached);
+  } catch { /* Storage may be unavailable or full. */ }
   const promise = (async () => {
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
         const data = await requestGalleryImage(index, slot);
-        if (data) return data;
+        if (data) {
+          try { sessionStorage.setItem(`gallery-image-${key}`, data); } catch { /* Best-effort cache. */ }
+          return data;
+        }
       } catch (error) {
         if (attempt === 2) console.error('Gallery screenshot:', error);
       }
