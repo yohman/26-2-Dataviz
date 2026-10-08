@@ -1,0 +1,12 @@
+{
+  "name": "dataviz-gallery-likes",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-09",
+  "vars": { "ALLOWED_ORIGINS": "https://yohman.github.io,http://127.0.0.1:8766,http://localhost:8766" },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "dataviz-gallery-likes",
+    "database_id": "REPLACE_WITH_CREATED_D1_DATABASE_ID",
+    "migrations_dir": "migrations"
+  }]
+}
