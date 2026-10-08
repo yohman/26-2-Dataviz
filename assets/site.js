@@ -104,6 +104,11 @@ function materialLinks(materials, context = {}) {
     const href = safeResourceHref(material.href);
     if (!href) return '';
     const type = material.type || (href.includes('lectures/') ? 'slides' : href.startsWith('data/') ? 'data' : 'reference');
+    if (type === 'data' && /^data\/.+\.csv$/i.test(href)) {
+      const previewParams = new URLSearchParams({ file: href, title: material.label });
+      if (context.week) previewParams.set('return', context.returnTo || `agenda.html#week-${context.week}`);
+      return `<div class="material-csv"><strong>${escapeHtml(material.label)}</strong><a class="material-link material-link--preview" href="csv-preview.html?${previewParams}">${copy('Preview table', '表をプレビュー')} →</a><a class="material-link material-link--download" href="${escapeHtml(href)}" download>${copy('Download CSV', 'CSVをダウンロード')} ↓</a></div>`;
+    }
     const previewableSlides = type === 'slides' && /^lectures\/[A-Za-z0-9._-]+\.pdf$/i.test(href) && context.week;
     const linkHref = previewableSlides
       ? `viewer.html?file=${encodeURIComponent(href)}&title=${encodeURIComponent(material.label)}&week=${encodeURIComponent(`Week ${context.week}`)}&return=${encodeURIComponent(context.returnTo || `agenda.html#week-${context.week}`)}`
@@ -235,6 +240,7 @@ function setupShell() {
     if (weeks.length) renderCourse();
     if (document.querySelector('[data-gallery]')) renderGallery();
     if (document.querySelector('[data-gallery-work]')) renderGalleryWork();
+    if (document.querySelector('[data-csv-preview]')) renderCsvPreview();
   }
 
   let language = 'ja';
@@ -280,7 +286,7 @@ function renderAgenda() {
       : '';
     const media = image ? `${slideHref ? `<a class="week-visual-link" href="${escapeHtml(slideHref)}" aria-label="${escapeHtml(slideLabel)}">` : ''}<figure class="week-visual"><img src="${escapeHtml(image)}" alt="" loading="lazy"><figcaption>${escapeHtml(slideLabel)}${slideHref ? '<b aria-hidden="true">→</b>' : ''}</figcaption></figure>${slideHref ? '</a>' : ''}` : '';
     const slides = !image && slideMaterials.length ? `<div class="lecture-slides">${materialLinks(slideMaterials.map(material => ({ ...material, label: slideLabel })), { week: week.week, returnTo })}</div>` : '';
-    const activityLinks = activityMaterials.length ? `<div class="activity-materials"><p>${copy('MATERIALS FOR THIS ACTIVITY', 'この課題で使う資料')}</p><div>${materialLinks(activityMaterials)}</div></div>` : '';
+    const activityLinks = activityMaterials.length ? `<div class="activity-materials"><p>${copy('MATERIALS FOR THIS ACTIVITY', 'この課題で使う資料')}</p><div>${materialLinks(activityMaterials, { week: week.week, returnTo })}</div></div>` : '';
     const status = week.week === focusedWeek?.week ? `<span class="week-status">${copy(week.course_date === today ? 'TODAY' : 'START HERE', week.course_date === today ? '今日' : 'ここから')}</span>` : '';
     const preview = `<span class="week-preview"><span><b>${copy('PRACTICE', '実践')}</b>${escapeHtml(copy(week.learn, week.learn_ja))}</span><span><b>${copy('TOOLS', 'ツール')}</b>${escapeHtml(copy(week.tools, week.tools_ja))}</span></span>`;
     const weekMain = `<span class="week-summary-main"><span class="week-meta"><span>${week.act}</span><span>${copy(`Week ${week.week}`, `第${week.week}週`)}</span>${locked ? '' : status}</span><span class="week-title">${escapeHtml(copy(week.title, week.title_ja))}</span>${locked ? '' : preview}</span>`;
@@ -452,6 +458,113 @@ function renderHome() {
   root.innerHTML = locked
     ? `<p class="eyebrow">${copy('THIS WEEK', '今週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(current.title, current.title_ja))}</h2><p>${escapeHtml(copy(`Details open ${compactDate(availabilityDate(current.course_date))}.`, `内容は${compactDate(availabilityDate(current.course_date))}に公開します。`))}</p><span class="next-cta">${copy('See the schedule →', '日程を見る →')}</span>`
     : `<p class="eyebrow">${copy('THIS WEEK', '今週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(current.challenge, current.challenge_ja))}</h2><p>${escapeHtml(copy(current.homework, current.homework_ja))}</p><span class="next-cta">${copy('Open this week →', 'この週を開く →')}</span>`;
+}
+
+function parseCsvText(text) {
+  const records = [];
+  let record = [], field = '', quoted = false;
+  const source = String(text || '').replace(/^\uFEFF/, '');
+  for (let index = 0; index < source.length; index++) {
+    const char = source[index];
+    if (quoted) {
+      if (char === '"' && source[index + 1] === '"') { field += '"'; index++; }
+      else if (char === '"') quoted = false;
+      else field += char;
+    } else if (char === '"' && field === '') quoted = true;
+    else if (char === ',') { record.push(field); field = ''; }
+    else if (char === '\n' || char === '\r') {
+      if (char === '\r' && source[index + 1] === '\n') index++;
+      record.push(field); records.push(record); record = []; field = '';
+    } else field += char;
+  }
+  if (field || record.length || source.endsWith(',')) { record.push(field); records.push(record); }
+  while (records.length && records.at(-1).every(value => value === '')) records.pop();
+  return records;
+}
+
+async function renderCsvPreview() {
+  const root = document.querySelector('[data-csv-preview]');
+  if (!root) return;
+  const params = new URLSearchParams(location.search);
+  const file = safeResourceHref(params.get('file'));
+  const title = params.get('title') || file?.split('/').pop() || 'CSV';
+  const returnTo = safeResourceHref(params.get('return')) || 'agenda.html';
+  root.replaceChildren();
+  if (!file || !/^data\/.+\.csv$/i.test(file)) {
+    root.append(element('p', copy('That CSV file is not available for preview.', 'このCSVファイルはプレビューできません。'), 'csv-preview-status'));
+    return;
+  }
+  const loading = element('div', '', 'csv-preview-status');
+  loading.setAttribute('role', 'status');
+  loading.append(element('span', '', 'gallery-work-spinner'), element('span', copy('Loading CSV…', 'CSVを読み込んでいます…')));
+  root.append(loading);
+  try {
+    const response = await fetch(file, { cache: 'default' });
+    if (!response.ok) throw new Error(`CSV HTTP ${response.status}`);
+    const records = parseCsvText(await response.text());
+    if (!records.length) throw new Error('CSV contains no rows');
+    const headers = records[0].map((value, index) => value || `Column ${index + 1}`);
+    const rows = records.slice(1);
+    const pageSize = 25;
+    let page = 0;
+    const section = element('section', '', 'csv-preview');
+    const heading = element('header', '', 'csv-preview-heading');
+    heading.append(element('p', copy('DATA PREVIEW', 'データプレビュー'), 'eyebrow'));
+    heading.append(element('h1', title));
+    heading.append(element('p', copy(`${rows.length.toLocaleString()} rows · ${headers.length.toLocaleString()} columns`, `${rows.length.toLocaleString()}行 · ${headers.length.toLocaleString()}列`), 'csv-preview-summary'));
+    const actions = element('div', '', 'csv-preview-actions');
+    const download = element('a', copy('Download CSV ↓', 'CSVをダウンロード ↓'), 'button');
+    download.href = file; download.download = file.split('/').pop();
+    const back = element('a', copy('← Back to the week', '← 授業ページに戻る'), 'text-link');
+    back.href = returnTo;
+    actions.append(download, back); heading.append(actions);
+    const tableRegion = element('div', '', 'csv-preview-table-region');
+    tableRegion.setAttribute('role', 'region');
+    tableRegion.setAttribute('aria-label', copy('Scrollable CSV table', 'スクロールできるCSV表'));
+    tableRegion.tabIndex = 0;
+    const table = element('table', '', 'csv-preview-table');
+    table.append(element('caption', title));
+    const thead = document.createElement('thead');
+    const headRow = document.createElement('tr');
+    headers.forEach(header => { const cell = element('th', header); cell.scope = 'col'; cell.title = header; headRow.append(cell); });
+    thead.append(headRow); table.append(thead);
+    const tbody = document.createElement('tbody'); table.append(tbody); tableRegion.append(table);
+    const pagination = element('nav', '', 'csv-preview-pagination');
+    pagination.setAttribute('aria-label', copy('Table pages', '表のページ移動'));
+    const previous = element('button', copy('← Previous', '← 前へ')); previous.type = 'button';
+    const pageStatus = element('span', '', 'csv-preview-page-status'); pageStatus.setAttribute('aria-live', 'polite');
+    const next = element('button', copy('Next →', '次へ →')); next.type = 'button';
+    pagination.append(previous, pageStatus, next);
+    function showPage() {
+      const start = page * pageSize;
+      const pageRows = rows.slice(start, start + pageSize);
+      tbody.replaceChildren(...pageRows.map(values => {
+        const row = document.createElement('tr');
+        headers.forEach((_, index) => row.append(element('td', values[index] || '')));
+        return row;
+      }));
+      const end = Math.min(start + pageRows.length, rows.length);
+      pageStatus.textContent = rows.length
+        ? copy(`Rows ${start + 1}–${end} of ${rows.length} · Page ${page + 1} of ${Math.max(1, Math.ceil(rows.length / pageSize))}`, `全${rows.length}行中 ${start + 1}–${end}行目 · ${page + 1} / ${Math.max(1, Math.ceil(rows.length / pageSize))}ページ`)
+        : copy('No data rows', 'データ行はありません');
+      previous.disabled = page === 0;
+      next.disabled = start + pageSize >= rows.length;
+      tableRegion.scrollTop = 0;
+    }
+    previous.addEventListener('click', () => { if (page > 0) { page--; showPage(); } });
+    next.addEventListener('click', () => { if ((page + 1) * pageSize < rows.length) { page++; showPage(); } });
+    showPage();
+    section.append(heading, tableRegion, pagination);
+    root.replaceChildren(section);
+    document.title = `${copy('CSV preview', 'CSVプレビュー')} · ${title} · 2026–2 Data Visualization`;
+  } catch (error) {
+    console.error('CSV preview:', error);
+    const message = element('div', '', 'csv-preview-error');
+    message.append(element('p', copy('The CSV could not be loaded.', 'CSVを読み込めませんでした。')));
+    const retry = element('button', copy('Try again', '再読み込み'), 'button');
+    retry.type = 'button'; retry.addEventListener('click', renderCsvPreview);
+    message.append(retry); root.replaceChildren(message);
+  }
 }
 
 function option(value, label) { const item = document.createElement('option'); item.value = value; item.textContent = label; return item; }

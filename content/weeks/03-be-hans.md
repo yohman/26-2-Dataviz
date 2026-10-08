@@ -27,6 +27,27 @@ image: assets/images/lecture/hans.png
 - [Gapminder data](data/gapminder/gapdata.ipynb) {data}
 - [Hans CSV](data/gapminder/hans.csv) {data}
 - [Tableau for students](https://www.tableau.com/academic/students) {reference}
+- [Padlet course wall](https://padlet.com/yohda/dataviz) {reference}
+
+## In Class Activities
+
+### Activity 1
+title: Rebuild Hans's chart, then make it yours
+title_ja: ハンスのグラフを再現し、自分の発見へ
+text: Start with hans.csv and explore how income, life expectancy, and population change across countries and years. First work individually, then compare and improve your charts with your group.
+text_ja: hans.csvを使い、国や年ごとに所得・平均寿命・人口がどう変化するかを探ります。まず個人で試し、その後グループで比べてグラフを改善します。
+steps:
+- Open Tableau Public (Student Edition) and import hans.csv.
+- Find and use Country, Year, Life expectancy, GDP, Population, and region; check that Tableau reads each field correctly.
+- Individual exploration · 10 minutes: try to recreate Hans's chart. Explore the data and note one pattern or question.
+- Group discussion · 10 minutes: share what you found, discuss what worked and what did not, and revise your charts.
+- Choose one revised chart to present and post it to Padlet.
+steps_ja:
+- Tableau Public（学生版）を開き、hans.csvを読み込みます。
+- Country、Year、Life expectancy、GDP、Population、regionの各項目を使います。Tableauが各項目を正しく読み取っているか確認しましょう。
+- 個人での探索・10分：ハンスのグラフの再現を試します。データを探索し、見つけたパターンか疑問を一つメモします。
+- グループでの話し合い・10分：発見を共有し、うまくいった点・いかなかった点を話し合い、グラフを修正します。
+- 修正版から一つを選んで発表し、Padletに投稿します。
 
 ## Mori's Corner
 
