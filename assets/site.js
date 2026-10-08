@@ -647,6 +647,16 @@ function rememberGalleryItems(items) {
   try { sessionStorage.setItem(gallerySessionKey, JSON.stringify({ savedAt: Date.now(), items })); }
   catch { /* Gallery still works without browser storage. */ }
 }
+function hydrateGalleryImages(items, snapshot) {
+  const images = new Map(snapshot.map(item => [galleryItemKey(item), item]));
+  return items.map(item => {
+    const cached = images.get(galleryItemKey(item));
+    if (!cached) return item;
+    const urls = Array.from({ length: galleryImageCount(item) }, (_, index) => cached.imageUrls?.[index] || item.imageUrls?.[index] || (index === 0 ? cached.imageUrl || item.imageUrl : '') || '');
+    return { ...item, imageUrls: urls, imageUrl: urls[0] };
+  });
+}
+
 function recentGalleryItems() {
   try {
     const cached = JSON.parse(sessionStorage.getItem(gallerySessionKey) || 'null');
@@ -1106,8 +1116,9 @@ async function renderGalleryWork() {
     if (!response.ok) throw new Error(`Gallery snapshot HTTP ${response.status}`);
     const snapshot = await response.json();
     if (!Array.isArray(snapshot.items)) throw new Error('Invalid gallery snapshot');
-    if (!galleryWorkItems || galleryWorkItems.length < snapshot.items.length) {
-      galleryWorkItems = snapshot.items;
+    const hydrated = hydrateGalleryImages(galleryWorkItems && galleryWorkItems.length >= snapshot.items.length ? galleryWorkItems : snapshot.items, snapshot.items);
+    if (!galleryWorkItems || JSON.stringify(hydrated) !== JSON.stringify(galleryWorkItems)) {
+      galleryWorkItems = hydrated;
       rememberGalleryItems(galleryWorkItems);
       paintGalleryWork(galleryWorkItems);
     }

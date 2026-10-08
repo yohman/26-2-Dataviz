@@ -18,6 +18,15 @@ test('scroll zoom follows delta size gently, normalizes units, and caps jumps', 
   assert(Math.abs(factor(20) * factor(-20) - 1) < 1e-12);
 });
 
+test('same-count stale session entries adopt locally hosted images without losing metadata', () => {
+  const result = vm.runInContext(`hydrateGalleryImages(
+    [{week:2,imageIndex:74,imageCount:2,title:'newer title',imageUrls:[]}],
+    [{week:2,imageIndex:74,imageCount:2,title:'older title',imageUrls:['first.png','second.png']}]
+  )[0]`, context);
+  assert.equal(result.title, 'newer title');
+  assert.deepEqual([...result.imageUrls], ['first.png', 'second.png']);
+});
+
 test('gallery work links retain the active week, tool, and chart filters', () => {
   const href = vm.runInContext("galleryPageUrl({ week: 1, imageIndex: 21 }, 'all', 'Google Sheets', 'bar')", context);
   const url = new URL(href, 'https://example.org/');
