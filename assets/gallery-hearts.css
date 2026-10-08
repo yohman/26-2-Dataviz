@@ -1,0 +1,9 @@
+.gallery-card-footer{position:relative}
+.gallery-card-links{padding-right:64px}
+.gallery-heart{display:inline-flex;align-items:center;gap:.45rem;border:0;background:transparent;padding:.35rem;color:#92918e;cursor:pointer;font:700 .8rem var(--sans)}
+.gallery-card-footer>.gallery-heart{position:absolute;right:0;bottom:0}
+.gallery-heart svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8}
+.gallery-heart.is-liked{color:var(--playfair-crimson)}
+.gallery-heart.is-liked svg{fill:currentColor}
+.gallery-heart:disabled{cursor:wait}
+.gallery-heart.is-loading span{width:14px;height:14px;border:2px solid #d9cbb9;border-top-color:var(--playfair-crimson);border-radius:50%;animation:gallery-work-spin .8s linear infinite}

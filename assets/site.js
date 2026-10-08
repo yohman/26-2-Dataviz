@@ -654,6 +654,71 @@ function recentGalleryItems() {
   } catch { return null; }
 }
 const galleryImageCount = item => Number(item.imageCount) === 2 ? 2 : 1;
+const galleryLikesUrl = 'https://dataviz-gallery-likes.ykawano.workers.dev/likes';
+let galleryLikesPromise;
+let galleryLikesBrowser;
+const galleryLikesState = new Map();
+async function galleryLikesRequest(method = 'GET', body) {
+  galleryLikesBrowser ||= localStorage.getItem('dataviz-heart-browser') || crypto.randomUUID();
+  localStorage.setItem('dataviz-heart-browser', galleryLikesBrowser);
+  const response = await fetch(galleryLikesUrl, {
+    method, signal: AbortSignal.timeout(5000),
+    headers: { 'X-Browser-ID': galleryLikesBrowser, ...(body ? { 'Content-Type': 'application/json' } : {}) },
+    ...(body ? { body: JSON.stringify(body) } : {})
+  });
+  if (!response.ok) throw new Error(`Likes HTTP ${response.status}`);
+  return response.json();
+}
+function galleryHeart(item) {
+  const id = galleryItemKey(item);
+  const button = element('button', '', 'gallery-heart'); button.type = 'button';
+  button.dataset.heartId = id;
+  button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg><span class="gallery-heart-count"></span>';
+  const paint = state => {
+    button.disabled = !state;
+    button.classList.toggle('is-loading', !state);
+    button.classList.toggle('is-liked', Boolean(state?.liked));
+    button.setAttribute('aria-pressed', String(Boolean(state?.liked)));
+    button.setAttribute('aria-label', copy(state?.liked ? 'Unlike' : 'Like', state?.liked ? 'いいねを取り消す' : 'いいね'));
+    button.querySelector('span').textContent = state ? String(state.count) : '';
+  };
+  const sync = state => {
+    galleryLikesState.set(id, state);
+    document.querySelectorAll('[data-heart-id]').forEach(other => {
+      if (other.dataset.heartId === id) other.dispatchEvent(new CustomEvent('heart-update', { detail: state }));
+    });
+  };
+  button.addEventListener('heart-update', event => paint(event.detail));
+  paint(galleryLikesState.get(id));
+  const load = async () => {
+    paint(galleryLikesState.get(id));
+    try {
+      galleryLikesPromise ||= galleryLikesRequest().then(data => {
+        data.items.forEach(state => galleryLikesState.set(state.id, state));
+        return data;
+      }).catch(error => { galleryLikesPromise = null; throw error; });
+      await galleryLikesPromise;
+      paint(galleryLikesState.get(id) || { count: 0, liked: false });
+      button.title = '';
+    } catch {
+      button.disabled = false; button.classList.remove('is-loading');
+      button.querySelector('span').textContent = '↻';
+      button.title = copy('Unable to load likes. Click to retry.', 'いいねを読み込めません。クリックして再試行。');
+    }
+  };
+  button.addEventListener('click', async () => {
+    if (button.title) { await load(); return; }
+    const old = galleryLikesState.get(id) || { count: 0, liked: false };
+    const liked = !old.liked;
+    sync({ count: old.count + (liked ? 1 : -1), liked });
+    button.disabled = true;
+    try { sync(await galleryLikesRequest('PUT', { id, liked })); }
+    catch { sync(old); button.title = copy('Save failed. Click to reload and retry.', '保存できませんでした。クリックして再読み込み。'); }
+    finally { button.disabled = false; }
+  });
+  load();
+  return button;
+}
 const galleryImageSource = (item, slot) => item.imageUrls?.[slot - 1] || (slot === 1 ? item.imageUrl : '') || loadGalleryImage(Number(item.imageIndex), slot);
 
 function galleryImageControls(count, onSelect) {
@@ -993,7 +1058,7 @@ function paintGalleryWork(items) {
     sourceBlock.append(link);
   });
   else sourceBlock.append(element('p', item.projectUrl || '—'));
-  metadata.append(sourceBlock); details.append(metadata);
+  metadata.append(sourceBlock); details.append(metadata, galleryHeart(item));
   layout.append(art, details); root.replaceChildren(nav, layout);
 
   async function showWorkImage(slot) {
@@ -1315,7 +1380,7 @@ async function renderGallery() {
           links.append(link);
         });
       } else if (item.projectUrl) links.append(element('span', `${copy('Data / source:', 'データ・出典:')} ${item.projectUrl}`, 'gallery-source-note'));
-      footer.append(links);
+      footer.append(links, galleryHeart(item));
       card.append(footer);
       root.append(card);
       if (index < 3) showImage(placeholder, item, true);

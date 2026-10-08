@@ -1,12 +1,13 @@
 {
   "name": "dataviz-gallery-likes",
   "main": "worker.mjs",
-  "compatibility_date": "2026-10-09",
+  "compatibility_date": "2026-10-01",
   "vars": { "ALLOWED_ORIGINS": "https://yohman.github.io,http://127.0.0.1:8766,http://localhost:8766" },
   "d1_databases": [{
     "binding": "DB",
     "database_name": "dataviz-gallery-likes",
-    "database_id": "REPLACE_WITH_CREATED_D1_DATABASE_ID",
+    "database_id": "e8d7f273-c2eb-450a-a8ae-4f93c55eb429",
     "migrations_dir": "migrations"
-  }]
+  }],
+  "ratelimits": [{ "name": "RATE_LIMITER", "namespace_id": "26020901", "simple": { "limit": 120, "period": 60 } }]
 }

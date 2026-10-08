@@ -12,6 +12,7 @@ export default {
     if (!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(browser || '')) return reply({ error: 'Invalid browser ID' }, 400);
     if (new URL(request.url).pathname !== '/likes') return reply({ error: 'Not found' }, 404);
     try {
+      if (env.RATE_LIMITER && !(await env.RATE_LIMITER.limit({ key: browser })).success) return reply({ error: 'Please wait before retrying' }, 429);
       if (request.method === 'GET') {
         const result = await env.DB.prepare('SELECT submission_id AS id, COUNT(*) AS count, MAX(browser_id = ?) AS liked FROM likes GROUP BY submission_id').bind(browser).all();
         return reply({ items: result.results.map(row => ({ ...row, liked: Boolean(row.liked) })) });

@@ -1,6 +1,8 @@
 # Cloudflare gallery hearts
 
-Backend foundation only; not connected to the public gallery yet.
+Deployed endpoint: https://dataviz-gallery-likes.ykawano.workers.dev/likes
+Connected to gallery cards and individual work pages. Likes load independently
+of cards and images, with bounded requests and optimistic updates.
 From this directory, using the intended Cloudflare account:
 
 ```sh
@@ -26,6 +28,6 @@ Keep existing submission IDs stable and keep account secrets off the frontend.
 
 This is browser-level identity, not authenticated voting. Clearing storage or
 using another device permits another like. CORS is not authentication.
-Before public activation: configure Worker rate limiting, test local Worker/D1,
-wire the frontend, and verify on a second computer.
-Deployment needs a Cloudflare account and an actual D1 database ID.
+Worker rate limiting permits 120 requests per browser identity per minute.
+Duplicate like and unlike operations have been tested on the deployed API.
+Still verify browser interactions and behavior on a second computer.
