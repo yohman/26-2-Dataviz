@@ -263,7 +263,8 @@ function renderAgenda() {
   const root = document.querySelector('[data-agenda]');
   if (!root) return;
   const today = todayInTokyo();
-  const previewAll = new URLSearchParams(location.search).get('preview') === 'all';
+  const localPreview = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+  const previewAll = localPreview || new URLSearchParams(location.search).get('preview') === 'all';
   const focusedWeek = weeks.find(week => week.course_date >= today) || weeks.at(-1);
   const jumpLinks = weeks.map(week => {
     const past = week.course_date < today;
@@ -314,7 +315,7 @@ function renderAgenda() {
     const submission = configuredFormUrl()
       ? `<div class="assignment-submit" data-submission-deadline="${deadlineMs}" data-submit-url="${escapeHtml(formUrl(week.week, week.challenge_ja || week.challenge))}"><a class="button" target="_blank" rel="noopener" href="${escapeHtml(formUrl(week.week, week.challenge_ja || week.challenge))}">${copy('Submit homework', '宿題を提出する')}</a><p class="assignment-deadline"><strong>${copy('DEADLINE', '締切')}</strong> ${escapeHtml(deadline)}</p><p class="assignment-resubmit">${copy('Made a mistake or want to submit a better version? Submit again before the deadline. Your newest submission will be used.', '間違えた場合や、よりよい作品を提出したい場合は、締切まで何度でも再提出できます。最新の提出を使用します。')}</p></div>`
       : `<div class="assignment-submit"><p class="assignment-note">${copy('The submission link will appear here.', '提出リンクはここに表示されます。')}</p><p class="assignment-deadline"><strong>${copy('DEADLINE', '締切')}</strong> ${escapeHtml(deadline)}</p></div>`;
-    html += `<details class="week" id="week-${week.week}"${week.week === focusedWeek?.week ? ' open' : ''}>
+    html += `<details class="week" id="week-${week.week}"${localPreview || week.week === focusedWeek?.week ? ' open' : ''}>
       <summary class="week-summary">${weekIndex}${weekMain}<span class="week-toggle"><span class="week-toggle-closed">${copy('Open week', '週の内容を見る')}</span><span class="week-toggle-open">${copy('Close week', '週の内容を閉じる')}</span><b aria-hidden="true">↓</b></span></summary>
       <div class="week-body">
         <section class="week-lecture"><div class="week-section-heading"><div><p class="week-section-label">${copy('LECTURE', '講義')}</p><h3>${copy('What to expect', '今週の講義')}</h3></div></div>
