@@ -24,7 +24,6 @@
     <a class="viewer-back" data-viewer-back href="agenda.html">← <span data-copy="back">Back to the Agenda</span></a>
     <header class="viewer-heading">
       <div><p class="eyebrow" data-copy="eyebrow">LECTURE SLIDE PREVIEW</p><h1 data-viewer-title>Lecture slides</h1></div>
-      <a class="viewer-download" data-download href="#" download><span data-copy="download">Download PDF</span> ↓</a>
     </header>
     <section class="pdf-viewer" aria-label="Lecture slide preview">
       <div class="pdf-toolbar">
@@ -60,7 +59,7 @@
     const returnTo = /^(?:agenda\.html(?:\?preview=all)?#week-\d+|resources\.html)$/.test(requestedReturn) ? requestedReturn : 'agenda.html';
     const strings = {
       back: ['Back to the Agenda', 'AGENDAに戻る'], eyebrow: ['LECTURE SLIDE PREVIEW', '講義スライドのプレビュー'],
-      download: ['Download PDF', 'PDFをダウンロード'], previous: ['Previous', '前へ'], next: ['Next', '次へ'],
+      previous: ['Previous', '前へ'], next: ['Next', '次へ'],
       page: ['Page', 'ページ'], fullscreen: ['Full screen', '全画面'], exitFullscreen: ['Exit full screen', '全画面を終了'],
       zoomIn: ['Zoom in', '拡大'], zoomOut: ['Zoom out', '縮小'],
       loading: ['Loading slides…', 'スライドを読み込んでいます…'],
@@ -92,7 +91,6 @@
     document.title = `${fullTitle} · Preview`;
     document.querySelector('[data-viewer-title]').textContent = fullTitle;
     document.querySelector('[data-viewer-back]').href = returnTo;
-    document.querySelector('[data-download]').href = file ? encodeURI(file) : '#';
 
     const stage = document.querySelector('[data-pdf-stage]');
     const pdfPage = document.querySelector('[data-pdf-page]');
@@ -218,7 +216,7 @@
       try {
         if (!file || !window.pdfjsLib) throw new Error('PDF preview unavailable');
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        const response = await fetch(`${encodeURI(file)}?v=week3-trim-20261008`);
+        const response = await fetch(`${encodeURI(file)}?v=week3-corrected-20261008`);
         if (!response.ok) throw new Error('PDF unavailable');
         pdf = await window.pdfjsLib.getDocument({ data: await response.arrayBuffer() }).promise;
         await renderPage(activePage);

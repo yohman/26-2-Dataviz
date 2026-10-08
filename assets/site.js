@@ -104,6 +104,7 @@ function materialLinks(materials, context = {}) {
     if (!href) return '';
     const external = /^https?:\/\//i.test(href);
     const extension = href.split(/[?#]/)[0].split('.').pop().toLowerCase();
+    const lecture = material.type === 'slides' || /^lectures\/.+\.pdf$/i.test(href);
     const webpage = external || extension === 'html';
     const fileType = webpage ? 'LINK' : extension.toUpperCase();
     const params = new URLSearchParams({ file: href, title: material.label });
@@ -113,7 +114,7 @@ function materialLinks(materials, context = {}) {
     const previewHref = !external && previewPage ? `${previewPage}?${params}` : href;
     const label = copy(material.label, window.COURSE_TRANSLATIONS?.ja?.[material.label] || material.label);
     const openLabel = external || !previewPage ? copy('Open', '開く') : copy('Preview', 'プレビュー');
-    return `<div class="course-resource" title="${escapeHtml(label)}"><strong class="course-resource-name">${escapeHtml(label)}</strong><span class="course-resource-type">${escapeHtml(fileType)}</span><div class="course-resource-actions"><a class="course-resource-preview" href="${escapeHtml(previewHref)}" aria-label="${escapeHtml(`${label} · ${openLabel}`)}"${external ? ' target="_blank" rel="noopener"' : ''}>${openLabel}${external ? ' ↗' : ''}</a>${webpage ? '' : `<a class="course-resource-download" href="${escapeHtml(href)}" download aria-label="${escapeHtml(label)} · ${copy('Download', 'ダウンロード')}">${copy('Download', 'ダウンロード')}</a>`}</div></div>`;
+    return `<div class="course-resource" title="${escapeHtml(label)}"><strong class="course-resource-name">${escapeHtml(label)}</strong><span class="course-resource-type">${escapeHtml(fileType)}</span><div class="course-resource-actions"><a class="course-resource-preview" href="${escapeHtml(previewHref)}" aria-label="${escapeHtml(`${label} · ${openLabel}`)}"${external ? ' target="_blank" rel="noopener"' : ''}>${openLabel}${external ? ' ↗' : ''}</a>${webpage || lecture ? '' : `<a class="course-resource-download" href="${escapeHtml(href)}" download aria-label="${escapeHtml(label)} · ${copy('Download', 'ダウンロード')}">${copy('Download', 'ダウンロード')}</a>`}</div></div>`;
   }).join('');
 }
 
