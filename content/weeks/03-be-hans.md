@@ -51,6 +51,25 @@ steps_ja:
 - グループでの話し合い・10分：発見を共有し、うまくいった点・いかなかった点を話し合い、グラフを修正します。
 - 修正版から一つを選んで発表します。発見したことを一つと、グループでの話し合いを受けて変更した点を一つ説明しましょう。
 
+walkthrough:
+- Put GDP on Columns and Life Expectancy on Rows. On each pill, choose Measure > Average so they show AVG(GDP) and AVG(Life Expectancy). Select Circle on the Marks card.
+- Drag Country to Detail on the Marks card. The single circle splits into countries. They still summarize all years until you complete the next step.
+- If Year is a measure, right-click it in the data pane and choose Convert to Dimension. Drag Year to Pages and make it Discrete (blue), not SUM(Year). Select 2000 in the page control to show one country per circle for that year.
+- Drag region to Color on the Marks card.
+- Drag Population to Size. SUM(Population) works when each mark is one country-year. Adjust Size so large bubbles do not obscure everything. Try 60–70% opacity under Color to reveal overlaps.
+- Right-click the horizontal GDP axis, choose Edit Axis, and enable Logarithmic. Keep the Life Expectancy axis linear.
+- Use Play on the Year page control to move through time, starting slowly. If the axes change between years, set fixed ranges covering the years you want to show. Remove any single-year filter before animating.
+- Check the final setup: Columns = AVG(GDP); Rows = AVG(Life Expectancy); Marks = Circle; Detail = Country; Color = region; Size = SUM(Population); Pages = discrete Year. Check the source definition of GDP before labeling it GDP per capita or adding dollar units.
+walkthrough_ja:
+- GDPを「列」、Life Expectancyを「行」に置きます。各ピルのメニューで「メジャー」から「平均」を選び、AVG(GDP)とAVG(Life Expectancy)にします。「マーク」の種類は「円」を選びます。
+- Countryを「マーク」の「詳細」にドラッグします。一つの円が国ごとの円に分かれます。ただし、この段階ではまだ全ての年をまとめているため、次の手順に進みましょう。
+- Yearがメジャーの場合は、データペインで右クリックし「ディメンションに変換」を選びます。Yearを「ページ」に置き、「不連続」（青）にします。SUM(Year)にはしません。ページの操作欄で2000年を選ぶと、その年の各国が一つずつの円になります。
+- regionを「マーク」の「色」にドラッグします。
+- Populationを「サイズ」にドラッグします。一つのマークが一つの国・年ならSUM(Population)で構いません。大きな円が他の国を隠さないようサイズを調整し、「色」の不透明度を60〜70%程度にすると重なりが見やすくなります。
+- 横軸のGDPを右クリックし、「軸の編集」で「対数」を有効にします。縦軸のLife Expectancyは通常の線形の軸のままにします。
+- Yearのページ操作欄で再生し、年ごとの変化を見ます。まずは遅い速度で試しましょう。年ごとに軸が動く場合は、表示したい期間の値を含む固定範囲に設定します。一年だけのフィルターを設定している場合は、再生前に外してください。
+- 最終確認：列＝AVG(GDP)、行＝AVG(Life Expectancy)、マーク＝円、詳細＝Country、色＝region、サイズ＝SUM(Population)、ページ＝不連続のYear。GDPの出典と定義を確認してから「一人当たりGDP」や通貨単位を軸に記載しましょう。
+
 ## Mori's Corner
 
 title:

@@ -49,12 +49,12 @@ function parseInClassActivities(source) {
   return block.split(/^###\s+Activity\s+/gmi).slice(1).map(chunk => {
     const lines = chunk.split('\n');
     const number = Number(lines.shift()?.trim());
-    const activity = { number, steps: [], steps_ja: [] };
+    const activity = { number, steps: [], steps_ja: [], walkthrough: [], walkthrough_ja: [] };
     let list = '';
     lines.forEach(line => {
       const field = line.match(/^(title|title_ja|text|text_ja|link|link_label|link_label_ja|results_link|results_label|results_label_ja):\s*(.*)$/);
       if (field) { activity[field[1]] = field[2].trim(); list = ''; return; }
-      const listStart = line.match(/^(steps|steps_ja):\s*$/);
+      const listStart = line.match(/^(steps|steps_ja|walkthrough|walkthrough_ja):\s*$/);
       if (listStart) { list = listStart[1]; return; }
       const item = line.match(/^\s*-\s+(.+)$/);
       if (item && list) activity[list].push(item[1].trim());
@@ -163,17 +163,24 @@ function activityTabs(week, sharedMaterials = '') {
     const resultsHref = safeUrl(activity.results_link) || safeResourceHref(activity.results_link);
     const resultsLink = resultsHref ? materialLinks([{ href: resultsHref, label: copy(activity.results_label, activity.results_label_ja) }], { week: week.week }) : '';
     const steps = copy(activity.steps, activity.steps_ja).map(step => `<li>${escapeHtml(step)}</li>`).join('');
+    const walkthrough = copy(activity.walkthrough || [], activity.walkthrough_ja || []);
+    const help = walkthrough.length ? `<details class="activity-walkthrough" data-confirm-walkthrough><summary>${copy('Show the step-by-step Tableau guide', 'Tableauの手順を表示する')}</summary><ol class="activity-steps">${walkthrough.map(step => `<li>${escapeHtml(step)}</li>`).join('')}</ol></details>` : '';
     return `<section class="activity-panel" role="tabpanel" id="week-${week.week}-activity-${activity.number}" aria-labelledby="week-${week.week}-activity-${activity.number}-tab"${index === 0 ? '' : ' hidden'}>
       <p class="assignment-label">${copy('IN CLASS', '授業内')} · ${copy(`ACTIVITY ${activity.number}`, `アクティビティ ${activity.number}`)}</p>
       <h4>${escapeHtml(copy(activity.title, activity.title_ja))}</h4>
       <p>${escapeHtml(copy(activity.text, activity.text_ja))}</p>
-      <ol class="activity-steps">${steps}</ol><div class="activity-actions">${link}${resultsLink}</div>
+      <ol class="activity-steps">${steps}</ol>${help}<div class="activity-actions">${link}${resultsLink}</div>
     </section>`;
   }).join('');
   return `<article class="assignment-card assignment-card--in-class activity-tabs-card" data-activity-tabs><div class="activity-tab-list" role="tablist" aria-label="${copy('In-class activities', '授業内アクティビティ')}">${tabs}</div>${panels}${sharedMaterials}</article>`;
 }
 
 function setupActivityTabs(root) {
+  root.querySelectorAll('[data-confirm-walkthrough] > summary').forEach(summary => {
+    summary.addEventListener('click', event => {
+      if (!summary.parentElement.open && !window.confirm(copy('Are you sure you want to open the step-by-step guide? Try exploring on your own first.', '手順を表示してもよいですか？まずは自分で試してみましょう。'))) event.preventDefault();
+    });
+  });
   root.querySelectorAll('[data-activity-tabs]').forEach(component => {
     const tabs = [...component.querySelectorAll('[role="tab"]')];
     const select = selected => {
