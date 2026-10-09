@@ -766,14 +766,17 @@ function galleryFilterItems(items, week, tool, chart) {
     (!form || matchesGalleryForm(item, form)));
 }
 
-function galleryVisibleItems(items, week, tool, chart) {
-  return galleryFilterItems(items, week, tool, chart);
+function galleryVisibleItems(items, week, tool, chart, sort = '') {
+  const shown = galleryFilterItems(items, week, tool, chart);
+  return sort === 'likes' ? shown.sort((a, b) =>
+    (galleryLikesState.get(galleryItemKey(b))?.count || 0) - (galleryLikesState.get(galleryItemKey(a))?.count || 0)) : shown;
 }
 
-function galleryPageUrl(item, week, tool, chart) {
+function galleryPageUrl(item, week, tool, chart, sort = '') {
   const params = new URLSearchParams({ id: galleryItemKey(item), week: String(week) });
   if (tool) params.set('tool', tool);
   if (chart) params.set('chart', chart);
+  if (sort === 'likes') params.set('sort', sort);
   return `gallery-work.html?${params}`;
 }
 
@@ -990,11 +993,13 @@ function paintGalleryWork(items) {
   const week = params.get('week') === 'all' ? 'all' : /^\d+$/.test(params.get('week') || '') ? params.get('week') : String(item.week);
   const tool = galleryTools.some(entry => entry.name === params.get('tool')) ? params.get('tool') : '';
   const chart = galleryForms.some(entry => entry.id === params.get('chart')) ? params.get('chart') : '';
-  const shown = galleryVisibleItems(items, week, tool, chart);
+  const sort = params.get('sort') === 'likes' ? 'likes' : '';
+  const shown = galleryVisibleItems(items, week, tool, chart, sort);
   const index = shown.findIndex(entry => galleryItemKey(entry) === id);
   const backParams = new URLSearchParams({ week });
   if (tool) backParams.set('tool', tool);
   if (chart) backParams.set('chart', chart);
+  if (sort) backParams.set('sort', sort);
   const nav = element('nav', '', 'gallery-work-navigation');
   nav.setAttribute('aria-label', copy('Work navigation', '作品の移動'));
   const back = element('a', copy('← Back to gallery', '← ギャラリーに戻る'), 'gallery-work-back');
@@ -1005,7 +1010,7 @@ function paintGalleryWork(items) {
   [['prev', index - 1, copy('← Previous', '← 前の作品')], ['next', index + 1, copy('Next →', '次の作品 →')]].forEach(([direction, target, label]) => {
     const available = index >= 0 && target >= 0 && target < shown.length;
     const control = element(available ? 'a' : 'span', label, `gallery-work-${direction}${available ? '' : ' is-disabled'}`);
-    if (available) control.href = galleryPageUrl(shown[target], week, tool, chart);
+    if (available) control.href = galleryPageUrl(shown[target], week, tool, chart, sort);
     sequence.append(control);
   });
   nav.append(sequence);
@@ -1111,6 +1116,12 @@ async function renderGalleryWork() {
   if (!root) return;
   galleryWorkItems ||= recentGalleryItems();
   if (galleryWorkItems) paintGalleryWork(galleryWorkItems);
+  if (new URLSearchParams(location.search).get('sort') === 'likes') {
+    galleryLikesRequest().then(data => {
+      data.items.forEach(state => galleryLikesState.set(state.id, state));
+      if (galleryWorkItems) paintGalleryWork(galleryWorkItems);
+    }).catch(error => console.warn('Gallery heart ordering:', error));
+  }
   try {
     const response = await fetch('data/gallery-public.json?v=gallery-performance-20261002', { cache: 'no-cache' });
     if (!response.ok) throw new Error(`Gallery snapshot HTTP ${response.status}`);
@@ -1256,6 +1267,33 @@ async function renderGallery() {
   wrapper.append(weekSelect); controls.append(wrapper);
   const params = new URLSearchParams(location.search);
   const requestedWeek = params.get('week');
+  const sortWrapper = element('label', copy('Sort', '並び順'), 'gallery-filter');
+  const sortSelect = document.createElement('select'); sortSelect.name = 'sort';
+  sortSelect.append(option('', copy('Default order', '標準')), option('likes', copy('Most hearts', 'いいねが多い順')));
+  sortSelect.value = params.get('sort') === 'likes' ? 'likes' : '';
+  sortWrapper.append(sortSelect); controls.append(sortWrapper);
+  const sortStatus = element('span', '', 'gallery-sort-status');
+  sortStatus.setAttribute('role', 'status'); controls.append(sortStatus);
+  let sortRequest = 0;
+  async function sortByHearts() {
+    const request = ++sortRequest;
+    if (!sortSelect.value) { sortStatus.textContent = ''; paint(); return; }
+    sortStatus.textContent = copy('Loading heart counts…', 'いいね数を読み込んでいます…');
+    try {
+      const data = await galleryLikesRequest();
+      if (request !== sortRequest) return;
+      data.items.forEach(state => galleryLikesState.set(state.id, state));
+      sortStatus.textContent = ''; paint();
+    } catch {
+      if (request === sortRequest) sortStatus.textContent = copy('Could not load counts. Select again to retry.', 'いいね数を読み込めません。再選択してお試しください。');
+    }
+  }
+  sortSelect.addEventListener('change', () => {
+    const url = new URL(location.href);
+    if (sortSelect.value) url.searchParams.set('sort', sortSelect.value);
+    else url.searchParams.delete('sort');
+    history.replaceState(null, '', url); sortByHearts();
+  });
   let selectedTool = params.get('tool') || '';
   if (!galleryTools.some(tool => tool.name === selectedTool)) selectedTool = '';
   let selectedForm = params.get('chart') || '';
@@ -1292,7 +1330,7 @@ async function renderGallery() {
   function paint() {
     imageObserver?.disconnect();
     const weekItems = items.filter(item => weekSelect.value === 'all' || String(item.week) === weekSelect.value);
-    const shown = galleryVisibleItems(items, weekSelect.value, selectedTool, selectedForm);
+    const shown = galleryVisibleItems(items, weekSelect.value, selectedTool, selectedForm, sortSelect.value);
     root.replaceChildren();
     renderGalleryInsights(weekItems, weekSelect.value, selectedTool, selectedForm, shown.length, chooseTool, chooseForm);
     status.hidden = shown.length > 0;
@@ -1324,7 +1362,7 @@ async function renderGallery() {
         }
         if (!placeholder.isConnected) return;
         const link = element('a', '', 'gallery-image-button');
-        link.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm);
+        link.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm, sortSelect.value);
         link.setAttribute('aria-label', copy(`View ${item.title || 'student work'}`, `${item.title || '学生作品'}を詳しく見る`));
         link.append(image);
         const stage = element('div', '', 'gallery-image-stage');
@@ -1371,7 +1409,7 @@ async function renderGallery() {
       weekLink.href = `agenda.html#week-${item.week}`; card.append(weekLink);
       const heading = element('h2');
       const titleLink = element('a', item.title || copy('Untitled work', '無題の作品'), 'gallery-card-title-link');
-      titleLink.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm);
+      titleLink.href = galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm, sortSelect.value);
       heading.append(titleLink); card.append(heading);
       card.append(element('p', item.studentName || '', 'gallery-student'));
       const description = element('div', '', 'gallery-description'); appendGalleryText(description, item.description); card.append(description);
@@ -1415,6 +1453,7 @@ async function renderGallery() {
     paint();
   });
   paint();
+  if (sortSelect.value) sortByHearts();
   // The embedded snapshot makes the gallery immediate. The public feed adds
   // submissions and revisions on every visit without rebuilding GitHub Pages.
   loadGalleryItems().then(latest => {

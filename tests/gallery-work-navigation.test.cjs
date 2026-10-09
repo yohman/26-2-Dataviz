@@ -37,6 +37,23 @@ test('gallery work links retain the active week, tool, and chart filters', () =>
   assert.equal(url.searchParams.get('chart'), 'bar');
 });
 
+test('heart sorting retains filters and stable ordering for tied counts', () => {
+  const ids = vm.runInContext(`(() => {
+    galleryLikesState.set('2-1', {count:2});
+    galleryLikesState.set('2-2', {count:5});
+    galleryLikesState.set('2-3', {count:2});
+    return galleryVisibleItems([
+      {week:2,imageIndex:1,tools:'Excel'},
+      {week:2,imageIndex:2,tools:'Excel'},
+      {week:2,imageIndex:3,tools:'Excel'},
+      {week:1,imageIndex:4,tools:'Excel'}
+    ], '2', 'Excel', '', 'likes').map(galleryItemKey);
+  })()`, context);
+  assert.deepEqual([...ids], ['2-2', '2-1', '2-3']);
+  const href = vm.runInContext("galleryPageUrl({week:2,imageIndex:2}, '2', 'Excel', '', 'likes')", context);
+  assert.equal(new URL(href, 'https://test/').searchParams.get('sort'), 'likes');
+});
+
 test('previous and next can use the same filtered item sequence as the gallery', () => {
   const selected = vm.runInContext(`galleryFilterItems([
     { week: 1, imageIndex: 1, tools: 'Excel', description: '棒グラフ' },
