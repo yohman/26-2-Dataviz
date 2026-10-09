@@ -10,3 +10,11 @@
 .tableau-guide li p{margin:.3rem 0 0;font-size:.88rem}
 .tableau-guide code{display:inline;padding:.12rem .4rem;border-radius:4px;background:#e9dfcc;color:#744826;font:600 .8rem var(--sans);box-decoration-break:clone;-webkit-box-decoration-break:clone}
 @media(max-width:600px){.tableau-guide{padding:1rem}}
+.tableau-guide-confirm{width:min(460px,calc(100vw - 32px));padding:2rem}
+.tableau-guide-confirm h2{margin:.5rem 0 1rem;font:600 1.65rem/1.3 var(--serif)}
+.tableau-guide-confirm p{font-size:.9rem;line-height:1.65;color:var(--muted)}
+.tableau-guide-confirm .tableau-guide-eyebrow{margin:0;color:var(--playfair-crimson);font:700 .75rem var(--sans)}
+.tableau-guide-confirm-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:.6rem;margin-top:1.7rem}
+.tableau-guide-confirm-actions button{padding:.7rem .9rem;border:1px solid var(--line);background:transparent;color:var(--ink);font:600 .8rem var(--sans);cursor:pointer}
+.tableau-guide-confirm-actions [data-guide-confirm]{background:var(--playfair-crimson);border-color:var(--playfair-crimson);color:white}
+.tableau-guide-confirm-actions button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}

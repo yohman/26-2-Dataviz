@@ -179,8 +179,17 @@ function activityTabs(week, sharedMaterials = '') {
 function setupActivityTabs(root) {
   root.querySelectorAll('[data-open-guide]').forEach(button => {
     const dialog = root.querySelector(`#${button.dataset.openGuide}`);
+    const confirmation = element('dialog', '', 'tableau-guide tableau-guide-confirm');
+    confirmation.setAttribute('aria-labelledby', `${dialog.id}-confirm-title`);
+    confirmation.innerHTML = `<p class="tableau-guide-eyebrow">${copy('A little help', 'ヒントが必要？')}</p><h2 id="${dialog.id}-confirm-title">${copy('Ready to open the guide?', '操作ガイドを開きますか？')}</h2><p>${copy('Try exploring first. If you get stuck, the guide will help you take the next step.', 'まずは自分で試してみましょう。迷ったら、ガイドで次の一歩を確認できます。')}</p><div class="tableau-guide-confirm-actions"><button type="button" data-guide-cancel autofocus>${copy('Keep exploring', 'もう少し試す')}</button><button type="button" data-guide-confirm>${copy('Open guide', 'ガイドを開く')} →</button></div>`;
+    root.append(confirmation);
+    confirmation.querySelector('[data-guide-cancel]').addEventListener('click', () => confirmation.close());
+    confirmation.querySelector('[data-guide-confirm]').addEventListener('click', () => {
+      confirmation.close();
+      dialog.showModal();
+    });
     button.addEventListener('click', () => {
-      if (window.confirm(copy('Open the guide? Try exploring on your own first.', '操作ガイドを開きますか？まずは自分で試してみましょう。'))) dialog.showModal();
+      confirmation.showModal();
     });
     dialog.querySelector('[data-close-guide]').addEventListener('click', () => dialog.close());
     dialog.addEventListener('click', event => {
