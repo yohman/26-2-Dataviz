@@ -54,6 +54,18 @@ test('heart sorting retains filters and stable ordering for tied counts', () => 
   assert.equal(new URL(href, 'https://test/').searchParams.get('sort'), 'likes');
 });
 
+test('my likes sort before higher public counts and preserve their original order', () => {
+  const ids = vm.runInContext(`(() => {
+    galleryLikesState.set('3-1', {count:99,liked:false});
+    galleryLikesState.set('3-2', {count:1,liked:true});
+    galleryLikesState.set('3-3', {count:2,liked:true});
+    return galleryVisibleItems([1,2,3].map(imageIndex=>({week:3,imageIndex})), '3', '', '', 'mine').map(galleryItemKey);
+  })()`, context);
+  assert.deepEqual([...ids], ['3-2', '3-3', '3-1']);
+  const href = vm.runInContext("galleryPageUrl({week:3,imageIndex:2}, '3', '', '', 'mine')", context);
+  assert.equal(new URL(href, 'https://test/').searchParams.get('sort'), 'mine');
+});
+
 test('previous and next can use the same filtered item sequence as the gallery', () => {
   const selected = vm.runInContext(`galleryFilterItems([
     { week: 1, imageIndex: 1, tools: 'Excel', description: '棒グラフ' },

@@ -5,5 +5,6 @@
 .gallery-heart svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8}
 .gallery-heart.is-liked{color:var(--playfair-crimson)}
 .gallery-heart.is-liked svg{fill:currentColor}
+.gallery-heart.is-liked-by-others:not(.is-liked) svg{fill:color-mix(in srgb,var(--playfair-crimson) 14%,transparent)}
 .gallery-heart:disabled{cursor:wait}
 .gallery-heart.is-loading span{width:14px;height:14px;border:2px solid #d9cbb9;border-top-color:var(--playfair-crimson);border-radius:50%;animation:gallery-work-spin .8s linear infinite}

@@ -702,6 +702,8 @@ function galleryHeart(item) {
     button.disabled = !state;
     button.classList.toggle('is-loading', !state);
     button.classList.toggle('is-liked', Boolean(state?.liked));
+    button.classList.toggle('is-liked-by-others', Boolean(state && state.count > (state.liked ? 1 : 0)));
+    button.title = state ? copy(`You: ${state.liked ? 1 : 0} · Others: ${Math.max(0, state.count - (state.liked ? 1 : 0))}`, `あなた: ${state.liked ? 1 : 0} · ほかの人: ${Math.max(0, state.count - (state.liked ? 1 : 0))}`) : '';
     button.setAttribute('aria-pressed', String(Boolean(state?.liked)));
     button.setAttribute('aria-label', copy(state?.liked ? 'Unlike' : 'Like', state?.liked ? 'いいねを取り消す' : 'いいね'));
     button.querySelector('span').textContent = state ? String(state.count) : '';
@@ -723,7 +725,6 @@ function galleryHeart(item) {
       }).catch(error => { galleryLikesPromise = null; throw error; });
       await galleryLikesPromise;
       paint(galleryLikesState.get(id) || { count: 0, liked: false });
-      button.title = '';
     } catch {
       button.disabled = false; button.classList.remove('is-loading');
       button.querySelector('span').textContent = '↻';
@@ -731,7 +732,7 @@ function galleryHeart(item) {
     }
   };
   button.addEventListener('click', async () => {
-    if (button.title) { await load(); return; }
+    if (button.querySelector('span').textContent === '↻') { await load(); return; }
     const old = galleryLikesState.get(id) || { count: 0, liked: false };
     const liked = !old.liked;
     sync({ count: old.count + (liked ? 1 : -1), liked });
@@ -782,6 +783,8 @@ function galleryFilterItems(items, week, tool, chart) {
 
 function galleryVisibleItems(items, week, tool, chart, sort = '') {
   const shown = galleryFilterItems(items, week, tool, chart);
+  if (sort === 'mine') return shown.sort((a, b) =>
+    Number(Boolean(galleryLikesState.get(galleryItemKey(b))?.liked)) - Number(Boolean(galleryLikesState.get(galleryItemKey(a))?.liked)));
   return sort === 'likes' ? shown.sort((a, b) =>
     (galleryLikesState.get(galleryItemKey(b))?.count || 0) - (galleryLikesState.get(galleryItemKey(a))?.count || 0)) : shown;
 }
@@ -790,7 +793,7 @@ function galleryPageUrl(item, week, tool, chart, sort = '') {
   const params = new URLSearchParams({ id: galleryItemKey(item), week: String(week) });
   if (tool) params.set('tool', tool);
   if (chart) params.set('chart', chart);
-  if (sort === 'likes') params.set('sort', sort);
+  if (['likes', 'mine'].includes(sort)) params.set('sort', sort);
   return `gallery-work.html?${params}`;
 }
 
@@ -1007,7 +1010,7 @@ function paintGalleryWork(items) {
   const week = params.get('week') === 'all' ? 'all' : /^\d+$/.test(params.get('week') || '') ? params.get('week') : String(item.week);
   const tool = galleryTools.some(entry => entry.name === params.get('tool')) ? params.get('tool') : '';
   const chart = galleryForms.some(entry => entry.id === params.get('chart')) ? params.get('chart') : '';
-  const sort = params.get('sort') === 'likes' ? 'likes' : '';
+  const sort = ['likes', 'mine'].includes(params.get('sort')) ? params.get('sort') : '';
   const shown = galleryVisibleItems(items, week, tool, chart, sort);
   const index = shown.findIndex(entry => galleryItemKey(entry) === id);
   const backParams = new URLSearchParams({ week });
@@ -1130,7 +1133,7 @@ async function renderGalleryWork() {
   if (!root) return;
   galleryWorkItems ||= recentGalleryItems();
   if (galleryWorkItems) paintGalleryWork(galleryWorkItems);
-  if (new URLSearchParams(location.search).get('sort') === 'likes') {
+  if (['likes', 'mine'].includes(new URLSearchParams(location.search).get('sort'))) {
     galleryLikesRequest().then(data => {
       data.items.forEach(state => galleryLikesState.set(state.id, state));
       if (galleryWorkItems) paintGalleryWork(galleryWorkItems);
@@ -1283,8 +1286,8 @@ async function renderGallery() {
   const requestedWeek = params.get('week');
   const sortWrapper = element('label', copy('Sort', '並び順'), 'gallery-filter');
   const sortSelect = document.createElement('select'); sortSelect.name = 'sort';
-  sortSelect.append(option('', copy('Default order', '標準')), option('likes', copy('Most hearts', 'いいねが多い順')));
-  sortSelect.value = params.get('sort') === 'likes' ? 'likes' : '';
+  sortSelect.append(option('', copy('Default order', '標準')), option('likes', copy('Most hearts', 'いいねが多い順')), option('mine', copy('My likes first', '自分のいいねを先に')));
+  sortSelect.value = ['likes', 'mine'].includes(params.get('sort')) ? params.get('sort') : '';
   sortWrapper.append(sortSelect); controls.append(sortWrapper);
   const sortStatus = element('span', '', 'gallery-sort-status');
   sortStatus.setAttribute('role', 'status'); controls.append(sortStatus);
