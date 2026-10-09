@@ -52,23 +52,21 @@ steps_ja:
 - 修正版から一つを選んで発表します。発見したことを一つと、グループでの話し合いを受けて変更した点を一つ説明しましょう。
 
 walkthrough:
-- Put GDP on Columns and Life Expectancy on Rows. On each pill, choose Measure > Average so they show AVG(GDP) and AVG(Life Expectancy). Select Circle on the Marks card.
-- Drag Country to Detail on the Marks card. The single circle splits into countries. They still summarize all years until you complete the next step.
-- If Year is a measure, right-click it in the data pane and choose Convert to Dimension. Drag Year to Pages and make it Discrete (blue), not SUM(Year). Select 2000 in the page control to show one country per circle for that year.
-- Drag region to Color on the Marks card.
-- Drag Population to Size. SUM(Population) works when each mark is one country-year. Adjust Size so large bubbles do not obscure everything. Try 60–70% opacity under Color to reveal overlaps.
-- Right-click the horizontal GDP axis, choose Edit Axis, and enable Logarithmic. Keep the Life Expectancy axis linear.
-- Use Play on the Year page control to move through time, starting slowly. If the axes change between years, set fixed ranges covering the years you want to show. Remove any single-year filter before animating.
-- Check the final setup: Columns = AVG(GDP); Rows = AVG(Life Expectancy); Marks = Circle; Detail = Country; Color = region; Size = SUM(Population); Pages = discrete Year. Check the source definition of GDP before labeling it GDP per capita or adding dollar units.
+- Set the axes::Drag `GDP` to `Columns` and `Life Expectancy` to `Rows`. Set both to `Average` using each pill's menu. Choose `Circle` on the Marks card.
+- Split the single circle::Drag `Country` to `Detail`. Each country gets its own circle, but years are still combined.
+- Choose one year::Convert `Year` to a dimension if needed. Drag it to `Pages` and select `Discrete` (blue). Choose `2000`. Each circle now represents one country in one year.
+- Add color and size::Drag `region` to `Color` and `Population` to `Size`. Keep `SUM(Population)`. Adjust bubble size and try 60–70% opacity to see overlaps.
+- Adjust the axes::Right-click the GDP axis: `Edit Axis` > `Logarithmic`. Keep life expectancy linear. If circles crowd the top, uncheck `Include zero` on its axis, or try a fixed range of 20–90 years.
+- Animate::Press `Play` on the Year control. Start slowly and use fixed axis ranges for consistent comparisons. Remove any single-year filter first.
+- Check the meaning::Confirm the source definition of `GDP` before adding per-capita or currency labels.
 walkthrough_ja:
-- GDPを「列」、Life Expectancyを「行」に置きます。各ピルのメニューで「メジャー」から「平均」を選び、AVG(GDP)とAVG(Life Expectancy)にします。「マーク」の種類は「円」を選びます。
-- Countryを「マーク」の「詳細」にドラッグします。一つの円が国ごとの円に分かれます。ただし、この段階ではまだ全ての年をまとめているため、次の手順に進みましょう。
-- Yearがメジャーの場合は、データペインで右クリックし「ディメンションに変換」を選びます。Yearを「ページ」に置き、「不連続」（青）にします。SUM(Year)にはしません。ページの操作欄で2000年を選ぶと、その年の各国が一つずつの円になります。
-- regionを「マーク」の「色」にドラッグします。
-- Populationを「サイズ」にドラッグします。一つのマークが一つの国・年ならSUM(Population)で構いません。大きな円が他の国を隠さないようサイズを調整し、「色」の不透明度を60〜70%程度にすると重なりが見やすくなります。
-- 横軸のGDPを右クリックし、「軸の編集」で「対数」を有効にします。縦軸のLife Expectancyは通常の線形の軸のままにします。
-- Yearのページ操作欄で再生し、年ごとの変化を見ます。まずは遅い速度で試しましょう。年ごとに軸が動く場合は、表示したい期間の値を含む固定範囲に設定します。一年だけのフィルターを設定している場合は、再生前に外してください。
-- 最終確認：列＝AVG(GDP)、行＝AVG(Life Expectancy)、マーク＝円、詳細＝Country、色＝region、サイズ＝SUM(Population)、ページ＝不連続のYear。GDPの出典と定義を確認してから「一人当たりGDP」や通貨単位を軸に記載しましょう。
+- 軸をつくる::`GDP`を`列`、`Life Expectancy`を`行`に置きます。各ピルのメニューで`平均`を選び、マークの種類を`円`にします。
+- 一つの円を国ごとに分ける::`Country`をマークの`詳細`へドラッグします。国ごとの円になりますが、まだ全ての年をまとめています。
+- 一年を選ぶ::必要なら`Year`をディメンションに変換します。`ページ`へ置き、`不連続`（青）を選択。`2000`年を選ぶと、一つの円が一つの国・年になります。
+- 色と大きさを付ける::`region`を`色`、`Population`を`サイズ`へ。`SUM(Population)`で構いません。円のサイズを調整し、不透明度を60〜70%程度にすると重なりが見やすくなります。
+- 軸を調整する::GDPの横軸を右クリックし、`軸の編集`で`対数`を有効に。平均寿命の縦軸は線形のままにします。円が上半分に集まる場合は`ゼロを含める`を外すか、20〜90年の固定範囲を試しましょう。
+- 時間の変化を見る::Yearの操作欄で`再生`します。まずは遅い速度で。比較しやすいよう軸の範囲を固定し、一年だけのフィルターは外してください。
+- データの意味を確認する::`GDP`の出典と定義を確認してから、一人当たりや通貨単位を軸に記載しましょう。
 
 ## Mori's Corner
 

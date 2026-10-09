@@ -1,0 +1,12 @@
+.tableau-guide{width:min(680px,calc(100vw - 32px));max-height:85dvh;box-sizing:border-box;padding:1.5rem 2rem;border:0;background:var(--paper);color:var(--ink);overflow:auto}
+.tableau-guide::backdrop{background:rgba(45,35,25,.55)}
+.tableau-guide header{display:flex;align-items:start;justify-content:space-between;gap:1rem}
+.tableau-guide header h2{margin:0;font:600 1.6rem/1.2 var(--serif)}
+.tableau-guide header button{border:0;background:none;color:var(--ink);font-size:1.7rem;cursor:pointer}
+.tableau-guide ol{padding-left:1.5rem;margin:1.5rem 0 0}
+.tableau-guide li{padding:0 0 1rem .4rem;font-size:.9rem;line-height:1.6}
+.tableau-guide li::marker{color:var(--playfair-crimson);font-weight:700}
+.tableau-guide li strong{display:block;font-size:1rem}
+.tableau-guide li p{margin:.3rem 0 0;font-size:.88rem}
+.tableau-guide code{display:inline;padding:.12rem .4rem;border-radius:4px;background:#e9dfcc;color:#744826;font:600 .8rem var(--sans);box-decoration-break:clone;-webkit-box-decoration-break:clone}
+@media(max-width:600px){.tableau-guide{padding:1rem}}

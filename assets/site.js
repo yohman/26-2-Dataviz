@@ -164,7 +164,8 @@ function activityTabs(week, sharedMaterials = '') {
     const resultsLink = resultsHref ? materialLinks([{ href: resultsHref, label: copy(activity.results_label, activity.results_label_ja) }], { week: week.week }) : '';
     const steps = copy(activity.steps, activity.steps_ja).map(step => `<li>${escapeHtml(step)}</li>`).join('');
     const walkthrough = copy(activity.walkthrough || [], activity.walkthrough_ja || []);
-    const help = walkthrough.length ? `<details class="activity-walkthrough" data-confirm-walkthrough><summary>${copy('Show the step-by-step Tableau guide', 'Tableauの手順を表示する')}</summary><ol class="activity-steps">${walkthrough.map(step => `<li>${escapeHtml(step)}</li>`).join('')}</ol></details>` : '';
+    const guideId = `tableau-guide-${week.week}-${activity.number}`;
+    const help = walkthrough.length ? `<button type="button" class="button" data-open-guide="${guideId}">${copy('Step-by-step Tableau guide', 'Tableauの操作ガイド')}</button><dialog id="${guideId}" class="tableau-guide" aria-labelledby="${guideId}-title"><header><h2 id="${guideId}-title">${copy('Build the Gapminder chart', 'Gapminderのグラフをつくる')}</h2><button type="button" data-close-guide aria-label="${copy('Close', '閉じる')}">×</button></header><ol>${walkthrough.map(step => { const [title, ...body] = step.split('::'); return `<li><strong>${escapeHtml(title)}</strong><p>${escapeHtml(body.join('::')).replace(/`([^`]+)`/g, '<code>$1</code>')}</p></li>`; }).join('')}</ol></dialog>` : '';
     return `<section class="activity-panel" role="tabpanel" id="week-${week.week}-activity-${activity.number}" aria-labelledby="week-${week.week}-activity-${activity.number}-tab"${index === 0 ? '' : ' hidden'}>
       <p class="assignment-label">${copy('IN CLASS', '授業内')} · ${copy(`ACTIVITY ${activity.number}`, `アクティビティ ${activity.number}`)}</p>
       <h4>${escapeHtml(copy(activity.title, activity.title_ja))}</h4>
@@ -176,9 +177,15 @@ function activityTabs(week, sharedMaterials = '') {
 }
 
 function setupActivityTabs(root) {
-  root.querySelectorAll('[data-confirm-walkthrough] > summary').forEach(summary => {
-    summary.addEventListener('click', event => {
-      if (!summary.parentElement.open && !window.confirm(copy('Are you sure you want to open the step-by-step guide? Try exploring on your own first.', '手順を表示してもよいですか？まずは自分で試してみましょう。'))) event.preventDefault();
+  root.querySelectorAll('[data-open-guide]').forEach(button => {
+    const dialog = root.querySelector(`#${button.dataset.openGuide}`);
+    button.addEventListener('click', () => {
+      if (window.confirm(copy('Open the guide? Try exploring on your own first.', '操作ガイドを開きますか？まずは自分で試してみましょう。'))) dialog.showModal();
+    });
+    dialog.querySelector('[data-close-guide]').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', event => {
+      const rect = dialog.getBoundingClientRect();
+      if (event.target === dialog && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) dialog.close();
     });
   });
   root.querySelectorAll('[data-activity-tabs]').forEach(component => {
