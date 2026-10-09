@@ -340,7 +340,7 @@ function renderAgenda() {
       : `<div class="assignment-submit"><p class="assignment-note">${copy('The submission link will appear here.', '提出リンクはここに表示されます。')}</p><p class="assignment-deadline"><strong>${copy('DEADLINE', '締切')}</strong> ${escapeHtml(deadline)}</p></div>`;
     const requirements = copy(week.requirements || '', week.requirements_ja || '');
     const homeworkRequirements = requirements ? `<h5>${copy('Requirements', '課題の要件')}</h5><ul class="homework-requirements">${requirements.split(';').filter(Boolean).map(item => `<li>${escapeHtml(item.trim())}</li>`).join('')}</ul>` : '';
-    html += `<details class="week" id="week-${week.week}"${localPreview || week.week === focusedWeek?.week ? ' open' : ''}>
+    html += `<details class="week" id="week-${week.week}"${week.week === focusedWeek?.week ? ' open' : ''}>
       <summary class="week-summary">${weekIndex}${weekMain}<span class="week-toggle"><span class="week-toggle-closed">${copy('Open week', '週の内容を見る')}</span><span class="week-toggle-open">${copy('Close week', '週の内容を閉じる')}</span><b aria-hidden="true">↓</b></span></summary>
       <div class="week-body">
         <section class="week-lecture"><div class="week-section-heading"><div><p class="week-section-label">${copy('LECTURE', '講義')}</p><h3>${copy('What to expect', '今週の講義')}</h3></div></div>
