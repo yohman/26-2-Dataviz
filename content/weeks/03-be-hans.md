@@ -14,8 +14,10 @@ schedule: 10:40–11:00|Submission review|Look back at student work and share ob
 schedule_ja: 10:40–11:00|提出作品のレビュー|学生の作品を見返し、気づきを共有する;11:00–11:20|ハンス・ロスリング|ハンスとGapminderについての短い講義;11:20–11:50|探索とグループ共有|データを読み込み、個人で探索した後、グループで比較・修正する;11:50–12:20|グループ発表とまとめ|選んだグラフを発表し、全体で振り返り、宿題を確認する
 in_class: Import hans.csv in Tableau, build one scatterplot, and share one question the view raises.
 in_class_ja: Tableauでhans.csvを読み込み、散布図を一つつくり、そのビューから生まれる問いを一つ共有する。
-homework: Use Tableau to visualize data of your own choice. You are welcome to reuse the dataset from a previous assignment, collect your own new data, or find a completely new dataset. Choose a question or comparison to explore, then try different chart types, fields, and visual choices to make your findings clear. Include a meaningful title and identify your data source. Submit through the same homework form as before, with one required screenshot and an optional second screenshot, plus commentary explaining your work.
-homework_ja: 自分で選んだデータをTableauで可視化してください。これまでの課題で使ってきたデータを再利用しても、自分で新しいデータを集めても、まったく新しいデータセットを探しても構いません。調べたい問いや比較を決め、グラフの種類、項目、見せ方を試しながら、発見が伝わる可視化をつくりましょう。内容が伝わるタイトルを付け、データの出典を明記してください。提出はこれまでと同じ宿題フォームで、スクリーンショット1枚（必須）、必要に応じて2枚目（任意）、作品についての説明を添えて行います。
+homework: Visualize data of your own choice in Tableau and make your findings clear.
+homework_ja: 自分で選んだデータをTableauで可視化し、発見が伝わる作品をつくりましょう。
+requirements: Use Tableau to visualize your chosen data.;Reuse a previous dataset, collect new data, or find a new dataset.;Explore a question or comparison and give your visualization a meaningful title.;Provide a link to the data, website, or source document you used.;Submit one screenshot (required), with an optional second screenshot.;Explain your data, what you visualized, what you found, and why you chose that representation.;Submit through the same homework form as before.
+requirements_ja: Tableauを使って、自分で選んだデータを可視化する。;以前の課題のデータを再利用しても、新しく集めたり探したりしても構いません。;問いや比較を決め、内容が伝わるタイトルを付ける。;使用したデータ・ウェブサイト・資料へのリンクを添える。;スクリーンショット1枚を提出する（必須）。2枚目は任意。;選んだデータ、可視化した内容、発見、その表現を選んだ理由を説明する。;これまでと同じ宿題フォームから提出する。
 deliverables: A title; a link to your data, website, or source document; one screenshot (required) and a second screenshot if useful (optional); and commentary explaining what data you chose, what you visualized in Tableau, what you found, and why you chose that particular representation.
 deliverables_ja: タイトル、使用したデータ・ウェブサイト・資料へのリンク、スクリーンショット1枚（必須）と必要に応じて2枚目（任意）、作品の説明。説明では、どのデータを選んだか、Tableauで何を可視化したか、何が分かったか、その表現を選んだ理由を伝えてください。
 challenge: Your data, visualized with Tableau
