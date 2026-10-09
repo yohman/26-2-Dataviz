@@ -13,3 +13,10 @@
 .gallery-comment time{color:var(--muted);font-size:.65rem}
 .gallery-comment p{white-space:pre-wrap;font-size:.85rem;line-height:1.6}
 .gallery-comment-link{position:absolute;right:0;bottom:2.5rem;font-size:.65rem;color:var(--muted)}
+.gallery-grid{align-items:start}
+.gallery-page .gallery-card--comments-open{height:auto;grid-template-rows:220px 24px 58px 36px 184px 145px auto}
+.gallery-card>.gallery-comments{grid-row:7;margin-top:1rem;padding-top:1rem;min-width:0}
+.gallery-card>.gallery-comments[hidden]{display:none}
+.gallery-page .gallery-card .gallery-comments h2{display:block;overflow:visible;margin:0 0 .6rem;line-height:1.3}
+.gallery-comment-list{max-height:360px;overflow-y:auto;overscroll-behavior:contain}
+@media(max-width:700px){.gallery-page .gallery-card--comments-open{grid-template-rows:205px 24px 56px 34px 178px 145px auto}}

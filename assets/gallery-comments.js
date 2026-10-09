@@ -20,9 +20,9 @@
   }
   let countsPromise;
   const counts = () => countsPromise ||= request().catch(error => { countsPromise = null; throw error; });
-  function mountWork(details, id) {
+  function mountWork(details, id, inline = false) {
     if (details.querySelector('.gallery-comments')) return;
-    const section = make('section', '', 'gallery-comments'); section.id = 'comments';
+    const section = make('section', '', 'gallery-comments'); section.id = inline ? `card-comments-${id}` : 'comments';
     section.append(make('h2', label('Comments', 'コメント')));
     const note = make('p', label('Comments are public immediately. Use a display name, and give thoughtful feedback.', 'コメントはすぐに公開されます。表示名を使い、作品について丁寧に感想や意見を伝えてください。'), 'gallery-comments-note');
     const list = make('div', '', 'gallery-comment-list');
@@ -91,7 +91,8 @@
       } catch (error) { feedback.textContent = error.message; }
       finally { submit.disabled = false; }
     });
-    section.append(note, form, list, more, status); details.append(section); load();
+    section.append(note, list, more, status, form); details.append(section); load();
+    return section;
   }
   function mountCards() {
     document.querySelectorAll('.gallery-card:not([data-comments-mounted])').forEach(card => {
@@ -100,7 +101,18 @@
       if (!target) return;
       const id = new URL(target.href).searchParams.get('id');
       const link = make('a', label('Comments…', 'コメント…'), 'gallery-comment-link');
-      link.href = target.href + '#comments'; card.querySelector('.gallery-card-footer').append(link);
+      link.href = `#card-comments-${id}`;
+      link.setAttribute('aria-expanded', 'false');
+      link.setAttribute('aria-controls', `card-comments-${id}`);
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const expanded = link.getAttribute('aria-expanded') !== 'true';
+        const section = card.querySelector('.gallery-comments') || mountWork(card, id, true);
+        section.hidden = !expanded;
+        card.classList.toggle('gallery-card--comments-open', expanded);
+        link.setAttribute('aria-expanded', String(expanded));
+      });
+      card.querySelector('.gallery-card-footer').append(link);
       counts().then(data => {
         const count = data.items.find(item => item.id === id)?.count || 0;
         link.textContent = label(`Comments (${count})`, `コメント (${count})`);
