@@ -49,6 +49,7 @@
     </section>
   </main>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="assets/slide-swipe.js?v=20261016"></script>
   <script>
     const parameters = new URLSearchParams(location.search);
     const requestedFile = parameters.get('file') || '';
@@ -177,6 +178,11 @@
     }
     previous.addEventListener('click', () => renderPage(activePage - 1));
     next.addEventListener('click', () => renderPage(activePage + 1));
+    window.installSlideSwipes(stage, {
+      canSwipe: () => Boolean(pdf) && !pdfPage.hidden && zoomScale <= 1 && (window.visualViewport?.scale || 1) <= 1.01,
+      next: () => { if (activePage < pdf.numPages) renderPage(activePage + 1); },
+      previous: () => { if (activePage > 1) renderPage(activePage - 1); }
+    });
     const setZoom = requestedZoom => {
       zoomScale = Math.min(maximumZoom, Math.max(minimumZoom, requestedZoom));
       renderPage(activePage).then(() => {
