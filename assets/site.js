@@ -287,7 +287,8 @@ function renderAgenda() {
   if (!root) return;
   const today = todayInTokyo();
   const localPreview = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
-  const previewAll = localPreview || new URLSearchParams(location.search).get('preview') === 'all';
+  const previewParams = new URLSearchParams(location.search);
+  const previewAll = localPreview || previewParams.has('p') || previewParams.get('preview') === 'all';
   const focusedWeek = weeks.find(week => week.course_date >= today) || weeks.at(-1);
   const jumpLinks = weeks.map(week => {
     const past = week.course_date < today;
@@ -305,12 +306,13 @@ function renderAgenda() {
       html += '<section class="wrap week-list">';
     }
     const no = String(week.week).padStart(2, '0');
-    const locked = !previewAll && today < availabilityDate(week.course_date);
+    const held = Number(week.week) === 4;
+    const locked = !previewAll && (held || today < availabilityDate(week.course_date));
     const classTime = week.date.match(/\d{1,2}:\d{2}\s*[–-]\s*\d{1,2}:\d{2}/)?.[0] || '';
     const weekIndex = `<span class="week-index"><span class="week-number">${no}</span><span class="week-date"><span>${escapeHtml(compactDate(week.course_date))}</span><span>${escapeHtml(classTime)}</span></span></span>`;
     const slideMaterials = week.materials.filter(material => material.type === 'slides' || material.href.startsWith('lectures/'));
     const activityMaterials = week.materials.filter(material => !slideMaterials.includes(material));
-    const returnTo = `agenda.html${previewAll ? '?preview=all' : ''}#week-${week.week}`;
+    const returnTo = `agenda.html${previewAll ? '?p' : ''}#week-${week.week}`;
     const image = safeResourceHref(week.image);
     const slideMaterial = slideMaterials[0];
     const slideFile = safeResourceHref(slideMaterial?.href);
@@ -326,6 +328,11 @@ function renderAgenda() {
     const weekMain = `<span class="week-summary-main"><span class="week-meta"><span>${week.act}</span><span>${copy(`Week ${week.week}`, `第${week.week}週`)}</span>${locked ? '' : status}</span><span class="week-title">${escapeHtml(copy(week.title, week.title_ja))}</span>${locked ? '' : preview}</span>`;
     if (locked) {
       const opens = compactDate(availabilityDate(week.course_date));
+      if (held) {
+        html += `<section class="week week--locked" id="week-${week.week}" aria-label="${escapeHtml(copy('Week 4, coming soon', '第4週、準備中'))}"><div class="week-summary">${weekIndex}${weekMain}<span class="week-toggle week-toggle--locked">${copy('Coming soon', '準備中')}</span></div></section>`;
+        if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
+        return;
+      }
       html += `<section class="week week--locked" id="week-${week.week}" aria-label="${escapeHtml(copy(`Week ${week.week}, available ${opens}`, `第${week.week}週、${opens}公開`))}"><div class="week-summary">${weekIndex}${weekMain}<span class="week-toggle week-toggle--locked">${escapeHtml(copy(`Opens ${opens}`, `${opens} 公開`))}</span></div></section>`;
       if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
       return;
