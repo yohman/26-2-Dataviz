@@ -1,0 +1,2 @@
+# Local Cloudflare runtime/deployment cache (not course content).
+.wrangler/
