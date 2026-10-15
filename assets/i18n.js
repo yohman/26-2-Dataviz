@@ -103,6 +103,10 @@ Object.assign(window.COURSE_TRANSLATIONS.ja, {
   'Let’s be Hans!': 'ハンスになろう！',
   'Hans Rosling · Gapminder': 'ハンス・ロスリング · Gapminder',
   'Open Week 3 →': '第3週を開く →',
+  'Open Week 4 →': '第4週を開く →',
+  'WEEK 4 · POKÉMON': '第4週 · ポケモン',
+  'Pokémon Challenge': 'ポケモン・チャレンジ',
+  'Marks · Channels · Tableau': 'マーク・チャネル・Tableau',
 
   'this week?': '見よう？',
   'Start here. Look at this week’s agenda, make the next thing, and bring a question.': 'ここから始めましょう。今週のAGENDAを確認し、次のMAKEに取り組み、問いを一つ持ってきてください。',
