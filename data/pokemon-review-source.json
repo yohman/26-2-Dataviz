@@ -26,7 +26,16 @@
     "Speed": "Base speed stat",
     "Base_Stat_Total": "Sum of the six base stats; not a universal measure of battle performance",
     "Legendary": "Source species classification, Yes/No",
-    "Mythical": "Source species classification, Yes/No; separate from Legendary"
+    "Mythical": "Source species classification, Yes/No; separate from Legendary",
+    "Image_URL": "Public PNG sprite URL from PokeAPI/sprites, matched by National Pokedex ID. These are small sprites, not high-resolution artwork."
+  },
+  "image_source": {
+    "repository": "https://github.com/PokeAPI/sprites",
+    "url_pattern": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{Pokedex_ID}.png",
+    "inventory_tree_sha": "ba403973fdf9d0ac59175813861e6a1f8ed5020c",
+    "verified_on": "2026-10-16",
+    "verified_files": 1025,
+    "note": "All referenced files occur in the upstream inventory and are smaller than Tableau's 200 kB image limit. URLs follow the upstream master branch. Pokemon imagery belongs to its respective rights holders."
   },
   "tableau_notes": [
     "Use Name or Pokedex_ID on Detail to obtain one mark per species.",
