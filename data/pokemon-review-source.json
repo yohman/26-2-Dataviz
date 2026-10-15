@@ -1,0 +1,37 @@
+{
+  "status": "Candidate dataset for instructor review; not assigned to students",
+  "source": "PokéAPI community-maintained database (not an official Nintendo dataset)",
+  "documentation": "https://pokeapi.co/docs/v2",
+  "repository": "https://github.com/PokeAPI/pokeapi",
+  "source_commit": "81d20919845b6a445969b9265aab5cec6b04cece",
+  "retrieved_on": "2026-10-15",
+  "source_tables": ["pokemon.csv", "pokemon_species.csv", "pokemon_species_names.csv", "pokemon_types.csv", "type_names.csv", "pokemon_stats.csv"],
+  "scope": "One default form per species. Alternate, Mega and regional forms excluded. Names use language 9 (English) and language 1 (Japanese). Types are the default form's types at the source snapshot, not necessarily the types at original release.",
+  "fields": {
+    "Pokedex_ID": "Species identifier / National Pokédex number; treat as an identifier, not an additive measure",
+    "Name": "English species name",
+    "Name_Japanese": "Japanese species name",
+    "Generation": "Generation when the species was introduced; categorical, not a year or a historical stats version",
+    "Type_1": "Primary type, English",
+    "Type_1_Japanese": "Primary type, Japanese",
+    "Type_2": "Secondary type, English; blank means no second type",
+    "Type_2_Japanese": "Secondary type, Japanese; blank means no second type",
+    "Height_m": "Default-form height in metres; source decimetres divided by 10",
+    "Weight_kg": "Default-form weight in kilograms; source hectograms divided by 10",
+    "HP": "Base HP stat, not an individual Pokémon's level-dependent HP",
+    "Attack": "Base physical attack stat",
+    "Defense": "Base physical defense stat",
+    "Special_Attack": "Base special attack stat",
+    "Special_Defense": "Base special defense stat",
+    "Speed": "Base speed stat",
+    "Base_Stat_Total": "Sum of the six base stats; not a universal measure of battle performance",
+    "Legendary": "Source species classification, Yes/No",
+    "Mythical": "Source species classification, Yes/No; separate from Legendary"
+  },
+  "tableau_notes": [
+    "Use Name or Pokedex_ID on Detail to obtain one mark per species.",
+    "Use Generation as a discrete dimension, not SUM(Generation).",
+    "For comparisons by type or generation, distinguish average stats from counts. Primary-type comparisons ignore the secondary type unless you explicitly include it.",
+    "For a smaller first exercise, filter Generation to 1. Do not infer real animal biology from fictional game attributes."
+  ]
+}
