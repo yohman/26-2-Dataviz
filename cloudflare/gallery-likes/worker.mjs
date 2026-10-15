@@ -1,4 +1,5 @@
 import { commentsApi } from './comments.mjs';
+import { activitiesApi, activityImage } from './activities.mjs';
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin');
@@ -6,16 +7,21 @@ export default {
       Vary: 'Origin', 'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, X-Browser-ID', 'Access-Control-Max-Age': '86400' };
     const reply = (data, status = 200) => new Response(JSON.stringify(data), { status, headers });
+    const path = new URL(request.url).pathname;
+    if (path === '/activity-image' && request.method === 'GET' && !origin) {
+      try { return await activityImage(request,env,{}); } catch { return new Response('Image unavailable',{status:503}); }
+    }
     if (!(env.ALLOWED_ORIGINS || '').split(',').includes(origin)) return reply({ error: 'Origin not allowed' }, 403);
     headers['Access-Control-Allow-Origin'] = origin;
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers });
     const browser = request.headers.get('X-Browser-ID');
     if (!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(browser || '')) return reply({ error: 'Invalid browser ID' }, 400);
-    const path = new URL(request.url).pathname;
-    if (!['/likes', '/comments'].includes(path)) return reply({ error: 'Not found' }, 404);
+    if (path === '/activity-image' && request.method === 'GET') return activityImage(request,env,headers);
+    if (!['/likes', '/comments', '/activities'].includes(path)) return reply({ error: 'Not found' }, 404);
     try {
       if (env.RATE_LIMITER && !(await env.RATE_LIMITER.limit({ key: browser })).success) return reply({ error: 'Please wait before retrying' }, 429);
       if (path === '/comments') return await commentsApi(request, env, browser, reply);
+      if (path === '/activities') return await activitiesApi(request,env,browser,reply);
       if (request.method === 'GET') {
         const result = await env.DB.prepare('SELECT submission_id AS id, COUNT(*) AS count, MAX(browser_id = ?) AS liked FROM likes GROUP BY submission_id').bind(browser).all();
         return reply({ items: result.results.map(row => ({ ...row, liked: Boolean(row.liked) })) });

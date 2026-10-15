@@ -1,0 +1,26 @@
+.activity-main{max-width:1000px;padding-block:3rem 5rem;font-family:var(--sans)}
+body:has(.activity-main) .site-nav{display:flex}
+.activity-main h1{font:600 clamp(2rem,5vw,3.6rem)/1.15 var(--serif);margin:0 0 1.5rem}
+.activity-main>p{line-height:1.7;font-size:.95rem}
+.activity-form{max-width:720px;display:grid;gap:1.2rem;margin-block:2rem}
+.activity-form label{display:grid;gap:.4rem;font-size:.85rem;font-weight:700}
+.activity-form input,.activity-form textarea{width:100%;padding:.8rem;border:1px solid var(--line);background:#fffdf8;color:var(--ink);font:400 .95rem var(--sans);box-sizing:border-box}
+.activity-form input[type=file]{font-size:.8rem}
+.activity-form .button{justify-self:start}
+.activity-note{font-size:.8rem!important;line-height:1.6;color:var(--muted)}
+.activity-results-actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-block:1.5rem}
+.activity-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem}
+.activity-result{min-width:0;background:#f1e9dc;padding:1.2rem}
+.activity-result h2{font:600 1.5rem/1.25 var(--serif);margin:.5rem 0}
+.activity-result p{font-size:.85rem;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.activity-result-images{display:flex;gap:.5rem;overflow-x:auto}
+.activity-result-images a{min-width:100%;display:block}
+.activity-result-images img{width:100%;height:260px;object-fit:contain;background:#fffdf8}
+.activity-result-images:has(a:nth-child(2)) a{min-width:85%}
+.activity-table-scroll{overflow-x:auto;margin-block:2rem}
+.variable-table{width:100%;border-collapse:collapse;font:.85rem/1.6 var(--sans)}
+.variable-table th{text-align:left;background:#e9d3a4;padding:.9rem;white-space:nowrap}
+.variable-table td{padding:.9rem;vertical-align:top;border-bottom:1px solid var(--line)}
+.variable-table code{font:600 .78rem var(--sans);background:#ece1ce;padding:.2rem .4rem;white-space:nowrap}
+.variable-table small{display:block;color:var(--muted);font-size:.75rem}
+@media(max-width:700px){.activity-results{grid-template-columns:1fr}.activity-main{padding-top:2rem}.variable-table{min-width:650px}.activity-main .activity-note{font-size:.75rem!important}}
