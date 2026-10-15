@@ -6,12 +6,12 @@ date: Fri 23 Oct 2026 · P2 · 10:40–12:20
 date_ja: 2026年10月23日（金） · 2限 · 10:40–12:20
 title: Python and the Unexpected
 title_ja: Pythonで予想外を見つける
-look: Tukey, exploratory data analysis, and Datasaurus: similar statistics can hide very different pictures
-look_ja: Tukey、探索的データ分析、Datasaurus：似た統計量の裏に、異なる形が隠れている
+look: Nightingale's visual evidence, then Tukey and Datasaurus: look beyond the summary
+look_ja: Nightingaleの視覚的な証拠から、TukeyとDatasaurusへ：要約の先を見る
 learn: run, modify, and explain a first Python visualization in a notebook
 learn_ja: ノートブックで初めてのPython可視化を実行し、変更し、説明する
-schedule: 10:40–10:55|Submission review|Discuss the refined Tableau projects;10:55–11:10|Python and exploration|Why code, and why look beyond summary statistics?;11:10–11:30|First notebook|Load the data and draw the dinosaur;11:30–11:55|Datasaurus exploration|Compare statistics and plots, then change a visual choice;11:55–12:10|Group share|Help one another and compare discoveries;12:10–12:20|Recap and homework|Explain what changed when you could see the data
-schedule_ja: 10:40–10:55|提出作品のレビュー|改善したTableau作品を振り返る;10:55–11:10|Pythonと探索|なぜコード？なぜ要約統計だけでは足りない？;11:10–11:30|最初のノートブック|データを読み込み、恐竜を描く;11:30–11:55|Datasaurusの探索|統計量と図を比較し、見せ方を変更する;11:55–12:10|グループ共有|助け合い、発見を比べる;12:10–12:20|まとめと宿題|データが見えたことで何が変わったかを説明
+schedule: 10:40–10:50|Submission review|Discuss the refined Tableau projects;10:50–11:10|Evidence and exploration|Nightingale, then Python, Tukey, and looking beyond summaries;11:10–11:30|First notebook|Load the data and draw the dinosaur;11:30–11:55|Datasaurus exploration|Compare statistics and plots, then change a visual choice;11:55–12:10|Group share|Help one another and compare discoveries;12:10–12:20|Recap and homework|Explain what changed when you could see the data
+schedule_ja: 10:40–10:50|提出作品のレビュー|改善したTableau作品を振り返る;10:50–11:10|証拠と探索|NightingaleからPython・Tukey・要約の先へ;11:10–11:30|最初のノートブック|データを読み込み、恐竜を描く;11:30–11:55|Datasaurusの探索|統計量と図を比較し、見せ方を変更する;11:55–12:10|グループ共有|助け合い、発見を比べる;12:10–12:20|まとめと宿題|データが見えたことで何が変わったかを説明
 in_class: Everyone runs the Datasaurus starter notebook, compares statistics and plots, and changes a visual choice. Work individually, with your group helping everyone succeed on their own computer.
 in_class_ja: 全員がDatasaurusの入門ノートブックを実行し、統計量と図を比べ、見せ方を変更します。個人で取り組み、グループでは全員が自分のPCでできるよう助け合います。
 homework: Use the starter notebook to make your own Python view of Datasaurus or another dataset. Explain what the picture reveals and one deliberate visual choice.
@@ -28,6 +28,7 @@ image: assets/images/lecture/week05-python.png
 ## Materials
 
 - [Lecture slides](lectures/w05-python-datasaurus.pdf) {slides}
+- [Nightingale mortality diagram](https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg) {reference}
 - [Datasaurus starter notebook](data/datasaurus-python.ipynb) {data}
 - [Run the notebook in Google Colab](https://colab.research.google.com/github/yohman/26-2-Dataviz/blob/main/data/datasaurus-python.ipynb) {reference}
 - [Datasaurus CSV](data/datasaurus.csv) {data}

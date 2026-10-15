@@ -6,12 +6,12 @@ date: Fri 16 Oct 2026 · P2 · 10:40–12:20
 date_ja: 2026年10月16日（金） · 2限 · 10:40–12:20
 title: Visual Language and the Pokémon Challenge
 title_ja: 視覚言語とポケモン・チャレンジ
-look: Marks, channels, and Nightingale: how visual choices shape what we see
-look_ja: マーク、チャネル、Nightingale：視覚的な選択で、見えるものが変わる
+look: Marks and channels: how visual choices shape what we see
+look_ja: マークとチャネル：視覚的な選択で、見えるものが変わる
 learn: use position, color, size, and chart type deliberately in Tableau
 learn_ja: Tableauで位置・色・大きさ・グラフの種類を意図的に選ぶ
-schedule: 10:40–10:50|Review|Look back at student work;10:50–11:10|Visual language|Marks, channels, and Nightingale;11:10–11:25|Pokémon solo work|Explore and make one chart;11:25–11:45|Group share and show|Select, submit, and view group choices;11:45–12:10|Peer-review workshop|Share last week's work, give feedback, and improve it;12:10–12:20|Publish and recap|Tableau Public and homework
-schedule_ja: 10:40–10:50|作品レビュー|学生の作品を振り返る;10:50–11:10|視覚言語|マーク・チャネル・Nightingale;11:10–11:25|ポケモン・個人制作|探索し、グラフを1点つくる;11:25–11:45|グループ共有と発表|選択・提出・グループ作品の共有;11:45–12:10|相互レビューと改善|先週の作品を見せ、意見をもらって改善;12:10–12:20|公開とまとめ|Tableau Publicへの公開と宿題
+schedule: 10:40–10:50|Review|Look back at student work;10:50–11:10|Visual language|Marks and channels;11:10–11:25|Pokémon solo work|Explore and make one chart;11:25–11:45|Group share and show|Select, submit, and view group choices;11:45–12:10|Peer-review workshop|Share last week's work, give feedback, and improve it;12:10–12:20|Publish and recap|Tableau Public and homework
+schedule_ja: 10:40–10:50|作品レビュー|学生の作品を振り返る;10:50–11:10|視覚言語|マークとチャネル;11:10–11:25|ポケモン・個人制作|探索し、グラフを1点つくる;11:25–11:45|グループ共有と発表|選択・提出・グループ作品の共有;11:45–12:10|相互レビューと改善|先週の作品を見せ、意見をもらって改善;12:10–12:20|公開とまとめ|Tableau Publicへの公開と宿題
 in_class: Pokémon Challenge: 15 minutes solo, then group sharing and one group submission. Continue in the same groups to review last week's individual work and begin refining it.
 in_class_ja: ポケモン・チャレンジは15分の個人制作から、グループ共有・1件の提出へ。同じグループで先週の個人作品を見せ合い、フィードバックを受けて改善を始めます。
 homework: Refine your own Tableau project using today's feedback, publish it on Tableau Public, and submit the published visualization link with your screenshots and commentary.
