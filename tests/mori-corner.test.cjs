@@ -37,13 +37,13 @@ test('Mori corner supports title, text, link, and a local file', () => {
 test('Week 4 lecture examples stay separate from activity materials and open externally', () => {
   context.source = fs.readFileSync(path.join(__dirname, '../content/weeks/04-find-the-unexpected.md'), 'utf8');
   const week = vm.runInContext('parseWeek(source, "week4")', context);
-  assert.equal(week.lectureExamples.length, 4);
-  assert(week.lectureExamples.every(item => item.href.startsWith('https://public.tableau.com/')));
+  assert.equal(week.lectureExamples.length, 1);
+  assert.equal(week.lectureExamples[0].href, 'https://public.tableau.com/app/discover/trending');
   assert(!week.materials.some(item => item.href.startsWith('https://public.tableau.com/')));
   context.exampleMaterials = week.lectureExamples;
   const html = vm.runInContext('materialLinks(exampleMaterials, { week: 4 })', context);
-  assert.equal((html.match(/target="_blank"/g) || []).length, 4);
-  assert.equal((html.match(/rel="noopener"/g) || []).length, 4);
+  assert.equal((html.match(/target="_blank"/g) || []).length, 1);
+  assert.equal((html.match(/rel="noopener"/g) || []).length, 1);
   assert(!html.includes('download'));
 });
 

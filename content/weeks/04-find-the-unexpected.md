@@ -34,10 +34,7 @@ image: assets/images/lecture/week04-visual-language.png
 
 ## Lecture Examples
 
-- [Studio Ghibli: Global Force in Animation · Jane Kamata](https://public.tableau.com/app/profile/jane.kamata/viz/StudioGhibliGlobalForceinAnimationIronVizStudentEdition2024/StudioGhibli) {reference}
-- [Into the Spider-Verse · Xinran Peng](https://public.tableau.com/app/profile/xinran.peng/viz/DataPlusMoviesStarterDashboard_17016561962340/Dashboard1) {reference}
-- [Two Eras of Safety · Bo McCready](https://public.tableau.com/app/profile/bo.mccready8742/viz/TwoErasofSafetyIronViz2025Winner/TwoEras) {reference}
-- [Pokémon Stat Dashboard · Milcah Joseph](https://public.tableau.com/app/profile/milcah.joseph2216/viz/PokeStat_17479338530510/PokeDash) {reference}
+- [Tableau Public · Trending Vizzes](https://public.tableau.com/app/discover/trending) {reference}
 
 ## In Class Activities
 
