@@ -32,6 +32,13 @@ image: assets/images/lecture/week04-visual-language.png
 - [Pokémon variable guide / ポケモンの変数一覧](pokemon-variables.html) {reference}
 - [Publish to Tableau Public / Tableau Publicで公開する](https://help.tableau.com/current/pro/desktop/en-us/publish_workbooks_tableaupublic.htm) {reference}
 
+## Lecture Examples
+
+- [Studio Ghibli: Global Force in Animation · Jane Kamata](https://public.tableau.com/app/profile/jane.kamata/viz/StudioGhibliGlobalForceinAnimationIronVizStudentEdition2024/StudioGhibli) {reference}
+- [Into the Spider-Verse · Xinran Peng](https://public.tableau.com/app/profile/xinran.peng/viz/DataPlusMoviesStarterDashboard_17016561962340/Dashboard1) {reference}
+- [Two Eras of Safety · Bo McCready](https://public.tableau.com/app/profile/bo.mccready8742/viz/TwoErasofSafetyIronViz2025Winner/TwoEras) {reference}
+- [Pokémon Stat Dashboard · Milcah Joseph](https://public.tableau.com/app/profile/milcah.joseph2216/viz/PokeStat_17479338530510/PokeDash) {reference}
+
 ## In Class Activities
 
 ### Activity 1

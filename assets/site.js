@@ -38,8 +38,8 @@ const challengeForWeek = number => {
   return week ? copy(week.challenge, week.challenge_ja) : '';
 };
 
-function parseMaterials(source) {
-  const block = source.match(/^##\s+Materials\s*\n([\s\S]*?)(?=^##\s+|$(?![\s\S]))/mi)?.[1] || '';
+function parseMaterials(source, section = 'Materials') {
+  const block = source.match(new RegExp(`^##\\s+${section}\\s*\\n([\\s\\S]*?)(?=^##\\s+|$(?![\\s\\S]))`, 'mi'))?.[1] || '';
   return [...block.matchAll(/^-\s+\[([^\]]+)\]\(([^)]+)\)\s*(?:\{(slides|data|reference)\})?\s*$/gmi)]
     .map(([, label, href, type]) => ({ label: label.trim(), href: href.trim(), type: type || '' }));
 }
@@ -87,7 +87,7 @@ function parseWeek(source, file) {
   if (Boolean(meta.in_class) !== Boolean(meta.in_class_ja)) throw new Error(`${file}: in_class and in_class_ja must be provided together`);
   if (Boolean(meta.deliverables) !== Boolean(meta.deliverables_ja)) throw new Error(`${file}: deliverables and deliverables_ja must be provided together`);
   if (!acts[meta.act]) throw new Error(`${file}: unknown act ${meta.act}`);
-  return { ...meta, week: Number(meta.week), materials: parseMaterials(match[2]), activities: parseInClassActivities(match[2]), mori: parseMoriCorner(match[2]) };
+  return { ...meta, week: Number(meta.week), materials: parseMaterials(match[2]), lectureExamples: parseMaterials(match[2], 'Lecture Examples'), activities: parseInClassActivities(match[2]), mori: parseMoriCorner(match[2]) };
 }
 
 function safeResourceHref(value) {
@@ -355,6 +355,7 @@ function renderAgenda() {
         <section class="week-lecture"><div class="week-section-heading"><div><p class="week-section-label">${copy('LECTURE', '講義')}</p><h3>${copy('What to expect', '今週の講義')}</h3></div></div>
           ${timing}
           <div class="week-heading"><p class="lecture-summary">${escapeHtml(copy(week.look, week.look_ja))}</p><div class="week-lecture-aside">${media}${slides}</div></div>
+          ${week.lectureExamples?.length ? `<div class="lecture-examples"><h4>${copy('Explore Tableau Public', 'Tableau Publicの作品を探索')}</h4><div class="lecture-examples-resources">${materialLinks(week.lectureExamples, { week: week.week })}</div><p>${copy('Explore the Pokémon example after the challenge: compare its design choices with your own.', 'ポケモンの作例はチャレンジの後に。自分の作品と見せ方を比べてみましょう。')}</p></div>` : ''}
         </section>
         <section class="week-assignments" aria-label="${copy('Assignments', '課題')}">
           <div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p>${homeworkRequirements}<dl class="assignment-details">${requirements ? '' : `<div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${escapeHtml(copy(week.deliverables || 'Visualization, title, concise explanation, project link, and one screenshot.', week.deliverables_ja || '可視化、タイトル、短い説明、作品リンク、スクリーンショット1枚。'))}</dd></div>`}<div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}<div class="homework-gallery-link" data-homework-gallery-week="${week.week}"></div></article></div>

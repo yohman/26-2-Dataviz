@@ -549,6 +549,13 @@ a.gallery-tool-chip:hover,a.gallery-tool-chip:focus-visible{background:var(--pla
 .activity-materials>div{display:grid;gap:.85rem}
 .course-resource{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:.7rem;padding:.8rem;background:rgba(255,255,255,.4);min-width:0}
 .course-resource-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:700 .85rem/1.4 var(--sans)}
+.lecture-examples{margin-top:2rem;padding-top:1rem}
+.lecture-examples h4{margin:0 0 1rem;font-size:1.3rem}
+.lecture-examples-resources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}
+.lecture-examples .course-resource-name{white-space:normal;overflow:visible}
+.lecture-examples .course-resource-actions{width:auto}
+.lecture-examples>p{margin:.8rem 0 0;color:var(--muted);font-size:.8rem}
+@media(max-width:900px){.lecture-examples-resources{grid-template-columns:1fr}}
 .course-resource-type{width:3rem;padding:.18rem .3rem;background:#e8ddca;color:#6e5b40;font:600 .65rem/1.2 "DM Mono",monospace;text-align:center}
 .course-resource-actions{display:flex;justify-content:flex-end;gap:.5rem;width:11.5rem}
 .course-resource-actions a{display:flex;align-items:center;justify-content:center;min-height:44px;width:5.5rem;padding:.6rem .4rem;text-decoration:none;font:700 .72rem/1.3 var(--sans);text-align:center}

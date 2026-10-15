@@ -4,7 +4,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const test = require('node:test');
 
-const context = { document: { addEventListener() {} }, window: {}, URL };
+const context = { document: { addEventListener() {} }, window: {}, URL, URLSearchParams };
 vm.createContext(context);
 vm.runInContext(fs.readFileSync(path.join(__dirname, '../assets/site.js'), 'utf8'), context);
 
@@ -32,6 +32,19 @@ test('Mori corner supports title, text, link, and a local file', () => {
   assert.equal(fields.file, 'content/files/handout.pdf');
   assert.equal(vm.runInContext("safeResourceHref('content/files/handout.pdf')", context), 'content/files/handout.pdf');
   assert.equal(vm.runInContext("safeResourceHref('content/../private.txt')", context), '');
+});
+
+test('Week 4 lecture examples stay separate from activity materials and open externally', () => {
+  context.source = fs.readFileSync(path.join(__dirname, '../content/weeks/04-find-the-unexpected.md'), 'utf8');
+  const week = vm.runInContext('parseWeek(source, "week4")', context);
+  assert.equal(week.lectureExamples.length, 4);
+  assert(week.lectureExamples.every(item => item.href.startsWith('https://public.tableau.com/')));
+  assert(!week.materials.some(item => item.href.startsWith('https://public.tableau.com/')));
+  context.exampleMaterials = week.lectureExamples;
+  const html = vm.runInContext('materialLinks(exampleMaterials, { week: 4 })', context);
+  assert.equal((html.match(/target="_blank"/g) || []).length, 4);
+  assert.equal((html.match(/rel="noopener"/g) || []).length, 4);
+  assert(!html.includes('download'));
 });
 
 test('Weeks 4 and 5 separate the Tableau challenge from Python and Datasaurus', () => {
