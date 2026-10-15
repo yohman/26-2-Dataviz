@@ -19,7 +19,7 @@
     ['Base_Stat_Total','HP〜Speedの6能力値の合計。これだけで勝敗や強さは決まりません。','Sum of six base stats; not a universal measure of battle performance.','派生値・6項目の合計 / Derived total'],
     ['Legendary','「伝説のポケモン」に分類されるか。Yes/No。','Whether the species is classified as Legendary.','カテゴリー / Yes or No'],
     ['Mythical','「幻のポケモン」に分類されるか。Legendaryとは別の分類。','Whether classified as Mythical, distinct from Legendary.','カテゴリー / Yes or No'],
-    ['Image_URL','標準の姿の小さなPNG画像への公開リンク（PokéAPI sprites）。','Public PNG sprite URL for the default form, hosted by PokéAPI sprites.','不連続のディメンション → Image Role > URL / Discrete dimension with Image Role: URL']
+    ['Image_URL','標準の姿の大きなイラストへの公開リンク。主に475〜512pxのPNG画像です。','Public larger artwork URL, mainly 475–512px PNGs, hosted by PokéAPI sprites.','不連続のディメンション → Image Role > URL / Discrete dimension with Image Role: URL']
   ];
   const tbody = document.querySelector('#pokemon-variables');
   rows.forEach(([name,ja,en,use])=>{

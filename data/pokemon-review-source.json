@@ -27,15 +27,20 @@
     "Base_Stat_Total": "Sum of the six base stats; not a universal measure of battle performance",
     "Legendary": "Source species classification, Yes/No",
     "Mythical": "Source species classification, Yes/No; separate from Legendary",
-    "Image_URL": "Public PNG sprite URL from PokeAPI/sprites, matched by National Pokedex ID. These are small sprites, not high-resolution artwork."
+    "Image_URL": "Public larger Pokemon artwork URL matched by National Pokedex ID. Official artwork is preferred, with Pokemon HOME PNG or Dream World SVG fallbacks to stay below Tableau's 200 kB limit."
   },
   "image_source": {
     "repository": "https://github.com/PokeAPI/sprites",
-    "url_pattern": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{Pokedex_ID}.png",
+    "url_pattern": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{Pokedex_ID}.png",
+    "fallback_patterns": [
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/{Pokedex_ID}.png",
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/{Pokedex_ID}.svg"
+    ],
+    "coverage": {"official_artwork_png": 1016, "home_png": 7, "dream_world_svg": 2},
     "inventory_tree_sha": "ba403973fdf9d0ac59175813861e6a1f8ed5020c",
     "verified_on": "2026-10-16",
     "verified_files": 1025,
-    "note": "All referenced files occur in the upstream inventory and are smaller than Tableau's 200 kB image limit. URLs follow the upstream master branch. Pokemon imagery belongs to its respective rights holders."
+    "note": "All 1025 referenced files occur in the upstream inventory and are below 200000 bytes. Tangela (114) and Golurk (623) use scalable SVG artwork, requiring Tableau 2023.2 or later. PNG artwork is typically 475 or 512 pixels square. URLs follow upstream master. Pokemon imagery belongs to its respective rights holders."
   },
   "tableau_notes": [
     "Use Name or Pokedex_ID on Detail to obtain one mark per species.",
