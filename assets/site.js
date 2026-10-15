@@ -92,7 +92,9 @@ function parseWeek(source, file) {
 
 function safeResourceHref(value) {
   const href = String(value || '').trim();
-  if (/^https?:\/\//i.test(href)) return encodeURI(href);
+  if (/^https?:\/\//i.test(href)) {
+    try { return new URL(href).href; } catch { return ''; }
+  }
   if (/^(?:assets|content|data|lectures)\//.test(href) && !href.split('/').includes('..')) return encodeURI(href);
   if (/^[a-z0-9-]+\.html(?:\?[-a-z0-9_~.%=&+]+)?(?:#[-\w]+)?$/i.test(href)) return href;
   return '';

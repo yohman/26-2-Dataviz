@@ -4,7 +4,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const test = require('node:test');
 
-const context = { document: { addEventListener() {} }, window: {} };
+const context = { document: { addEventListener() {} }, window: {}, URL };
 vm.createContext(context);
 vm.runInContext(fs.readFileSync(path.join(__dirname, '../assets/site.js'), 'utf8'), context);
 
@@ -32,6 +32,38 @@ test('Mori corner supports title, text, link, and a local file', () => {
   assert.equal(fields.file, 'content/files/handout.pdf');
   assert.equal(vm.runInContext("safeResourceHref('content/files/handout.pdf')", context), 'content/files/handout.pdf');
   assert.equal(vm.runInContext("safeResourceHref('content/../private.txt')", context), '');
+});
+
+test('Weeks 4 and 5 separate the Tableau challenge from Python and Datasaurus', () => {
+  const load = name => {
+    context.source = fs.readFileSync(path.join(__dirname, '../content/weeks', name), 'utf8');
+    return vm.runInContext(`parseWeek(source, ${JSON.stringify(name)})`, context);
+  };
+  const four = load('04-find-the-unexpected.md');
+  const five = load('05-python-history-evidence.md');
+  assert.equal(four.activities.length, 2);
+  assert.equal(five.activities.length, 2);
+  assert(four.materials.some(m => m.href === 'data/pokemon-review.csv'));
+  assert(!four.materials.some(m => /datasaurus|ipynb/.test(m.href)));
+  assert(four.materials.some(m => m.href === 'lectures/w04-visual-language.pdf'));
+  assert.match(four.homework, /own Tableau project/);
+  assert.match(four.requirements, /one screenshot/);
+  assert.match(four.activities[1].link, /entry\.155622460=/);
+  assert.equal(four.activities[1].results_link, 'gallery.html?week=4');
+  context.groupLink = four.activities[1].link;
+  const url = new URL(vm.runInContext('safeResourceHref(groupLink)', context));
+  assert.equal(url.searchParams.get('entry.155622460'), '第4週｜ポケモン・グループ共有');
+  assert(five.materials.some(m => m.href === 'data/datasaurus-python.ipynb'));
+  assert(five.materials.some(m => m.href === 'data/datasaurus.csv'));
+  assert(five.materials.some(m => m.href === 'lectures/w05-python-datasaurus.pdf'));
+  for (const week of [four, five]) {
+    const duration = schedule => schedule.split(';').reduce((total, step) => {
+      const times = step.split('|')[0].match(/\d\d:\d\d/g).map(t => Number(t.slice(0, 2))*60 + Number(t.slice(3)));
+      return total + times[1] - times[0];
+    }, 0);
+    assert.equal(duration(week.schedule), 100);
+    assert.equal(duration(week.schedule_ja), 100);
+  }
 });
 
 test('weekly content opens on the calendar day before class, including month boundaries', () => {

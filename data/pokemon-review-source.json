@@ -1,5 +1,5 @@
 {
-  "status": "Candidate dataset for instructor review; not assigned to students",
+  "status": "Approved dataset for the Week 4 Tableau challenge",
   "source": "PokéAPI community-maintained database (not an official Nintendo dataset)",
   "documentation": "https://pokeapi.co/docs/v2",
   "repository": "https://github.com/PokeAPI/pokeapi",
