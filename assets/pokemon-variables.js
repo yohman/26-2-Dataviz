@@ -21,7 +21,9 @@
     ['Mythical','「幻のポケモン」に分類されるか。Legendaryとは別の分類。','Whether classified as Mythical, distinct from Legendary.','カテゴリー / Yes or No'],
     ['Image_URL','標準の姿の大きなイラストへの公開リンク。主に475〜512pxのPNG画像です。','Public larger artwork URL, mainly 475–512px PNGs, hosted by PokéAPI sprites.','不連続のディメンション → Image Role > URL / Discrete dimension with Image Role: URL']
   ];
+  window.POKEMON_VARIABLES = rows;
   const tbody = document.querySelector('#pokemon-variables');
+  if (!tbody) return;
   rows.forEach(([name,ja,en,use])=>{
     const tr=document.createElement('tr'), key=document.createElement('td'), code=document.createElement('code'), meaning=document.createElement('td'), english=document.createElement('small'), usage=document.createElement('td');
     code.textContent=name; key.append(code); meaning.append(document.createTextNode(ja)); english.textContent=en; meaning.append(english); usage.textContent=use; tr.append(key,meaning,usage); tbody.append(tr);

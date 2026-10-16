@@ -100,10 +100,16 @@ function safeResourceHref(value) {
   return '';
 }
 
+function pokemonVariableGuide() {
+  const rows = window.POKEMON_VARIABLES || [];
+  return `<details class="pokemon-variable-guide"><summary>${copy('Pokémon variable guide', 'ポケモンの変数一覧')}</summary><p>${copy('One row is one species. No Pokémon knowledge needed.', '1行が1種のポケモンです。ゲームの知識は不要です。')}</p><div class="pokemon-variable-scroll" tabindex="0" role="region" aria-label="${copy('Pokémon variables', 'ポケモンの変数')}"><table><thead><tr><th>${copy('Variable', '変数')}</th><th>${copy('Meaning', '意味')}</th><th>${copy('Use', '扱い方')}</th></tr></thead><tbody>${rows.map(([name,ja,en,use])=>{const [useJa,...useEn]=use.split(' / ');return `<tr><td><code>${escapeHtml(name)}</code></td><td>${escapeHtml(copy(en,ja))}</td><td>${escapeHtml(copy(useEn.join(' / ')||useJa,useJa))}</td></tr>`;}).join('')}</tbody></table></div><p class="pokemon-variable-note">${copy('Base stats describe a species, not an individual Pokémon. Total stats alone do not determine battle performance.', '能力値は種ごとの基礎値です。個体の値ではなく、合計だけで強さが決まるわけではありません。')}</p></details>`;
+}
+
 function materialLinks(materials, context = {}) {
   return [...materials].sort((first, second) => Number(second.type === 'slides') - Number(first.type === 'slides')).map(material => {
     const href = safeResourceHref(material.href);
     if (!href) return '';
+    if (href === 'pokemon-variables.html' && window.POKEMON_VARIABLES) return pokemonVariableGuide();
     const external = /^https?:\/\//i.test(href);
     const extension = href.split(/[?#]/)[0].split('.').pop().toLowerCase();
     const lecture = material.type === 'slides' || /^lectures\/.+\.pdf$/i.test(href);
@@ -304,6 +310,7 @@ function scrollToAgendaWeek(root) {
 function renderAgenda() {
   const root = document.querySelector('[data-agenda]');
   if (!root) return;
+  const variableGuideOpen = Boolean(root.querySelector('.pokemon-variable-guide[open]'));
   const today = todayInTokyo();
   const localPreview = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
   const previewParams = new URLSearchParams(location.search);
@@ -378,6 +385,7 @@ function renderAgenda() {
     if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
   });
   root.innerHTML = intro + html;
+  if (variableGuideOpen) root.querySelectorAll('.pokemon-variable-guide').forEach(guide => { guide.open = true; });
   root.querySelectorAll('.agenda-week-link').forEach(link => link.addEventListener('click', () => {
     const panel = root.querySelector(`details${link.getAttribute('href')}`);
     if (panel) panel.open = true;

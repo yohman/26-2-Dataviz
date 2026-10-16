@@ -1,0 +1,22 @@
+const test=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const vm=require('node:vm');
+test('Pokemon guide stays inline with all 20 fields and follows JP/EN',()=>{
+ const context={window:{courseLanguage:'ja'},document:{querySelector:()=>null,addEventListener(){}}};
+ vm.createContext(context);
+ vm.runInContext(fs.readFileSync('assets/pokemon-variables.js','utf8'),context);
+ vm.runInContext(fs.readFileSync('assets/site.js','utf8'),context);
+ assert.equal(context.window.POKEMON_VARIABLES.length,20);
+ const ja=vm.runInContext("materialLinks([{href:'pokemon-variables.html',label:'Guide'}])",context);
+ assert.match(ja,/<details class="pokemon-variable-guide">/);
+ assert(!ja.includes('href="pokemon-variables.html"'));
+ assert.match(ja,/物理攻撃の強さ/);
+ assert(!ja.includes('Base strength of physical attacks.'));
+ assert.equal((ja.match(/<tr>/g)||[]).length,21);
+ context.window.courseLanguage='en';
+ const en=vm.runInContext('pokemonVariableGuide()',context);
+ assert.match(en,/Base strength of physical attacks/);
+ assert(!en.includes('物理攻撃の強さ'));
+ assert.match(en,/Image_URL/);
+});
