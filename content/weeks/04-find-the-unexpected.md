@@ -14,12 +14,15 @@ schedule: 10:40–10:50|Review|Look back at student work;10:50–11:10|Visual la
 schedule_ja: 10:40–10:50|作品レビュー|学生の作品を振り返る;10:50–11:10|視覚言語|マークとチャネル;11:10–11:25|ポケモン・個人制作|探索し、グラフを1点つくる;11:25–11:45|グループ共有と発表|選択・提出・グループ作品の共有;11:45–12:10|相互レビューと改善|先週の作品を見せ、意見をもらって改善;12:10–12:20|公開とまとめ|Tableau Publicへの公開と宿題
 in_class: Pokémon Challenge: 15 minutes solo, then group sharing and one group submission. Continue in the same groups to review last week's individual work and begin refining it.
 in_class_ja: ポケモン・チャレンジは15分の個人制作から、グループ共有・1件の提出へ。同じグループで先週の個人作品を見せ合い、フィードバックを受けて改善を始めます。
-homework: Refine your own Tableau project using today's feedback, publish it on Tableau Public, and submit the published visualization link with your screenshots and commentary.
-homework_ja: 今日のフィードバックを生かして自分のTableau作品を改善し、Tableau Publicで公開してください。公開した作品のリンク・スクリーンショット・説明を添えて提出します。
-requirements: Refine your own Tableau project from last week, not the group's Pokémon selection.;Make at least two purposeful improvements based on peer feedback or today's lesson.;Publish the improved work on Tableau Public and check that its direct visualization link opens without signing in. Do not publish private or sensitive data.;Include both the Tableau Public visualization URL and the data/source URL in the form's link answer (separate lines). Do not submit only your profile URL.;Submit one screenshot of the improved work (required). A second screenshot is optional and can show the earlier version.;Explain the feedback you received, what you changed and why, and what is now clearer.;Submit individually through the usual homework form. You can resubmit until the deadline.
-requirements_ja: 先週の自分のTableau作品を改善する。グループで選んだポケモン作品ではありません。;仲間のフィードバックや今日の学びを基に、意図のある改善を少なくとも2点行う。;改善後の作品をTableau Publicで公開し、ログインせずに開けることを確認する。個人情報や非公開データは公開しないこと。;フォームのリンク欄にTableau Publicの作品URLを、説明欄にデータ・出典URLを記載する。プロフィールのURLだけでは不可。;改善後のスクリーンショット1枚は必須。2枚目は任意で、比較用の改善前の画像でも構いません。;もらった意見、変更した内容と理由、より伝わるようになった点を説明する。;いつもの宿題フォームから個人で提出する。締切まで再提出できます。
-challenge: Refine and publish your Tableau project
-challenge_ja: 自分のTableau作品を磨いて公開する
+homework: Develop your own Tableau project into an interactive dashboard with at least two sheets and a working filter. Use your existing data or choose new data. Publish the dashboard on Tableau Public.
+homework_ja: 自分のTableau作品を、2つ以上のシートと動作するフィルターを備えたダッシュボードにしましょう。これまでのデータでも、新しく選んだデータでも構いません。Tableau Publicで公開してください。
+requirements: Create at least two worksheets that explore related aspects of one question.;Combine both sheets in one dashboard with a clear title and readable layout.;Add at least one interactive filter that changes the displayed data. A sheet set to Use as Filter or a visible filter control is acceptable. Highlighting alone does not count.;Test selecting a value and clearing the filter. Explain what changes and what the viewer can discover.;Publish the dashboard on Tableau Public and check its direct visualization URL while signed out. Do not publish private or sensitive data.;Submit the Tableau Public visualization URL in the form's link field and the data/source URL in your commentary. Do not submit only a profile URL.;Submit one screenshot of the dashboard (required). A second screenshot is optional and can show the filtered state.;Explain your question, the purpose of each sheet, what the filter does, and one finding.;Submit individually through the usual homework form. You can resubmit until the deadline.
+requirements_ja: 同じ問いを異なる角度から見るワークシートを2つ以上つくる。;2つ以上のシートを1つのダッシュボードに配置し、明確なタイトルと読みやすいレイアウトにする。;表示するデータが変わるフィルターを少なくとも1つ付ける。「フィルターとして使用」でも、表示したフィルター操作でも可。ハイライトだけでは不可。;値の選択と解除を試す。何が変わり、何を発見できるか確認する。;Tableau Publicでダッシュボードを公開し、ログアウト状態でも作品URLが開けることを確認する。個人情報や非公開データは公開しない。;フォームのリンク欄にTableau Publicの作品URLを、説明欄にデータ・出典URLを記載する。プロフィールURLだけでは不可。;ダッシュボードのスクリーンショット1枚は必須。2枚目は任意で、フィルター後の状態を示しても構いません。;問い、各シートの役割、フィルターの動作、発見を説明する。;いつもの宿題フォームから個人で提出する。締切まで再提出できます。
+homework_guide: tableau-dashboard-guide.html
+homework_guide_label: How to build a filtered dashboard
+homework_guide_label_ja: フィルター付きダッシュボードの作り方
+challenge: Create a filtered Tableau dashboard
+challenge_ja: フィルター付きTableauダッシュボードをつくる
 tools: Tableau / Tableau Public
 tools_ja: Tableau / Tableau Public
 image: assets/images/lecture/week04-visual-language.png
@@ -70,13 +73,13 @@ text_ja: 同じグループで続けます。今度はポケモンではなく�
 steps:
 - Take turns showing last week's submission (about two minutes each). Explain the question, finding, and one part you want to improve.
 - Groupmates offer one specific strength and one actionable suggestion. Discuss chart type, position, color, size, labels, or axes.
-- After everyone has shared, work individually. Choose at least two improvements and start revising your own Tableau project.
+- After everyone has shared, work individually. Use the feedback to plan at least two related sheets and an interactive filter for your homework dashboard. Open the how-to guide in the homework panel.
 - Publish the improved work: Server → Tableau Public → Save to Tableau Public. Sign in, then copy the visualization's Share link. Interface wording may vary.
 - Check the link in a signed-out/private window. Submit that direct project link with your data source, screenshots, and commentary for homework. Tableau Public is public: remove private data before uploading.
 steps_ja:
 - 1人約2分で先週の提出作品を紹介する。問い、発見、改善したい点を伝えましょう。
 - 仲間は、よい点を1つ、具体的な改善案を1つ返す。グラフの種類・位置・色・大きさ・ラベル・軸などを見て話し合いましょう。
-- 全員が共有した後、個人で改善を始める。少なくとも2点の変更を選び、自分のTableau作品を修正します。
+- 全員が共有した後、個人で制作を始める。意見を生かして、宿題のダッシュボードに使う2つ以上のシートとフィルターを考えましょう。宿題パネルの手順ガイドを参照してください。
 - 改善した作品を公開：「サーバー」→「Tableau Public」→「Tableau Publicに保存」。ログイン後、作品の「共有」からリンクをコピーします。表示名はバージョンで異なる場合があります。
 - ログアウト状態やプライベートウィンドウでリンクを確認する。作品URL・データの出典・画像・説明を宿題として提出します。Tableau Publicは一般公開なので、個人情報を含めないでください。
 link: gallery.html?week=3

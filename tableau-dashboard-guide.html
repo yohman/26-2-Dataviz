@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>フィルター付きダッシュボードの作り方 · Data Visualization</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css"><link rel="stylesheet" href="assets/dashboard-guide.css">
+</head>
+<body>
+<header class="site-header"><a class="wordmark" href="index.html"><span>DV / 26–2</span>データを見る</a><nav class="site-nav"><a href="agenda.html#week-4">AGENDA</a><a href="gallery.html?week=4">GALLERY</a></nav></header>
+<main class="wrap dashboard-guide">
+<p class="eyebrow">WEEK 4 · TABLEAU HOW-TO</p>
+<h1>フィルター付き<br>ダッシュボードの作り方</h1>
+<p class="guide-intro">2つ以上のシートを組み合わせ、見る人がデータを絞り込める作品にします。これまでのデータを使っても、新しく選んでも構いません。</p>
+<ol class="guide-steps">
+<li><h2>問いと2つの見方を決める</h2><p>同じ問いに対して、役割の違うグラフを2つ考えます。例：「国ごとの豊かさと健康はどう関係するか？」を、散布図と地域別の棒グラフで見る。</p><p class="guide-example">Gapminderの例：<code>GDP</code> × <code>Life Expectancy</code> の散布図と、<code>region</code> 別の平均寿命。自分のデータなら、カテゴリ別の比較と詳細のグラフなど。</p></li>
+<li><h2>ワークシートを2つ以上つくる</h2><p>同じデータソースでシートをつくり、分かる名前を付けます。軸・単位・集計方法を確認しましょう。</p><p class="guide-example">Gapminder：両方のシートの <code>Year</code> を同じ1年に絞る。散布図は <code>Country</code> を <strong>Detail</strong> に、<code>region</code> を <strong>Color</strong> に。棒グラフは <code>region</code> を <strong>Rows</strong>、<code>AVG(Life Expectancy)</code> を <strong>Columns</strong> に置きます。</p></li>
+<li><h2>新しいダッシュボードに配置する</h2><p>画面下の <strong>New Dashboard（新しいダッシュボード）</strong> をクリック。左の <strong>Size（サイズ）</strong> を <strong>Automatic（自動）</strong> にして、<strong>Sheets</strong> 一覧から2つのシートを白いキャンバスにドラッグします。<strong>Tiled（タイル）</strong> で並べると整えやすくなります。</p><p class="guide-note">固定サイズなら例として1200 × 800。サイズは「Default（既定）」のレイアウトで設定します。「Desktop」は端末別レイアウトで、用紙サイズの選択ではありません。灰色の領域には配置できません。</p></li>
+<li><h2>漏斗アイコンでフィルターを付ける</h2><p>ダッシュボード内で、フィルターの入口にしたいシートを選択。右上付近の<strong>漏斗アイコン</strong>をクリックして <strong>Use as Filter（フィルターとして使用）</strong> を有効にします。見つからない場合は、シートのメニューから同じ項目を選びます。</p><p class="guide-example">Gapminder：地域別の棒グラフをフィルターにする。<code>Asia</code> の棒をクリックすると、散布図にアジアの国だけが表示されます。</p><p class="guide-note">薄くするだけの「ハイライト」とは異なります。フィルターは、選択に合わないデータを表示から除きます。</p></li>
+<li><h2>選択・解除をテストする</h2><p>別の棒もクリックして、もう一方のシートが変わることを確認。選択を解除すると全体に戻るかも試します。戻らない場合は <strong>Dashboard → Actions</strong> でフィルターアクションを編集し、<strong>Clearing the selection → Show all values</strong> を選びます。</p><p class="guide-note">動かない場合：アクションの対象シートにもう一方のシートが含まれるか、両方が同じデータソースを使うかを確認。Gapminderの地域フィルターでは、散布図に <code>region</code> が含まれていることも確認します。</p><p>タイトルと「棒をクリックすると絞り込めます」などの短い操作説明を添えます。</p></li>
+<li><h2>公開して、いつものフォームから提出する</h2><p><strong>Server → Tableau Public → Save to Tableau Public</strong> で公開します（表示名はバージョンで異なります）。公開ページでダッシュボードを表示し、<strong>Share（共有）</strong> から作品URLをコピー。プライベートウィンドウでも、2つのシートとフィルターが使えるか確認してください。</p><ul><li>リンク欄：<strong>Tableau Publicの作品URL</strong>。プロフィールURLではありません。</li><li>画像：ダッシュボードの<strong>スクリーンショット1枚は必須</strong>。2枚目は任意で、絞り込み後の状態など。</li><li>説明：<strong>問い・各シートの役割・フィルターの動作・発見</strong>と、<strong>データ・出典URL</strong>。</li></ul><p class="guide-note">公開前に個人情報や非公開データを除いてください。締切までは同じ宿題フォームから再提出できます。締切はWeek 4の宿題パネルに表示されます。</p></li>
+</ol>
+<details class="guide-english" lang="en"><summary>English instructions</summary><ol><li>Choose a question and two related views. Use existing or new data.</li><li>Create at least two worksheets from the same source. For Gapminder, filter both to the same single year: a GDP/life-expectancy scatterplot with Country on Detail and region on Color, plus a bar chart of average life expectancy by region.</li><li>Create a New Dashboard. Set Size to Automatic in the Default layout, or choose a fixed size such as 1200 × 800. Drag both sheets into the white canvas using Tiled placement. The Desktop device layout is not the canvas-size setting.</li><li>Select the regional bar chart in the dashboard and click its funnel icon, Use as Filter. The sheet menu offers the same command. Click Asia: the scatterplot should show only Asian countries.</li><li>Test another selection and clear it. If necessary, edit Dashboard → Actions and set clearing the selection to Show all values. Check the target sheet and shared data source. Highlighting alone does not satisfy the filter requirement.</li><li>Publish to Tableau Public. Verify the dashboard and filter while signed out. Submit the direct visualization URL, one required screenshot (a second is optional), and commentary explaining the question, each sheet, the filter, a finding, and the data/source URL. Resubmit through the usual homework form until the deadline shown in the agenda.</li></ol></details>
+<section class="guide-sources"><h2>Tableau公式ガイド / Official guides</h2><p><a href="https://help.tableau.com/current/pro/desktop/en-us/dashboards_create.htm" target="_blank" rel="noopener">ダッシュボードの作成 / Create a dashboard ↗</a></p><p><a href="https://help.tableau.com/current/pro/desktop/en-us/actions_filter.htm" target="_blank" rel="noopener">フィルターアクション / Filter actions ↗</a></p></section>
+<p><a class="button" href="agenda.html#week-4">Week 4の宿題に戻る →</a></p>
+</main></body></html>

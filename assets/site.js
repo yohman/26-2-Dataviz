@@ -361,6 +361,8 @@ function renderAgenda() {
       : `<div class="assignment-submit"><p class="assignment-note">${copy('The submission link will appear here.', '提出リンクはここに表示されます。')}</p><p class="assignment-deadline"><strong>${copy('DEADLINE', '締切')}</strong> ${escapeHtml(deadline)}</p></div>`;
     const requirements = copy(week.requirements || '', week.requirements_ja || '');
     const homeworkRequirements = requirements ? `<h5>${copy('Requirements', '課題の要件')}</h5><ul class="homework-requirements">${requirements.split(';').filter(Boolean).map(item => `<li>${escapeHtml(item.trim())}</li>`).join('')}</ul>` : '';
+    const guideHref = safeResourceHref(week.homework_guide);
+    const homeworkGuide = guideHref ? `<p class="homework-guide-link"><a class="button" href="${escapeHtml(guideHref)}">${escapeHtml(copy(week.homework_guide_label || 'Homework how-to guide', week.homework_guide_label_ja || '課題の手順ガイド'))} →</a></p>` : '';
     html += `<details class="week" id="week-${week.week}"${week.week === focusedWeek?.week ? ' open' : ''}>
       <summary class="week-summary">${weekIndex}${weekMain}<span class="week-toggle"><span class="week-toggle-closed">${copy('Open week', '週の内容を見る')}</span><span class="week-toggle-open">${copy('Close week', '週の内容を閉じる')}</span><b aria-hidden="true">↓</b></span></summary>
       <div class="week-body">
@@ -370,7 +372,7 @@ function renderAgenda() {
           ${week.lectureExamples?.length ? `<div class="lecture-examples"><h4>${copy('Explore Tableau Public', 'Tableau Publicの作品を探索')}</h4><div class="lecture-examples-resources">${materialLinks(week.lectureExamples, { week: week.week })}</div></div>` : ''}
         </section>
         <section class="week-assignments" aria-label="${copy('Assignments', '課題')}">
-          <div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p>${homeworkRequirements}<dl class="assignment-details">${requirements ? '' : `<div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${escapeHtml(copy(week.deliverables || 'Visualization, title, concise explanation, project link, and one screenshot.', week.deliverables_ja || '可視化、タイトル、短い説明、作品リンク、スクリーンショット1枚。'))}</dd></div>`}<div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}<div class="homework-gallery-link" data-homework-gallery-week="${week.week}"></div></article></div>
+          <div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p>${homeworkRequirements}${homeworkGuide}<dl class="assignment-details">${requirements ? '' : `<div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${escapeHtml(copy(week.deliverables || 'Visualization, title, concise explanation, project link, and one screenshot.', week.deliverables_ja || '可視化、タイトル、短い説明、作品リンク、スクリーンショット1枚。'))}</dd></div>`}<div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}<div class="homework-gallery-link" data-homework-gallery-week="${week.week}"></div></article></div>
         </section>
       </div></details>`;
     if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';

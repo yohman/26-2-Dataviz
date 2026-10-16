@@ -1,0 +1,16 @@
+.dashboard-guide{max-width:920px;padding-block:3rem 5rem}
+.dashboard-guide h1{font-size:clamp(2.2rem,5vw,4rem);line-height:1.2;margin:0 0 1.5rem}
+.guide-intro{max-width:46rem;font-size:1.1rem;line-height:1.9}
+.guide-steps{list-style:none;counter-reset:step;padding:0;margin:3rem 0}
+.guide-steps>li{counter-increment:step;position:relative;padding:0 0 2rem 4rem;margin-bottom:2rem;border-bottom:1px solid var(--line)}
+.guide-steps>li::before{content:counter(step,decimal-leading-zero);position:absolute;left:0;top:.1rem;color:var(--cobalt);font:700 1.6rem var(--sans)}
+.dashboard-guide h2{font:700 1.25rem/1.5 var(--sans);margin:0 0 .8rem}
+.dashboard-guide p,.dashboard-guide li{line-height:1.9}
+.dashboard-guide code{font:600 .9em var(--sans);background:#ece1ce;padding:.15em .4em;box-decoration-break:clone}
+.guide-example{border-left:3px solid var(--cobalt);padding-left:1rem}
+.guide-note{color:var(--muted);font-size:.9rem}
+.guide-english{margin:2rem 0;padding:1rem 0;border-block:1px solid var(--line)}
+.guide-english summary{cursor:pointer;font-weight:700}
+.guide-sources{margin-block:2rem}
+body:has(.dashboard-guide) .site-nav{display:flex}
+@media(max-width:600px){.guide-steps>li{padding-left:2.7rem}.guide-steps>li::before{font-size:1.2rem}.dashboard-guide h2{font-size:1.1rem}.dashboard-guide .site-nav{gap:.7rem}}

@@ -67,6 +67,10 @@ test('Weeks 4 and 5 separate the Tableau challenge from Python and Datasaurus', 
   assert.equal(four.activities[0].results_link, 'activity-results.html?week=4');
   assert.equal(four.activities[1].link, 'gallery.html?week=3');
   assert.match(four.requirements, /Tableau Public visualization URL/);
+  assert.match(four.requirements, /at least two worksheets/);
+  assert.match(four.requirements, /interactive filter/);
+  assert.equal(four.homework_guide, 'tableau-dashboard-guide.html');
+  assert(fs.existsSync(path.join(__dirname, '..', four.homework_guide)));
   assert(four.materials.some(m => m.href === 'pokemon-variables.html'));
   context.groupLink = 'https://example.org/?title=%E7%AC%AC4%E9%80%B1';
   assert.equal(new URL(vm.runInContext('safeResourceHref(groupLink)', context)).searchParams.get('title'), '第4週');
