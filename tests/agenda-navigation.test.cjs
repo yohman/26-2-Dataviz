@@ -1,0 +1,20 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const test = require('node:test');
+test('agenda scrolls to an asynchronously rendered hash target and expands it', () => {
+  let frame, scrolled;
+  const panel = { open: false, isConnected: true, matches: () => true, scrollIntoView: options => { scrolled = options; } };
+  const context = { document: { addEventListener() {} }, window: {}, location: { hash: '#week-4' }, requestAnimationFrame: fn => { frame = fn; }, panel };
+  vm.createContext(context);
+  vm.runInContext(fs.readFileSync('assets/site.js', 'utf8'), context);
+  vm.runInContext('scrollToAgendaWeek({ querySelector: selector => selector === "#week-4" ? panel : null })', context);
+  assert.equal(panel.open, true);
+  assert.equal(scrolled, undefined);
+  frame();
+  assert.equal(scrolled.block, 'start');
+  scrolled = undefined;
+  context.location.hash = '#week-3';
+  frame();
+  assert.equal(scrolled, undefined);
+});

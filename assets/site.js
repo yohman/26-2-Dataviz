@@ -284,6 +284,18 @@ function setupShell() {
   languageButton.addEventListener('click', () => applyLanguage(language = language === 'en' ? 'ja' : 'en'));
 }
 
+function scrollToAgendaWeek(root) {
+  const hash = location.hash;
+  if (!/^#week-\d+$/.test(hash)) return;
+  const panel = root.querySelector(hash);
+  if (!panel) return;
+  if (panel.matches('details')) panel.open = true;
+  // Weekly panels arrive asynchronously, after the browser's initial anchor jump.
+  requestAnimationFrame(() => {
+    if (location.hash === hash && panel.isConnected) panel.scrollIntoView({ block: 'start', behavior: 'instant' });
+  });
+}
+
 function renderAgenda() {
   const root = document.querySelector('[data-agenda]');
   if (!root) return;
@@ -368,17 +380,13 @@ function renderAgenda() {
     const panel = root.querySelector(`details${link.getAttribute('href')}`);
     if (panel) panel.open = true;
   }));
-  const requestedWeek = location.hash.match(/^#week-(\d+)$/)?.[1];
-  if (requestedWeek) {
-    const requestedPanel = root.querySelector(`details#week-${requestedWeek}`);
-    if (requestedPanel) requestedPanel.open = true;
-  }
   root.querySelectorAll('details.week').forEach(node => {
     node.querySelector('.week-lecture-aside').append(createMoriCorner(weekFor(node.id.replace('week-', ''))));
   });
   setupActivityTabs(root);
   startSubmissionDeadlineClock(root);
   syncHomeworkGalleryLinks(root);
+  scrollToAgendaWeek(root);
 }
 
 function galleryWeekCounts(items) {
