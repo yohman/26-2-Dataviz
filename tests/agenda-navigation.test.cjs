@@ -18,3 +18,13 @@ test('agenda scrolls to an asynchronously rendered hash target and expands it', 
   frame();
   assert.equal(scrolled, undefined);
 });
+test('homework guide links open the week and guide and scroll directly to it',()=>{
+ let frame,scrolled=false;
+ const guide={open:false,isConnected:true,scrollIntoView(){scrolled=true;}};
+ const panel={open:false,matches:()=>true,querySelector:()=>guide};
+ const context={document:{addEventListener(){}},window:{},location:{hash:'#week-4-homework-guide'},requestAnimationFrame:fn=>{frame=fn;},panel};
+ vm.createContext(context);vm.runInContext(fs.readFileSync('assets/site.js','utf8'),context);
+ vm.runInContext('scrollToAgendaWeek({querySelector:()=>panel})',context);
+ assert.equal(panel.open,true);assert.equal(guide.open,true);
+ frame();assert.equal(scrolled,true);
+});

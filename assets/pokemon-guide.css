@@ -8,7 +8,7 @@
 .pokemon-variable-scroll td:nth-child(2){min-width:200px}
 .pokemon-variable-scroll code{font:600 .8rem var(--sans);white-space:nowrap}
 .pokemon-variable-note{color:var(--muted)}
-.homework-dashboard-guide{margin:1.25rem 0;font-family:var(--sans)}
+.homework-dashboard-guide{margin:1.25rem 0;font-family:var(--sans);scroll-margin-top:90px}
 .homework-dashboard-guide summary{cursor:pointer;padding:.9rem 1rem;border:1px solid var(--line);font-weight:700;color:var(--playfair-crimson);background:var(--paper)}
 .homework-dashboard-guide ol{padding:0 0 0 1.5rem;margin:1.25rem 0}
 .homework-dashboard-guide li{padding-left:.25rem;margin-bottom:1.2rem;font-size:.88rem;line-height:1.7}

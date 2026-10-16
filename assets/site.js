@@ -310,13 +310,17 @@ function setupShell() {
 
 function scrollToAgendaWeek(root) {
   const hash = location.hash;
-  if (!/^#week-\d+$/.test(hash)) return;
-  const panel = root.querySelector(hash);
+  const match = hash.match(/^#week-(\d+)(-homework-guide)?$/);
+  if (!match) return;
+  const panel = root.querySelector(`#week-${match[1]}`);
   if (!panel) return;
   if (panel.matches('details')) panel.open = true;
+  const guide = match[2] ? panel.querySelector('.homework-dashboard-guide') : null;
+  if (guide) guide.open = true;
+  const target = guide || panel;
   // Weekly panels arrive asynchronously, after the browser's initial anchor jump.
   requestAnimationFrame(() => {
-    if (location.hash === hash && panel.isConnected) panel.scrollIntoView({ block: 'start', behavior: 'instant' });
+    if (location.hash === hash && target.isConnected) target.scrollIntoView({ block: 'start', behavior: 'instant' });
   });
 }
 
