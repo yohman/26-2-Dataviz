@@ -1,6 +1,7 @@
 // English remains in each HTML page for searchability and no-JavaScript fallback.
 // Add or revise Japanese copy here; weekly dynamic content lives in site.js.
 window.COURSE_TRANSLATIONS = { ja: {
+  'Tableau Dashboard Guide · Data Visualization': 'フィルター付きダッシュボードの作り方 · Data Visualization',
   '2026-2 Data Visualization': '2026-2 データビジュアライゼーション',
   'Agenda · 2026-2 Data Visualization': '授業計画 · 2026-2 データビジュアライゼーション',
   'MAKE · 2026-2 Data Visualization': 'MAKE · 2026-2 データビジュアライゼーション',

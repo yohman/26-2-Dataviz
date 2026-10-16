@@ -2,15 +2,16 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>フィルター付きダッシュボードの作り方 · Data Visualization</title>
+<title>Tableau Dashboard Guide · Data Visualization</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/styles.css"><link rel="stylesheet" href="assets/dashboard-guide.css">
 </head>
 <body>
-<header class="site-header"><a class="wordmark" href="index.html"><span>DV / 26–2</span>データを見る</a><nav class="site-nav"><a href="agenda.html#week-4">AGENDA</a><a href="gallery.html?week=4">GALLERY</a></nav></header>
+<header class="site-header"><a class="wordmark" href="index.html"><span>DV / 26–2</span> Seeing Data</a><nav class="site-nav"><a href="agenda.html#week-4">AGENDA</a><a href="gallery.html?week=4">GALLERY</a></nav></header>
 <main class="wrap dashboard-guide">
 <p class="eyebrow">WEEK 4 · TABLEAU HOW-TO</p>
+<section data-course-lang="ja" lang="ja">
 <h1>フィルター付き<br>ダッシュボードの作り方</h1>
 <p class="guide-intro">2つのグラフを並べて、クリックで絞り込めるようにする。</p>
 <ol class="guide-steps">
@@ -18,7 +19,15 @@
 <li><h2>フィルターを付ける</h2><p>ダッシュボード内の棒グラフを選び、右上の<strong>漏斗アイコン（Use as Filter）</strong>をクリック。棒をクリックすると、もう一方のグラフが絞り込まれるか確認しましょう。</p><p class="guide-example">例：地域の棒をクリックすると、その地域の国だけが散布図に表示される。</p></li>
 <li><h2>公開して提出する</h2><p><strong>Server → Tableau Public → Save to Tableau Public</strong> で公開。公開ページの <strong>Share</strong> から作品URLをコピーします。</p><p>いつもの宿題フォームに、<strong>作品URL・画像1枚（2枚目は任意）・発見とフィルターの短い説明・データの出典URL</strong>を提出してください。</p><p class="guide-note">個人情報は公開しないこと。締切までは再提出できます。</p></li>
 </ol>
-<details class="guide-english" lang="en"><summary>English instructions</summary><ol><li><strong>Arrange two charts.</strong> Create two sheets from the same data. Open New Dashboard, set Size to Automatic, and drag both sheets onto the white canvas.</li><li><strong>Add a filter.</strong> Select one chart and click its funnel icon (Use as Filter). Click a mark and check that the other chart filters.</li><li><strong>Publish and submit.</strong> Save to Tableau Public. Submit the visualization URL, one screenshot (a second is optional), a short explanation of your finding and filter, and the data/source URL through the usual homework form. Keep private information out. You can resubmit until the deadline.</li></ol></details>
-<section class="guide-sources"><h2>Tableau公式ガイド / Official guides</h2><p><a href="https://help.tableau.com/current/pro/desktop/en-us/dashboards_create.htm" target="_blank" rel="noopener">ダッシュボードの作成 / Create a dashboard ↗</a></p><p><a href="https://help.tableau.com/current/pro/desktop/en-us/actions_filter.htm" target="_blank" rel="noopener">フィルターアクション / Filter actions ↗</a></p></section>
-<p><a class="button" href="agenda.html#week-4">Week 4の宿題に戻る →</a></p>
-</main></body></html>
+</section>
+<section data-course-lang="en" lang="en" hidden>
+<h1>A dashboard<br>with a filter</h1>
+<p class="guide-intro">Arrange two charts. Click one to filter the other.</p>
+<ol class="guide-steps">
+<li><h2>Arrange two charts</h2><p>Create two sheets from the same data. Open <strong>New Dashboard</strong>, set <strong>Size → Automatic</strong>, and drag both sheets onto the white canvas.</p><p class="guide-example">Example: a category bar chart and a detailed scatterplot.</p></li>
+<li><h2>Add a filter</h2><p>Select the bar chart and click its <strong>funnel icon (Use as Filter)</strong>. Click a bar and check that the other chart filters.</p><p class="guide-example">Example: click a region to show only its countries in the scatterplot.</p></li>
+<li><h2>Publish and submit</h2><p>Choose <strong>Server → Tableau Public → Save to Tableau Public</strong>. Copy the visualization URL from <strong>Share</strong> on the published page.</p><p>Submit the <strong>visualization URL, one screenshot (a second is optional), a short explanation of your finding and filter, and the data/source URL</strong> through the usual homework form.</p><p class="guide-note">Keep private information out. You can resubmit until the deadline.</p></li>
+</ol></section>
+<section class="guide-sources"><h2><span data-course-lang="ja">Tableau公式ガイド</span><span data-course-lang="en" hidden>Official Tableau guides</span></h2><p><a href="https://help.tableau.com/current/pro/desktop/en-us/dashboards_create.htm" target="_blank" rel="noopener"><span data-course-lang="ja">ダッシュボードの作成 ↗</span><span data-course-lang="en" hidden>Create a dashboard ↗</span></a></p><p><a href="https://help.tableau.com/current/pro/desktop/en-us/actions_filter.htm" target="_blank" rel="noopener"><span data-course-lang="ja">フィルターアクション ↗</span><span data-course-lang="en" hidden>Filter actions ↗</span></a></p></section>
+<p><a class="button" href="agenda.html#week-4"><span data-course-lang="ja">Week 4の宿題に戻る →</span><span data-course-lang="en" hidden>Back to Week 4 homework →</span></a></p>
+</main><script src="assets/i18n.js?v=dashboard-guide-20261016"></script><script src="assets/site.js?v=homework-slide-20261016"></script></body></html>

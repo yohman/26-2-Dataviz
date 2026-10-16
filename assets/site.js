@@ -221,6 +221,10 @@ function setupActivityTabs(root) {
   });
 }
 
+function applyCourseLanguageSections(language) {
+  document.querySelectorAll('[data-course-lang]').forEach(node => { node.hidden = node.dataset.courseLang !== language; });
+}
+
 function setupShell() {
   const guideGroups = [...document.querySelectorAll('.guide-grid--week article')].map(article => ({
     article, materials: [...article.querySelectorAll('a')].map(anchor => ({
@@ -257,6 +261,7 @@ function setupShell() {
   function applyLanguage(language) {
     window.courseLanguage = language;
     document.documentElement.lang = language;
+    applyCourseLanguageSections(language);
     nodes.forEach(({ node, english }) => {
       const key = english.trim();
       node.nodeValue = language === 'ja' && translations[key] ? english.replace(key, translations[key]) : english;
