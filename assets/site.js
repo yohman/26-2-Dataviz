@@ -105,6 +105,19 @@ function pokemonVariableGuide() {
   return `<details class="pokemon-variable-guide"><summary>${copy('Pokémon variable guide', 'ポケモンの変数一覧')}</summary><p>${copy('One row is one species. No Pokémon knowledge needed.', '1行が1種のポケモンです。ゲームの知識は不要です。')}</p><div class="pokemon-variable-scroll" tabindex="0" role="region" aria-label="${copy('Pokémon variables', 'ポケモンの変数')}"><table><thead><tr><th>${copy('Variable', '変数')}</th><th>${copy('Meaning', '意味')}</th><th>${copy('Use', '扱い方')}</th></tr></thead><tbody>${rows.map(([name,ja,en,use])=>{const [useJa,...useEn]=use.split(' / ');return `<tr><td><code>${escapeHtml(name)}</code></td><td>${escapeHtml(copy(en,ja))}</td><td>${escapeHtml(copy(useEn.join(' / ')||useJa,useJa))}</td></tr>`;}).join('')}</tbody></table></div><p class="pokemon-variable-note">${copy('Base stats describe a species, not an individual Pokémon. Total stats alone do not determine battle performance.', '能力値は種ごとの基礎値です。個体の値ではなく、合計だけで強さが決まるわけではありません。')}</p></details>`;
 }
 
+function dashboardHomeworkGuide() {
+  const steps = isJapanese() ? [
+    ['2つのグラフを並べる', '同じデータでシートを2つつくる。<strong>New Dashboard</strong> を開き、<strong>Size → Automatic</strong> にして、2つのシートを白いキャンバスにドラッグします。'],
+    ['フィルターを付ける', 'ダッシュボード内のグラフを選び、右上の<strong>漏斗アイコン（Use as Filter）</strong>をクリック。グラフをクリックして、もう一方が絞り込まれるか確認しましょう。'],
+    ['公開して提出する', '<strong>Server → Tableau Public → Save to Tableau Public</strong> で公開し、<strong>Share</strong> から作品URLをコピー。いつものフォームに、<strong>作品URL・画像1枚（2枚目は任意）・発見とフィルターの短い説明・データの出典URL</strong>を提出します。']
+  ] : [
+    ['Arrange two charts', 'Create two sheets from the same data. Open <strong>New Dashboard</strong>, set <strong>Size → Automatic</strong>, and drag both sheets onto the white canvas.'],
+    ['Add a filter', 'Select one chart and click its <strong>funnel icon (Use as Filter)</strong>. Click a mark and check that the other chart filters.'],
+    ['Publish and submit', 'Choose <strong>Server → Tableau Public → Save to Tableau Public</strong>. Copy the visualization URL from <strong>Share</strong>. Submit the <strong>project URL, one screenshot (a second is optional), a short explanation of your finding and filter, and the data/source URL</strong> through the usual homework form.']
+  ];
+  return `<details class="homework-dashboard-guide"><summary>${copy('How to build a filtered dashboard', 'フィルター付きダッシュボードの作り方')}</summary><ol>${steps.map(([title,body])=>`<li><h5>${title}</h5><p>${body}</p></li>`).join('')}</ol><p class="guide-note">${copy('Keep private information out. You can resubmit until the deadline.', '個人情報は公開しないこと。締切までは再提出できます。')}</p></details>`;
+}
+
 function materialLinks(materials, context = {}) {
   return [...materials].sort((first, second) => Number(second.type === 'slides') - Number(first.type === 'slides')).map(material => {
     const href = safeResourceHref(material.href);
@@ -311,6 +324,7 @@ function renderAgenda() {
   const root = document.querySelector('[data-agenda]');
   if (!root) return;
   const variableGuideOpen = Boolean(root.querySelector('.pokemon-variable-guide[open]'));
+  const dashboardGuideOpen = Boolean(root.querySelector('.homework-dashboard-guide[open]'));
   const today = todayInTokyo();
   const localPreview = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
   const previewParams = new URLSearchParams(location.search);
@@ -368,7 +382,7 @@ function renderAgenda() {
     const requirements = copy(week.requirements || '', week.requirements_ja || '');
     const homeworkRequirements = requirements ? `<h5>${copy('Requirements', '課題の要件')}</h5><ul class="homework-requirements">${requirements.split(';').filter(Boolean).map(item => `<li>${escapeHtml(item.trim())}</li>`).join('')}</ul>` : '';
     const guideHref = safeResourceHref(week.homework_guide);
-    const homeworkGuide = guideHref ? `<p class="homework-guide-link"><a class="button" href="${escapeHtml(guideHref)}">${escapeHtml(copy(week.homework_guide_label || 'Homework how-to guide', week.homework_guide_label_ja || '課題の手順ガイド'))} →</a></p>` : '';
+    const homeworkGuide = guideHref === 'tableau-dashboard-guide.html' ? dashboardHomeworkGuide() : guideHref ? `<p class="homework-guide-link"><a class="button" href="${escapeHtml(guideHref)}">${escapeHtml(copy(week.homework_guide_label || 'Homework how-to guide', week.homework_guide_label_ja || '課題の手順ガイド'))} →</a></p>` : '';
     html += `<details class="week" id="week-${week.week}"${week.week === focusedWeek?.week ? ' open' : ''}>
       <summary class="week-summary">${weekIndex}${weekMain}<span class="week-toggle"><span class="week-toggle-closed">${copy('Open week', '週の内容を見る')}</span><span class="week-toggle-open">${copy('Close week', '週の内容を閉じる')}</span><b aria-hidden="true">↓</b></span></summary>
       <div class="week-body">
@@ -386,6 +400,7 @@ function renderAgenda() {
   });
   root.innerHTML = intro + html;
   if (variableGuideOpen) root.querySelectorAll('.pokemon-variable-guide').forEach(guide => { guide.open = true; });
+  if (dashboardGuideOpen) root.querySelectorAll('.homework-dashboard-guide').forEach(guide => { guide.open = true; });
   root.querySelectorAll('.agenda-week-link').forEach(link => link.addEventListener('click', () => {
     const panel = root.querySelector(`details${link.getAttribute('href')}`);
     if (panel) panel.open = true;

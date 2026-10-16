@@ -17,3 +17,18 @@ test('dashboard guide uses the shared language toggle for both three-step versio
  assert.equal(lists.length,2);
  lists.forEach(list=>assert.equal((list[1].match(/<li>/g)||[]).length,3));
 });
+test('homework dashboard guide expands inline in the selected language',()=>{
+ const context={document:{addEventListener(){}},window:{courseLanguage:'ja'}};
+ vm.createContext(context);vm.runInContext(fs.readFileSync('assets/site.js','utf8'),context);
+ const ja=vm.runInContext('dashboardHomeworkGuide()',context);
+ assert.match(ja,/<details class="homework-dashboard-guide">/);
+ assert.match(ja,/2つのグラフを並べる/);
+ assert(!ja.includes('Arrange two charts'));
+ assert.equal((ja.match(/<li>/g)||[]).length,3);
+ context.window.courseLanguage='en';
+ const en=vm.runInContext('dashboardHomeworkGuide()',context);
+ assert.match(en,/Arrange two charts/);
+ assert(!en.includes('2つのグラフを並べる'));
+ assert(!en.includes('href="tableau-dashboard-guide.html"'));
+ assert.equal((en.match(/<li>/g)||[]).length,3);
+});
