@@ -367,6 +367,7 @@ function renderAgenda() {
       <div class="week-body">
         <section class="week-lecture"><div class="week-section-heading"><div><p class="week-section-label">${copy('LECTURE', '講義')}</p><h3>${copy('What to expect', '今週の講義')}</h3></div></div>
           ${timing}
+          ${Number(week.lecture_gallery_week) > 0 ? `<p class="lecture-gallery-link"><a class="inline-resource" href="gallery.html?week=${Number(week.lecture_gallery_week)}">${copy(`Review last week's work (Week ${Number(week.lecture_gallery_week)})`, `先週の作品を見る（第${Number(week.lecture_gallery_week)}週）`)} →</a></p>` : ''}
           <div class="week-heading"><p class="lecture-summary">${escapeHtml(copy(week.look, week.look_ja))}</p><div class="week-lecture-aside">${media}${slides}</div></div>
           ${week.lectureExamples?.length ? `<div class="lecture-examples"><h4>${copy('Explore Tableau Public', 'Tableau Publicの作品を探索')}</h4><div class="lecture-examples-resources">${materialLinks(week.lectureExamples, { week: week.week })}</div></div>` : ''}
         </section>

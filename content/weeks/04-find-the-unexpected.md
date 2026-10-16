@@ -8,6 +8,7 @@ title: Visual Language and the Pokémon Challenge
 title_ja: 視覚言語とポケモン・チャレンジ
 look: Marks and channels: how visual choices shape what we see
 look_ja: マークとチャネル：視覚的な選択で、見えるものが変わる
+lecture_gallery_week: 3
 learn: use position, color, size, and chart type deliberately in Tableau
 learn_ja: Tableauで位置・色・大きさ・グラフの種類を意図的に選ぶ
 schedule: 10:40–10:50|Review|Look back at student work;10:50–11:10|Visual language|Marks and channels;11:10–11:25|Pokémon solo work|Explore and make one chart;11:25–11:45|Group share and show|Select, submit, and view group choices;11:45–12:10|Peer-review workshop|Share last week's work, give feedback, and improve it;12:10–12:20|Publish and recap|Tableau Public and homework

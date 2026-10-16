@@ -71,6 +71,7 @@ test('Weeks 4 and 5 separate the Tableau challenge from Python and Datasaurus', 
   assert.match(four.requirements, /at least two worksheets/);
   assert.match(four.requirements, /interactive filter/);
   assert.equal(four.homework_guide, 'tableau-dashboard-guide.html');
+  assert.equal(Number(four.lecture_gallery_week), 3);
   assert(fs.existsSync(path.join(__dirname, '..', four.homework_guide)));
   assert(four.materials.some(m => m.href === 'pokemon-variables.html'));
   context.groupLink = 'https://example.org/?title=%E7%AC%AC4%E9%80%B1';
