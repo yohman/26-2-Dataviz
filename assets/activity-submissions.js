@@ -7,7 +7,7 @@
     localStorage.setItem('dataviz-heart-browser',id);
     const response=await fetch(api+'/activities?week=4',{method,headers:{'X-Browser-ID':id,...(body?{'Content-Type':'application/json'}:{})},signal:AbortSignal.timeout(20000),...(body?{body:JSON.stringify(body)}:{})});
     const data=await response.json();
-    if(!response.ok)throw new Error(response.status===409?'このグループ番号は別のブラウザから提出済みです。元のブラウザで更新するか、番号を確認してください。 / Group already submitted from another browser.':response.status===429?'1分ほど待って再試行してください。 / Please wait a minute and retry.':'送信・読み込みに失敗しました。再試行してください。 / Please retry.');
+    if(!response.ok)throw new Error(response.status===409?'このグループ名は別のブラウザから提出済みです。元のブラウザで更新するか、グループ名を確認してください。 / Group name already submitted from another browser.':response.status===429?'1分ほど待って再試行してください。 / Please wait a minute and retry.':'送信・読み込みに失敗しました。再試行してください。 / Please retry.');
     return data;
   }
   async function compress(file) {
@@ -26,8 +26,10 @@
       const button=form.querySelector('[type=submit]'); button.disabled=true;
       status.textContent='画像を準備して送信しています… / Preparing and submitting…';
       try {
+        const tableauUrl=form.elements.tableauUrl.value.trim();
+        if(tableauUrl) { const u=new URL(tableauUrl);if(u.protocol!=='https:'||u.hostname!=='public.tableau.com'||u.username||u.password)throw new Error('Tableau Publicの作品URLを入力してください。 / Enter a Tableau Public visualization URL.'); }
         const images=await Promise.all([form.elements.image1.files[0],form.elements.image2.files[0]].filter(Boolean).map(compress));
-        await request('POST',{week:4,groupNumber:Number(form.elements.groupNumber.value),members:form.elements.members.value,title:form.elements.title.value,description:form.elements.description.value,images});
+        await request('POST',{week:4,groupName:form.elements.groupName.value.trim(),members:form.elements.members.value,title:form.elements.title.value,description:form.elements.description.value,tableauUrl:form.elements.tableauUrl.value.trim(),images});
         status.replaceChildren(make('strong','提出しました。同じブラウザから再提出すると更新できます。 / Submitted.'));
         const link=make('a',' 作品を見る / View submissions →'); link.href='activity-results.html?week=4'; status.append(link);
       } catch(error) { status.textContent=error.message||'送信できませんでした。再試行してください。'; }
@@ -35,8 +37,8 @@
     });
     request().then(data=>{
       const mine=data.items.find(item=>item.mine);
-      if(!mine||['groupNumber','members','title','description'].some(key=>form.elements[key].value))return;
-      ['groupNumber','members','title','description'].forEach(key=>{form.elements[key].value=mine[key];});
+      if(!mine||['groupName','members','title','description'].some(key=>form.elements[key].value))return;
+      ['groupName','members','title','description','tableauUrl'].forEach(key=>{form.elements[key].value=mine[key]||'';});
       status.textContent='前回の提出を読み込みました。更新する場合は画像も選び直してください。 / Reselect images to update your submission.';
     }).catch(()=>{});
   }
@@ -51,16 +53,17 @@
         const data=await request(); results.replaceChildren();
         data.items.forEach(item=>{
           const card=make('article','','activity-result');
-          card.append(make('p',`Group ${String(item.groupNumber).padStart(2,'0')}`,'eyebrow'));
+          card.append(make('p',item.groupName,'eyebrow'));
           const images=make('div','','activity-result-images');
           for(let slot=1;slot<=(item.hasSecondImage?2:1);slot++) {
-            const href=`${api}/activity-image?week=4&group=${item.groupNumber}&slot=${slot}&v=${encodeURIComponent(item.updatedAt)}`;
+            const href=`${api}/activity-image?week=4&group=${encodeURIComponent(item.groupName)}&slot=${slot}&v=${encodeURIComponent(item.updatedAt)}`;
             const link=make('a'); link.href=href; link.target='_blank'; link.rel='noopener';
             const img=make('img'); img.src=href; img.alt=`${item.title} · ${slot}`; img.loading='lazy';
             img.addEventListener('error',()=>{link.replaceChildren(make('span','画像を表示できません。クリックして再確認 / Open image'));});
             link.append(img); images.append(link);
           }
           card.append(images,make('h2',item.title),make('p',item.members),make('p',item.description));
+          if(item.tableauUrl) { const link=make('a','Tableau Publicで開く / Open in Tableau Public ↗');link.href=item.tableauUrl;link.target='_blank';link.rel='noopener noreferrer';card.append(link); }
           if(item.hasSecondImage)card.append(make('p','画像2枚 · 横にスクロール / Scroll for image 2','activity-note'));
           results.append(card);
         });

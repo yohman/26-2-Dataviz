@@ -47,13 +47,13 @@ steps:
 - Solo work · 15 minutes: import the Pokémon CSV in Tableau. Choose a question and make one chart that reveals a finding. Add a clear title.
 - Group share: in groups of four, everyone shows their chart and explains one finding and one visual choice.
 - Select one work together for its finding and clarity. Improve it if needed.
-- One representative submits the selected work through the in-class form: group number, all members' names, title, finding and selection reason, and one required screenshot (a second is optional).
+- One representative submits the selected work through the in-class form: group name, all members' names, title, finding and selection reason, and one required screenshot (a second is optional).
 - Open the in-class results page for show and tell. Be ready to explain your group's selection briefly.
 steps_ja:
 - 個人制作・15分：ポケモンCSVをTableauで読み込み、問いを1つ決めて、発見が伝わるグラフを1点つくる。内容が伝わるタイトルを付けましょう。
 - グループ共有：4人で、全員が自分の作品・発見・見せ方の工夫を紹介する。
 - 発見と伝わりやすさで1点を選び、必要なら一緒に改善する。
-- 代表者1人が授業内フォームから提出：グループ番号、全員の名前、タイトル、発見と選んだ理由、画像1枚（必須、2枚目は任意）。
+- 代表者1人が授業内フォームから提出：グループ名、全員の名前、タイトル、発見と選んだ理由、画像1枚（必須、2枚目は任意）。
 - 授業内の結果ページを開いてショー＆テル。選んだ作品を短く説明できるようにしましょう。
 link: activity-submit.html?week=4
 link_label: Submit in-class group work
