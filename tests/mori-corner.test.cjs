@@ -60,6 +60,7 @@ test('Weeks 4 and 5 separate the Tableau challenge from Python and Datasaurus', 
   assert(!four.materials.some(m => /datasaurus|ipynb/.test(m.href)));
   assert(four.materials.some(m => m.href === 'lectures/w04-visual-language.pdf'));
   assert.match(four.homework, /own Tableau project/);
+  assert.equal(four.requirements.split(';').length, 4);
   assert.match(four.requirements, /one screenshot/);
   assert.equal(four.activities[0].title, 'Pokémon Challenge');
   assert.match(four.activities[0].steps[0], /15 minutes/);
