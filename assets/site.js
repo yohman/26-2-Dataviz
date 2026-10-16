@@ -441,7 +441,7 @@ function updateHomeworkGalleryLinks(root, items) {
 
 async function syncHomeworkGalleryLinks(root) {
   try {
-    const response = await fetch('data/gallery-public.json');
+    const response = await fetch('data/gallery-public.json', { cache: 'no-store' });
     if (!response.ok) throw new Error(`Gallery snapshot HTTP ${response.status}`);
     const snapshot = await response.json();
     if (Array.isArray(snapshot.items)) updateHomeworkGalleryLinks(root, snapshot.items);
@@ -1198,11 +1198,11 @@ async function renderGalleryWork() {
     }).catch(error => console.warn('Gallery heart ordering:', error));
   }
   try {
-    const response = await fetch('data/gallery-public.json?v=gallery-performance-20261002', { cache: 'no-cache' });
+    const response = await fetch(`data/gallery-public.json?t=${Date.now()}`, { cache: 'no-store' });
     if (!response.ok) throw new Error(`Gallery snapshot HTTP ${response.status}`);
     const snapshot = await response.json();
     if (!Array.isArray(snapshot.items)) throw new Error('Invalid gallery snapshot');
-    const hydrated = hydrateGalleryImages(galleryWorkItems && galleryWorkItems.length >= snapshot.items.length ? galleryWorkItems : snapshot.items, snapshot.items);
+    const hydrated = hydrateGalleryImages(snapshot.items, snapshot.items);
     if (!galleryWorkItems || JSON.stringify(hydrated) !== JSON.stringify(galleryWorkItems)) {
       galleryWorkItems = hydrated;
       rememberGalleryItems(galleryWorkItems);
@@ -1302,17 +1302,19 @@ async function renderGallery() {
   let items;
   let snapshot;
   try {
-    const embedded = document.querySelector('#gallery-snapshot')?.textContent.trim();
-    if (embedded) snapshot = JSON.parse(embedded);
-    else {
-      const response = await fetch('data/gallery-public.json', { cache: 'default' });
+    // Always revalidate the data, even when the HTML or session holds an older
+    // snapshot. Cached item counts are not a reliable measure of freshness.
+    try {
+      const response = await fetch(`data/gallery-public.json?t=${Date.now()}`, { cache: 'no-store' });
       if (!response.ok) throw new Error(`Gallery snapshot HTTP ${response.status}`);
       snapshot = await response.json();
+    } catch (error) {
+      const embedded = document.querySelector('#gallery-snapshot')?.textContent.trim();
+      if (!embedded) throw error;
+      snapshot = JSON.parse(embedded);
     }
     if (!Array.isArray(snapshot.items)) throw new Error('Invalid gallery snapshot');
     items = snapshot.items;
-    const saved = recentGalleryItems();
-    if (saved && saved.length >= items.length) items = saved;
     rememberGalleryItems(items);
     status.textContent = copy(`${items.length} works.`, `${items.length} 点の作品。`);
   } catch (error) {
@@ -1529,7 +1531,7 @@ async function renderGallery() {
   });
   paint();
   if (sortSelect.value) sortByHearts();
-  // The embedded snapshot makes the gallery immediate. The public feed adds
+  // The public snapshot provides the initial view. The public feed adds
   // submissions and revisions on every visit without rebuilding GitHub Pages.
   loadGalleryItems().then(latest => {
     if (sameGalleryItems(items, latest)) return;
