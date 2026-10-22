@@ -17,8 +17,11 @@ test('Week 5 starts open-ended Gemini exploration with just a CSV', () => {
   assert.equal(week.activities[1].materials.length, 4);
   assert.equal(week.activities[1].steps.length, 5);
   assert.equal(week.activities[1].steps_ja.length, 5);
-  assert.match(week.activities[1].steps.join(' '), /USGS|iTunes|Open-Meteo|Pokemon/);
+  assert.match(week.activities[1].steps.join(' '), /USGS|iTunes|Pokemon/);
   assert.match(week.activities[1].text, /not necessarily an artist's complete discography/);
+  assert.ok(week.activities[1].steps.every(prompt => prompt.split(/\s+/).length <= 25));
+  assert.ok(week.activities[1].steps_ja.every(prompt => prompt.length < 75));
+  assert.doesNotMatch(week.activities[1].steps.join(' '), /https?:/);
   assert.ok(week.activities[0].steps.some(step => step.includes('folder icon')));
   assert.ok(week.activities[0].steps.some(step => step.includes('“Load the data.”')));
   assert.ok(week.activities[0].steps_ja.some(step => step.includes('「データを読み込んで」')));
@@ -41,6 +44,9 @@ test('starter notebook is removed from the course and homework', () => {
 test('Week 5 homework allows any Python workflow and encourages optional sharing', () => {
   const source = fs.readFileSync('content/weeks/05-python-history-evidence.md', 'utf8');
   assert.match(source, /homework: Individually, use Python/);
+  assert.match(source, /Go beyond the first chart/);
+  assert.match(source, /one or more visualizations/);
+  assert.match(source, /what surprised you, what you discovered/);
   assert.match(source, /Gemini, Codex, or another approach/);
   assert.match(source, /encouraged but optional/);
   assert.match(source, /one screenshot \(required\), with an optional second screenshot/);
