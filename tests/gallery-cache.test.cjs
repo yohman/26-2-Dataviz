@@ -14,6 +14,6 @@ test('gallery requests a fresh snapshot before falling back to embedded HTML', (
 
 test('gallery and individual work pages load the cache fix', () => {
   for (const page of ['gallery.html', 'gallery-work.html']) {
-    assert.match(fs.readFileSync(page, 'utf8'), /site\.js\?v=gallery-fresh-data-20261016/);
+    assert.match(fs.readFileSync(page, 'utf8'), /site\.js\?v=gallery-tableau-tools-20261023/);
   }
 });

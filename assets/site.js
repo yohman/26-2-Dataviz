@@ -959,7 +959,8 @@ function loadGalleryImage(index, slot = 1) {
 }
 
 const galleryTools = [
-  { name: 'Excel', pattern: /excel|exel|エクセル/i, url: 'https://www.microsoft.com/microsoft-365/excel' },
+  { name: 'Tableau', pattern: /\b(?:tableau|tabeau|tableu)\b|\btable\s+public\b|タ[ブベ]ロー/i, url: 'https://public.tableau.com/' },
+  { name: 'Excel', pattern: /excel|exel|ecxel|エクセル/i, url: 'https://www.microsoft.com/microsoft-365/excel' },
   { name: 'Google Sheets', pattern: /スプレッ[ドト]シート|sheets/i, url: 'https://workspace.google.com/products/sheets/' },
   { name: 'Gemini', pattern: /gemini/i, url: 'https://gemini.google.com/' },
   { name: 'Claude', pattern: /claude/i, url: 'https://claude.ai/' },
@@ -969,13 +970,20 @@ const galleryTools = [
   { name: 'VS Code', pattern: /vs\s*(?:code|cord)/i, url: 'https://code.visualstudio.com/' },
   { name: 'JavaScript', pattern: /javascript/i, url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript' },
   { name: 'Codex', pattern: /codex/i, url: 'https://openai.com/codex/' },
-  { name: 'ChatGPT', pattern: /chatgpt/i, url: 'https://chatgpt.com/' },
+  { name: 'ChatGPT', pattern: /chat\s*gpt/i, url: 'https://chatgpt.com/' },
   { name: 'PowerPoint', pattern: /powerpoint/i, url: 'https://www.microsoft.com/microsoft-365/powerpoint' },
   { name: copy('Paper and pen', '紙とペン'), pattern: /紙|ノート|ペン/ }
 ];
 
 function matchedGalleryTools(raw) {
-  return galleryTools.filter(tool => tool.pattern.test(raw || ''));
+  const text = String(raw || '').normalize('NFKC');
+  return galleryTools.filter(tool => tool.pattern.test(text));
+}
+
+function galleryToolCounts(items) {
+  const counts = new Map();
+  items.forEach(item => matchedGalleryTools(item.tools).forEach(tool => counts.set(tool.name, (counts.get(tool.name) || 0) + 1)));
+  return counts;
 }
 
 const galleryForms = [
@@ -1271,8 +1279,7 @@ function renderGalleryInsights(items, selectedWeek, selectedTool, selectedForm, 
   }
   if (selectedTool || selectedForm) lead.append(element('p', copy(`${shownCount} matching works`, `該当する作品 ${shownCount}点`), 'gallery-filter-count'));
   root.append(lead);
-  const toolCounts = new Map();
-  items.forEach(item => matchedGalleryTools(item.tools).forEach(tool => toolCounts.set(tool.name, (toolCounts.get(tool.name) || 0) + 1)));
+  const toolCounts = galleryToolCounts(items);
   const popular = [...toolCounts].sort((a, b) => b[1] - a[1]).slice(0, 5);
   const panel = element('div', '', 'gallery-insights-tools');
   panel.append(element('h2', copy('Tools students used', 'みんなが使ったツール')));
