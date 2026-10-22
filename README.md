@@ -1,53 +1,38 @@
 # 2026–2 Data Visualization
 
-Static, bilingual course site for GitHub Pages. There is no build step: enable
-Pages for the repository root.
+Editable bilingual content lives in `content/weeks/*.md`. Serve the local clone
+on port 8767. GitHub Pages hosts the frontend.
 
-## Edit the course
+## Cloudflare backend
 
-- Page content is in the root `.html` files.
-- Each week's bilingual agenda, assignment, materials, date, and tools live in
-  one Markdown file under `content/weeks/`. Edit that week's file only. See
-  `content/README.md` for the field guide.
-- `assets/site.js` loads the weekly Markdown and renders the Agenda, homepage
-  next-week card, and gallery.
-- Shared visual styles are in `assets/styles.css`. Static Japanese interface
-  translations are in `assets/i18n.js`.
+Worker: `https://dataviz-gallery-likes.ykawano.workers.dev`
+Source: `cloudflare/gallery-likes/`.
 
-## Weekly submissions
+- D1 `dataviz-course` (`COURSE_DB`): homework, private revision history, original Google response archives, week deadlines, and chunked screenshot images.
+- Existing D1 `dataviz-gallery-likes` (`DB`): hearts, comments, and in-class group work. It remains authoritative, so votes posted during migration are not lost.
+- Existing `week-imageIndex` work IDs and `dataviz-heart-browser` identities stay unchanged.
+- `GET /gallery` is public, cursor-paginated JSON (250 works per page). No JSONP or 1,000-record application cap.
+- `GET /gallery-image?key=…` serves immutable screenshot images directly from D1. Monitor D1 storage and move images to R2 when enabled.
+- `/homework?week=N` supplies deadlines and accepts submissions from `homework-submit.html`. One screenshot required, two allowed. Shared notebook/project URL is optional.
+- Student IDs are hashed in the current-work table. Original response archives and private revision details have no public API route.
+- Resubmissions preserve the work ID and its hearts/comments. Same-browser ownership or a saved revision code is required. This is not university SSO.
+- Server-side deadlines match the agenda: 23:59 JST the night before the next class. Update `week_schedule` if course dates change.
 
-The Japanese Google Form collects student ID, email, name, week, title, tools,
-project link, a required image screenshot, and a short explanation. It tells
-students that their names and work appear in the gallery, while IDs and email
-addresses stay private. Each homework card opens the same form with its week
-prefilled.
+Google Apps Script and Google Forms are no longer used by the running site.
+`google-apps-script/` remains only as a historical source/rollback record.
+The original Sheet and Drive files remain untouched.
 
-The form URL and week field are configured in `COURSE_CONFIG` in
-`assets/site.js`. Its response sheet stays private.
+## Deployment and backup
 
-## Gallery feed
+Run `node --test tests/*.cjs tests/*.mjs`.
+Deploy with `wrangler deploy --config cloudflare/gallery-likes/wrangler.jsonc`.
+Do not swap the D1 bindings: current hearts/comments remain in `DB`.
 
-`google-apps-script/gallery-feed.gs` is the source for a script bound to the
-private response sheet. It reads the sheet through Google's Spreadsheet service
-and makes a read-only feed for the GitHub Pages gallery. It is deployed as a
-web app running as the owner, with access for everyone. Its published `/exec`
-URL is configured as `GALLERY_API_URL` in `assets/site.js`. After editing the
-script, deploy a new version of that same web app so the URL stays stable.
+`node scripts/sync-gallery.mjs` refreshes the sanitized public JSON and embedded
+failure fallback from Cloudflare. The Pages workflow runs it on pushes and every
+30 minutes. Browsers also fetch the current Cloudflare feed independently.
 
-The script selects the newest response for each **student ID + week**. Students
-can resubmit; the latest submission replaces the earlier one in the gallery.
-Student IDs and email addresses never leave the script. Its output has
-the public fields `week`, `challenge`, `submittedAt`, `studentName`, `title`,
-`tools`, `projectUrl`, `description`, `imageIndex`, and `imageCount`. The optional
-second screenshot uses the same private image endpoint with `slot=2`; the gallery
-shows arrows and dots only for two-image works. Screenshots load through
-a separate call only when their cards come into view. The original uploaded
-Drive files stay private, and images from superseded submissions cannot be
-requested through the feed.
-
-The feed uses a fixed JSONP callback, `courseGalleryReceive`, because the site
-is hosted on GitHub Pages. If the feed is unavailable, the gallery shows an
-unavailable message rather than sample student work.
-
-Run `node --test tests/gallery-feed.test.cjs` to check the latest-response and
-privacy rules before deploying changes to the script.
+`scripts/migrate-course-d1.mjs` is a one-time tool, not a runtime dependency. It
+reads private exports from `/tmp/`, verifies original rows against public IDs,
+and creates a private SQL import outside the repo. Never commit private exports,
+migration SQL, database backups, or credentials.

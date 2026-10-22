@@ -3,6 +3,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '*/30 * * * *'
 permissions:
   contents: read
 concurrency:
@@ -13,6 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Refresh gallery fallback from Cloudflare
+        run: node scripts/sync-gallery.mjs
       - uses: actions/upload-pages-artifact@v4
         with:
           path: .

@@ -8,6 +8,14 @@ const context = { document: { addEventListener() {} }, window: {}, URL, URLSearc
 vm.createContext(context);
 vm.runInContext(fs.readFileSync(path.join(__dirname, '../assets/site.js'), 'utf8'), context);
 
+test('gallery accepts only the exact Cloudflare image endpoint and safe legacy image formats',()=>{
+  const valid=value=>vm.runInContext(`validGalleryImage(${JSON.stringify(value)})`,context);
+  assert(valid('https://dataviz-gallery-likes.ykawano.workers.dev/gallery-image?key='+'a'.repeat(64)));
+  assert(!valid('https://evil.example/gallery-image?key='+'a'.repeat(64)));
+  assert(!valid('https://dataviz-gallery-likes.ykawano.workers.dev.evil.example/gallery-image?key='+'a'.repeat(64)));
+  assert(!valid('data:image/svg+xml;base64,AAAA'));
+});
+
 test('scroll zoom follows delta size gently, normalizes units, and caps jumps', () => {
   const factor = (delta, mode = 0) => vm.runInContext(`galleryScrollZoomFactor(${delta}, ${mode})`, context);
   assert.equal(factor(0), 1);

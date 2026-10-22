@@ -1,4 +1,10 @@
-# Cloudflare gallery hearts
+# Cloudflare course backend
+
+The Worker now also serves the homework gallery, screenshot images, deadlines,
+and the site-hosted homework form. `COURSE_DB` is `dataviz-course`; `DB` remains
+the existing hearts/comments/group-work database. See the root README for the
+cutover and private-archive details. Never migrate `DB` away by overwriting it
+with an old backup: keep live votes authoritative.
 
 Deployed endpoint: https://dataviz-gallery-likes.ykawano.workers.dev/likes
 Connected to gallery cards and individual work pages. Likes load independently

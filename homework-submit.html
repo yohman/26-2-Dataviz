@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Homework submission · Data Visualization</title><link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css"><link rel="stylesheet" href="assets/activity.css">
+</head><body><header class="site-header"><a class="wordmark" href="index.html"><span>DV / 26–2</span>Seeing Data</a><nav class="site-nav"><a href="agenda.html">AGENDA</a><a href="gallery.html">GALLERY</a></nav></header>
+<main class="wrap activity-main" id="main"><p class="eyebrow" id="homework-week">HOMEWORK</p>
+<h1><span data-course-lang="ja">宿題を提出する</span><span data-course-lang="en" hidden>Submit homework</span></h1>
+<p id="homework-deadline" role="status"></p>
+<p><span data-course-lang="ja">名前・作品・説明・リンクはギャラリーに公開されます。学籍番号は非公開です。画像や説明に個人情報・APIキーを含めないでください。</span><span data-course-lang="en" hidden>Your name, work, explanation, and links will be public in the gallery. Your student ID stays private. Remove private information and API keys from your work.</span></p>
+<form id="homework-form" class="activity-form">
+<label><span data-course-lang="ja">学籍番号（非公開）</span><span data-course-lang="en" hidden>Student ID (private)</span><input name="studentId" required pattern="[A-Za-z0-9-]{6,32}" maxlength="32" autocomplete="off"></label>
+<label><span data-course-lang="ja">氏名（公開）</span><span data-course-lang="en" hidden>Name (public)</span><input name="studentName" required maxlength="120" autocomplete="name"></label>
+<label><span data-course-lang="ja">作品タイトル</span><span data-course-lang="en" hidden>Title</span><input name="title" required maxlength="200"></label>
+<label><span data-course-lang="ja">使用したツール</span><span data-course-lang="en" hidden>Tools used</span><input name="tools" required maxlength="500" placeholder="Python, Gemini, Colab…"></label>
+<label><span data-course-lang="ja">使用したデータ・出典へのリンク</span><span data-course-lang="en" hidden>Data / source links</span><textarea name="projectUrl" required rows="2" maxlength="6000"></textarea></label>
+<label><span data-course-lang="ja">共有ノートブック・作品リンク（任意）</span><span data-course-lang="en" hidden>Shared notebook / project link (optional)</span><input name="notebookUrl" type="url" maxlength="2000" placeholder="https://colab.research.google.com/…"></label>
+<label><span data-course-lang="ja">何を発見しましたか？どのように可視化し、何に驚きましたか？</span><span data-course-lang="en" hidden>What did you discover? How did you visualize it, and what surprised you?</span><textarea name="description" required rows="6" maxlength="8000"></textarea></label>
+<label><span data-course-lang="ja">スクリーンショット1（必須）</span><span data-course-lang="en" hidden>Screenshot 1 (required)</span><input name="image1" type="file" accept="image/jpeg,image/png,image/webp" required></label>
+<label><span data-course-lang="ja">スクリーンショット2（任意）</span><span data-course-lang="en" hidden>Screenshot 2 (optional)</span><input name="image2" type="file" accept="image/jpeg,image/png,image/webp"></label>
+<p class="activity-note"><span data-course-lang="ja">各15MBまで。送信前に画像を縮小します。締切までは同じブラウザから何度でも修正できます。更新時は画像も選び直してください。</span><span data-course-lang="en" hidden>Up to 15 MB each. Images are resized before uploading. Revise from the same browser until the deadline; reselect images when updating.</span></p>
+<details><summary><span data-course-lang="ja">別のブラウザで修正する場合</span><span data-course-lang="en" hidden>Revising from another browser</span></summary><label><span data-course-lang="ja">修正コード（提出後に表示。保存してください）</span><span data-course-lang="en" hidden>Revision code (shown after submitting; save it)</span><input name="revisionCode" autocomplete="off" spellcheck="false"></label></details>
+<button type="submit" class="button" disabled><span data-course-lang="ja">提出する</span><span data-course-lang="en" hidden>Submit</span></button><p id="homework-status" role="status" aria-live="polite"></p>
+</form><p><a id="homework-gallery" href="gallery.html">ギャラリー / Gallery →</a></p></main>
+<script src="assets/i18n.js"></script><script src="assets/site.js?v=cloudflare-course-20261023"></script><script src="assets/homework-submissions.js?v=cloudflare-course-20261023" defer></script></body></html>

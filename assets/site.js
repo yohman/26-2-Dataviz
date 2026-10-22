@@ -1,8 +1,7 @@
 /* Weekly teaching content is edited in content/weeks/*.md. */
 const COURSE_CONFIG = {
-  GOOGLE_FORM_URL: 'https://docs.google.com/forms/d/e/1FAIpQLSctVgkCDhtkaG8UscBrVJVteqBiCFXHCB_tlQFscdM8wU4xAg/viewform',
-  GOOGLE_FORM_WEEK_ENTRY_ID: 'entry.155622460',
-  GALLERY_API_URL: 'https://script.google.com/macros/s/AKfycbx0QJbdytCdRNdCTGPsMhfkMC3HFRImz9-VUCebCoZ6XjdVlieGwDDzmpxuxg0ORVZb5Q/exec'
+  HOMEWORK_URL: 'homework-submit.html',
+  GALLERY_API_URL: 'https://dataviz-gallery-likes.ykawano.workers.dev/gallery'
 };
 
 const acts = {
@@ -452,13 +451,11 @@ async function syncHomeworkGalleryLinks(root) {
 }
 
 function configuredFormUrl() {
-  return /^https:\/\/docs\.google\.com\/forms\//.test(COURSE_CONFIG.GOOGLE_FORM_URL) && !COURSE_CONFIG.GOOGLE_FORM_URL.includes('REPLACE');
+  return Boolean(COURSE_CONFIG.HOMEWORK_URL);
 }
 
 function formUrl(week, challengeJa) {
-  const params = new URLSearchParams();
-  params.set(COURSE_CONFIG.GOOGLE_FORM_WEEK_ENTRY_ID, `第${week}週｜${challengeJa}`);
-  return `${COURSE_CONFIG.GOOGLE_FORM_URL}?usp=pp_url&${params}`;
+  return `${COURSE_CONFIG.HOMEWORK_URL}?${new URLSearchParams({week:String(week)})}`;
 }
 
 function todayInTokyo() {
@@ -726,9 +723,9 @@ function appendGalleryText(node, value) {
 }
 
 const galleryItemKey = item => `${item.week}-${item.imageIndex}`;
-const galleryPublicFields = ['week', 'challenge', 'submittedAt', 'studentName', 'title', 'tools', 'projectUrl', 'description', 'imageIndex', 'imageCount'];
+const galleryPublicFields = ['week', 'challenge', 'submittedAt', 'studentName', 'title', 'tools', 'projectUrl', 'description', 'imageIndex', 'imageCount', 'imageUrls', 'notebookUrl'];
 const sameGalleryItems = (a, b) => a.length === b.length && a.every((item, index) =>
-  galleryPublicFields.every(field => (item[field] ?? '') === (b[index][field] ?? '')));
+  galleryPublicFields.every(field => JSON.stringify(item[field] ?? '') === JSON.stringify(b[index][field] ?? '')));
 const gallerySessionKey = 'dataviz-gallery-items-v1';
 function rememberGalleryItems(items) {
   try { sessionStorage.setItem(gallerySessionKey, JSON.stringify({ savedAt: Date.now(), items })); }
@@ -818,6 +815,11 @@ function galleryHeart(item) {
   return button;
 }
 const galleryImageSource = (item, slot) => item.imageUrls?.[slot - 1] || (slot === 1 ? item.imageUrl : '') || loadGalleryImage(Number(item.imageIndex), slot);
+function validGalleryImage(value) {
+  return /^assets\/gallery\/[a-f0-9]{24}\.(?:png|jpg|webp|gif)$/.test(value)
+    || /^https:\/\/dataviz-gallery-likes\.ykawano\.workers\.dev\/gallery-image\?key=[a-f0-9]{64}$/.test(value)
+    || /^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(value);
+}
 
 function galleryImageControls(count, onSelect) {
   if (count < 2) return { element: null, select: () => {} };
@@ -870,27 +872,19 @@ function galleryPageUrl(item, week, tool, chart, sort = '') {
   return `gallery-work.html?${params}`;
 }
 
-function requestGalleryItems() {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    let settled = false;
-    const timer = setTimeout(() => finish(new Error('Gallery feed timed out')), 12000);
-    function finish(error, payload) {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timer);
-      script.remove();
-      delete window.courseGalleryReceive;
-      // An empty live feed is ambiguous (for example, a changed form header).
-      // Never let it erase the last published, known-good gallery.
-      if (error || !Array.isArray(payload?.items) || payload.items.length === 0) reject(error || new Error('Gallery live feed returned no submissions; keeping the published snapshot'));
-      else resolve(payload.items);
-    }
-    window.courseGalleryReceive = payload => finish(null, payload);
-    script.onerror = () => finish(new Error('Gallery feed unavailable'));
-    script.src = `${COURSE_CONFIG.GALLERY_API_URL}?callback=courseGalleryReceive&t=${Date.now()}`;
-    document.head.append(script);
-  });
+async function requestGalleryItems() {
+  const items=[], seen=new Set(); let cursor='';
+  do {
+    const response = await fetch(`${COURSE_CONFIG.GALLERY_API_URL}?t=${Date.now()}${cursor?`&cursor=${encodeURIComponent(cursor)}`:''}`, {cache:'no-store',signal:AbortSignal.timeout(12000)});
+    if (!response.ok) throw new Error(`Gallery HTTP ${response.status}`);
+    const payload = await response.json();
+    if (!Array.isArray(payload?.items)) throw new Error('Invalid gallery feed');
+    items.push(...payload.items); cursor=payload.nextCursor || '';
+    if (cursor && seen.has(cursor)) throw new Error('Gallery pagination repeated a cursor');
+    seen.add(cursor);
+  } while(cursor);
+  if (!items.length) throw new Error('Gallery feed returned no submissions; keeping the published snapshot');
+  return items.sort((a,b)=>b.week-a.week || (a.studentName || '').localeCompare(b.studentName || '', 'ja'));
 }
 
 function loadGalleryItems() {
@@ -907,26 +901,9 @@ function loadGalleryItems() {
   return galleryItemsPromise;
 }
 
-function requestGalleryImage(index, slot = 1) {
-  return new Promise((resolve, reject) => {
-    const callback = `courseGalleryImageReceive_${index}_${slot}`;
-    const script = document.createElement('script');
-    let settled = false;
-    const timer = setTimeout(() => finish(new Error('Screenshot timed out')), 15000);
-    function finish(error, payload) {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timer);
-      script.remove();
-      delete window[callback];
-      if (error || payload?.index !== index || payload?.slot !== slot) reject(error || new Error('Invalid screenshot'));
-      else resolve(payload.data || '');
-    }
-    window[callback] = payload => finish(null, payload);
-    script.onerror = () => finish(new Error('Screenshot unavailable'));
-    script.src = `${COURSE_CONFIG.GALLERY_API_URL}?image=${index}&slot=${slot}&callback=${callback}`;
-    document.head.append(script);
-  });
+async function requestGalleryImage(index, slot = 1) {
+  const items = await loadGalleryItems();
+  return items.find(item => Number(item.imageIndex) === index)?.imageUrls?.[slot-1] || '';
 }
 
 function loadGalleryImage(index, slot = 1) {
@@ -1181,6 +1158,10 @@ function paintGalleryWork(items) {
   });
   else sourceBlock.append(element('p', item.projectUrl || '—'));
   metadata.append(sourceBlock); details.append(metadata, galleryHeart(item));
+  if (galleryUrls(item.notebookUrl).length) {
+    const link=element('a',copy('Open notebook / project ↗','ノートブック・作品を開く ↗'));
+    link.href=galleryUrls(item.notebookUrl)[0];link.target='_blank';link.rel='noopener noreferrer';sourceBlock.append(link);
+  }
   layout.append(art, details); root.replaceChildren(nav, layout);
 
   async function showWorkImage(slot) {
@@ -1192,7 +1173,7 @@ function paintGalleryWork(items) {
     viewport.classList.add('is-loading');
     const data = await galleryImageSource(item, slot);
     if (!viewport.isConnected || request !== imageRequest) return;
-    if (!/^assets\/gallery\/[a-f0-9]{24}\.(?:png|jpg|webp|gif)$/.test(data) && !/^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(data)) {
+    if (!validGalleryImage(data)) {
       replaceImageContents(element('span', copy('Screenshot unavailable.', '画像を表示できません。')));
       controls.hidden = true;
       return;
@@ -1243,7 +1224,7 @@ async function renderGalleryWork() {
     const changed = !galleryWorkItems || !sameGalleryItems(galleryWorkItems, latest);
     const cachedImages = new Map((galleryWorkItems || []).map(item => [galleryItemKey(item), item.imageUrls || [item.imageUrl]]));
     if (changed) {
-      galleryWorkItems = latest.map(item => ({ ...item, imageUrls: cachedImages.get(galleryItemKey(item)) || [], imageUrl: cachedImages.get(galleryItemKey(item))?.[0] || '' }));
+      galleryWorkItems = latest.map(item => ({ ...item, imageUrls: item.imageUrls || cachedImages.get(galleryItemKey(item)) || [], imageUrl: item.imageUrl || cachedImages.get(galleryItemKey(item))?.[0] || '' }));
       rememberGalleryItems(galleryWorkItems);
     }
     galleryWorkLiveStatus = 'loaded';
@@ -1444,7 +1425,7 @@ async function renderGallery() {
     const showImage = async (placeholder, item, eager = false) => {
       const data = await galleryImageSource(item, 1);
       if (!placeholder.isConnected) return;
-      if (/^assets\/gallery\/[a-f0-9]{24}\.(?:png|jpg|webp|gif)$/.test(data) || /^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(data)) {
+      if (validGalleryImage(data)) {
         const image = document.createElement('img'); image.src = data;
         image.alt = copy(`Image 1 of ${galleryImageCount(item)} for ${item.title || 'student work'}`, `${item.title || '学生作品'}の画像 1 / ${galleryImageCount(item)}`);
         // The observer already defers offscreen cards. A detached lazy image
@@ -1475,7 +1456,7 @@ async function renderGallery() {
           const request = ++imageRequest;
           const next = await galleryImageSource(item, slot);
           if (!stage.isConnected || request !== imageRequest) return;
-          if (!/^assets\/gallery\/[a-f0-9]{24}\.(?:png|jpg|webp|gif)$/.test(next) && !/^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(next)) return;
+          if (!validGalleryImage(next)) return;
           image.src = next;
           image.alt = copy(`Image ${slot} of ${galleryImageCount(item)} for ${item.title || 'student work'}`, `${item.title || '学生作品'}の画像 ${slot} / ${galleryImageCount(item)}`);
           currentSlot = slot;
@@ -1538,6 +1519,10 @@ async function renderGallery() {
         });
       } else if (item.projectUrl) links.append(element('span', `${copy('Data / source:', 'データ・出典:')} ${item.projectUrl}`, 'gallery-source-note'));
       footer.append(links, galleryHeart(item));
+      if (galleryUrls(item.notebookUrl).length) {
+        const link=element('a',copy('Notebook / project ↗','ノートブック・作品 ↗'));
+        link.href=galleryUrls(item.notebookUrl)[0];link.target='_blank';link.rel='noopener noreferrer';links.prepend(link);
+      }
       card.append(footer);
       root.append(card);
       if (index < 3) showImage(placeholder, item, true);
@@ -1560,7 +1545,7 @@ async function renderGallery() {
   loadGalleryItems().then(latest => {
     if (sameGalleryItems(items, latest)) return;
     const cachedImages = new Map(items.map(item => [galleryItemKey(item), item.imageUrls || [item.imageUrl]]));
-    items = latest.map(item => ({ ...item, imageUrls: cachedImages.get(galleryItemKey(item)) || [], imageUrl: cachedImages.get(galleryItemKey(item))?.[0] || '' }));
+    items = latest.map(item => ({ ...item, imageUrls: item.imageUrls || cachedImages.get(galleryItemKey(item)) || [], imageUrl: item.imageUrl || cachedImages.get(galleryItemKey(item))?.[0] || '' }));
     rememberGalleryItems(items);
     status.textContent = copy(`${items.length} latest works.`, `最新の作品 ${items.length} 点。`);
     updateWeekOptions();
