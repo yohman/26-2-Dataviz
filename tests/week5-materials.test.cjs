@@ -3,6 +3,12 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const test = require('node:test');
 
+test('activity tabs share a single row at desktop and mobile widths', () => {
+  const css = fs.readFileSync('assets/styles.css', 'utf8');
+  assert.match(css, /\.activity-tab-list\{[^}]*grid-auto-flow:column;grid-auto-columns:minmax\(0,1fr\)/);
+  assert.doesNotMatch(css, /\.activity-tab-list\{[^}]*grid-template-columns:repeat\(2/);
+});
+
 test('Week 5 starts open-ended Gemini exploration with just a CSV', () => {
   const context = { document: { addEventListener() {} }, window: {}, URL, URLSearchParams };
   vm.createContext(context);

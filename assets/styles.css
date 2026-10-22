@@ -149,7 +149,7 @@ body{background:#fff}
 
 /* Multiple in-class activities stay in one card and switch without losing the week. */
 .activity-tabs-card{display:block;padding:0;overflow:hidden}
-.activity-tab-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));background:#d7eae7;border-bottom:1px solid #a9c7c4}
+.activity-tab-list{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);background:#d7eae7;border-bottom:1px solid #a9c7c4}
 .activity-tab-list button{border:0;border-right:1px solid #a9c7c4;background:transparent;padding:.85rem 1rem;color:var(--muted);cursor:pointer;font:700 .7rem var(--sans);letter-spacing:.04em;text-align:left}
 .activity-tab-list button:last-child{border-right:0}
 .activity-tab-list button[aria-selected="true"]{background:var(--teal);color:white}
@@ -162,7 +162,7 @@ body{background:#fff}
 .activity-steps li{padding-left:.25rem;font-size:.9rem;line-height:1.45}
 .activity-link{margin-top:.25rem;background:var(--teal)}
 .activity-link:hover,.activity-link:focus-visible{background:var(--ink)}
-@media(max-width:560px){.activity-tab-list{grid-template-columns:repeat(2,minmax(0,1fr))}.activity-tab-list button{min-height:52px;border-right:1px solid #a9c7c4;border-bottom:0;padding:.8rem .75rem;text-align:center}.activity-tab-list button:last-child{border-right:0}.activity-panel{padding:1.2rem}}
+@media(max-width:560px){.activity-tab-list button{min-height:52px;border-right:1px solid #a9c7c4;border-bottom:0;padding:.8rem .75rem;text-align:center}.activity-tab-list button:last-child{border-right:0}.activity-panel{padding:1.2rem}}
 
 /* Grading is a visible part of the course contract, not a footnote. */
 .grading{margin-bottom:2rem;padding:clamp(1.4rem,3vw,2.25rem);background:var(--navy);color:white}
