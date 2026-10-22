@@ -1,6 +1,10 @@
 // English remains in each HTML page for searchability and no-JavaScript fallback.
 // Add or revise Japanese copy here; weekly dynamic content lives in site.js.
 window.COURSE_TRANSLATIONS = { ja: {
+  'Nightingale mortality diagram': 'Nightingaleの死亡原因図',
+  'Datasaurus starter notebook': 'Datasaurus入門ノートブック',
+  'Open starter notebook in Colab': '入門ノートブックをColabで開く',
+  'Gapminder wrangling notebook (optional extension)': 'Gapminderデータ整理ノートブック（発展・任意）',
   'Tableau Dashboard Guide · Data Visualization': 'フィルター付きダッシュボードの作り方 · Data Visualization',
   '2026-2 Data Visualization': '2026-2 データビジュアライゼーション',
   'Agenda · 2026-2 Data Visualization': '授業計画 · 2026-2 データビジュアライゼーション',

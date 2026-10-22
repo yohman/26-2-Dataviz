@@ -29,10 +29,19 @@ image: assets/images/lecture/week05-python.png
 ## Materials
 
 - [Lecture slides](lectures/w05-python-datasaurus.pdf) {slides}
+
+## Lecture Resources
+
 - [Nightingale mortality diagram](https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg) {reference}
+
+## Activity 1 Materials
+
 - [Datasaurus starter notebook](data/datasaurus-python.ipynb) {data}
-- [Run the notebook in Google Colab](https://colab.research.google.com/github/yohman/26-2-Dataviz/blob/main/data/datasaurus-python.ipynb) {reference}
 - [Datasaurus CSV](data/datasaurus.csv) {data}
+
+## Activity 2 Materials
+
+- [Open starter notebook in Colab](https://colab.research.google.com/github/yohman/26-2-Dataviz/blob/main/data/datasaurus-python.ipynb) {reference}
 - [Anscombe CSV](data/anscombe.csv) {data}
 - [Gapminder wrangling notebook (optional extension)](data/gapminder/gapdata.ipynb) {data}
 
@@ -41,20 +50,25 @@ image: assets/images/lecture/week05-python.png
 ### Activity 1
 title: Turn numbers into a dinosaur
 title_ja: 数字から恐竜を描く
-text: Use the starter notebook in Google Colab; no local Python installation is needed. You do not need to understand every line before running it. First make the data visible, then investigate how the code works.
-text_ja: Google Colabで入門ノートブックを使います。PCへのPythonのインストールは不要です。全てのコードを理解してから実行する必要はありません。まずデータを見える形にし、その後コードの働きを調べます。
+text: Run Python in Google Colab, in your browser. No installation needed. Download the two files below. If Colab resets the session, upload the CSV again.
+text_ja: Google Colabで、ブラウザ上でPythonを動かします。インストールは不要です。下の2つのファイルをダウンロードします。セッションがリセットされたら、CSVを再アップロードしてください。
+link: https://colab.research.google.com/
+link_label: Open Google Colab
+link_label_ja: Google Colabを開く
 steps:
-- Open the Colab link, sign in if prompted, and save your own copy. Run the cells in order from the top using each cell's play button.
-- Load datasaurus.csv and inspect the dataset, x, and y columns. Each row is one point, not a country or year.
-- Plot the dino dataset with x on the horizontal axis and y on the vertical axis. Keep equal axis scaling to preserve the shape.
-- Read the summary-statistics table. Predict whether the other datasets will look alike, then plot all of them.
-- Change the selected dataset, point color, or point size. Run the cell again and save one result. Note what changed and what did not.
+- Download datasaurus.csv and datasaurus-python.ipynb using the Download buttons below.
+- Open Google Colab and sign in with your Google account.
+- Choose File > Upload notebook (or Open notebook > Upload), then select datasaurus-python.ipynb. Do not put the notebook in the Files sidebar.
+- Click Connect if needed. Open the folder icon on the left, click Upload to session storage, and choose datasaurus.csv. Wait until it appears in the file list.
+- Run each code cell from the top with its play button, or Shift+Enter. Wait for each cell to finish. The notebook reads your uploaded datasaurus.csv.
+- Find the dinosaur plot. Change the point color or size, then run that cell again. Save your notebook to Drive using File > Save a copy in Drive if needed.
 steps_ja:
-- Colabのリンクを開き、求められたらログインし、自分用のコピーを保存します。各セルの再生ボタンで、上から順に実行します。
-- datasaurus.csvを読み込み、dataset・x・yの列を確認します。1行が1つの点を表し、国や年のデータではありません。
-- dinoを選び、横軸x・縦軸yで散布図を描きます。形を保つため、縦横の縮尺をそろえます。
-- 要約統計の表を見ます。他のデータも同じ形になるか予想してから、全てのデータを描いて確かめましょう。
-- データの選択・点の色・点の大きさのいずれかを変更し、再実行して結果を保存します。何が変わり、何が変わらないかをメモしましょう。
+- 下のダウンロードボタンから、datasaurus.csvとdatasaurus-python.ipynbをPCに保存します。
+- Google Colabを開き、Googleアカウントでログインします。
+- 「ファイル > ノートブックをアップロード」（または「ノートブックを開く > アップロード」）からdatasaurus-python.ipynbを選びます。左のファイル一覧には入れません。
+- 必要なら「接続」をクリック。左のフォルダアイコンを開き、「セッション ストレージにアップロード」からdatasaurus.csvを選びます。一覧に表示されるまで待ちます。
+- 上から順に、各コードセルの再生ボタン、またはShift+Enterで実行します。終わってから次のセルへ進みます。アップロードしたdatasaurus.csvを読み込みます。
+- 恐竜の図が出たら、点の色か大きさを変えて再実行します。必要なら「ファイル > ドライブにコピーを保存」でノートブックを保存します。
 
 ### Activity 2
 title: Compare and help one another

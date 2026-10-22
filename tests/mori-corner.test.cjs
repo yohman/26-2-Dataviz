@@ -76,12 +76,12 @@ test('Weeks 4 and 5 separate the Tableau challenge from Python and Datasaurus', 
   assert(four.materials.some(m => m.href === 'pokemon-variables.html'));
   context.groupLink = 'https://example.org/?title=%E7%AC%AC4%E9%80%B1';
   assert.equal(new URL(vm.runInContext('safeResourceHref(groupLink)', context)).searchParams.get('title'), '第4週');
-  assert(five.materials.some(m => m.href === 'data/datasaurus-python.ipynb'));
-  assert(five.materials.some(m => m.href === 'data/datasaurus.csv'));
+  assert(five.activities[0].materials.some(m => m.href === 'data/datasaurus-python.ipynb'));
+  assert(five.activities[0].materials.some(m => m.href === 'data/datasaurus.csv'));
   assert(five.materials.some(m => m.href === 'lectures/w05-python-datasaurus.pdf'));
   assert(!four.look.includes('Nightingale'));
   assert(five.look.includes('Nightingale'));
-  assert(five.materials.some(m => /Nightingale-mortality/.test(m.href)));
+  assert(five.lectureResources.some(m => /Nightingale-mortality/.test(m.href)));
   for (const week of [four, five]) {
     const duration = schedule => schedule.split(';').reduce((total, step) => {
       const times = step.split('|')[0].match(/\d\d:\d\d/g).map(t => Number(t.slice(0, 2))*60 + Number(t.slice(3)));

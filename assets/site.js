@@ -87,7 +87,7 @@ function parseWeek(source, file) {
   if (Boolean(meta.in_class) !== Boolean(meta.in_class_ja)) throw new Error(`${file}: in_class and in_class_ja must be provided together`);
   if (Boolean(meta.deliverables) !== Boolean(meta.deliverables_ja)) throw new Error(`${file}: deliverables and deliverables_ja must be provided together`);
   if (!acts[meta.act]) throw new Error(`${file}: unknown act ${meta.act}`);
-  return { ...meta, week: Number(meta.week), materials: parseMaterials(match[2]), lectureExamples: parseMaterials(match[2], 'Lecture Examples'), activities: parseInClassActivities(match[2]), mori: parseMoriCorner(match[2]) };
+  return { ...meta, week: Number(meta.week), materials: parseMaterials(match[2]), lectureResources: parseMaterials(match[2], 'Lecture Resources'), lectureExamples: parseMaterials(match[2], 'Lecture Examples'), activities: parseInClassActivities(match[2]).map(activity => ({ ...activity, materials: parseMaterials(match[2], `Activity ${activity.number} Materials`) })), mori: parseMoriCorner(match[2]) };
 }
 
 function safeResourceHref(value) {
@@ -191,7 +191,7 @@ function activityTabs(week, sharedMaterials = '') {
       <p class="assignment-label">${copy('IN CLASS', '授業内')} · ${copy(`ACTIVITY ${activity.number}`, `アクティビティ ${activity.number}`)}</p>
       <h4>${escapeHtml(copy(activity.title, activity.title_ja))}</h4>
       <p>${escapeHtml(copy(activity.text, activity.text_ja))}</p>
-      <ol class="activity-steps">${steps}</ol>${help}<div class="activity-actions">${link}${resultsLink}</div>
+      <ol class="activity-steps">${steps}</ol>${help}<div class="activity-actions">${link}${resultsLink}</div>${activity.materials?.length ? `<div class="activity-materials"><p>${copy('MATERIALS FOR THIS ACTIVITY', 'この課題で使う資料')}</p>${materialLinks(activity.materials, { week: week.week })}</div>` : ''}
     </section>`;
   }).join('');
   return `<article class="assignment-card assignment-card--in-class activity-tabs-card" data-activity-tabs><div class="activity-tab-list" role="tablist" aria-label="${copy('In-class activities', '授業内アクティビティ')}">${tabs}</div>${panels}${sharedMaterials}</article>`;
@@ -395,6 +395,7 @@ function renderAgenda() {
           ${Number(week.lecture_gallery_week) > 0 ? `<p class="lecture-gallery-link"><a class="inline-resource" href="gallery.html?week=${Number(week.lecture_gallery_week)}">${copy(`Review last week's work (Week ${Number(week.lecture_gallery_week)})`, `先週の作品を見る（第${Number(week.lecture_gallery_week)}週）`)} →</a></p>` : ''}
           <div class="week-heading"><p class="lecture-summary">${escapeHtml(copy(week.look, week.look_ja))}</p><div class="week-lecture-aside">${media}${slides}</div></div>
           ${week.lectureExamples?.length ? `<div class="lecture-examples"><h4>${copy('Explore Tableau Public', 'Tableau Publicの作品を探索')}</h4><div class="lecture-examples-resources">${materialLinks(week.lectureExamples, { week: week.week })}</div></div>` : ''}
+          ${week.lectureResources?.length ? `<div class="lecture-resources">${materialLinks(week.lectureResources, { week: week.week })}</div>` : ''}
         </section>
         <section class="week-assignments" aria-label="${copy('Assignments', '課題')}">
           <div class="assignment-grid">${inClass}<article class="assignment-card assignment-card--homework"><p class="assignment-label">${copy('HOMEWORK', '宿題')}</p><h4>${escapeHtml(copy(week.challenge, week.challenge_ja))}</h4><p>${escapeHtml(copy(week.homework, week.homework_ja))}</p>${homeworkRequirements}${homeworkGuide}<dl class="assignment-details">${requirements ? '' : `<div><dt>${copy('DELIVERABLES', '提出物')}</dt><dd>${escapeHtml(copy(week.deliverables || 'Visualization, title, concise explanation, project link, and one screenshot.', week.deliverables_ja || '可視化、タイトル、短い説明、作品リンク、スクリーンショット1枚。'))}</dd></div>`}<div><dt>${copy('SUGGESTED TOOLS', 'おすすめのツール')}</dt><dd>${escapeHtml(copy(week.tools, week.tools_ja))}</dd></div></dl>${submission}<div class="homework-gallery-link" data-homework-gallery-week="${week.week}"></div></article></div>
