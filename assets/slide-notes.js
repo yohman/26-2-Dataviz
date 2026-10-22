@@ -14,7 +14,7 @@
       const original = root.querySelector('[data-notes-original]');
       const details = root.querySelector('details');
       const sources = root.querySelector('[data-notes-sources]');
-      heading.textContent = ja ? `講義ノート · ${currentPage}` : `Presenter notes · ${currentPage}`;
+      heading.textContent = ja ? `スライドノート · ${currentPage}` : `Slide notes · ${currentPage}`;
       root.querySelector('summary').textContent = ja ? '元スライドの説明' : 'Original slide text';
       sources.replaceChildren();
       if (!slides) {

@@ -4,8 +4,8 @@
     {
       "page": 1,
       "title": "Nightingaleの図",
-      "ja": "まず、この図から何が読み取れるか学生に問いかける。言葉で先に解説せず、色・面積・配置から気づいたことを聞く。",
-      "en": "Ask students what they notice in Nightingale’s diagram before explaining it. Invite observations about color, area, and arrangement.",
+      "ja": "色・面積・配置が死因と時期の違いを表す。青い領域は病気による死亡で、負傷による死亡を大きく上回る月がある。",
+      "en": "Color, area, and arrangement encode causes of death and time. Blue represents disease, which accounts for far more deaths than wounds in several months.",
       "originalText": "W hat do you see here?\nhttps://commons.wikimedia.org/wiki/File:Nightingale-\nmortality.jpg#/media/File:Nightingale-mortality.jpg\n2323",
       "sources": [
         "https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg"
@@ -14,48 +14,48 @@
     {
       "page": 2,
       "title": "Florence Nightingale",
-      "ja": "Florence Nightingale（1820–1910）。看護の改革とともに、データを使って問題を伝え、行動につなげた人物として紹介する。",
-      "en": "Introduce Florence Nightingale (1820–1910) as a reformer who used evidence and visualization to make problems visible.",
+      "ja": "Florence Nightingale（1820–1910）は看護と病院衛生の改革者。統計と可視化を使い、軍の健康問題を政策の問題として伝えた。",
+      "en": "Florence Nightingale (1820–1910) was a reformer of nursing and hospital sanitation. Statistics and visualization helped her communicate military health problems as matters of public policy.",
       "originalText": "2424",
       "sources": []
     },
     {
       "page": 3,
       "title": "ランプを持つ女性",
-      "ja": "病院の場面から、Nightingaleの活動を紹介する。個人の物語と、その背後にある多数の人々のデータをつなぐ。",
-      "en": "Use the hospital scene to connect Nightingale’s personal story with the lives represented by the data.",
+      "ja": "「ランプを持つ女性」という呼び名は、クリミア戦争中の夜間巡回の姿と結びついている。広く知られる看護師の姿の背後には、記録と統計を用いた改革活動もある。",
+      "en": "The image of the ‘Lady with the Lamp’ is associated with Nightingale’s nighttime rounds during the Crimean War. Her familiar nursing image coexists with a substantial legacy of statistical investigation and reform.",
       "originalText": "The lady with the lam p\nFlorence Nightingale (1820-1910)\n2525",
       "sources": []
     },
     {
       "page": 4,
       "title": "現場から証拠へ",
-      "ja": "病院の現場を観察し、記録し、改善する。データは現場と切り離された数字ではないことを話す。",
-      "en": "Connect observation, records, and reform. Data represents people and conditions in a real setting.",
+      "ja": "病院での観察と記録は、死亡や衛生状態を比較する証拠になった。ここでのデータは、実際の人々と生活環境を記録したもの。",
+      "en": "Hospital observations and records provided evidence for comparing mortality and sanitary conditions. These data represent real people and the conditions in which they lived.",
       "originalText": "2626",
       "sources": []
     },
     {
       "page": 5,
       "title": "本という伝達手段",
-      "ja": "図を作るだけでなく、誰にどう届けるか。Nightingaleが使った本という媒体に注目する。",
-      "en": "Discuss the book as a vehicle for communicating evidence to an audience.",
+      "ja": "本は図と説明をまとめ、現場にいない読者にも証拠を届ける媒体だった。可視化の影響力は、図の形だけでなく出版と流通にも支えられている。",
+      "en": "Books brought diagrams and explanations to readers beyond the hospital. Visualization’s influence depended on publication and circulation as well as graphic design.",
       "originalText": "2727",
       "sources": []
     },
     {
       "page": 6,
       "title": "記録と報告",
-      "ja": "タイトルページを見せ、証拠をまとめて他の人が検討できる形にすることの意味を話す。",
-      "en": "Discuss why recording and publishing evidence matters, beyond making a single chart.",
+      "ja": "報告書は観察を残し、他の人が証拠を検討できる形にする。タイトルページは、図が独立した画像ではなく、より大きな議論の一部であったことを示す。",
+      "en": "Reports preserve observations in a form others can examine. The title page places the graphics within a larger published argument rather than presenting them as isolated images.",
       "originalText": "2828",
       "sources": []
     },
     {
       "page": 7,
       "title": "図が伝えるもの",
-      "ja": "図の形・色・面積は、何を比較しやすくしているか。読み取り方を学生自身の言葉で説明してもらう。",
-      "en": "Ask what the diagram makes easy to compare and what students need to know to interpret it.",
+      "ja": "月ごとの扇形と死因ごとの色が、季節と死亡の構成を同時に表す。読み取りには、面積の尺度、期間、凡例が重要になる。",
+      "en": "Monthly sectors and colors for causes of death show seasonality and the composition of mortality together. Interpretation depends on the area scale, dates, and legend.",
       "originalText": "2929",
       "sources": [
         "https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg"
@@ -64,8 +64,8 @@
     {
       "page": 8,
       "title": "England and Her Soldiers",
-      "ja": "右ページはHarriet Martineau著『England and Her Soldiers』（1859）の扉。Nightingaleの証拠を一般読者に伝える出版と協力の文脈を紹介する。",
-      "en": "The right page is the title page of Harriet Martineau’s England and Her Soldiers (1859). Discuss publication and collaboration as ways of bringing Nightingale’s evidence to a wider audience.",
+      "ja": "右ページはHarriet Martineau著『England and Her Soldiers』（1859）の扉。Nightingaleの証拠を一般読者へ伝える出版と協力の文脈が見える。",
+      "en": "The right page is the title page of Harriet Martineau’s England and Her Soldiers (1859). It places Nightingale’s evidence in a context of collaboration and communication with a wider readership.",
       "originalText": "",
       "sources": [
         "https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/"
@@ -74,8 +74,8 @@
     {
       "page": 9,
       "title": "Diagram of the Causes of Mortality",
-      "ja": "題名が何を説明する図なのかを明示している。対象・場所・死因という情報に注目する。",
-      "en": "The title names the subject and setting. Ask students what question the chart promises to address.",
+      "ja": "題名は、東方の軍隊における死亡原因を扱う図であることを明示している。題名自体が、図の対象と範囲を定めている。",
+      "en": "The title identifies causes of mortality in the army in the East. It establishes the subject and scope of the diagram before the individual marks are read.",
       "originalText": "",
       "sources": [
         "https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/"
@@ -84,8 +84,8 @@
     {
       "page": 10,
       "title": "面積と色の説明",
-      "ja": "青は予防・軽減可能な病気、赤は負傷、黒はその他の死因。各扇形の面積を中心から測るという説明を読む。半径の長さではなく面積に注目する。",
-      "en": "Read the original key: blue denotes preventable or mitigable disease, red wounds, and black other causes. The encoding uses sector area measured from the center, not radius alone.",
+      "ja": "青は予防・軽減可能な病気、赤は負傷、黒はその他の死因。値を表すのは中心から測った各扇形の面積で、半径だけではない。",
+      "en": "Blue denotes preventable or mitigable disease, red wounds, and black other causes. Values are encoded by sector area measured from the center, not by radius alone.",
       "originalText": "",
       "sources": [
         "https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/"
@@ -94,8 +94,8 @@
     {
       "page": 11,
       "title": "1854–1855",
-      "ja": "最初の年の大きい図。冬に青い領域がどれほど増えるか。負傷による死と比較してもらう。",
-      "en": "The larger diagram shows April 1854–March 1855. Compare the winter disease sectors with deaths from wounds.",
+      "ja": "大きい図は1854年4月–1855年3月。冬に病気による死亡の青い領域が大きくなり、負傷による死亡を上回っている。",
+      "en": "The larger diagram covers April 1854–March 1855. Blue disease sectors expand markedly in winter and exceed deaths from wounds.",
       "originalText": "",
       "sources": [
         "https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/"
@@ -104,8 +104,8 @@
     {
       "page": 12,
       "title": "1855–1856",
-      "ja": "次の年の小さい図。同じ面積の尺度で比較する。縮小を読み取りつつ、この図だけで特定の個人や介入の因果効果を断定しない。",
-      "en": "The smaller diagram shows April 1855–March 1856 on the same area scale. Compare the reduction without treating the chart alone as proof of any individual intervention’s causal effect.",
+      "ja": "小さい図は1855年4月–1856年3月で、前の年と同じ面積尺度を使う。領域は縮小しているが、この比較だけで特定の介入の因果効果は確定しない。",
+      "en": "The smaller diagram covers April 1855–March 1856 on the same area scale. The areas shrink, but the comparison alone does not establish the causal effect of a particular intervention.",
       "originalText": "",
       "sources": [
         "https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/"
@@ -114,8 +114,8 @@
     {
       "page": 13,
       "title": "Diagrams K · 1858",
-      "ja": "Nightingaleの初期の図。半径が死亡率を表すため、塗られた面積は値に比例しない。後の扇形の面積による表現と比較し、符号化の選択が印象をどう変えるか話す。",
-      "en": "Nightingale’s early radar-style diagrams encode mortality through radius, so shaded area is not proportional to the value. Compare this with the later polar-area design. Source: Duke University Libraries, 1858.",
+      "ja": "初期の図では半径が死亡率を表すため、塗られた面積は値に比例しない。後の扇形面積による表現とは、同じ値でも視覚的な印象が異なる。出典：Duke University Libraries、1858年。",
+      "en": "These early diagrams encode mortality through radius, so shaded area is not proportional to the value. This differs from the later polar-area design and changes the visual impression of magnitude. Source: Duke University Libraries, 1858.",
       "originalText": "",
       "sources": [
         "https://exhibits.library.duke.edu/items/show/13722"
@@ -124,8 +124,8 @@
     {
       "page": 14,
       "title": "Scutari · 1854–1855",
-      "ja": "Scutariの病人集団の死亡率。長い半径が強い印象を与える。期間、分母、尺度を確かめ、前の軍全体の図とは単純比較しない。",
-      "en": "This early Scutari diagram concerns mortality in the sick population. Check its dates, denominator, and scale before comparing it with army-wide mortality.",
+      "ja": "Scutariの病人集団の死亡率を扱う初期の図。対象集団・期間・分母が異なるため、軍全体の死亡率の図とは単純比較できない。",
+      "en": "This early Scutari diagram concerns mortality among the sick population. Its population, dates, and denominator differ from army-wide mortality, preventing a simple direct comparison.",
       "originalText": "",
       "sources": [
         "https://exhibits.library.duke.edu/items/show/13722"
@@ -134,8 +134,8 @@
     {
       "page": 15,
       "title": "Scutari and Kulali hospitals",
-      "ja": "1854年10月–1855年9月の病院死亡率。点線はロンドン周辺の軍病院の比較値。衛生改善の開始を示す文字と、その後の領域の変化を探してもらう。相関と因果は区別する。",
-      "en": "Hospital mortality at Scutari and Kulali, October 1854–September 1855. Locate the sanitation annotation and the dotted London comparison. Discuss the changing areas while distinguishing comparison from causal proof.",
+      "ja": "ScutariとKulaliの1854年10月–1855年9月の病院死亡率。点線はロンドン周辺の軍病院の比較値。衛生改善開始の注記と領域の変化が示されるが、比較と因果の証明は別である。",
+      "en": "Hospital mortality at Scutari and Kulali, October 1854–September 1855. A dotted line gives a London-area military hospital comparison. Sanitation annotations accompany changing areas, but comparison is distinct from causal proof.",
       "originalText": "",
       "sources": [
         "https://r2bit.com/gpt-stat/cs_nightingale.html"
@@ -144,8 +144,8 @@
     {
       "page": 16,
       "title": "Why Python?",
-      "ja": "Pythonを、探索を何度も試せる道具として紹介する。今日はすべての文法を覚えるより、結果を見ながら問いを深める。",
-      "en": "Introduce Python as a tool for repeated exploration. Today the focus is asking questions and inspecting results rather than memorizing syntax.",
+      "ja": "Pythonはデータの読み込み、加工、集計、可視化を同じ環境で繰り返せる。コードは分析手順の記録にもなり、条件を変えた再実行ができる。",
+      "en": "Python supports repeated loading, transformation, summarization, and visualization in one environment. Code also records the analytical procedure and makes it possible to rerun it with different conditions.",
       "originalText": "Why Python?\n3131",
       "sources": [
         "https://www.python.org/community/logos/"
@@ -154,16 +154,16 @@
     {
       "page": 17,
       "title": "Pythonの可視化ライブラリ",
-      "ja": "matplotlib、seaborn、Plotly、Bokeh。同じPythonでも異なる表現方法がある。道具の名前より、どのようにデータを見せたいかを重視する。",
-      "en": "Matplotlib, seaborn, Plotly, and Bokeh offer different ways to visualize data. Begin with the visual question rather than a favorite library.",
+      "ja": "matplotlib、seaborn、Plotly、BokehはPythonの可視化ライブラリ。静的な図、統計的な図、対話的な表示など、得意な表現と操作方法が異なる。",
+      "en": "Matplotlib, seaborn, Plotly, and Bokeh are Python visualization libraries. They differ in their approaches to static graphics, statistical plots, and interactive displays.",
       "originalText": "3232",
       "sources": []
     },
     {
       "page": 18,
       "title": "John Tukey",
-      "ja": "John Wilder Tukey（1915–2000）はPrinceton大学とBell研究所で活躍した統計学者。データを見ることを、仮説検定の前のおまけではなく発見のための重要な仕事として位置づけた。1977年の『Exploratory Data Analysis』は、図を描いて構造・外れ値・予想外の特徴を探す姿勢を広めた。箱ひげ図も広く普及させた。\n\nCooleyとともに高速フーリエ変換（FFT）の発展にも貢献。学生には「AIに最初の図を作らせる」ことと「図を見て次の問いを考える」ことの違いを強調する。この引用は今日のEDAの中心。答えを飾るためでなく、まだ知らなかったことに気づくために可視化する。",
-      "en": "John Wilder Tukey (1915–2000) was a statistician at Princeton and Bell Laboratories. He helped make exploration a central part of data analysis, alongside formal confirmation. His 1977 book Exploratory Data Analysis promoted graphical investigation of structure, outliers, and unexpected features, and helped popularize box plots.\n\nHe also contributed to the fast Fourier transform with James Cooley. For students, contrast asking AI for a first chart with inspecting it and choosing the next question. His quotation captures today’s EDA goal: use visualization to discover something unexpected, then investigate it rather than treating an attractive chart as the conclusion.",
+      "ja": "John Wilder Tukey（1915–2000）はPrinceton大学とBell研究所の統計学者。1977年の『Exploratory Data Analysis』は、図から構造・外れ値・予想外の特徴を探す姿勢を広め、箱ひげ図の普及にも貢献した。\n\nJames Cooleyとともに高速フーリエ変換（FFT）の発展にも貢献。探索は仮説の確認だけではなく、新しい問いを見つける仕事でもある、という考えが彼の重要な遺産。",
+      "en": "John Wilder Tukey (1915–2000) was a statistician at Princeton and Bell Laboratories. His 1977 book Exploratory Data Analysis promoted graphical investigation of structure, outliers, and unexpected features, and helped popularize box plots.\n\nHe also contributed to the fast Fourier transform with James Cooley. A central part of his legacy is the idea that analysis can generate new questions, not merely confirm existing hypotheses.",
       "originalText": "“The greatest value of a picture is when it\nforces us to notice what we never expected\nto see.”\n—  J o h n  Tu key,  1 9 7 7 1 61 6",
       "sources": [
         "https://www.princeton.edu/news/2000/07/28/statistician-john-w-tukey-dies",
@@ -174,40 +174,40 @@
     {
       "page": 19,
       "title": "Exploratory Data Analysis",
-      "ja": "EDA＝探索的データ分析。データを見る、問いを立てる、可視化する、さらに問い直す。最初の図を作ることは出発点にすぎない。",
-      "en": "EDA means exploratory data analysis. Examine data, ask questions, visualize, and revise the questions. The first chart is a starting point.",
+      "ja": "EDAはExploratory Data Analysis（探索的データ分析）の略。観察、可視化、比較、問いの修正を繰り返し、構造や例外を探る。最初の図は結論ではなく探索の出発点となる。",
+      "en": "EDA stands for Exploratory Data Analysis. Observation, visualization, comparison, and revised questions form an iterative search for structure and exceptions. The first chart is a starting point rather than a conclusion.",
       "originalText": "",
       "sources": []
     },
     {
       "page": 20,
       "title": "EDA",
-      "ja": "EDA＝探索的データ分析。データを見る、問いを立てる、可視化する、さらに問い直す。最初の図を作ることは出発点にすぎない。",
-      "en": "EDA means exploratory data analysis. Examine data, ask questions, visualize, and revise the questions. The first chart is a starting point.",
+      "ja": "探索的データ分析では、図から得た気づきが次の問いにつながる。仮説を検証する分析と補い合うが、探索で見つかったパターンだけで因果関係が確定するわけではない。",
+      "en": "In exploratory data analysis, observations from a chart lead to further questions. Exploration complements confirmatory analysis, but a pattern discovered during exploration does not by itself establish causation.",
       "originalText": "EDA\nE x p l o ra to r y  Da t a  A n a l y s i s\n1 71 7",
       "sources": []
     },
     {
       "page": 21,
       "title": "要約で消える形",
-      "ja": "平均やヒストグラムが見せるもの、隠すものを比較する。要約から元の分布の形が一意に分かるとは限らない。",
-      "en": "Discuss what a summary reveals and conceals. A mean or histogram does not uniquely determine the underlying distribution.",
+      "ja": "平均やヒストグラムは情報を要約する一方、個々の値や配置を失う。異なるデータが同じ要約を持つことがあり、要約から元の形は一意に復元できない。",
+      "en": "Means and histograms summarize information while discarding individual values or arrangements. Different datasets can share a summary, so the original structure cannot be uniquely reconstructed from it.",
       "originalText": "2 42 4",
       "sources": []
     },
     {
       "page": 22,
       "title": "点を重ねて見る",
-      "ja": "要約だけでなく個々の点を見る。外れ値や密度、ばらつきについて、何が新しく見えるかを聞く。",
-      "en": "Ask what individual points reveal about density, variation, and outliers beyond a summary plot.",
+      "ja": "個々の点を表示すると、要約だけでは見えにくい密度、ばらつき、外れ値が現れる。一方、点の重なりは密度を隠すこともある。",
+      "en": "Individual points reveal density, variation, and outliers that summaries can conceal. Overlapping points can in turn obscure density.",
       "originalText": "2 52 5",
       "sources": []
     },
     {
       "page": 23,
       "title": "視覚的な手がかり",
-      "ja": "位置・長さ・角度で、同じ傾向の伝わり方が変わる。図の出典はNatureの記事。",
-      "en": "Discuss how position, length, and angle communicate patterns differently. The original figure links to Nature.",
+      "ja": "位置・長さ・角度は、数値を視覚に変換する異なる手がかり。同じデータでも符号化の選択によって比較のしやすさが変わる。元の図の出典はNature。",
+      "en": "Position, length, and angle are different visual encodings of quantity. Encoding choices affect how easily values can be compared. The original figure links to Nature.",
       "originalText": "https://w w w.nature.com /articles /497186a\n2 62 6",
       "sources": [
         "https://www.nature.com/articles/497186a"
@@ -216,8 +216,8 @@
     {
       "page": 24,
       "title": "Gemini",
-      "ja": "GeminiはGoogle DeepMindのAIモデル群。最初の公開は2023年12月。名前は「双子」で、ふたご座のCastorとPollux、BrainとDeepMindの合流が由来。",
-      "en": "Gemini is Google DeepMind’s AI model family, introduced in December 2023. Its name evokes the twins Castor and Pollux and the joining of the Brain and DeepMind teams.",
+      "ja": "GeminiはGoogle DeepMindのAIモデル群で、2023年12月に初公開された。名前は「双子」を意味し、CastorとPollux、BrainとDeepMindの合流を連想させる。",
+      "en": "Gemini is Google DeepMind’s AI model family, introduced in December 2023. Its name evokes twins, Castor and Pollux, and the joining of the Brain and DeepMind teams.",
       "originalText": "Geminiとは？\nGoogle DeepMind / December 2023\n言葉・画像・コードを扱う、GoogleのAIモデル群\n名はふたご座の双子、カストルとポルックスから。\nBrainとDeepMindの合流も、この名の由来。\nGoogle: Geminiの名前の由来\n",
       "sources": [
         "https://blog.google/innovation-and-ai/products/google-gemini-ai-name-meaning/",
@@ -227,8 +227,8 @@
     {
       "page": 25,
       "title": "Vibe coding",
-      "ja": "日本語など自然な言葉で頼み、AIが生成するコードを実行し、結果を見て対話を続けるスタイル。Karpathyが2025年2月に命名。速く始められる一方、理解や検証を後回しにしやすいことも説明する。",
-      "en": "Vibe coding describes conversational creation and iteration with AI-generated code. Karpathy named it in February 2025. Discuss the tradeoff between speed and deferred understanding or verification.",
+      "ja": "Andrej Karpathyは2025年2月に「vibe coding」という呼び名を広めた。自然言語でAIに依頼し、結果を見て反復するスタイルを指す。速さと引き換えに、コードの理解や検証が後回しになるリスクもある。",
+      "en": "Andrej Karpathy popularized the term ‘vibe coding’ in February 2025. It describes conversational iteration with AI-generated code. Speed can come at the cost of deferred understanding and verification.",
       "originalText": "爆速プロトタイプ構築術｜麗澤大学 2026秋\nVibe Coding＝日本語で頼み、結果を見て進めるスタイル\n定義\nAndrej Karpathy が名付けた（2025年2月、Xへの投\n稿）\n• 雰囲気（vibe）に身をまかせ、コードの存在すら忘れて進\nめる\n• AIが提案する変更を、細かく読まずに「すべて受け入れ\nる」\n• エラーが出たら、メッセージをそのままAIに貼り付ける\n• コードが自分の理解を超えて育っても、先へ進む\n出典の要旨。教科書 第1章 1.1\n手に入るもの\n速い・始めやすい・対話できる\n後回しにしているもの\nコードの理解・変更内容の確認・検証\nと対応準備\n速さと引き換えに、理解と確認を\n後回しにする。それがこのスタイル\nの正直な設計\n4",
       "sources": [
         "https://simonwillison.net/2025/Feb/6/andrej-karpathy/",
@@ -239,8 +239,8 @@
     {
       "page": 26,
       "title": "具体的な依頼と曖昧な依頼",
-      "ja": "具体的な依頼では結果を比較しやすい。曖昧な依頼ではAIが仮定を置く。違っていたら言い直し、変更後も以前の動作を確かめる。長いプロンプトである必要はない。",
-      "en": "Concrete requests are easier to check. Vague requests leave room for assumptions. Clarify through conversation and recheck earlier behavior after a change. Prompts need not be long.",
+      "ja": "具体的な依頼は出力と意図を比較しやすい。曖昧な依頼ではAIが不足した条件を仮定する。短いプロンプトでも対話を重ねて条件を明確にできる。",
+      "en": "Concrete requests make it easier to compare results with intent. Ambiguous requests leave missing conditions to the model’s assumptions. Short prompts can still become precise through successive exchanges.",
       "originalText": "爆速プロトタイプ構築術｜麗澤大学 2026秋\nDEMO② 言葉で変える。具体的に頼むか、曖昧に頼むか\nライブデモ\n具体的な頼み方\n「つかれた」のボタンだけ紫色にしてください。あと\n、記録の文章を「17:03 つかれた」のように短くし\nてください。\n曖昧な頼み方\n全体を、もっとやさしい雰囲気にしてください。\n→ 結果を見比べやすい → 色を淡く？角を丸く？ 人によって解釈が分かれる\n曖昧な部分は、AIが「仮定」で埋める。違っていたら言い直せばよい。変えたら、色だけでなく「記録が\n増える」ことも確かめる\n14",
       "sources": [
         "https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf"
@@ -249,8 +249,8 @@
     {
       "page": 27,
       "title": "どこまでAIに任せる？",
-      "ja": "コーディングはコードを書くこと。プログラミングには手順を考え、動かして確かめることも含む。アプリ開発には、誰の何を解決するか、届け方や運用まで含む。図の3つの領域を指しながら説明する。",
-      "en": "Coding sits inside programming, which sits inside app development. Explain the broader decisions involved at each level while pointing to the nested diagram.",
+      "ja": "コーディングはコードを書く作業。プログラミングには手順の設計と検証も含まれ、アプリ開発には利用者、目的、公開、運用などの判断も含まれる。図はその入れ子関係を表す。",
+      "en": "Coding concerns writing code. Programming also includes designing procedures and checking behavior; app development adds decisions about users, purpose, delivery, and operation. The nested diagram depicts these broader scopes.",
       "originalText": "爆速プロトタイプ構築術｜麗澤大学 2026秋\nコーディング ⊂ プログラミング ⊂ アプリ開発\nどこまでAIに任せる？\nアプリ開発\nプログラミング\nコーディング\nコーディング\n決まった内容をコードに書く（清書）\nAIが強く助ける\nプログラミング\n手順を考え、組み立て、動かして確かめる\nAIがかなり助ける\nアプリ開発\n誰の困りごとを解くか決め、確かめ、届け、使わ\nれ続ける状態を保つ\n人の判断が増える\n今日のデモで触れるのは、いちばん\n内側だけ\n5",
       "sources": [
         "https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf"
@@ -259,8 +259,8 @@
     {
       "page": 28,
       "title": "小さく変え、確かめる",
-      "ja": "必要ならまず計画を聞く。1回で変えることを小さくする。不明点や仮定を確認する。直らないときは同じ指示を繰り返さず、事実を伝え、問題を小さくする。",
-      "en": "Ask for a plan when useful, keep changes small, and identify assumptions. If a fix fails, provide observations and narrow the problem rather than repeating the same request.",
+      "ja": "小さな変更は、結果と原因の対応を追いやすい。失敗時の具体的な観察や再現条件は、同じ依頼の繰り返しよりも原因の特定に役立つ。",
+      "en": "Small changes make it easier to connect an outcome to its cause. Concrete observations and reproducible conditions are more informative for diagnosis than repeated identical requests.",
       "originalText": "爆速プロトタイプ構築術｜麗澤大学 2026秋\n壊れの連鎖を止める3つの鉄則\n頼み方の型\nまず計画を出させる\n「まず計画だけ出してください。実装\nはまだしないでください」\n作る前なら、ずれを言葉の段階で直\nせる\n1回の依頼＝1つの変化\n「取り消しを直して、ついでに集計も、\nあと色も」は3つの変化\n完成条件が1〜2行で書けないタスク\nは、まだ大きすぎる\n仮定と不明点を挙げさせる\n「実装の前に、あなたが置く仮定と、\n決まっていないことを列挙して」\n答えた内容は仕様書に書き戻す\n直らないときは同じ指示を繰り返さない：①言い方を変える（事実を書く）②小さくする ③戻す\n23",
       "sources": [
         "https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf"
@@ -269,8 +269,8 @@
     {
       "page": 29,
       "title": "エラーと検証",
-      "ja": "何をして何が起きたか、エラー全文とともに伝える。秘密情報は伏せる。AIの「確認した」という言葉だけを証拠にせず、実行結果を自分でも確かめる。",
-      "en": "Describe the action and result, include the full error, and remove secrets. Verify the actual outcome rather than relying on an AI claim that it tested something.",
+      "ja": "エラーメッセージには、失敗した場所や種類の手がかりが含まれる。AIの説明と実行結果は別の証拠であり、出力・軸・値の確認が重要。共有するログには秘密情報が含まれる場合もある。",
+      "en": "Error messages contain clues about where and how execution failed. An AI explanation and an observed result are different kinds of evidence. Logs can also contain secrets, while charts require checks of their outputs, axes, and values.",
       "originalText": "爆速プロトタイプ構築術｜麗澤大学 2026秋\nエラーが出たら／AIに自分でテストさせる\n困ったとき\nエラーの伝え方\n• 何をしたら、何が起きたか（操作と結果）\n• エラー文は要約せず、全文を貼る\n• 貼る前に、APIキー・パスワード・個人情報を伏せる（\n例：apiKey=[伏せた]）\n• 自動修正に任せたら「何が原因だったか」も聞く\n役割を分ける\n実装役 ブリーフ通りに作る\nテスト役 壊すつもりで確かめる（検算・意地悪な入力）\nレビュー役 仕様と比べ、漏れと余計な変更を探す\nAIの「確認しました」は証拠ではない。実行した方法と結果を出させ、自分の画面でも試す\n24",
       "sources": [
         "https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf"
@@ -279,8 +279,8 @@
     {
       "page": 30,
       "title": "ColabにCSVをアップロード",
-      "ja": "Colabにログインして新規ノートブックを作る。必要なら接続。左のフォルダアイコンから「セッション ストレージにアップロード」を選びdatasaurus.csvをアップロード。一覧に出るまで待つ。セッションがリセットされたら再アップロードする。",
-      "en": "Sign in to Colab, create a notebook, and connect if needed. Open the folder icon on the left, upload datasaurus.csv to session storage, and wait for it to appear. Upload again if the session resets.",
+      "ja": "Colabの左側のフォルダアイコンからセッションストレージにCSVをアップロードできる。この保存領域は一時的で、ランタイムのリセット後にはファイルの再アップロードが必要になる。",
+      "en": "Colab’s left-hand folder panel provides uploads to session storage. This storage is temporary; files need to be uploaded again after a runtime reset.",
       "originalText": "Google Colabの準備\nPython runs in your browser\n1   ログインして、新しいノートブックを作る。\n2   必要なら「接続」。左のフォルダアイコンを開く。\n3   「セッション ストレージにアップロード」を選ぶ。\n4   datasaurus.csvを選び、一覧への表示を待つ。\nGoogle Colabを開く\n",
       "sources": [
         "https://colab.research.google.com/"
@@ -289,8 +289,8 @@
     {
       "page": 31,
       "title": "Colab × Gemini",
-      "ja": "きらきらマークで右のGeminiパネルを開く。最初は「データを読み込んで」とだけ伝える。それ以降の探索の手順は自分で考える。Geminiが使えない場合は教員に相談する。\n\nGeminiがコードセルを作ったら提案を確認し、「Accept and run」をクリック。毎回、出力を見て次の問いを考える。エラーが出たら、その内容をGeminiと確認して再挑戦する。\n\n図がアップロードしたデータを表しているか、軸や数値は合っているかを確認。知らないコードは説明してもらう。個人情報・APIキーは入れず、ノートブックはDriveに保存する。",
-      "en": "Open Gemini’s right-hand panel using the sparkle icon. Begin only with “Load the data.” Choose your own next questions. Ask the instructor if Gemini is unavailable.\n\nReview the proposed code cells and click “Accept and run.” Inspect the output before choosing the next question. Discuss errors with Gemini and try again.\n\nCheck that the chart uses the uploaded data and that axes and values make sense. Ask for code explanations. Keep out personal information and API keys, and save the notebook to Drive.",
+      "ja": "右側のGeminiパネルは、自然言語の依頼からノートブックのコードセルを生成する。「データを読み込んで」が探索の最初の依頼となる。\n\n「Accept and run」は、提案されたコードを受け入れて実行する操作。出力やエラーは次の対話の材料になる。\n\nコードが実行できることと、分析が正しいことは別。データ、軸、単位、集計方法の確認が必要で、ノートブック自体はDriveに保存できる。",
+      "en": "Gemini’s right-hand panel generates notebook code cells from natural-language requests. ‘Load the data’ provides an initial request for exploration.\n\n‘Accept and run’ accepts and executes proposed code. Outputs and errors provide evidence for the next exchange.\n\nSuccessful execution does not guarantee a valid analysis. Data, axes, units, and aggregation still require verification. The notebook itself can be saved to Drive.",
       "originalText": "最初のひと言\nGeminiのきらきらマークをクリック。右のパネルで。\nデータを読み込んで\nLoad the data.\nここからは、自分で探索。恐竜を見つけよう。\nGeminiが使えない場合は、教員に相談してください。\n\nGeminiと、試してみる\nConversation + Python + output\nGeminiがコードセルを作ったら、提案を確認。\n「Accept and run」をクリックして実行。\n結果を見て、次に知りたいことを自分で考える。\nエラーも会話の続き。直して、また試す。\nGoogle: ColabとGeminiの使い方\n\n動いた。では、正しい？\nYou decide whether the result makes sense\n図は、アップロードしたデータを表している？\n軸・数値・説明は、元のデータと合っている？\n知らないコードの働きは、Geminiに説明してもらう。\n個人情報は入れず、ノートブックをDriveに保存。\nGoogle Colab FAQ: AIの利用とデータの扱い\n",
       "sources": [
         "https://developers.googleblog.com/en/new-ai-first-google-colab-now-available-to-everyone/",
@@ -300,8 +300,8 @@
     {
       "page": 32,
       "title": "datasaurus.csv",
-      "ja": "1,846点、13種類のデータ。datasetはデータ名、xとyは各点の座標。活動1ではこのCSVだけをダウンロードする。表をクリックするとプレビューを開ける。",
-      "en": "The CSV has 1,846 points across 13 datasets. dataset names the group, while x and y are point coordinates. Click the table to preview the CSV.",
+      "ja": "CSVは13種類のデータ、計1,846点を含む。dataset列はグループ名、xとy列は座標。似た要約統計を持つデータでも、散布図の形は大きく異なる。",
+      "en": "The CSV contains 1,846 points across 13 datasets. The dataset column identifies the group; x and y provide coordinates. Datasets with similar summary statistics can have strikingly different scatterplot shapes.",
       "originalText": "datasaurus.csv\n1,846 points   /   13 datasets\ndataset\nx\ny\ndino\n55.3846\n97.1795\ndino\n51.5385\n96.0256\ndino\n46.1538\n94.4872\ndino\n42.8205\n91.4103\ndino\n40.7692\n88.3333\ndino\n38.7179\n84.8718\nPreview data / Download CSV\ndataset = group name     x, y = coordinates of one point\n",
       "sources": [
         "https://yohman.github.io/26-2-Dataviz/data/datasaurus.csv"

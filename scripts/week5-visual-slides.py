@@ -293,6 +293,8 @@ notes[9] = ('John Tukey',
     'John Wilder Tukey（1915–2000）はPrinceton大学とBell研究所で活躍した統計学者。データを見ることを、仮説検定の前のおまけではなく発見のための重要な仕事として位置づけた。1977年の『Exploratory Data Analysis』は、図を描いて構造・外れ値・予想外の特徴を探す姿勢を広めた。箱ひげ図も広く普及させた。\n\nCooleyとともに高速フーリエ変換（FFT）の発展にも貢献。学生には「AIに最初の図を作らせる」ことと「図を見て次の問いを考える」ことの違いを強調する。この引用は今日のEDAの中心。答えを飾るためでなく、まだ知らなかったことに気づくために可視化する。',
     'John Wilder Tukey (1915–2000) was a statistician at Princeton and Bell Laboratories. He helped make exploration a central part of data analysis, alongside formal confirmation. His 1977 book Exploratory Data Analysis promoted graphical investigation of structure, outliers, and unexpected features, and helped popularize box plots.\n\nHe also contributed to the fast Fourier transform with James Cooley. For students, contrast asking AI for a first chart with inspecting it and choosing the next question. His quotation captures today’s EDA goal: use visualization to discover something unexpected, then investigate it rather than treating an attractive chart as the conclusion.')
 payload = {'file': 'lectures/w05-python-datasaurus.pdf', 'slides': []}
+factual_notes = json.loads((root / 'scripts/week5-factual-notes.json').read_text())
+assert len(factual_notes) == len(order)
 for i, origin in enumerate(order):
     if origin in detail_notes:
         title, ja, en, link = detail_notes[origin]
@@ -309,6 +311,7 @@ for i, origin in enumerate(order):
     else:
         title, ja, en = notes[origin-1]
         text, links = original.pages[origin-1].extract_text() or '', sources.get(origin, [])
+    ja, en = factual_notes[i]
     payload['slides'].append({'page': i+1, 'title': title, 'ja': ja, 'en': en, 'originalText': text, 'sources': links})
 (root / 'lectures/w05-python-datasaurus.notes.json').write_text(json.dumps(payload, ensure_ascii=False, indent=2)+'\n')
 print(f'Built {len(order)} slides with aligned bilingual notes')
