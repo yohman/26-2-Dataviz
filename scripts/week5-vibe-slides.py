@@ -67,8 +67,8 @@ text('Geminiが使えない場合は、教員に相談してください。', 74
 c.showPage()
 
 slide('Geminiと、試してみる', 'Conversation + Python + output', [
-    '提案を確認して、コードを承認・挿入する。',
-    'セルの再生ボタン、またはGeminiの実行操作。',
+    'Geminiがコードセルを作ったら、提案を確認。',
+    '「Accept and run」をクリックして実行。',
     '結果を見て、次に知りたいことを自分で考える。',
     'エラーも会話の続き。直して、また試す。',
 ], ('Google: ColabとGeminiの使い方', 'https://developers.googleblog.com/en/new-ai-first-google-colab-now-available-to-everyone/'))

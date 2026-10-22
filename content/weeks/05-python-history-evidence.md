@@ -57,13 +57,13 @@ steps:
 - Download datasaurus.csv below. Open Google Colab, sign in, and choose New notebook.
 - Click Connect if needed. Click the folder icon on the left, then Upload to session storage. Select datasaurus.csv and wait for it to appear.
 - Open Gemini using the sparkle icon. In the chat panel on the right, start with only: “Load the data.”
-- Explore from there in your own words. Review Gemini's proposed actions, accept or insert its code, and run it. If it inserts a code cell, use that cell's play button. Look at the output before continuing.
+- Explore from there in your own words. After Gemini creates code cells, review its proposal and click “Accept and run.” Look at the output before continuing.
 - Keep experimenting until you can see the dinosaur. If you get an error, discuss it with Gemini and try again. Save your notebook in Drive.
 steps_ja:
 - 下のdatasaurus.csvをダウンロード。Google Colabを開いてログインし、「ノートブックを新規作成」を選びます。
 - 必要なら「接続」をクリック。左のフォルダアイコンを開き、「セッション ストレージにアップロード」でdatasaurus.csvを選びます。一覧への表示を待ちます。
 - きらきらマークからGeminiを開きます。右のチャット欄で、最初は「データを読み込んで」とだけ伝えます。
-- ここからは自分の言葉で探索しましょう。Geminiの提案を確認してコードを承認・挿入し、実行します。セルに入ったコードは再生ボタンで実行。毎回、結果を見てから次へ進みます。
+- ここからは自分の言葉で探索しましょう。Geminiがコードセルを作ったら、提案を確認し「Accept and run」をクリック。毎回、結果を見てから次へ進みます。
 - 恐竜が見えるまで試してみましょう。エラーが出たらGeminiと相談して再挑戦。ノートブックはドライブに保存します。
 
 ### Activity 2

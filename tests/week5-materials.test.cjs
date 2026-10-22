@@ -18,6 +18,8 @@ test('Week 5 starts open-ended Gemini exploration with just a CSV', () => {
   assert.ok(week.activities[0].steps.some(step => step.includes('folder icon')));
   assert.ok(week.activities[0].steps.some(step => step.includes('“Load the data.”')));
   assert.ok(week.activities[0].steps_ja.some(step => step.includes('「データを読み込んで」')));
+  assert.ok(week.activities[0].steps.some(step => step.includes('Accept and run')));
+  assert.ok(week.activities[0].steps_ja.some(step => step.includes('Accept and run')));
   assert.doesNotMatch(week.activities[0].steps.join(' '), /scatter|selected_dataset|x on|y on/);
   context.week = week;
   const html = vm.runInContext('activityTabs(week)', context);
