@@ -1,4 +1,4 @@
-"""Build the 31-page, image-led Week 5 deck and its viewer notes.
+"""Build the image-led Week 5 deck and its aligned viewer notes.
 
 Original layouts/text are recoverable from Git revision bc4954f. The earlier
 week5-vibe-slides.py builder produces the text-led version, not this revision.
@@ -96,7 +96,13 @@ image_page(4)
 image_page(5)
 image_page(6)
 image_page(7)
-page(lambda c: symbol(c, 'code-xml'))
+def brand(c, filename, x, y, width, height):
+    drawing = svg2rlg(str(root / 'assets/images/lecture' / filename))
+    scale = min(width/drawing.width, height/drawing.height)
+    dw, dh = drawing.width*scale, drawing.height*scale
+    drawing.scale(scale, scale)
+    renderPDF.draw(drawing, c, x+(width-dw)/2, y+(height-dh)/2)
+page(lambda c: brand(c, 'python-logo.svg', 190, 160, 580, 220))
 def libraries(c):
     for i, item in enumerate(original.pages[8].images):
         im = item.image
@@ -105,60 +111,63 @@ def libraries(c):
         cx, cy = (260 if i % 2 == 0 else 700), (390 if i < 2 else 150)
         c.drawImage(ImageReader(im), cx-iw*scale/2, cy-ih*scale/2, iw*scale, ih*scale, mask='auto')
 page(libraries)
-image_page(10)
+def tukey(c):
+    im = original.pages[9].images[0].image
+    iw, ih = im.size
+    scale = min(350/iw, H/ih)
+    c.drawImage(ImageReader(im), 0, (H-ih*scale)/2, iw*scale, ih*scale)
+    for i, line in enumerate(['“The greatest value of a picture', 'is when it forces us to notice', 'what we never expected to see.”']):
+        label(c, line, 640, 330-i*49, 29)
+    label(c, 'John Tukey · 1977', 640, 135, 20)
+page(tukey)
+def eda(c):
+    label(c, 'EDA', 480, 245, 180)
+    label(c, 'Exploratory Data Analysis', 480, 160, 30)
+page(eda)
 image_page(11)
-page(lambda c: plot(c, data['circle'], (130, 25, 700, 490)))
-def exploration(c):
-    for i, name in enumerate(['circle', 'h_lines', 'x_shape']):
-        plot(c, data[name], (i*320, 100, 320, 330))
-page(exploration)
-page(lambda c: plot(c, data['dino'], (130, 25, 700, 490)))
-crop_page(15, (417, 205, 550, 330))
-anscombe = list(csv.DictReader((root / 'data/anscombe.csv').open()))
-def quartet(c):
-    for i in range(1, 5):
-        points = [(float(r[f'x{i}'])*5, float(r[f'y{i}'])*7) for r in anscombe]
-        plot(c, points, (60+((i-1)%2)*450, 20+(1-(i-1)//2)*260, 390, 240), f'I{"I"*(i-1)}' if i < 4 else 'IV')
-page(quartet)
-def dozen(c):
-    names = list(data)
-    for i, name in enumerate(names):
-        col, row = i % 5, i // 5
-        plot(c, data[name], (col*192, 360-row*175, 192, 170), name)
-page(dozen)
 image_page(18)
 image_page(19)
 image_page(20)
-page(lambda c: symbol(c, 'sparkles'))
-page(lambda c: symbol(c, 'message-circle-code'))
+def gemini(c):
+    brand(c, 'gemini-logo.svg', 330, 325, 300, 150)
+    brand(c, 'deepmind-logo.svg', 435, 170, 90, 90)
+    label(c, 'Google DeepMind', 480, 135, 32)
+    label(c, 'Google Brain  +  DeepMind', 480, 65, 26)
+page(gemini)
+def karpathy(c):
+    im = ImageReader(str(root / 'assets/images/lecture/karpathy.jpg'))
+    iw, ih = im.getSize()
+    scale = min(450/iw, 365/ih)
+    c.drawImage(im, (W-iw*scale)/2, 175, iw*scale, ih*scale)
+    label(c, 'Vibe coding', 480, 105, 48)
+    label(c, 'Andrej Karpathy · 2025', 480, 55, 23)
+page(karpathy)
 # The actual nested diagram remains vector-based, with its three short labels.
 crop_page(23, (28, 42, 403, 304))
 def requests(c):
-    symbol(c, 'message-circle-code', 140, 135, 260)
-    symbol(c, 'circle-help', 560, 135, 260)
+    label(c, '“I just see stuff, say stuff, run stuff,', 480, 305, 36)
+    label(c, 'and copy paste stuff, and it mostly works.”', 480, 250, 36)
+    label(c, 'Andrej Karpathy · 2025', 480, 150, 21)
 page(requests)
 def iteration(c):
-    for i, name in enumerate(['search', 'repeat-2', 'sliders-horizontal']):
-        symbol(c, name, 85+i*300, 165, 190)
+    label(c, '「1回の依頼＝1つの変化」', 480, 280, 56)
+    label(c, 'One request. One change.', 480, 200, 28)
 page(iteration)
 def debugging(c):
-    for i, name in enumerate(['bug', 'search', 'circle-check']):
-        symbol(c, name, 85+i*300, 165, 190)
+    label(c, '「AIの『確認しました』は証拠ではない。」', 480, 280, 38)
+    label(c, '“I checked it” is not evidence.', 480, 200, 28)
 page(debugging)
 def upload(c):
-    symbol(c, 'folder-up', 330, 140, 300)
-    label(c, 'datasaurus.csv', 480, 77, 30)
+    label(c, 'datasaurus.csv', 480, 155, 30)
 page(upload)
-def first_prompt(c):
-    symbol(c, 'sparkles', 435, 355, 90)
-    label(c, 'データを読み込んで', 480, 245, 52)
-    label(c, 'Load the data.', 480, 175, 25)
-page(first_prompt)
-def run(c):
-    symbol(c, 'circle-play', 355, 190, 250)
-    label(c, 'Accept and run', 480, 105, 40)
-page(run)
-page(lambda c: symbol(c, 'circle-check'))
+source = copy(original.pages[14])
+source.cropbox = source.trimbox = RectangleObject((417, 205, 550, 330))
+writer.pages[-1].merge_transformed_page(source, Transformation().translate(-417, -205).translate(413.5, 235))
+def instructions(c):
+    label(c, 'Colab × Gemini', 480, 435, 38)
+    for i, line in enumerate(['1   Gemini →「データを読み込んで」', '2   Accept and run → 出力を見る', '3   質問を重ねて、恐竜を探す']):
+        label(c, line, 480, 325-i*85, 34)
+page(instructions)
 def csv_slide(c):
     rows = list(csv.DictReader((root / 'data/datasaurus.csv').open()))
     for i, values in enumerate([['dataset', 'x', 'y']] + [[r['dataset'], f"{float(r['x']):.4f}", f"{float(r['y']):.4f}"] for r in rows[:6]]):
@@ -200,7 +209,8 @@ notes = [
 ('結果を自分で確かめる', '図がアップロードしたデータを表しているか、軸や数値は合っているかを確認。知らないコードは説明してもらう。個人情報・APIキーは入れず、ノートブックはDriveに保存する。', 'Check that the chart uses the uploaded data and that axes and values make sense. Ask for code explanations. Keep out personal information and API keys, and save the notebook to Drive.'),
 ('datasaurus.csv', '1,846点、13種類のデータ。datasetはデータ名、xとyは各点の座標。活動1ではこのCSVだけをダウンロードする。表をクリックするとプレビューを開ける。', 'The CSV has 1,846 points across 13 datasets. dataset names the group, while x and y are point coordinates. Click the table to preview the CSV.')
 ]
-assert len(writer.pages) == len(notes) == 31
+order = list(range(1, 11)) + ['eda', 11, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 'instructions', 31]
+assert len(writer.pages) == len(order) == 24
 sources = {
     1: ['https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg'],
     7: ['https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg'],
@@ -220,9 +230,23 @@ output = root / 'lectures/w05-python-datasaurus.pdf'
 writer.add_metadata({'/Title': 'Week 5: Visual evidence and vibe coding', '/Subject': 'Image-led slides; explanations in the course viewer notes'})
 with output.open('wb') as f:
     writer.write(f)
-payload = {'file': 'lectures/w05-python-datasaurus.pdf', 'slides': [
-    {'page': i+1, 'title': title, 'ja': ja, 'en': en,
-     'originalText': original.pages[i].extract_text() or '', 'sources': sources.get(i+1, [])}
-    for i, (title, ja, en) in enumerate(notes)]}
+sources[8] = ['https://www.python.org/community/logos/']
+sources[21].append('https://deepmind.google/about/')
+sources[22].append('https://karpathy.ai/')
+payload = {'file': 'lectures/w05-python-datasaurus.pdf', 'slides': []}
+for i, origin in enumerate(order):
+    if origin == 'eda':
+        title, ja, en = ('Exploratory Data Analysis', notes[10][1], notes[10][2])
+        text, links = '', []
+    elif origin == 'instructions':
+        title = 'Colab × Gemini'
+        ja = '\n\n'.join(n[1] for n in notes[27:30])
+        en = '\n\n'.join(n[2] for n in notes[27:30])
+        text = '\n'.join(original.pages[n-1].extract_text() or '' for n in [28, 29, 30])
+        links = sources[29] + sources[30]
+    else:
+        title, ja, en = notes[origin-1]
+        text, links = original.pages[origin-1].extract_text() or '', sources.get(origin, [])
+    payload['slides'].append({'page': i+1, 'title': title, 'ja': ja, 'en': en, 'originalText': text, 'sources': links})
 (root / 'lectures/w05-python-datasaurus.notes.json').write_text(json.dumps(payload, ensure_ascii=False, indent=2)+'\n')
-print('Built 31 image-led slides with 31 bilingual notes')
+print(f'Built {len(order)} slides with aligned bilingual notes')
