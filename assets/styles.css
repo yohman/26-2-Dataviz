@@ -308,6 +308,8 @@ a{color:var(--playfair-crimson)}
 .history-feature .history-map-image{display:block;width:100%;aspect-ratio:2.23/1;object-fit:contain;background:#fff}
 .history-feature .week-hero-image{aspect-ratio:16/9;object-fit:cover;background:#071d35}
 .pokemon-hero .history-map{background:#f1e6c8;box-shadow:none}
+.nightingale-hero .history-map{background:transparent;box-shadow:none}
+.history-feature.nightingale-hero .history-map-image{height:auto;aspect-ratio:1375/775;object-fit:contain;background:transparent}
 .history-feature.pokemon-hero .history-map-image{height:clamp(260px,38vw,440px);aspect-ratio:auto;object-fit:contain;background:transparent;padding:1.5rem}
 .history-feature .minard-icon{position:absolute;z-index:2;right:-1rem;top:-2.8rem;width:clamp(84px,9vw,116px);height:clamp(84px,9vw,116px);border:0;border-radius:50%;background:var(--paper);box-shadow:0 0 0 7px rgba(250,247,240,.95),0 12px 28px rgba(68,59,50,.2);object-fit:cover;object-position:50% 22%}
 .history-map-hint{position:absolute;right:1rem;bottom:.8rem;padding:.4rem .55rem;background:rgba(250,247,240,.92);font:700 .65rem var(--sans);letter-spacing:.03em}

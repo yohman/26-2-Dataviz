@@ -1,6 +1,10 @@
 // English remains in each HTML page for searchability and no-JavaScript fallback.
 // Add or revise Japanese copy here; weekly dynamic content lives in site.js.
 window.COURSE_TRANSLATIONS = { ja: {
+  'Open Week 5 →': '第5週を開く →',
+  'WEEK 5 · EXPLORATION': '第5週 · 探索',
+  'Vibe Coding with Python': 'Pythonでバイブコーディング',
+  'Florence Nightingale · 1820–1910': 'フローレンス・ナイチンゲール · 1820–1910',
   'USGS earthquake data': 'USGSの地震データ',
   'iTunes Search API': 'iTunesの検索API',
   'Open-Meteo weather data': 'Open-Meteoの天気データ',
