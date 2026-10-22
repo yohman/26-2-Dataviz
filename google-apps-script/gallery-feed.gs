@@ -32,8 +32,8 @@ function doGet(request) {
     // The current form has no gallery-publication question. Preserve any
     // historical explicit refusal while publishing the named submissions.
     if (consentColumn && /^いいえ/.test(get(row, consentColumn))) return;
-    const studentId = get(row, '学籍番号');
-    const challenge = get(row, '週・チャレンジ');
+    const studentId = getAny(row, ['学籍番号 Student ID', '学籍番号']);
+    const challenge = getAny(row, ['Week Challenge', '週・チャレンジ']);
     const week = Number(challenge.match(/第\s*(\d+)\s*週/)?.[1]);
     if (!studentId || !week || week < 1 || week > 14) return;
     const rawDate = row[column('タイムスタンプ')];
@@ -64,10 +64,10 @@ function doGet(request) {
       week: item.week,
       challenge: item.challenge,
       submittedAt: Utilities.formatDate(new Date(item.time), 'Asia/Tokyo', 'yyyy-MM-dd'),
-      studentName: get(row, '氏名'),
-      title: get(row, '作品タイトル'),
-      tools: get(row, '使用したツール'),
-      projectUrl: getAny(row, ['課題で使用したデータ、ウェブサイト、またはドキュメントへのリンク', '作品のリンク']),
+      studentName: getAny(row, ['Name', '氏名']),
+      title: getAny(row, ['Title', '作品タイトル']),
+      tools: getAny(row, ['使用したツール Tools used', '使用したツール']),
+      projectUrl: getAny(row, ['課題で使用したデータ、ウェブサイト、またはドキュメントへのリンク\nLink', '課題で使用したデータ、ウェブサイト、またはドキュメントへのリンク', '作品のリンク']),
       description: getAny(row, ['作品について説明してください', 'この可視化から何が見えますか？']),
       imageIndex: item.index,
       imageCount: secondImageColumn && get(row, secondImageColumn) ? 2 : 1

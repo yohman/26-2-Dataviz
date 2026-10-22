@@ -7,8 +7,10 @@ const publishedSite = 'https://yohman.github.io/26-2-Dataviz/';
 const root = resolve(process.argv[2] || '.');
 const fields = ['week', 'challenge', 'submittedAt', 'studentName', 'title', 'tools', 'projectUrl', 'description', 'imageIndex', 'imageCount'];
 const cachedImages = new Map();
+let savedSnapshot;
 try {
   const previous = JSON.parse(await readFile(join(root, 'data/gallery-public.json'), 'utf8'));
+  if (Array.isArray(previous.items) && previous.items.length) savedSnapshot = previous;
   for (const item of previous.items || []) {
     (item.imageUrls || [item.imageUrl]).forEach((path, index) => {
       if (path) cachedImages.set(`${item.week}:${item.imageIndex}:${item.title}:${index + 1}`, path);
@@ -18,7 +20,7 @@ try {
 
 async function request(params, callback, attempts = 3, timeoutMs = 20000) {
   const url = new URL(feed);
-  Object.entries({ ...params, callback }).forEach(([key, value]) => url.searchParams.set(key, value));
+  Object.entries({ ...params, callback, t: Date.now() }).forEach(([key, value]) => url.searchParams.set(key, value));
   let failure;
   for (let attempt = 0; attempt < attempts; attempt++) {
     try {
@@ -36,6 +38,18 @@ async function request(params, callback, attempts = 3, timeoutMs = 20000) {
 }
 
 async function publishedSnapshot() {
+  // The JSON can be newer than the HTML's embedded fallback. Do not roll a
+  // successful local snapshot back to an older published HTML snapshot.
+  try {
+    const response = await fetch(new URL(`data/gallery-public.json?t=${Date.now()}`, publishedSite),
+      { cache: 'no-store', signal: AbortSignal.timeout(20000) });
+    if (!response.ok) throw new Error(`Published JSON HTTP ${response.status}`);
+    const fresh = await response.json();
+    if (!Array.isArray(fresh.items) || !fresh.items.length) throw new Error('Published JSON is empty');
+    return savedSnapshot?.items.length > fresh.items.length ? savedSnapshot : fresh;
+  } catch (error) {
+    if (savedSnapshot) return savedSnapshot;
+  }
   const response = await fetch(new URL('gallery.html', publishedSite), { signal: AbortSignal.timeout(20000) });
   if (!response.ok) throw new Error(`Published gallery HTTP ${response.status}`);
   const html = await response.text();

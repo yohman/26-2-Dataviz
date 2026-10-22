@@ -39,6 +39,13 @@ test('the feed publishes named latest responses without IDs, emails, or explicit
   assert.doesNotMatch(response.text, /-id|@example\.com|Older|"Revision"|Private work/);
   const items = JSON.parse(response.text.slice('courseGalleryReceive('.length, -2)).items;
   assert.equal(items.length, 5);
+  const aliases = { '学籍番号': '学籍番号 Student ID', '氏名': 'Name', '週・チャレンジ': 'Week Challenge',
+    '作品タイトル': 'Title', '使用したツール': '使用したツール Tools used',
+    '課題で使用したデータ、ウェブサイト、またはドキュメントへのリンク': '課題で使用したデータ、ウェブサイト、またはドキュメントへのリンク\nLink' };
+  values[0] = headers.map(header => aliases[header] || header);
+  const bilingual = context.doGet({ parameter: { callback: 'courseGalleryReceive' } });
+  assert.deepEqual(JSON.parse(bilingual.text.slice('courseGalleryReceive('.length, -2)).items, items,
+    'current bilingual form headers must publish the same complete records');
   assert.deepEqual(items.map(item => item.title).sort(), ['Anonymous submission', 'Another student', 'Latest revision', 'No screenshot yet', 'Week two']);
   assert.equal(items.find(item => item.title === 'Anonymous submission').studentName, 'Student');
   assert.ok(items.every(item => Number.isInteger(item.imageIndex)));
