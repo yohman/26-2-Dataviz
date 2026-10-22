@@ -55,7 +55,7 @@ test('Weeks 4 and 5 separate the Tableau challenge from Python and Datasaurus', 
   const four = load('04-find-the-unexpected.md');
   const five = load('05-python-history-evidence.md');
   assert.equal(four.activities.length, 2);
-  assert.equal(five.activities.length, 2);
+  assert.equal(five.activities.length, 3);
   assert(four.materials.some(m => m.href === 'data/pokemon-review.csv'));
   assert(!four.materials.some(m => /datasaurus|ipynb/.test(m.href)));
   assert(four.materials.some(m => m.href === 'lectures/w04-visual-language.pdf'));

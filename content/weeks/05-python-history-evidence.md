@@ -71,8 +71,8 @@ steps_ja:
 ### Activity 2
 title: What will you make with Gemini?
 title_ja: Geminiで、何をつくる？
-text: Choose one prompt, or invent your own. Use Accept and run, then keep asking questions. Help one another and share a discovery. iTunes results are not necessarily an artist's complete discography. APIs may have limits or temporary outages.
-text_ja: 1つ選ぶか、自分で考えてみましょう。「Accept and run」で実行し、問いを重ねます。助け合い、発見を共有しましょう。iTunesの検索結果は全曲一覧とは限りません。APIには利用制限や一時的な停止があります。
+text: Choose one prompt, or invent your own. Use Accept and run, then keep asking questions. iTunes results are not necessarily an artist's complete discography. APIs may have limits or temporary outages.
+text_ja: 1つ選ぶか、自分で考えてみましょう。「Accept and run」で実行し、問いを重ねます。iTunesの検索結果は全曲一覧とは限りません。APIには利用制限や一時的な停止があります。
 steps:
 - Earthquakes: “Get the last 30 days of earthquakes from USGS and map them.”
 - Music: “Use the iTunes API to make an app in Colab where I enter an artist and see their songs.”
@@ -85,6 +85,20 @@ steps_ja:
 - 天気：「東京・ソウル・台北の来週の気温を比べて。」
 - ポケモン：「このポケモンCSVを探索したい。タイプで攻撃力と防御力はどう違う？」
 - 自分のデータ：「このCSVで、どんな面白い問いを調べられそう？」
+
+### Activity 3
+title: Share what you made
+title_ja: つくったものを見せ合おう
+text: Get together in groups of four. Take turns showing what you created in Activity 2. Work in progress is welcome.
+text_ja: 4人グループで、アクティビティ2でつくったものを順番に見せ合いましょう。途中のものでも構いません。
+steps:
+- Show your visualization or app and explain what you tried to find out.
+- Share something surprising you discovered, or something that did not work as expected.
+- Ask each other questions and suggest one thing to explore next.
+steps_ja:
+- 可視化やアプリを見せて、何を知りたかったのか説明します。
+- 驚いた発見や、思い通りにいかなかったことを共有します。
+- お互いに質問し、次に試すと面白そうなことを提案しましょう。
 
 ## Mori's Corner
 

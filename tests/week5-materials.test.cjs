@@ -17,6 +17,12 @@ test('Week 5 starts open-ended Gemini exploration with just a CSV', () => {
   assert.equal(week.activities[1].materials.length, 4);
   assert.equal(week.activities[1].steps.length, 5);
   assert.equal(week.activities[1].steps_ja.length, 5);
+  assert.equal(week.activities.length, 3);
+  assert.equal(week.activities[2].number, 3);
+  assert.match(week.activities[2].text, /groups of four/);
+  assert.match(week.activities[2].text, /Activity 2/);
+  assert.equal(week.activities[2].steps.length, 3);
+  assert.equal(week.activities[2].steps_ja.length, 3);
   assert.match(week.activities[1].steps.join(' '), /USGS|iTunes|Pokemon/);
   assert.match(week.activities[1].text, /not necessarily an artist's complete discography/);
   assert.ok(week.activities[1].steps.every(prompt => prompt.split(/\s+/).length <= 25));
@@ -32,6 +38,8 @@ test('Week 5 starts open-ended Gemini exploration with just a CSV', () => {
   const html = vm.runInContext('activityTabs(week)', context);
   assert.match(html, /datasaurus\.csv/);
   assert.match(html, /performance-partners\.apple\.com/);
+  assert.match(html, /week-5-activity-3-tab/);
+  assert.match(html, /week-5-activity-3"/);
 });
 
 test('starter notebook is removed from the course and homework', () => {
