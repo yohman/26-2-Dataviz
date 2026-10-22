@@ -103,7 +103,7 @@ def detail(key, image, box, title, ja, en, source):
     iw, ih = im.size
     scale = min(W/iw, H/ih)
     def draw(c):
-        pixel = im.convert('RGB').getpixel((0, 0))
+        pixel = image.convert('RGB').getpixel((20, image.height // 2))
         c.setFillColorRGB(*(v/255 for v in pixel))
         c.rect(0, 0, W, H, fill=1, stroke=0)
         c.drawImage(ImageReader(im), (W-iw*scale)/2, (H-ih*scale)/2, iw*scale, ih*scale)
@@ -111,19 +111,25 @@ def detail(key, image, box, title, ja, en, source):
     detail_notes[key] = (title, ja, en, source)
 book = original.pages[6].images[0].image
 book_source = 'https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/'
+from PIL import Image
+chart = Image.open(root / 'assets/images/lecture/nightingale-mortality-hires.png')
+chart_source = 'https://upload.wikimedia.org/wikipedia/commons/1/17/Nightingale-mortality.jpg'
+detail('chart-full', chart, (0, 0, 3840, 2100), 'Diagram of the Causes of Mortality · full chart',
+       'Nightingaleの死亡原因の図。左右の図は同じ面積尺度で異なる年を示す。',
+       'Nightingale’s mortality diagram shows two years using the same area scale.', chart_source)
 detail('book-page', book, (1160, 215, 1545, 825), 'England and Her Soldiers',
        '右ページはHarriet Martineau著『England and Her Soldiers』（1859）の扉。Nightingaleの証拠を一般読者に伝える出版と協力の文脈を紹介する。',
        'The right page is the title page of Harriet Martineau’s England and Her Soldiers (1859). Discuss publication and collaboration as ways of bringing Nightingale’s evidence to a wider audience.', book_source)
-detail('chart-title', book, (410, 220, 835, 280), 'Diagram of the Causes of Mortality',
+detail('chart-title', chart, (1230, 0, 2710, 205), 'Diagram of the Causes of Mortality',
        '題名が何を説明する図なのかを明示している。対象・場所・死因という情報に注目する。',
        'The title names the subject and setting. Ask students what question the chart promises to address.', book_source)
-detail('chart-key', book, (150, 600, 625, 825), '面積と色の説明',
+detail('chart-key', chart, (310, 1300, 1880, 2070), '面積と色の説明',
        '青は予防・軽減可能な病気、赤は負傷、黒はその他の死因。各扇形の面積を中心から測るという説明を読む。半径の長さではなく面積に注目する。',
        'Read the original key: blue denotes preventable or mitigable disease, red wounds, and black other causes. The encoding uses sector area measured from the center, not radius alone.', book_source)
-detail('chart-large', book, (625, 280, 1090, 800), '1854–1855',
+detail('chart-large', chart, (1940, 75, 3530, 1980), '1854–1855',
        '最初の年の大きい図。冬に青い領域がどれほど増えるか。負傷による死と比較してもらう。',
        'The larger diagram shows April 1854–March 1855. Compare the winter disease sectors with deaths from wounds.', book_source)
-detail('chart-small', book, (155, 255, 455, 565), '1855–1856',
+detail('chart-small', chart, (345, 70, 1290, 1180), '1855–1856',
        '次の年の小さい図。同じ面積の尺度で比較する。縮小を読み取りつつ、この図だけで特定の個人や介入の因果効果を断定しない。',
        'The smaller diagram shows April 1855–March 1856 on the same area scale. Compare the reduction without treating the chart alone as proof of any individual intervention’s causal effect.', book_source)
 from PIL import Image
@@ -254,7 +260,20 @@ notes = [
 ('datasaurus.csv', '1,846点、13種類のデータ。datasetはデータ名、xとyは各点の座標。活動1ではこのCSVだけをダウンロードする。表をクリックするとプレビューを開ける。', 'The CSV has 1,846 points across 13 datasets. dataset names the group, while x and y are point coordinates. Click the table to preview the CSV.')
 ]
 order = list(range(1, 8)) + list(detail_notes) + [8, 9, 10, 'eda', 11, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 'instructions', 31]
-assert len(writer.pages) == len(order) == 32
+assert len(writer.pages) == len(order) == 33
+# Keep the full chart directly after the book spread, followed by its four details.
+book_index = order.index('book-page')
+book_page = writer.pages[book_index]
+pages = list(writer.pages)
+pages.pop(book_index)
+order.pop(book_index)
+book_index = order.index('chart-small') + 1
+pages.insert(book_index, book_page)
+order.insert(book_index, 'book-page')
+reordered = PdfWriter()
+for p in pages:
+    reordered.add_page(p)
+writer = reordered
 # User's slide numbers refer to the pre-insertion 24-slide deck: 19 before 18.
 first, second = order.index(23), order.index(24)
 pages = list(writer.pages)
@@ -298,6 +317,8 @@ assert len(factual_notes) == len(order)
 for i, origin in enumerate(order):
     if origin in detail_notes:
         title, ja, en, link = detail_notes[origin]
+        if origin in ['chart-title', 'chart-key', 'chart-large', 'chart-small']:
+            link = chart_source
         text, links = '', [link]
     elif origin == 'eda':
         title, ja, en = ('Exploratory Data Analysis', notes[10][1], notes[10][2])
