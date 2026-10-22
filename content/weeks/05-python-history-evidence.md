@@ -40,8 +40,10 @@ image: assets/images/lecture/week05-python.png
 
 ## Activity 2 Materials
 
-- [Anscombe CSV](data/anscombe.csv) {data}
-- [Gapminder wrangling notebook (optional extension)](data/gapminder/gapdata.ipynb) {data}
+- [USGS earthquake data](https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php) {reference}
+- [iTunes Search API](https://performance-partners.apple.com/search-api) {reference}
+- [Open-Meteo weather data](https://open-meteo.com/en/docs) {reference}
+- [Pokemon CSV](data/pokemon-review.csv) {data}
 
 ## In Class Activities
 
@@ -67,20 +69,22 @@ steps_ja:
 - 恐竜が見えるまで試してみましょう。エラーが出たらGeminiと相談して再挑戦。ノートブックはドライブに保存します。
 
 ### Activity 2
-title: Compare and help one another
-title_ja: 比べて、助け合う
-text: Groups of four are here to help, not compete. Everyone should finish with a working plot on their own computer and a short explanation of why looking at the data matters.
-text_ja: 4人グループは競争のためではなく、助け合うためです。全員が自分のPCで図を描き、なぜデータを見ることが大切なのか短く説明できることを目指します。
+title: What will you make with Gemini?
+title_ja: Geminiで、何をつくる？
+text: Choose one prompt below, or invent your own. Paste it into Gemini, use Accept and run, and refine the result through conversation. Work on your own computer, help one another in your group, and share one discovery. The iTunes app runs inside Colab using Python and ipywidgets. Its results are catalog matches, not necessarily an artist's complete discography. APIs may have limits or temporary outages.
+text_ja: 下のプロンプトから1つ選ぶか、自分で考えてみましょう。Geminiに貼り付け、「Accept and run」で実行し、対話しながら改善します。自分のPCで取り組み、グループで助け合って発見を1つ共有。iTunesのアプリはPythonとipywidgetsでColab内に作れます。検索結果は全曲一覧とは限りません。APIには利用制限や一時的な停止があります。
 steps:
-- Show your plot and how your conversation with Gemini developed. If someone is stuck, help them explore on their own computer.
-- Compare two datasets with similar means, standard deviations, and correlation but different shapes. Describe what the statistics do not reveal.
-- Discuss how axis scaling and point size affect the result. Keep the underlying data unchanged while testing these choices.
-- Prepare one observation or question for the class recap. There is no competition or formal group presentation.
+- Earthquake map: “Use Python in Colab to get the past 30 days of earthquakes from USGS at https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson and map them interactively. Use circle size for magnitude and color for depth. Show the place, magnitude, and date when clicked. Start with magnitude 2.5 or higher to keep the map responsive.”
+- Artist song finder: “Build a Python app inside Colab using ipywidgets and the iTunes Search API. Let me enter an artist, choose the matching artist, and see up to 50 songs with album, release date, duration, and an iTunes link. Use the Japan store. Cache results and show a helpful message if no matches are found. Add a chart of song durations.”
+- Weather comparison: “Use Open-Meteo in Python to compare the next 7 days of hourly temperature forecasts for Tokyo, Seoul, and Taipei. Plot all three in Japan time with clear city labels and Celsius units. Show the data source and when you retrieved it.”
+- Pokemon explorer: “Use my uploaded pokemon-review.csv to make an interactive Pokemon explorer in Colab. First inspect the actual column names. Let me filter by type and compare Attack and Defense in a scatterplot. Show the Pokemon name when I hover over a point.”
+- Your own data: “Explore the CSV I uploaded using Python in Colab. First inspect the columns and missing values, then suggest three questions this data could answer. Wait for me to choose one before making a visualization. Explain the result without inventing missing data.”
 steps_ja:
-- 自分の図と、Geminiとの対話の進め方を見せます。困っている人がいたら、その人のPCで探索を続けられるよう助けましょう。
-- 平均・標準偏差・相関が似ているのに形が異なるデータを2つ比べ、統計量だけでは分からないことを説明します。
-- 軸の縮尺や点の大きさが見え方に与える影響を話し合います。データ自体は変えず、見せ方を試してください。
-- 全体の振り返りで共有する気づきか疑問を1つ用意します。競争や正式なグループ発表はありません。
+- 地震マップ：「ColabのPythonでUSGSの過去30日間の地震データ https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson を取得して、操作できる地図にして。円の大きさでマグニチュード、色で深さを表し、クリックで場所・規模・日時を表示。まずM2.5以上に絞って、軽く動くようにして。」
+- アーティストの曲探し：「Colab内でPythonとipywidgetsを使い、iTunes Search APIの曲検索アプリを作って。名前を入力し、該当するアーティストを選ぶと、曲名・アルバム・発売日・長さ・iTunesリンクを最大50曲表示。日本のストアを使い、結果をキャッシュして。見つからない場合はメッセージを出し、曲の長さもグラフにして。」
+- 3都市の天気：「PythonでOpen-Meteoから東京・ソウル・台北の今後7日間の毎時気温予報を取得し、比較する折れ線グラフを作って。時刻は日本時間、気温は℃、都市名を明記。出典と取得日時も表示して。」
+- ポケモン図鑑：「アップロードしたpokemon-review.csvで、Colabに操作できるポケモン図鑑を作って。まず実際の列名を確認。タイプで絞り込み、攻撃力と防御力の散布図を表示して。点にマウスを重ねると名前が分かるようにして。」
+- 自分のデータ：「アップロードしたCSVをColabのPythonで探索したい。まず列と欠損値を確認し、このデータで調べられる問いを3つ提案して。私が1つ選ぶまで可視化は待って。欠けたデータを勝手に作らず、結果を説明して。」
 
 ## Mori's Corner
 

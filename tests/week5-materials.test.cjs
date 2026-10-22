@@ -14,7 +14,11 @@ test('Week 5 starts open-ended Gemini exploration with just a CSV', () => {
   assert.match(week.lectureResources[0].href, /Nightingale/);
   assert.deepEqual(Array.from(week.activities[0].materials, m => m.href), ['data/datasaurus.csv']);
   assert.equal(week.activities[0].link, 'https://colab.research.google.com/');
-  assert.equal(week.activities[1].materials.length, 2);
+  assert.equal(week.activities[1].materials.length, 4);
+  assert.equal(week.activities[1].steps.length, 5);
+  assert.equal(week.activities[1].steps_ja.length, 5);
+  assert.match(week.activities[1].steps.join(' '), /USGS|iTunes|Open-Meteo|Pokemon/);
+  assert.match(week.activities[1].text, /not necessarily an artist's complete discography/);
   assert.ok(week.activities[0].steps.some(step => step.includes('folder icon')));
   assert.ok(week.activities[0].steps.some(step => step.includes('“Load the data.”')));
   assert.ok(week.activities[0].steps_ja.some(step => step.includes('「データを読み込んで」')));
@@ -24,7 +28,7 @@ test('Week 5 starts open-ended Gemini exploration with just a CSV', () => {
   context.week = week;
   const html = vm.runInContext('activityTabs(week)', context);
   assert.match(html, /datasaurus\.csv/);
-  assert.match(html, /data\/anscombe\.csv/);
+  assert.match(html, /performance-partners\.apple\.com/);
 });
 
 test('starter notebook is removed from the course and homework', () => {

@@ -1,6 +1,10 @@
 // English remains in each HTML page for searchability and no-JavaScript fallback.
 // Add or revise Japanese copy here; weekly dynamic content lives in site.js.
 window.COURSE_TRANSLATIONS = { ja: {
+  'USGS earthquake data': 'USGSの地震データ',
+  'iTunes Search API': 'iTunesの検索API',
+  'Open-Meteo weather data': 'Open-Meteoの天気データ',
+  'Pokemon CSV': 'ポケモンのCSVデータ',
   'Nightingale mortality diagram': 'Nightingaleの死亡原因図',
   'Gapminder wrangling notebook (optional extension)': 'Gapminderデータ整理ノートブック（発展・任意）',
   'Tableau Dashboard Guide · Data Visualization': 'フィルター付きダッシュボードの作り方 · Data Visualization',
