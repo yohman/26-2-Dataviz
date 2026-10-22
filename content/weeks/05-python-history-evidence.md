@@ -15,14 +15,14 @@ schedule: 10:40–10:50|Submission review|Discuss the refined Tableau projects;1
 schedule_ja: 10:40–10:50|提出作品のレビュー|改善したTableau作品を振り返る;10:50–11:10|講義|視覚的な証拠・バイブコーディング・Gemini;11:10–11:30|Colabの準備|新しいノートブックを作り、CSVをアップロードして読み込む;11:30–11:55|恐竜を探そう|GeminiとPythonで自由に探索する;11:55–12:10|グループ共有|発見を比べ、助け合う;12:10–12:20|まとめと宿題|結果と確かめ方を説明する
 in_class: Upload datasaurus.csv to a new Colab notebook. Start by asking Gemini to load the data, then explore independently until you find the dinosaur. Everyone works on their own computer.
 in_class_ja: 新しいColabノートブックにdatasaurus.csvをアップロードします。Geminiにデータの読み込みを頼むところから始め、恐竜が見つかるまで自分で探索します。全員が自分のPCで取り組みます。
-homework: Use Gemini and Python in Colab to visualize Datasaurus or another dataset. Explain what you found and how you checked the result.
-homework_ja: ColabでGeminiとPythonを使い、Datasaurusまたは別のデータを可視化します。発見したことと、結果をどう確かめたかを説明してください。
-requirements: Create one visualization using Python in Colab, with Gemini's help.;Use Datasaurus or another dataset and provide its source link.;Submit one screenshot (required), with an optional second screenshot.;Explain the data, your finding, and how you checked Gemini's output.;Use the usual homework form.
-requirements_ja: ColabでGeminiを使い、Pythonで可視化を1点つくる。;Datasaurusまたは別のデータを使い、出典リンクを添える。;スクリーンショット1枚は必須、2枚目は任意。;データ・発見したこと・Geminiの出力をどう確かめたかを説明する。;いつもの宿題フォームから提出する。
+homework: Individually, use Python to visualize data of your choice. Gemini, Codex, or another approach is welcome. Share your notebook or working project if you can.
+homework_ja: 自分で選んだデータを、Pythonで可視化しましょう。Gemini・Codex・その他の方法、どれでも構いません。ノートブックや動く作品の共有も歓迎します。
+requirements: Create one Python visualization using data of your choice and provide the data-source link.;Upload one screenshot (required), with an optional second screenshot.;Briefly explain the data, your finding, and how you checked the result.;A shared Colab notebook, app, or repository link is encouraged but optional. Check that others can open it, and remove personal information and API keys.
+requirements_ja: 好きなデータでPythonの可視化を1点つくり、データの出典リンクを添える。;スクリーンショット1枚は必須、2枚目は任意。;データ・発見したこと・結果の確かめ方を短く説明する。;Colab・アプリ・リポジトリなどの共有リンクも歓迎（任意）。他の人が開けるか確認し、個人情報やAPIキーは除く。
 challenge: Python view
 challenge_ja: Pythonビュー
-tools: Google Colab, Gemini, Python
-tools_ja: Google Colab・Gemini・Python
+tools: Python, Gemini, Codex, Google Colab, or other tools
+tools_ja: Python・Gemini・Codex・Google Colabなど
 image: assets/images/lecture/week05-python.png
 ---
 

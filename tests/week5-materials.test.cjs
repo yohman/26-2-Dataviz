@@ -37,3 +37,12 @@ test('starter notebook is removed from the course and homework', () => {
   assert.match(source, /title: Vibe Coding with Python/);
   assert.equal(fs.existsSync('data/datasaurus-python.ipynb'), false);
 });
+
+test('Week 5 homework allows any Python workflow and encourages optional sharing', () => {
+  const source = fs.readFileSync('content/weeks/05-python-history-evidence.md', 'utf8');
+  assert.match(source, /homework: Individually, use Python/);
+  assert.match(source, /Gemini, Codex, or another approach/);
+  assert.match(source, /encouraged but optional/);
+  assert.match(source, /one screenshot \(required\), with an optional second screenshot/);
+  assert.match(source, /共有リンクも歓迎（任意）/);
+});
