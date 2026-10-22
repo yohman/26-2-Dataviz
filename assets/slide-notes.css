@@ -1,0 +1,8 @@
+.slide-notes{margin:1.5rem 0 3rem;padding:1.35rem 0;border-top:1px solid var(--line);max-width:78ch}
+.slide-notes[hidden],.slide-notes details[hidden]{display:none}
+.slide-notes h2{margin:0 0 .75rem;font:700 .9rem var(--sans);color:var(--muted)}
+.slide-notes p{font:400 1rem/1.8 var(--sans);white-space:pre-line}
+.slide-notes details{margin-top:1rem;font:400 .85rem/1.7 var(--sans)}
+.slide-notes summary{cursor:pointer;color:var(--muted)}
+.slide-notes pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;color:var(--muted)}
+.slide-notes [data-notes-sources]{display:flex;flex-wrap:wrap;gap:1rem;font-size:.8rem}

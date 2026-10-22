@@ -1,0 +1,284 @@
+{
+  "file": "lectures/w05-python-datasaurus.pdf",
+  "slides": [
+    {
+      "page": 1,
+      "title": "Nightingaleの図",
+      "ja": "まず、この図から何が読み取れるか学生に問いかける。言葉で先に解説せず、色・面積・配置から気づいたことを聞く。",
+      "en": "Ask students what they notice in Nightingale’s diagram before explaining it. Invite observations about color, area, and arrangement.",
+      "originalText": "W hat do you see here?\nhttps://commons.wikimedia.org/wiki/File:Nightingale-\nmortality.jpg#/media/File:Nightingale-mortality.jpg\n2323",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg"
+      ]
+    },
+    {
+      "page": 2,
+      "title": "Florence Nightingale",
+      "ja": "Florence Nightingale（1820–1910）。看護の改革とともに、データを使って問題を伝え、行動につなげた人物として紹介する。",
+      "en": "Introduce Florence Nightingale (1820–1910) as a reformer who used evidence and visualization to make problems visible.",
+      "originalText": "2424",
+      "sources": []
+    },
+    {
+      "page": 3,
+      "title": "ランプを持つ女性",
+      "ja": "病院の場面から、Nightingaleの活動を紹介する。個人の物語と、その背後にある多数の人々のデータをつなぐ。",
+      "en": "Use the hospital scene to connect Nightingale’s personal story with the lives represented by the data.",
+      "originalText": "The lady with the lam p\nFlorence Nightingale (1820-1910)\n2525",
+      "sources": []
+    },
+    {
+      "page": 4,
+      "title": "現場から証拠へ",
+      "ja": "病院の現場を観察し、記録し、改善する。データは現場と切り離された数字ではないことを話す。",
+      "en": "Connect observation, records, and reform. Data represents people and conditions in a real setting.",
+      "originalText": "2626",
+      "sources": []
+    },
+    {
+      "page": 5,
+      "title": "本という伝達手段",
+      "ja": "図を作るだけでなく、誰にどう届けるか。Nightingaleが使った本という媒体に注目する。",
+      "en": "Discuss the book as a vehicle for communicating evidence to an audience.",
+      "originalText": "2727",
+      "sources": []
+    },
+    {
+      "page": 6,
+      "title": "記録と報告",
+      "ja": "タイトルページを見せ、証拠をまとめて他の人が検討できる形にすることの意味を話す。",
+      "en": "Discuss why recording and publishing evidence matters, beyond making a single chart.",
+      "originalText": "2828",
+      "sources": []
+    },
+    {
+      "page": 7,
+      "title": "図が伝えるもの",
+      "ja": "図の形・色・面積は、何を比較しやすくしているか。読み取り方を学生自身の言葉で説明してもらう。",
+      "en": "Ask what the diagram makes easy to compare and what students need to know to interpret it.",
+      "originalText": "2929",
+      "sources": [
+        "https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg"
+      ]
+    },
+    {
+      "page": 8,
+      "title": "Why Python?",
+      "ja": "Pythonを、探索を何度も試せる道具として紹介する。今日はすべての文法を覚えるより、結果を見ながら問いを深める。",
+      "en": "Introduce Python as a tool for repeated exploration. Today the focus is asking questions and inspecting results rather than memorizing syntax.",
+      "originalText": "Why Python?\n3131",
+      "sources": []
+    },
+    {
+      "page": 9,
+      "title": "Pythonの可視化ライブラリ",
+      "ja": "matplotlib、seaborn、Plotly、Bokeh。同じPythonでも異なる表現方法がある。道具の名前より、どのようにデータを見せたいかを重視する。",
+      "en": "Matplotlib, seaborn, Plotly, and Bokeh offer different ways to visualize data. Begin with the visual question rather than a favorite library.",
+      "originalText": "3232",
+      "sources": []
+    },
+    {
+      "page": 10,
+      "title": "John Tukey",
+      "ja": "Tukeyの言葉：「The greatest value of a picture is when it forces us to notice what we never expected to see.」予想外に気づくことが今日の授業と宿題の中心。",
+      "en": "Use Tukey’s quotation about noticing the unexpected to introduce the purpose of today’s exploration.",
+      "originalText": "“The greatest value of a picture is when it\nforces us to notice what we never expected\nto see.”\n—  J o h n  Tu key,  1 9 7 7 1 61 6",
+      "sources": []
+    },
+    {
+      "page": 11,
+      "title": "EDA",
+      "ja": "EDA＝探索的データ分析。データを見る、問いを立てる、可視化する、さらに問い直す。最初の図を作ることは出発点にすぎない。",
+      "en": "EDA means exploratory data analysis. Examine data, ask questions, visualize, and revise the questions. The first chart is a starting point.",
+      "originalText": "EDA\nE x p l o ra to r y  Da t a  A n a l y s i s\n1 71 7",
+      "sources": []
+    },
+    {
+      "page": 12,
+      "title": "可視化による発見",
+      "ja": "数字だけでは見えにくい形や傾向を、図によって発見する。この図の点は、実際のDatasaurusデータを使っている。",
+      "en": "Visualization reveals structure that summaries can hide. These points come from the actual Datasaurus dataset.",
+      "originalText": "① Discovery through Visualization\nS e e i n g  p a t te r n s ,  t re n d s ,  a n d  o u t l i e r s  t h a t  n u m b e r s  a l o n e  c a n n o t  s h o w.\n可視化による発⾒\n数字だけでは ⾒えないパタ ーンや 傾向 、外れ値を「⾒る」ことで 発⾒す\nる。\n1 81 8",
+      "sources": []
+    },
+    {
+      "page": 13,
+      "title": "反復的な探索",
+      "ja": "同じような統計量でも形が違う。1枚で結論を出さず、別の見方や比較を試す。",
+      "en": "Iterative exploration means trying another view or comparison instead of stopping after the first chart.",
+      "originalText": "② Iterative Exploration\nA n a l y ze ,  v i s u a l i ze ,  q u e s t i o n ,  a n d  re f i n e  re p e a te d l y  to  u n cove r  d e e p e r\ni n s i g h t s .\n反復的な探究\n可視化と分析を繰り返し⾏い、データの 奥にある 意味を掘り下げる 。\n1 91 9",
+      "sources": []
+    },
+    {
+      "page": 14,
+      "title": "予想外に開かれる",
+      "ja": "驚きが見つかったら、それを新しい問いにする。見たかった結果だけを探すのではなく、実際のデータの形に注目する。",
+      "en": "Let surprising patterns generate new questions. Attend to the data rather than only looking for the answer you expected.",
+      "originalText": "③ Openness to Surprise\nE x p e c t  t h e  u n ex p e c te d  —  E DA  va l u e s  c u r i o s i t y  ove r  co n f i r m a t i o n .\n意外性への開放性\n仮説の検証よりも 、好奇⼼と「予想外の発⾒」を重視する 。\n2 02 0",
+      "sources": []
+    },
+    {
+      "page": 15,
+      "title": "恐竜を探そう",
+      "ja": "活動1。datasaurus.csvをColabにアップロードし、Geminiにはまず「データを読み込んで」とだけ伝える。そこからは学生自身で探索する。",
+      "en": "Activity 1: upload datasaurus.csv to Colab and begin with only “Load the data.” Students choose how to explore from there.",
+      "originalText": "datasaurus.csv\n🦖\nF i n d  t h e  d i n o s a u r !\n2 12 1",
+      "sources": []
+    },
+    {
+      "page": 16,
+      "title": "Anscombeの例",
+      "ja": "4組のデータは似た要約統計を持つが、散布図は異なる。なぜ数値の要約だけでは足りないかを話し合う。",
+      "en": "Anscombe’s quartet illustrates how similar summary statistics can conceal very different patterns.",
+      "originalText": "Anscombe's quartet\nhttps://ja.wikipedia.org/wiki/ アンスコムの 例\n2 22 2",
+      "sources": [
+        "https://en.wikipedia.org/wiki/Anscombe%27s_quartet"
+      ]
+    },
+    {
+      "page": 17,
+      "title": "Datasaurus Dozen",
+      "ja": "実際のCSVの13種類を、同じ縮尺で並べた図。要約統計と、目で見た形の両方を確かめる。",
+      "en": "All 13 datasets use the same scale. Compare visual patterns as well as numerical summaries.",
+      "originalText": "I n  P y t h o n\n2 32 3",
+      "sources": [
+        "https://www.research.autodesk.com/publications/same-stats-different-graphs/"
+      ]
+    },
+    {
+      "page": 18,
+      "title": "要約で消える形",
+      "ja": "平均やヒストグラムが見せるもの、隠すものを比較する。要約から元の分布の形が一意に分かるとは限らない。",
+      "en": "Discuss what a summary reveals and conceals. A mean or histogram does not uniquely determine the underlying distribution.",
+      "originalText": "2 42 4",
+      "sources": []
+    },
+    {
+      "page": 19,
+      "title": "点を重ねて見る",
+      "ja": "要約だけでなく個々の点を見る。外れ値や密度、ばらつきについて、何が新しく見えるかを聞く。",
+      "en": "Ask what individual points reveal about density, variation, and outliers beyond a summary plot.",
+      "originalText": "2 52 5",
+      "sources": []
+    },
+    {
+      "page": 20,
+      "title": "視覚的な手がかり",
+      "ja": "位置・長さ・角度で、同じ傾向の伝わり方が変わる。図の出典はNatureの記事。",
+      "en": "Discuss how position, length, and angle communicate patterns differently. The original figure links to Nature.",
+      "originalText": "https://w w w.nature.com /articles /497186a\n2 62 6",
+      "sources": [
+        "https://www.nature.com/articles/497186a"
+      ]
+    },
+    {
+      "page": 21,
+      "title": "Gemini",
+      "ja": "GeminiはGoogle DeepMindのAIモデル群。最初の公開は2023年12月。名前は「双子」で、ふたご座のCastorとPollux、BrainとDeepMindの合流が由来。",
+      "en": "Gemini is Google DeepMind’s AI model family, introduced in December 2023. Its name evokes the twins Castor and Pollux and the joining of the Brain and DeepMind teams.",
+      "originalText": "Geminiとは？\nGoogle DeepMind / December 2023\n言葉・画像・コードを扱う、GoogleのAIモデル群\n名はふたご座の双子、カストルとポルックスから。\nBrainとDeepMindの合流も、この名の由来。\nGoogle: Geminiの名前の由来\n",
+      "sources": [
+        "https://blog.google/innovation-and-ai/products/google-gemini-ai-name-meaning/"
+      ]
+    },
+    {
+      "page": 22,
+      "title": "Vibe coding",
+      "ja": "日本語など自然な言葉で頼み、AIが生成するコードを実行し、結果を見て対話を続けるスタイル。Karpathyが2025年2月に命名。速く始められる一方、理解や検証を後回しにしやすいことも説明する。",
+      "en": "Vibe coding describes conversational creation and iteration with AI-generated code. Karpathy named it in February 2025. Discuss the tradeoff between speed and deferred understanding or verification.",
+      "originalText": "爆速プロトタイプ構築術｜麗澤大学 2026秋\nVibe Coding＝日本語で頼み、結果を見て進めるスタイル\n定義\nAndrej Karpathy が名付けた（2025年2月、Xへの投\n稿）\n• 雰囲気（vibe）に身をまかせ、コードの存在すら忘れて進\nめる\n• AIが提案する変更を、細かく読まずに「すべて受け入れ\nる」\n• エラーが出たら、メッセージをそのままAIに貼り付ける\n• コードが自分の理解を超えて育っても、先へ進む\n出典の要旨。教科書 第1章 1.1\n手に入るもの\n速い・始めやすい・対話できる\n後回しにしているもの\nコードの理解・変更内容の確認・検証\nと対応準備\n速さと引き換えに、理解と確認を\n後回しにする。それがこのスタイル\nの正直な設計\n4",
+      "sources": [
+        "https://simonwillison.net/2025/Feb/6/andrej-karpathy/",
+        "https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf"
+      ]
+    },
+    {
+      "page": 23,
+      "title": "どこまでAIに任せる？",
+      "ja": "コーディングはコードを書くこと。プログラミングには手順を考え、動かして確かめることも含む。アプリ開発には、誰の何を解決するか、届け方や運用まで含む。図の3つの領域を指しながら説明する。",
+      "en": "Coding sits inside programming, which sits inside app development. Explain the broader decisions involved at each level while pointing to the nested diagram.",
+      "originalText": "爆速プロトタイプ構築術｜麗澤大学 2026秋\nコーディング ⊂ プログラミング ⊂ アプリ開発\nどこまでAIに任せる？\nアプリ開発\nプログラミング\nコーディング\nコーディング\n決まった内容をコードに書く（清書）\nAIが強く助ける\nプログラミング\n手順を考え、組み立て、動かして確かめる\nAIがかなり助ける\nアプリ開発\n誰の困りごとを解くか決め、確かめ、届け、使わ\nれ続ける状態を保つ\n人の判断が増える\n今日のデモで触れるのは、いちばん\n内側だけ\n5",
+      "sources": [
+        "https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf"
+      ]
+    },
+    {
+      "page": 24,
+      "title": "具体的な依頼と曖昧な依頼",
+      "ja": "具体的な依頼では結果を比較しやすい。曖昧な依頼ではAIが仮定を置く。違っていたら言い直し、変更後も以前の動作を確かめる。長いプロンプトである必要はない。",
+      "en": "Concrete requests are easier to check. Vague requests leave room for assumptions. Clarify through conversation and recheck earlier behavior after a change. Prompts need not be long.",
+      "originalText": "爆速プロトタイプ構築術｜麗澤大学 2026秋\nDEMO② 言葉で変える。具体的に頼むか、曖昧に頼むか\nライブデモ\n具体的な頼み方\n「つかれた」のボタンだけ紫色にしてください。あと\n、記録の文章を「17:03 つかれた」のように短くし\nてください。\n曖昧な頼み方\n全体を、もっとやさしい雰囲気にしてください。\n→ 結果を見比べやすい → 色を淡く？角を丸く？ 人によって解釈が分かれる\n曖昧な部分は、AIが「仮定」で埋める。違っていたら言い直せばよい。変えたら、色だけでなく「記録が\n増える」ことも確かめる\n14",
+      "sources": [
+        "https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf"
+      ]
+    },
+    {
+      "page": 25,
+      "title": "小さく変え、確かめる",
+      "ja": "必要ならまず計画を聞く。1回で変えることを小さくする。不明点や仮定を確認する。直らないときは同じ指示を繰り返さず、事実を伝え、問題を小さくする。",
+      "en": "Ask for a plan when useful, keep changes small, and identify assumptions. If a fix fails, provide observations and narrow the problem rather than repeating the same request.",
+      "originalText": "爆速プロトタイプ構築術｜麗澤大学 2026秋\n壊れの連鎖を止める3つの鉄則\n頼み方の型\nまず計画を出させる\n「まず計画だけ出してください。実装\nはまだしないでください」\n作る前なら、ずれを言葉の段階で直\nせる\n1回の依頼＝1つの変化\n「取り消しを直して、ついでに集計も、\nあと色も」は3つの変化\n完成条件が1〜2行で書けないタスク\nは、まだ大きすぎる\n仮定と不明点を挙げさせる\n「実装の前に、あなたが置く仮定と、\n決まっていないことを列挙して」\n答えた内容は仕様書に書き戻す\n直らないときは同じ指示を繰り返さない：①言い方を変える（事実を書く）②小さくする ③戻す\n23",
+      "sources": [
+        "https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf"
+      ]
+    },
+    {
+      "page": 26,
+      "title": "エラーと検証",
+      "ja": "何をして何が起きたか、エラー全文とともに伝える。秘密情報は伏せる。AIの「確認した」という言葉だけを証拠にせず、実行結果を自分でも確かめる。",
+      "en": "Describe the action and result, include the full error, and remove secrets. Verify the actual outcome rather than relying on an AI claim that it tested something.",
+      "originalText": "爆速プロトタイプ構築術｜麗澤大学 2026秋\nエラーが出たら／AIに自分でテストさせる\n困ったとき\nエラーの伝え方\n• 何をしたら、何が起きたか（操作と結果）\n• エラー文は要約せず、全文を貼る\n• 貼る前に、APIキー・パスワード・個人情報を伏せる（\n例：apiKey=[伏せた]）\n• 自動修正に任せたら「何が原因だったか」も聞く\n役割を分ける\n実装役 ブリーフ通りに作る\nテスト役 壊すつもりで確かめる（検算・意地悪な入力）\nレビュー役 仕様と比べ、漏れと余計な変更を探す\nAIの「確認しました」は証拠ではない。実行した方法と結果を出させ、自分の画面でも試す\n24",
+      "sources": [
+        "https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf"
+      ]
+    },
+    {
+      "page": 27,
+      "title": "ColabにCSVをアップロード",
+      "ja": "Colabにログインして新規ノートブックを作る。必要なら接続。左のフォルダアイコンから「セッション ストレージにアップロード」を選びdatasaurus.csvをアップロード。一覧に出るまで待つ。セッションがリセットされたら再アップロードする。",
+      "en": "Sign in to Colab, create a notebook, and connect if needed. Open the folder icon on the left, upload datasaurus.csv to session storage, and wait for it to appear. Upload again if the session resets.",
+      "originalText": "Google Colabの準備\nPython runs in your browser\n1   ログインして、新しいノートブックを作る。\n2   必要なら「接続」。左のフォルダアイコンを開く。\n3   「セッション ストレージにアップロード」を選ぶ。\n4   datasaurus.csvを選び、一覧への表示を待つ。\nGoogle Colabを開く\n",
+      "sources": [
+        "https://colab.research.google.com/"
+      ]
+    },
+    {
+      "page": 28,
+      "title": "最初のひと言",
+      "ja": "きらきらマークで右のGeminiパネルを開く。最初は「データを読み込んで」とだけ伝える。それ以降の探索の手順は自分で考える。Geminiが使えない場合は教員に相談する。",
+      "en": "Open Gemini’s right-hand panel using the sparkle icon. Begin only with “Load the data.” Choose your own next questions. Ask the instructor if Gemini is unavailable.",
+      "originalText": "最初のひと言\nGeminiのきらきらマークをクリック。右のパネルで。\nデータを読み込んで\nLoad the data.\nここからは、自分で探索。恐竜を見つけよう。\nGeminiが使えない場合は、教員に相談してください。\n",
+      "sources": []
+    },
+    {
+      "page": 29,
+      "title": "Accept and run",
+      "ja": "Geminiがコードセルを作ったら提案を確認し、「Accept and run」をクリック。毎回、出力を見て次の問いを考える。エラーが出たら、その内容をGeminiと確認して再挑戦する。",
+      "en": "Review the proposed code cells and click “Accept and run.” Inspect the output before choosing the next question. Discuss errors with Gemini and try again.",
+      "originalText": "Geminiと、試してみる\nConversation + Python + output\nGeminiがコードセルを作ったら、提案を確認。\n「Accept and run」をクリックして実行。\n結果を見て、次に知りたいことを自分で考える。\nエラーも会話の続き。直して、また試す。\nGoogle: ColabとGeminiの使い方\n",
+      "sources": [
+        "https://developers.googleblog.com/en/new-ai-first-google-colab-now-available-to-everyone/"
+      ]
+    },
+    {
+      "page": 30,
+      "title": "結果を自分で確かめる",
+      "ja": "図がアップロードしたデータを表しているか、軸や数値は合っているかを確認。知らないコードは説明してもらう。個人情報・APIキーは入れず、ノートブックはDriveに保存する。",
+      "en": "Check that the chart uses the uploaded data and that axes and values make sense. Ask for code explanations. Keep out personal information and API keys, and save the notebook to Drive.",
+      "originalText": "動いた。では、正しい？\nYou decide whether the result makes sense\n図は、アップロードしたデータを表している？\n軸・数値・説明は、元のデータと合っている？\n知らないコードの働きは、Geminiに説明してもらう。\n個人情報は入れず、ノートブックをDriveに保存。\nGoogle Colab FAQ: AIの利用とデータの扱い\n",
+      "sources": [
+        "https://research.google.com/colaboratory/faq.html"
+      ]
+    },
+    {
+      "page": 31,
+      "title": "datasaurus.csv",
+      "ja": "1,846点、13種類のデータ。datasetはデータ名、xとyは各点の座標。活動1ではこのCSVだけをダウンロードする。表をクリックするとプレビューを開ける。",
+      "en": "The CSV has 1,846 points across 13 datasets. dataset names the group, while x and y are point coordinates. Click the table to preview the CSV.",
+      "originalText": "datasaurus.csv\n1,846 points   /   13 datasets\ndataset\nx\ny\ndino\n55.3846\n97.1795\ndino\n51.5385\n96.0256\ndino\n46.1538\n94.4872\ndino\n42.8205\n91.4103\ndino\n40.7692\n88.3333\ndino\n38.7179\n84.8718\nPreview data / Download CSV\ndataset = group name     x, y = coordinates of one point\n",
+      "sources": [
+        "https://yohman.github.io/26-2-Dataviz/data/datasaurus.csv"
+      ]
+    }
+  ]
+}

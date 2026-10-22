@@ -12,6 +12,8 @@ from reportlab.lib.colors import HexColor
 from pypdf import PdfReader, PdfWriter
 
 root = Path(__file__).resolve().parents[1]
+if (root / 'lectures/w05-python-datasaurus.notes.json').exists():
+    raise SystemExit('Legacy text-led builder. Use scripts/week5-visual-slides.py for the current deck and notes.')
 path = root / 'lectures/w05-python-datasaurus.pdf'
 reader = PdfReader(path)
 pdfmetrics.registerFont(TTFont('Japanese', '/System/Library/Fonts/Supplemental/Arial Unicode.ttf'))

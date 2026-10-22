@@ -12,7 +12,8 @@ Original slide numbers, in order: **4, 5, 14, 23, 24**.
 - Iterative changes
 - Errors and testing
 
-These pages retain their original layout, attribution, and slide numbers.
-In the Data Visualization Week 5 deck, they are slides **22–26**, between
-the Gemini introduction and Colab setup. They replace the earlier short
-vibe-coding definition slide. The CSV remains the final slide.
+The source excerpt PDF retains the original layout, attribution, and slide numbers.
+In the current Data Visualization Week 5 deck, slides **22–26** are visual
+adaptations: the nested diagram is enlarged, and the other concepts use symbols.
+Their explanations and original text appear in the viewer's bilingual notes,
+with links back to the Engineer source. The CSV remains the final slide.

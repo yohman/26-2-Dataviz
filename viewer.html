@@ -47,7 +47,15 @@
         </div>
       </div>
     </section>
+    <section class="slide-notes" data-slide-notes hidden aria-live="polite">
+      <h2 data-notes-heading>Presenter notes</h2>
+      <p data-notes-text></p>
+      <details><summary>Original slide text</summary><pre data-notes-original></pre></details>
+      <p data-notes-sources></p>
+    </section>
   </main>
+  <link rel="stylesheet" href="assets/slide-notes.css?v=20261023">
+  <script src="assets/slide-notes.js?v=20261023"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="assets/slide-swipe.js?v=20261016"></script>
   <script>
@@ -70,6 +78,8 @@
     let language = 'ja';
     try { language = localStorage.getItem('dv-language') || 'ja'; } catch { /* Japanese fallback. */ }
     const copy = key => strings[key][language === 'ja' ? 1 : 0];
+    const slideNotes = window.createSlideNotes({ root: document.querySelector('[data-slide-notes]'), file,
+      language: () => language, page: Math.max(1, Number(parameters.get('page')) || 1) });
     const applyLanguage = () => {
       document.documentElement.lang = language;
       document.querySelectorAll('[data-copy]').forEach(node => { node.textContent = copy(node.dataset.copy); });
@@ -80,6 +90,7 @@
       fullscreenLabel.textContent = copy(document.querySelector('.pdf-viewer')?.classList.contains('is-fullscreen') ? 'exitFullscreen' : 'fullscreen');
       document.querySelector('[data-zoom-out]').setAttribute('aria-label', copy('zoomOut'));
       document.querySelector('[data-zoom-in]').setAttribute('aria-label', copy('zoomIn'));
+      slideNotes.render();
     };
     document.querySelector('[data-language-toggle]').addEventListener('click', () => {
       language = language === 'ja' ? 'en' : 'ja';
@@ -168,6 +179,7 @@
         linkLayer.append(link);
       });
       pdfPage.hidden = false; status.hidden = true;
+      slideNotes.setPage(activePage);
       stage.classList.toggle('is-zoomed', zoomScale > 1);
       zoomLevel.value = `${Math.round(zoomScale * 100)}%`;
       zoomOut.disabled = zoomScale <= minimumZoom;
@@ -222,7 +234,7 @@
       try {
         if (!file || !window.pdfjsLib) throw new Error('PDF preview unavailable');
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        const response = await fetch(`${encodeURI(file)}?v=week5-engineer-vibe-20261023`);
+        const response = await fetch(`${encodeURI(file)}?v=week5-visual-notes-20261023`);
         if (!response.ok) throw new Error('PDF unavailable');
         pdf = await window.pdfjsLib.getDocument({ data: await response.arrayBuffer() }).promise;
         await renderPage(activePage);

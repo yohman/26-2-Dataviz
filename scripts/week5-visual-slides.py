@@ -1,0 +1,228 @@
+"""Build the 31-page, image-led Week 5 deck and its viewer notes.
+
+Original layouts/text are recoverable from Git revision bc4954f. The earlier
+week5-vibe-slides.py builder produces the text-led version, not this revision.
+Dependencies: reportlab, pypdf, svglib (and its cssselect2/tinycss2 dependencies).
+"""
+import csv
+import json
+import subprocess
+from collections import defaultdict
+from io import BytesIO
+from pathlib import Path
+from copy import copy
+from reportlab.pdfgen import canvas
+from reportlab.lib.colors import HexColor
+from reportlab.lib.utils import ImageReader
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from pypdf import PdfReader, PdfWriter, Transformation
+from pypdf.generic import RectangleObject
+from svglib.svglib import svg2rlg
+from reportlab.graphics import renderPDF
+
+root = Path(__file__).resolve().parents[1]
+original = PdfReader(BytesIO(subprocess.check_output(
+    ['git', 'show', 'bc4954f:lectures/w05-python-datasaurus.pdf'], cwd=root)))
+pdfmetrics.registerFont(TTFont('Japanese', '/System/Library/Fonts/Supplemental/Arial Unicode.ttf'))
+W, H = 960, 540
+writer = PdfWriter()
+symbols = root / 'assets/images/week05-symbols'
+
+def page(draw):
+    stream = BytesIO()
+    c = canvas.Canvas(stream, pagesize=(W, H))
+    c.setFillColor(HexColor('#fcfbff'))
+    c.rect(0, 0, W, H, fill=1, stroke=0)
+    draw(c)
+    c.showPage()
+    c.save()
+    writer.add_page(PdfReader(stream).pages[0])
+
+def label(c, value, x, y, size=28):
+    c.setFillColor(HexColor('#40382f'))
+    c.setFont('Japanese', size)
+    c.drawCentredString(x, y, value)
+
+def symbol(c, name, x=330, y=120, size=300):
+    drawing = svg2rlg(str(symbols / f'{name}.svg'))
+    drawing.scale(size/drawing.width, size/drawing.height)
+    renderPDF.draw(drawing, c, x, y)
+
+def image_page(number, index=0, fill=False):
+    image = original.pages[number-1].images[index].image
+    iw, ih = image.size
+    scale = (max if fill else min)(W/iw, H/ih)
+    page(lambda c: c.drawImage(ImageReader(image), (W-iw*scale)/2,
+                              (H-ih*scale)/2, iw*scale, ih*scale, mask='auto'))
+
+def crop_page(number, box):
+    source = copy(original.pages[number-1])
+    source.cropbox = RectangleObject(box)
+    source.trimbox = RectangleObject(box)
+    x, y, right, top = box
+    scale = min(W/(right-x), H/(top-y))
+    target = writer.add_blank_page(W, H)
+    transform = Transformation().translate(-x, -y).scale(scale).translate(
+        (W-(right-x)*scale)/2, (H-(top-y)*scale)/2)
+    target.merge_transformed_page(source, transform)
+
+data = defaultdict(list)
+with (root / 'data/datasaurus.csv').open() as f:
+    for row in csv.DictReader(f):
+        data[row['dataset']].append((float(row['x']), float(row['y'])))
+
+def plot(c, points, box, name='', color='#ac3e50', axes=True):
+    x, y, w, h = box
+    pad = 24 if axes else 5
+    scale = min((w-2*pad)/110, (h-2*pad)/110)
+    ox, oy = x+(w-110*scale)/2, y+(h-110*scale)/2
+    if axes:
+        c.setStrokeColor(HexColor('#b8afa4'))
+        c.setLineWidth(.7)
+        c.line(ox, oy, ox+110*scale, oy)
+        c.line(ox, oy, ox, oy+110*scale)
+    c.setFillColor(HexColor(color))
+    for px, py in points:
+        c.circle(ox+px*scale, oy+py*scale, max(1.8, scale*.65), fill=1, stroke=0)
+    if name:
+        label(c, name, x+w/2, y+h-15, 13)
+
+# Historical images fill the canvas; explanations move to the viewer notes.
+image_page(7)
+image_page(2, fill=True)
+crop_page(4, (360, 110, 600, 430))
+image_page(4)
+image_page(5)
+image_page(6)
+image_page(7)
+page(lambda c: symbol(c, 'code-xml'))
+def libraries(c):
+    for i, item in enumerate(original.pages[8].images):
+        im = item.image
+        iw, ih = im.size
+        scale = min(340/iw, 155/ih)
+        cx, cy = (260 if i % 2 == 0 else 700), (390 if i < 2 else 150)
+        c.drawImage(ImageReader(im), cx-iw*scale/2, cy-ih*scale/2, iw*scale, ih*scale, mask='auto')
+page(libraries)
+image_page(10)
+image_page(11)
+page(lambda c: plot(c, data['circle'], (130, 25, 700, 490)))
+def exploration(c):
+    for i, name in enumerate(['circle', 'h_lines', 'x_shape']):
+        plot(c, data[name], (i*320, 100, 320, 330))
+page(exploration)
+page(lambda c: plot(c, data['dino'], (130, 25, 700, 490)))
+crop_page(15, (417, 205, 550, 330))
+anscombe = list(csv.DictReader((root / 'data/anscombe.csv').open()))
+def quartet(c):
+    for i in range(1, 5):
+        points = [(float(r[f'x{i}'])*5, float(r[f'y{i}'])*7) for r in anscombe]
+        plot(c, points, (60+((i-1)%2)*450, 20+(1-(i-1)//2)*260, 390, 240), f'I{"I"*(i-1)}' if i < 4 else 'IV')
+page(quartet)
+def dozen(c):
+    names = list(data)
+    for i, name in enumerate(names):
+        col, row = i % 5, i // 5
+        plot(c, data[name], (col*192, 360-row*175, 192, 170), name)
+page(dozen)
+image_page(18)
+image_page(19)
+image_page(20)
+page(lambda c: symbol(c, 'sparkles'))
+page(lambda c: symbol(c, 'message-circle-code'))
+# The actual nested diagram remains vector-based, with its three short labels.
+crop_page(23, (28, 42, 403, 304))
+def requests(c):
+    symbol(c, 'message-circle-code', 140, 135, 260)
+    symbol(c, 'circle-help', 560, 135, 260)
+page(requests)
+def iteration(c):
+    for i, name in enumerate(['search', 'repeat-2', 'sliders-horizontal']):
+        symbol(c, name, 85+i*300, 165, 190)
+page(iteration)
+def debugging(c):
+    for i, name in enumerate(['bug', 'search', 'circle-check']):
+        symbol(c, name, 85+i*300, 165, 190)
+page(debugging)
+def upload(c):
+    symbol(c, 'folder-up', 330, 140, 300)
+    label(c, 'datasaurus.csv', 480, 77, 30)
+page(upload)
+def first_prompt(c):
+    symbol(c, 'sparkles', 435, 355, 90)
+    label(c, 'データを読み込んで', 480, 245, 52)
+    label(c, 'Load the data.', 480, 175, 25)
+page(first_prompt)
+def run(c):
+    symbol(c, 'circle-play', 355, 190, 250)
+    label(c, 'Accept and run', 480, 105, 40)
+page(run)
+page(lambda c: symbol(c, 'circle-check'))
+def csv_slide(c):
+    rows = list(csv.DictReader((root / 'data/datasaurus.csv').open()))
+    for i, values in enumerate([['dataset', 'x', 'y']] + [[r['dataset'], f"{float(r['x']):.4f}", f"{float(r['y']):.4f}"] for r in rows[:6]]):
+        for x, value in zip([220, 480, 740], values):
+            label(c, value, x, 430-i*54, 28)
+    c.linkURL('https://yohman.github.io/26-2-Dataviz/csv-preview.html?file=data%2Fdatasaurus.csv&title=Datasaurus', (100, 70, 860, 480), relative=0)
+page(csv_slide)
+
+notes = [
+('Nightingaleの図', 'まず、この図から何が読み取れるか学生に問いかける。言葉で先に解説せず、色・面積・配置から気づいたことを聞く。', 'Ask students what they notice in Nightingale’s diagram before explaining it. Invite observations about color, area, and arrangement.'),
+('Florence Nightingale', 'Florence Nightingale（1820–1910）。看護の改革とともに、データを使って問題を伝え、行動につなげた人物として紹介する。', 'Introduce Florence Nightingale (1820–1910) as a reformer who used evidence and visualization to make problems visible.'),
+('ランプを持つ女性', '病院の場面から、Nightingaleの活動を紹介する。個人の物語と、その背後にある多数の人々のデータをつなぐ。', 'Use the hospital scene to connect Nightingale’s personal story with the lives represented by the data.'),
+('現場から証拠へ', '病院の現場を観察し、記録し、改善する。データは現場と切り離された数字ではないことを話す。', 'Connect observation, records, and reform. Data represents people and conditions in a real setting.'),
+('本という伝達手段', '図を作るだけでなく、誰にどう届けるか。Nightingaleが使った本という媒体に注目する。', 'Discuss the book as a vehicle for communicating evidence to an audience.'),
+('記録と報告', 'タイトルページを見せ、証拠をまとめて他の人が検討できる形にすることの意味を話す。', 'Discuss why recording and publishing evidence matters, beyond making a single chart.'),
+('図が伝えるもの', '図の形・色・面積は、何を比較しやすくしているか。読み取り方を学生自身の言葉で説明してもらう。', 'Ask what the diagram makes easy to compare and what students need to know to interpret it.'),
+('Why Python?', 'Pythonを、探索を何度も試せる道具として紹介する。今日はすべての文法を覚えるより、結果を見ながら問いを深める。', 'Introduce Python as a tool for repeated exploration. Today the focus is asking questions and inspecting results rather than memorizing syntax.'),
+('Pythonの可視化ライブラリ', 'matplotlib、seaborn、Plotly、Bokeh。同じPythonでも異なる表現方法がある。道具の名前より、どのようにデータを見せたいかを重視する。', 'Matplotlib, seaborn, Plotly, and Bokeh offer different ways to visualize data. Begin with the visual question rather than a favorite library.'),
+('John Tukey', 'Tukeyの言葉：「The greatest value of a picture is when it forces us to notice what we never expected to see.」予想外に気づくことが今日の授業と宿題の中心。', 'Use Tukey’s quotation about noticing the unexpected to introduce the purpose of today’s exploration.'),
+('EDA', 'EDA＝探索的データ分析。データを見る、問いを立てる、可視化する、さらに問い直す。最初の図を作ることは出発点にすぎない。', 'EDA means exploratory data analysis. Examine data, ask questions, visualize, and revise the questions. The first chart is a starting point.'),
+('可視化による発見', '数字だけでは見えにくい形や傾向を、図によって発見する。この図の点は、実際のDatasaurusデータを使っている。', 'Visualization reveals structure that summaries can hide. These points come from the actual Datasaurus dataset.'),
+('反復的な探索', '同じような統計量でも形が違う。1枚で結論を出さず、別の見方や比較を試す。', 'Iterative exploration means trying another view or comparison instead of stopping after the first chart.'),
+('予想外に開かれる', '驚きが見つかったら、それを新しい問いにする。見たかった結果だけを探すのではなく、実際のデータの形に注目する。', 'Let surprising patterns generate new questions. Attend to the data rather than only looking for the answer you expected.'),
+('恐竜を探そう', '活動1。datasaurus.csvをColabにアップロードし、Geminiにはまず「データを読み込んで」とだけ伝える。そこからは学生自身で探索する。', 'Activity 1: upload datasaurus.csv to Colab and begin with only “Load the data.” Students choose how to explore from there.'),
+('Anscombeの例', '4組のデータは似た要約統計を持つが、散布図は異なる。なぜ数値の要約だけでは足りないかを話し合う。', 'Anscombe’s quartet illustrates how similar summary statistics can conceal very different patterns.'),
+('Datasaurus Dozen', '実際のCSVの13種類を、同じ縮尺で並べた図。要約統計と、目で見た形の両方を確かめる。', 'All 13 datasets use the same scale. Compare visual patterns as well as numerical summaries.'),
+('要約で消える形', '平均やヒストグラムが見せるもの、隠すものを比較する。要約から元の分布の形が一意に分かるとは限らない。', 'Discuss what a summary reveals and conceals. A mean or histogram does not uniquely determine the underlying distribution.'),
+('点を重ねて見る', '要約だけでなく個々の点を見る。外れ値や密度、ばらつきについて、何が新しく見えるかを聞く。', 'Ask what individual points reveal about density, variation, and outliers beyond a summary plot.'),
+('視覚的な手がかり', '位置・長さ・角度で、同じ傾向の伝わり方が変わる。図の出典はNatureの記事。', 'Discuss how position, length, and angle communicate patterns differently. The original figure links to Nature.'),
+('Gemini', 'GeminiはGoogle DeepMindのAIモデル群。最初の公開は2023年12月。名前は「双子」で、ふたご座のCastorとPollux、BrainとDeepMindの合流が由来。', 'Gemini is Google DeepMind’s AI model family, introduced in December 2023. Its name evokes the twins Castor and Pollux and the joining of the Brain and DeepMind teams.'),
+('Vibe coding', '日本語など自然な言葉で頼み、AIが生成するコードを実行し、結果を見て対話を続けるスタイル。Karpathyが2025年2月に命名。速く始められる一方、理解や検証を後回しにしやすいことも説明する。', 'Vibe coding describes conversational creation and iteration with AI-generated code. Karpathy named it in February 2025. Discuss the tradeoff between speed and deferred understanding or verification.'),
+('どこまでAIに任せる？', 'コーディングはコードを書くこと。プログラミングには手順を考え、動かして確かめることも含む。アプリ開発には、誰の何を解決するか、届け方や運用まで含む。図の3つの領域を指しながら説明する。', 'Coding sits inside programming, which sits inside app development. Explain the broader decisions involved at each level while pointing to the nested diagram.'),
+('具体的な依頼と曖昧な依頼', '具体的な依頼では結果を比較しやすい。曖昧な依頼ではAIが仮定を置く。違っていたら言い直し、変更後も以前の動作を確かめる。長いプロンプトである必要はない。', 'Concrete requests are easier to check. Vague requests leave room for assumptions. Clarify through conversation and recheck earlier behavior after a change. Prompts need not be long.'),
+('小さく変え、確かめる', '必要ならまず計画を聞く。1回で変えることを小さくする。不明点や仮定を確認する。直らないときは同じ指示を繰り返さず、事実を伝え、問題を小さくする。', 'Ask for a plan when useful, keep changes small, and identify assumptions. If a fix fails, provide observations and narrow the problem rather than repeating the same request.'),
+('エラーと検証', '何をして何が起きたか、エラー全文とともに伝える。秘密情報は伏せる。AIの「確認した」という言葉だけを証拠にせず、実行結果を自分でも確かめる。', 'Describe the action and result, include the full error, and remove secrets. Verify the actual outcome rather than relying on an AI claim that it tested something.'),
+('ColabにCSVをアップロード', 'Colabにログインして新規ノートブックを作る。必要なら接続。左のフォルダアイコンから「セッション ストレージにアップロード」を選びdatasaurus.csvをアップロード。一覧に出るまで待つ。セッションがリセットされたら再アップロードする。', 'Sign in to Colab, create a notebook, and connect if needed. Open the folder icon on the left, upload datasaurus.csv to session storage, and wait for it to appear. Upload again if the session resets.'),
+('最初のひと言', 'きらきらマークで右のGeminiパネルを開く。最初は「データを読み込んで」とだけ伝える。それ以降の探索の手順は自分で考える。Geminiが使えない場合は教員に相談する。', 'Open Gemini’s right-hand panel using the sparkle icon. Begin only with “Load the data.” Choose your own next questions. Ask the instructor if Gemini is unavailable.'),
+('Accept and run', 'Geminiがコードセルを作ったら提案を確認し、「Accept and run」をクリック。毎回、出力を見て次の問いを考える。エラーが出たら、その内容をGeminiと確認して再挑戦する。', 'Review the proposed code cells and click “Accept and run.” Inspect the output before choosing the next question. Discuss errors with Gemini and try again.'),
+('結果を自分で確かめる', '図がアップロードしたデータを表しているか、軸や数値は合っているかを確認。知らないコードは説明してもらう。個人情報・APIキーは入れず、ノートブックはDriveに保存する。', 'Check that the chart uses the uploaded data and that axes and values make sense. Ask for code explanations. Keep out personal information and API keys, and save the notebook to Drive.'),
+('datasaurus.csv', '1,846点、13種類のデータ。datasetはデータ名、xとyは各点の座標。活動1ではこのCSVだけをダウンロードする。表をクリックするとプレビューを開ける。', 'The CSV has 1,846 points across 13 datasets. dataset names the group, while x and y are point coordinates. Click the table to preview the CSV.')
+]
+assert len(writer.pages) == len(notes) == 31
+sources = {
+    1: ['https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg'],
+    7: ['https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg'],
+    16: ['https://en.wikipedia.org/wiki/Anscombe%27s_quartet'],
+    17: ['https://www.research.autodesk.com/publications/same-stats-different-graphs/'],
+    20: ['https://www.nature.com/articles/497186a'],
+    21: ['https://blog.google/innovation-and-ai/products/google-gemini-ai-name-meaning/'],
+    22: ['https://simonwillison.net/2025/Feb/6/andrej-karpathy/'],
+    27: ['https://colab.research.google.com/'],
+    29: ['https://developers.googleblog.com/en/new-ai-first-google-colab-now-available-to-everyone/'],
+    30: ['https://research.google.com/colaboratory/faq.html'],
+    31: ['https://yohman.github.io/26-2-Dataviz/data/datasaurus.csv']
+}
+for number in range(22, 27):
+    sources.setdefault(number, []).append('https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf')
+output = root / 'lectures/w05-python-datasaurus.pdf'
+writer.add_metadata({'/Title': 'Week 5: Visual evidence and vibe coding', '/Subject': 'Image-led slides; explanations in the course viewer notes'})
+with output.open('wb') as f:
+    writer.write(f)
+payload = {'file': 'lectures/w05-python-datasaurus.pdf', 'slides': [
+    {'page': i+1, 'title': title, 'ja': ja, 'en': en,
+     'originalText': original.pages[i].extract_text() or '', 'sources': sources.get(i+1, [])}
+    for i, (title, ja, en) in enumerate(notes)]}
+(root / 'lectures/w05-python-datasaurus.notes.json').write_text(json.dumps(payload, ensure_ascii=False, indent=2)+'\n')
+print('Built 31 image-led slides with 31 bilingual notes')
