@@ -1,5 +1,5 @@
 .activity-main{max-width:1000px;padding-block:3rem 5rem;font-family:var(--sans)}
-body:has(.activity-main) .site-nav{display:flex}
+body:has(.activity-main):not(.homework-page) .site-nav{display:flex}
 .activity-main h1{font:600 clamp(2rem,5vw,3.6rem)/1.15 var(--serif);margin:0 0 1.5rem}
 .activity-main>p{line-height:1.7;font-size:.95rem}
 .activity-form{max-width:720px;display:grid;gap:1.2rem;margin-block:2rem}
@@ -8,6 +8,30 @@ body:has(.activity-main) .site-nav{display:flex}
 .activity-form input[type=file]{font-size:.8rem}
 .activity-form .button{justify-self:start}
 .activity-note{font-size:.8rem!important;line-height:1.6;color:var(--muted)}
+.homework-page .site-header{background:rgba(230,213,184,.96)}
+.homework-page .activity-main{max-width:800px}
+.homework-page .activity-main h1{font-size:clamp(2rem,4vw,3rem);margin-bottom:1rem}
+.homework-page #homework-deadline{color:var(--signal);font-weight:700}
+.homework-page .activity-form{max-width:none;background:#fffdf8;padding:clamp(1.2rem,4vw,2.5rem);gap:1.8rem;border-top:3px solid var(--signal)}
+.homework-page .activity-form fieldset{min-width:0;margin:0;padding:1.3rem 0 0;border:0;border-top:1px solid var(--line);display:grid;gap:1.3rem}
+.homework-page .activity-form legend{padding:0 .7rem 0 0;font:700 1.05rem var(--sans)}
+.form-identity{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.homework-page .activity-form label{font-size:.85rem;line-height:1.6;gap:.5rem}
+.homework-page .activity-form label:has([required])>[data-course-lang]::after{content:" *";color:#b52f42;font-weight:800}
+.form-required-note{margin:0;font-size:.75rem;color:var(--muted)}
+.form-required-note>span:first-child{color:#b52f42;font-weight:800}
+.homework-page .activity-form input,.homework-page .activity-form textarea{background:var(--paper);border-color:var(--line);border-radius:0;min-width:0}
+.homework-page .activity-form input:focus,.homework-page .activity-form textarea:focus{outline:2px solid var(--signal);outline-offset:2px}
+.homework-page .activity-form textarea{resize:vertical}
+.homework-page .activity-form input[type=file]{padding:.7rem}
+.homework-page input::file-selector-button{font:700 .8rem var(--sans);padding:.5rem .75rem;margin-right:.75rem;background:#e9d3a4;color:var(--ink);border:0;cursor:pointer}
+.homework-page .activity-form .button{min-width:160px;min-height:48px;font-size:.9rem}
+.homework-page .activity-form .button:disabled{opacity:.5;cursor:not-allowed}
+.homework-page .activity-form details{font-size:.8rem;color:var(--muted)}
+.homework-page .activity-form details summary{cursor:pointer;margin-bottom:.7rem}
+.homework-page .activity-form [hidden]{display:none!important}
+@media(max-width:900px){.homework-page .site-nav{top:100%}.homework-page .menu-toggle{line-height:0;padding:.6rem;border:0}}
+@media(max-width:560px){.form-identity{grid-template-columns:1fr}.homework-page .activity-main{padding-top:2rem}.homework-page .activity-form{margin-top:1.5rem}.homework-page .activity-form .button{width:100%}}
 .activity-results-actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-block:1.5rem}
 .activity-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem}
 .activity-result{min-width:0;background:#f1e9dc;padding:1.2rem}
