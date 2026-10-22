@@ -63,6 +63,86 @@
     },
     {
       "page": 8,
+      "title": "England and Her Soldiers",
+      "ja": "右ページはHarriet Martineau著『England and Her Soldiers』（1859）の扉。Nightingaleの証拠を一般読者に伝える出版と協力の文脈を紹介する。",
+      "en": "The right page is the title page of Harriet Martineau’s England and Her Soldiers (1859). Discuss publication and collaboration as ways of bringing Nightingale’s evidence to a wider audience.",
+      "originalText": "",
+      "sources": [
+        "https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/"
+      ]
+    },
+    {
+      "page": 9,
+      "title": "Diagram of the Causes of Mortality",
+      "ja": "題名が何を説明する図なのかを明示している。対象・場所・死因という情報に注目する。",
+      "en": "The title names the subject and setting. Ask students what question the chart promises to address.",
+      "originalText": "",
+      "sources": [
+        "https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/"
+      ]
+    },
+    {
+      "page": 10,
+      "title": "面積と色の説明",
+      "ja": "青は予防・軽減可能な病気、赤は負傷、黒はその他の死因。各扇形の面積を中心から測るという説明を読む。半径の長さではなく面積に注目する。",
+      "en": "Read the original key: blue denotes preventable or mitigable disease, red wounds, and black other causes. The encoding uses sector area measured from the center, not radius alone.",
+      "originalText": "",
+      "sources": [
+        "https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/"
+      ]
+    },
+    {
+      "page": 11,
+      "title": "1854–1855",
+      "ja": "最初の年の大きい図。冬に青い領域がどれほど増えるか。負傷による死と比較してもらう。",
+      "en": "The larger diagram shows April 1854–March 1855. Compare the winter disease sectors with deaths from wounds.",
+      "originalText": "",
+      "sources": [
+        "https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/"
+      ]
+    },
+    {
+      "page": 12,
+      "title": "1855–1856",
+      "ja": "次の年の小さい図。同じ面積の尺度で比較する。縮小を読み取りつつ、この図だけで特定の個人や介入の因果効果を断定しない。",
+      "en": "The smaller diagram shows April 1855–March 1856 on the same area scale. Compare the reduction without treating the chart alone as proof of any individual intervention’s causal effect.",
+      "originalText": "",
+      "sources": [
+        "https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/"
+      ]
+    },
+    {
+      "page": 13,
+      "title": "Diagrams K · 1858",
+      "ja": "Nightingaleの初期の図。半径が死亡率を表すため、塗られた面積は値に比例しない。後の扇形の面積による表現と比較し、符号化の選択が印象をどう変えるか話す。",
+      "en": "Nightingale’s early radar-style diagrams encode mortality through radius, so shaded area is not proportional to the value. Compare this with the later polar-area design. Source: Duke University Libraries, 1858.",
+      "originalText": "",
+      "sources": [
+        "https://exhibits.library.duke.edu/items/show/13722"
+      ]
+    },
+    {
+      "page": 14,
+      "title": "Scutari · 1854–1855",
+      "ja": "Scutariの病人集団の死亡率。長い半径が強い印象を与える。期間、分母、尺度を確かめ、前の軍全体の図とは単純比較しない。",
+      "en": "This early Scutari diagram concerns mortality in the sick population. Check its dates, denominator, and scale before comparing it with army-wide mortality.",
+      "originalText": "",
+      "sources": [
+        "https://exhibits.library.duke.edu/items/show/13722"
+      ]
+    },
+    {
+      "page": 15,
+      "title": "Scutari and Kulali hospitals",
+      "ja": "1854年10月–1855年9月の病院死亡率。点線はロンドン周辺の軍病院の比較値。衛生改善の開始を示す文字と、その後の領域の変化を探してもらう。相関と因果は区別する。",
+      "en": "Hospital mortality at Scutari and Kulali, October 1854–September 1855. Locate the sanitation annotation and the dotted London comparison. Discuss the changing areas while distinguishing comparison from causal proof.",
+      "originalText": "",
+      "sources": [
+        "https://r2bit.com/gpt-stat/cs_nightingale.html"
+      ]
+    },
+    {
+      "page": 16,
       "title": "Why Python?",
       "ja": "Pythonを、探索を何度も試せる道具として紹介する。今日はすべての文法を覚えるより、結果を見ながら問いを深める。",
       "en": "Introduce Python as a tool for repeated exploration. Today the focus is asking questions and inspecting results rather than memorizing syntax.",
@@ -72,7 +152,7 @@
       ]
     },
     {
-      "page": 9,
+      "page": 17,
       "title": "Pythonの可視化ライブラリ",
       "ja": "matplotlib、seaborn、Plotly、Bokeh。同じPythonでも異なる表現方法がある。道具の名前より、どのようにデータを見せたいかを重視する。",
       "en": "Matplotlib, seaborn, Plotly, and Bokeh offer different ways to visualize data. Begin with the visual question rather than a favorite library.",
@@ -80,15 +160,19 @@
       "sources": []
     },
     {
-      "page": 10,
+      "page": 18,
       "title": "John Tukey",
-      "ja": "Tukeyの言葉：「The greatest value of a picture is when it forces us to notice what we never expected to see.」予想外に気づくことが今日の授業と宿題の中心。",
-      "en": "Use Tukey’s quotation about noticing the unexpected to introduce the purpose of today’s exploration.",
+      "ja": "John Wilder Tukey（1915–2000）はPrinceton大学とBell研究所で活躍した統計学者。データを見ることを、仮説検定の前のおまけではなく発見のための重要な仕事として位置づけた。1977年の『Exploratory Data Analysis』は、図を描いて構造・外れ値・予想外の特徴を探す姿勢を広めた。箱ひげ図も広く普及させた。\n\nCooleyとともに高速フーリエ変換（FFT）の発展にも貢献。学生には「AIに最初の図を作らせる」ことと「図を見て次の問いを考える」ことの違いを強調する。この引用は今日のEDAの中心。答えを飾るためでなく、まだ知らなかったことに気づくために可視化する。",
+      "en": "John Wilder Tukey (1915–2000) was a statistician at Princeton and Bell Laboratories. He helped make exploration a central part of data analysis, alongside formal confirmation. His 1977 book Exploratory Data Analysis promoted graphical investigation of structure, outliers, and unexpected features, and helped popularize box plots.\n\nHe also contributed to the fast Fourier transform with James Cooley. For students, contrast asking AI for a first chart with inspecting it and choosing the next question. His quotation captures today’s EDA goal: use visualization to discover something unexpected, then investigate it rather than treating an attractive chart as the conclusion.",
       "originalText": "“The greatest value of a picture is when it\nforces us to notice what we never expected\nto see.”\n—  J o h n  Tu key,  1 9 7 7 1 61 6",
-      "sources": []
+      "sources": [
+        "https://www.princeton.edu/news/2000/07/28/statistician-john-w-tukey-dies",
+        "https://as.amphilsoc.org/repositories/2/resources/2960",
+        "https://www.pearson.com/en-us/subject-catalog/p/exploratory-data-analysis-classic-version-/P200000006400"
+      ]
     },
     {
-      "page": 11,
+      "page": 19,
       "title": "Exploratory Data Analysis",
       "ja": "EDA＝探索的データ分析。データを見る、問いを立てる、可視化する、さらに問い直す。最初の図を作ることは出発点にすぎない。",
       "en": "EDA means exploratory data analysis. Examine data, ask questions, visualize, and revise the questions. The first chart is a starting point.",
@@ -96,7 +180,7 @@
       "sources": []
     },
     {
-      "page": 12,
+      "page": 20,
       "title": "EDA",
       "ja": "EDA＝探索的データ分析。データを見る、問いを立てる、可視化する、さらに問い直す。最初の図を作ることは出発点にすぎない。",
       "en": "EDA means exploratory data analysis. Examine data, ask questions, visualize, and revise the questions. The first chart is a starting point.",
@@ -104,7 +188,7 @@
       "sources": []
     },
     {
-      "page": 13,
+      "page": 21,
       "title": "要約で消える形",
       "ja": "平均やヒストグラムが見せるもの、隠すものを比較する。要約から元の分布の形が一意に分かるとは限らない。",
       "en": "Discuss what a summary reveals and conceals. A mean or histogram does not uniquely determine the underlying distribution.",
@@ -112,7 +196,7 @@
       "sources": []
     },
     {
-      "page": 14,
+      "page": 22,
       "title": "点を重ねて見る",
       "ja": "要約だけでなく個々の点を見る。外れ値や密度、ばらつきについて、何が新しく見えるかを聞く。",
       "en": "Ask what individual points reveal about density, variation, and outliers beyond a summary plot.",
@@ -120,7 +204,7 @@
       "sources": []
     },
     {
-      "page": 15,
+      "page": 23,
       "title": "視覚的な手がかり",
       "ja": "位置・長さ・角度で、同じ傾向の伝わり方が変わる。図の出典はNatureの記事。",
       "en": "Discuss how position, length, and angle communicate patterns differently. The original figure links to Nature.",
@@ -130,7 +214,7 @@
       ]
     },
     {
-      "page": 16,
+      "page": 24,
       "title": "Gemini",
       "ja": "GeminiはGoogle DeepMindのAIモデル群。最初の公開は2023年12月。名前は「双子」で、ふたご座のCastorとPollux、BrainとDeepMindの合流が由来。",
       "en": "Gemini is Google DeepMind’s AI model family, introduced in December 2023. Its name evokes the twins Castor and Pollux and the joining of the Brain and DeepMind teams.",
@@ -141,7 +225,7 @@
       ]
     },
     {
-      "page": 17,
+      "page": 25,
       "title": "Vibe coding",
       "ja": "日本語など自然な言葉で頼み、AIが生成するコードを実行し、結果を見て対話を続けるスタイル。Karpathyが2025年2月に命名。速く始められる一方、理解や検証を後回しにしやすいことも説明する。",
       "en": "Vibe coding describes conversational creation and iteration with AI-generated code. Karpathy named it in February 2025. Discuss the tradeoff between speed and deferred understanding or verification.",
@@ -153,17 +237,7 @@
       ]
     },
     {
-      "page": 18,
-      "title": "どこまでAIに任せる？",
-      "ja": "コーディングはコードを書くこと。プログラミングには手順を考え、動かして確かめることも含む。アプリ開発には、誰の何を解決するか、届け方や運用まで含む。図の3つの領域を指しながら説明する。",
-      "en": "Coding sits inside programming, which sits inside app development. Explain the broader decisions involved at each level while pointing to the nested diagram.",
-      "originalText": "爆速プロトタイプ構築術｜麗澤大学 2026秋\nコーディング ⊂ プログラミング ⊂ アプリ開発\nどこまでAIに任せる？\nアプリ開発\nプログラミング\nコーディング\nコーディング\n決まった内容をコードに書く（清書）\nAIが強く助ける\nプログラミング\n手順を考え、組み立て、動かして確かめる\nAIがかなり助ける\nアプリ開発\n誰の困りごとを解くか決め、確かめ、届け、使わ\nれ続ける状態を保つ\n人の判断が増える\n今日のデモで触れるのは、いちばん\n内側だけ\n5",
-      "sources": [
-        "https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf"
-      ]
-    },
-    {
-      "page": 19,
+      "page": 26,
       "title": "具体的な依頼と曖昧な依頼",
       "ja": "具体的な依頼では結果を比較しやすい。曖昧な依頼ではAIが仮定を置く。違っていたら言い直し、変更後も以前の動作を確かめる。長いプロンプトである必要はない。",
       "en": "Concrete requests are easier to check. Vague requests leave room for assumptions. Clarify through conversation and recheck earlier behavior after a change. Prompts need not be long.",
@@ -173,7 +247,17 @@
       ]
     },
     {
-      "page": 20,
+      "page": 27,
+      "title": "どこまでAIに任せる？",
+      "ja": "コーディングはコードを書くこと。プログラミングには手順を考え、動かして確かめることも含む。アプリ開発には、誰の何を解決するか、届け方や運用まで含む。図の3つの領域を指しながら説明する。",
+      "en": "Coding sits inside programming, which sits inside app development. Explain the broader decisions involved at each level while pointing to the nested diagram.",
+      "originalText": "爆速プロトタイプ構築術｜麗澤大学 2026秋\nコーディング ⊂ プログラミング ⊂ アプリ開発\nどこまでAIに任せる？\nアプリ開発\nプログラミング\nコーディング\nコーディング\n決まった内容をコードに書く（清書）\nAIが強く助ける\nプログラミング\n手順を考え、組み立て、動かして確かめる\nAIがかなり助ける\nアプリ開発\n誰の困りごとを解くか決め、確かめ、届け、使わ\nれ続ける状態を保つ\n人の判断が増える\n今日のデモで触れるのは、いちばん\n内側だけ\n5",
+      "sources": [
+        "https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf"
+      ]
+    },
+    {
+      "page": 28,
       "title": "小さく変え、確かめる",
       "ja": "必要ならまず計画を聞く。1回で変えることを小さくする。不明点や仮定を確認する。直らないときは同じ指示を繰り返さず、事実を伝え、問題を小さくする。",
       "en": "Ask for a plan when useful, keep changes small, and identify assumptions. If a fix fails, provide observations and narrow the problem rather than repeating the same request.",
@@ -183,7 +267,7 @@
       ]
     },
     {
-      "page": 21,
+      "page": 29,
       "title": "エラーと検証",
       "ja": "何をして何が起きたか、エラー全文とともに伝える。秘密情報は伏せる。AIの「確認した」という言葉だけを証拠にせず、実行結果を自分でも確かめる。",
       "en": "Describe the action and result, include the full error, and remove secrets. Verify the actual outcome rather than relying on an AI claim that it tested something.",
@@ -193,7 +277,7 @@
       ]
     },
     {
-      "page": 22,
+      "page": 30,
       "title": "ColabにCSVをアップロード",
       "ja": "Colabにログインして新規ノートブックを作る。必要なら接続。左のフォルダアイコンから「セッション ストレージにアップロード」を選びdatasaurus.csvをアップロード。一覧に出るまで待つ。セッションがリセットされたら再アップロードする。",
       "en": "Sign in to Colab, create a notebook, and connect if needed. Open the folder icon on the left, upload datasaurus.csv to session storage, and wait for it to appear. Upload again if the session resets.",
@@ -203,7 +287,7 @@
       ]
     },
     {
-      "page": 23,
+      "page": 31,
       "title": "Colab × Gemini",
       "ja": "きらきらマークで右のGeminiパネルを開く。最初は「データを読み込んで」とだけ伝える。それ以降の探索の手順は自分で考える。Geminiが使えない場合は教員に相談する。\n\nGeminiがコードセルを作ったら提案を確認し、「Accept and run」をクリック。毎回、出力を見て次の問いを考える。エラーが出たら、その内容をGeminiと確認して再挑戦する。\n\n図がアップロードしたデータを表しているか、軸や数値は合っているかを確認。知らないコードは説明してもらう。個人情報・APIキーは入れず、ノートブックはDriveに保存する。",
       "en": "Open Gemini’s right-hand panel using the sparkle icon. Begin only with “Load the data.” Choose your own next questions. Ask the instructor if Gemini is unavailable.\n\nReview the proposed code cells and click “Accept and run.” Inspect the output before choosing the next question. Discuss errors with Gemini and try again.\n\nCheck that the chart uses the uploaded data and that axes and values make sense. Ask for code explanations. Keep out personal information and API keys, and save the notebook to Drive.",
@@ -214,7 +298,7 @@
       ]
     },
     {
-      "page": 24,
+      "page": 32,
       "title": "datasaurus.csv",
       "ja": "1,846点、13種類のデータ。datasetはデータ名、xとyは各点の座標。活動1ではこのCSVだけをダウンロードする。表をクリックするとプレビューを開ける。",
       "en": "The CSV has 1,846 points across 13 datasets. dataset names the group, while x and y are point coordinates. Click the table to preview the CSV.",

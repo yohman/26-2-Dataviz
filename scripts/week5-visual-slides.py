@@ -96,6 +96,50 @@ image_page(4)
 image_page(5)
 image_page(6)
 image_page(7)
+detail_notes = {}
+def detail(key, image, box, title, ja, en, source):
+    # Requested detail crops retain every word/mark in the selected section.
+    im = image.crop(box)
+    iw, ih = im.size
+    scale = min(W/iw, H/ih)
+    def draw(c):
+        pixel = im.convert('RGB').getpixel((0, 0))
+        c.setFillColorRGB(*(v/255 for v in pixel))
+        c.rect(0, 0, W, H, fill=1, stroke=0)
+        c.drawImage(ImageReader(im), (W-iw*scale)/2, (H-ih*scale)/2, iw*scale, ih*scale)
+    page(draw)
+    detail_notes[key] = (title, ja, en, source)
+book = original.pages[6].images[0].image
+book_source = 'https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/'
+detail('book-page', book, (1160, 215, 1545, 825), 'England and Her Soldiers',
+       '右ページはHarriet Martineau著『England and Her Soldiers』（1859）の扉。Nightingaleの証拠を一般読者に伝える出版と協力の文脈を紹介する。',
+       'The right page is the title page of Harriet Martineau’s England and Her Soldiers (1859). Discuss publication and collaboration as ways of bringing Nightingale’s evidence to a wider audience.', book_source)
+detail('chart-title', book, (410, 220, 835, 280), 'Diagram of the Causes of Mortality',
+       '題名が何を説明する図なのかを明示している。対象・場所・死因という情報に注目する。',
+       'The title names the subject and setting. Ask students what question the chart promises to address.', book_source)
+detail('chart-key', book, (150, 600, 625, 825), '面積と色の説明',
+       '青は予防・軽減可能な病気、赤は負傷、黒はその他の死因。各扇形の面積を中心から測るという説明を読む。半径の長さではなく面積に注目する。',
+       'Read the original key: blue denotes preventable or mitigable disease, red wounds, and black other causes. The encoding uses sector area measured from the center, not radius alone.', book_source)
+detail('chart-large', book, (625, 280, 1090, 800), '1854–1855',
+       '最初の年の大きい図。冬に青い領域がどれほど増えるか。負傷による死と比較してもらう。',
+       'The larger diagram shows April 1854–March 1855. Compare the winter disease sectors with deaths from wounds.', book_source)
+detail('chart-small', book, (155, 255, 455, 565), '1855–1856',
+       '次の年の小さい図。同じ面積の尺度で比較する。縮小を読み取りつつ、この図だけで特定の個人や介入の因果効果を断定しない。',
+       'The smaller diagram shows April 1855–March 1856 on the same area scale. Compare the reduction without treating the chart alone as proof of any individual intervention’s causal effect.', book_source)
+from PIL import Image
+early = Image.open(root / 'assets/images/lecture/nightingale-diagrams-k.jpg')
+duke_source = 'https://exhibits.library.duke.edu/items/show/13722'
+detail('early-radar', early, (150, 40, 1390, 1310), 'Diagrams K · 1858',
+       'Nightingaleの初期の図。半径が死亡率を表すため、塗られた面積は値に比例しない。後の扇形の面積による表現と比較し、符号化の選択が印象をどう変えるか話す。',
+       'Nightingale’s early radar-style diagrams encode mortality through radius, so shaded area is not proportional to the value. Compare this with the later polar-area design. Source: Duke University Libraries, 1858.', duke_source)
+detail('scutari-radar', early, (175, 735, 640, 1300), 'Scutari · 1854–1855',
+       'Scutariの病人集団の死亡率。長い半径が強い印象を与える。期間、分母、尺度を確かめ、前の軍全体の図とは単純比較しない。',
+       'This early Scutari diagram concerns mortality in the sick population. Check its dates, denominator, and scale before comparing it with army-wide mortality.', duke_source)
+hospital = Image.open(root / 'assets/images/lecture/nightingale-hospital-mortality.png')
+detail('hospital-area', hospital, (0, 0, hospital.width, hospital.height), 'Scutari and Kulali hospitals',
+       '1854年10月–1855年9月の病院死亡率。点線はロンドン周辺の軍病院の比較値。衛生改善の開始を示す文字と、その後の領域の変化を探してもらう。相関と因果は区別する。',
+       'Hospital mortality at Scutari and Kulali, October 1854–September 1855. Locate the sanitation annotation and the dotted London comparison. Discuss the changing areas while distinguishing comparison from causal proof.',
+       'https://r2bit.com/gpt-stat/cs_nightingale.html')
 def brand(c, filename, x, y, width, height):
     drawing = svg2rlg(str(root / 'assets/images/lecture' / filename))
     scale = min(width/drawing.width, height/drawing.height)
@@ -114,8 +158,8 @@ page(libraries)
 def tukey(c):
     im = original.pages[9].images[0].image
     iw, ih = im.size
-    scale = min(350/iw, H/ih)
-    c.drawImage(ImageReader(im), 0, (H-ih*scale)/2, iw*scale, ih*scale)
+    scale = min(300/iw, 470/ih)
+    c.drawImage(ImageReader(im), 65, (H-ih*scale)/2, iw*scale, ih*scale)
     for i, line in enumerate(['“The greatest value of a picture', 'is when it forces us to notice', 'what we never expected to see.”']):
         label(c, line, 640, 330-i*49, 29)
     label(c, 'John Tukey · 1977', 640, 135, 20)
@@ -209,8 +253,17 @@ notes = [
 ('結果を自分で確かめる', '図がアップロードしたデータを表しているか、軸や数値は合っているかを確認。知らないコードは説明してもらう。個人情報・APIキーは入れず、ノートブックはDriveに保存する。', 'Check that the chart uses the uploaded data and that axes and values make sense. Ask for code explanations. Keep out personal information and API keys, and save the notebook to Drive.'),
 ('datasaurus.csv', '1,846点、13種類のデータ。datasetはデータ名、xとyは各点の座標。活動1ではこのCSVだけをダウンロードする。表をクリックするとプレビューを開ける。', 'The CSV has 1,846 points across 13 datasets. dataset names the group, while x and y are point coordinates. Click the table to preview the CSV.')
 ]
-order = list(range(1, 11)) + ['eda', 11, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 'instructions', 31]
-assert len(writer.pages) == len(order) == 24
+order = list(range(1, 8)) + list(detail_notes) + [8, 9, 10, 'eda', 11, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 'instructions', 31]
+assert len(writer.pages) == len(order) == 32
+# User's slide numbers refer to the pre-insertion 24-slide deck: 19 before 18.
+first, second = order.index(23), order.index(24)
+pages = list(writer.pages)
+pages[first], pages[second] = pages[second], pages[first]
+order[first], order[second] = order[second], order[first]
+reordered = PdfWriter()
+for p in pages:
+    reordered.add_page(p)
+writer = reordered
 sources = {
     1: ['https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg'],
     7: ['https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg'],
@@ -233,9 +286,18 @@ with output.open('wb') as f:
 sources[8] = ['https://www.python.org/community/logos/']
 sources[21].append('https://deepmind.google/about/')
 sources[22].append('https://karpathy.ai/')
+sources[10] = ['https://www.princeton.edu/news/2000/07/28/statistician-john-w-tukey-dies',
+               'https://as.amphilsoc.org/repositories/2/resources/2960',
+               'https://www.pearson.com/en-us/subject-catalog/p/exploratory-data-analysis-classic-version-/P200000006400']
+notes[9] = ('John Tukey',
+    'John Wilder Tukey（1915–2000）はPrinceton大学とBell研究所で活躍した統計学者。データを見ることを、仮説検定の前のおまけではなく発見のための重要な仕事として位置づけた。1977年の『Exploratory Data Analysis』は、図を描いて構造・外れ値・予想外の特徴を探す姿勢を広めた。箱ひげ図も広く普及させた。\n\nCooleyとともに高速フーリエ変換（FFT）の発展にも貢献。学生には「AIに最初の図を作らせる」ことと「図を見て次の問いを考える」ことの違いを強調する。この引用は今日のEDAの中心。答えを飾るためでなく、まだ知らなかったことに気づくために可視化する。',
+    'John Wilder Tukey (1915–2000) was a statistician at Princeton and Bell Laboratories. He helped make exploration a central part of data analysis, alongside formal confirmation. His 1977 book Exploratory Data Analysis promoted graphical investigation of structure, outliers, and unexpected features, and helped popularize box plots.\n\nHe also contributed to the fast Fourier transform with James Cooley. For students, contrast asking AI for a first chart with inspecting it and choosing the next question. His quotation captures today’s EDA goal: use visualization to discover something unexpected, then investigate it rather than treating an attractive chart as the conclusion.')
 payload = {'file': 'lectures/w05-python-datasaurus.pdf', 'slides': []}
 for i, origin in enumerate(order):
-    if origin == 'eda':
+    if origin in detail_notes:
+        title, ja, en, link = detail_notes[origin]
+        text, links = '', [link]
+    elif origin == 'eda':
         title, ja, en = ('Exploratory Data Analysis', notes[10][1], notes[10][2])
         text, links = '', []
     elif origin == 'instructions':

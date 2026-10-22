@@ -13,25 +13,27 @@ function fixture(fetcher) {
   vm.runInNewContext(fs.readFileSync('assets/slide-notes.js', 'utf8'), { window, URL });
   return { root, nodes, create: window.createSlideNotes };
 }
-test('all 24 revised slides retain aligned bilingual notes', () => {
-  assert.equal(payload.slides.length, 24);
+test('all 32 revised slides retain aligned bilingual notes', () => {
+  assert.equal(payload.slides.length, 32);
   payload.slides.forEach((slide, index) => {
     assert.equal(slide.page, index + 1);
     assert.ok(slide.ja && slide.en && typeof slide.originalText === 'string');
   });
-  assert.match(payload.slides[17].ja, /コーディング/);
-  assert.equal(payload.slides[10].title, 'Exploratory Data Analysis');
-  assert.equal(payload.slides[22].title, 'Colab × Gemini');
+  assert.match(payload.slides[26].ja, /コーディング/);
+  assert.equal(payload.slides[18].title, 'Exploratory Data Analysis');
+  assert.equal(payload.slides[30].title, 'Colab × Gemini');
+  assert.equal(payload.slides[25].title, '具体的な依頼と曖昧な依頼');
+  assert.match(payload.slides[17].ja, /Princeton/);
 });
 test('notes follow page changes and JP/EN without refetching', async () => {
   let calls = 0, language = 'ja';
   const f = fixture(async () => { calls++; return { ok: true, json: async () => payload }; });
-  const notes = f.create({ root: f.root, file: payload.file, page: 18, language: () => language });
+  const notes = f.create({ root: f.root, file: payload.file, page: 27, language: () => language });
   await notes.ready;
-  assert.equal(f.nodes.get('[data-notes-text]').textContent, payload.slides[17].ja);
+  assert.equal(f.nodes.get('[data-notes-text]').textContent, payload.slides[26].ja);
   language = 'en'; notes.render();
-  assert.equal(f.nodes.get('[data-notes-text]').textContent, payload.slides[17].en);
-  notes.setPage(23);
+  assert.equal(f.nodes.get('[data-notes-text]').textContent, payload.slides[26].en);
+  notes.setPage(31);
   assert.match(f.nodes.get('[data-notes-text]').textContent, /Accept and run/);
   assert.equal(calls, 1);
   assert.equal(f.root.hidden, false);

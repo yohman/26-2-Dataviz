@@ -13,7 +13,7 @@ Original slide numbers, in order: **4, 5, 14, 23, 24**.
 - Errors and testing
 
 The source excerpt PDF retains the original layout, attribution, and slide numbers.
-In the current Data Visualization Week 5 deck, slides **17–21** are visual
+In the current Data Visualization Week 5 deck, slides **25–29** are visual
 adaptations: the nested diagram is enlarged, and the other concepts use symbols.
 Their explanations and original text appear in the viewer's bilingual notes,
 with links back to the Engineer source. The CSV remains the final slide.
