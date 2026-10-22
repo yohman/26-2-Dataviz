@@ -1,7 +1,7 @@
-"""Append six Colab/Gemini slides before the final CSV slide of Week 5.
+"""Merge Engineer vibe-coding excerpts and Colab/Gemini slides into Week 5.
 
 The first 20 original pages and the final CSV page remain unchanged.
-Running again replaces the six additions rather than duplicating them.
+Running again replaces the additions rather than duplicating them.
 """
 from io import BytesIO
 from pathlib import Path
@@ -43,12 +43,6 @@ slide('Geminiとは？', 'Google DeepMind / December 2023', [
     'BrainとDeepMindの合流も、この名の由来。',
 ], ('Google: Geminiの名前の由来', 'https://blog.google/innovation-and-ai/products/google-gemini-ai-name-meaning/'))
 
-slide('Vibe coding', 'Andrej Karpathy / February 2025', [
-    'やりたいことを、ふつうの言葉で伝える。',
-    'AIがコードを書き、実行結果を見て対話を続ける。',
-    '今日はPythonでデータを探索します。',
-], ('Karpathyの言葉（2025年2月、Simon Willisonによる引用）', 'https://simonwillison.net/2025/Feb/6/andrej-karpathy/'))
-
 slide('Google Colabの準備', 'Python runs in your browser', [
     '1   ログインして、新しいノートブックを作る。',
     '2   必要なら「接続」。左のフォルダアイコンを開く。',
@@ -84,7 +78,11 @@ c.save()
 writer = PdfWriter()
 for page in reader.pages[:20]:
     writer.add_page(page)
-writer.append(PdfReader(buffer))
+colab = PdfReader(buffer)
+writer.add_page(colab.pages[0])
+writer.append(PdfReader(root / 'lectures/sources/engineer-week4-vibe-excerpts.pdf'))
+for page in colab.pages[1:]:
+    writer.add_page(page)
 writer.add_page(reader.pages[-1])
 with path.open('wb') as output:
     writer.write(output)

@@ -1,0 +1,18 @@
+# Reitaku Engineer Week 4 excerpts
+
+Source: [爆速プロトタイプ構築術 / Google AI Studioではじめる Vibe Coding](https://yohman.github.io/26-2-Reitaku-Engineer/assets/week02/ai-studio-prototyping.pdf)
+
+Author credited on the source cover: 麗澤大学 工学部 小塩 篤史.
+
+Original slide numbers, in order: **4, 5, 14, 23, 24**.
+
+- Vibe coding definition and tradeoffs
+- Coding, programming, and app development
+- Concrete and vague requests
+- Iterative changes
+- Errors and testing
+
+These pages retain their original layout, attribution, and slide numbers.
+In the Data Visualization Week 5 deck, they are slides **22–26**, between
+the Gemini introduction and Colab setup. They replace the earlier short
+vibe-coding definition slide. The CSV remains the final slide.
