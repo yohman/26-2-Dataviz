@@ -2,6 +2,7 @@
 week: 5
 act: MAKE
 course_date: 2026-10-23
+opens_at: 2026-10-23T09:00:00+09:00
 date: Fri 23 Oct 2026 · P2 · 10:40–12:20
 date_ja: 2026年10月23日（金） · 2限 · 10:40–12:20
 title: Python and the Unexpected

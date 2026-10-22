@@ -350,7 +350,7 @@ function renderAgenda() {
       html += '<section class="wrap week-list">';
     }
     const no = String(week.week).padStart(2, '0');
-    const locked = !previewAll && today < availabilityDate(week.course_date);
+    const locked = weekIsLocked(week, previewAll);
     const classTime = week.date.match(/\d{1,2}:\d{2}\s*[–-]\s*\d{1,2}:\d{2}/)?.[0] || '';
     const weekIndex = `<span class="week-index"><span class="week-number">${no}</span><span class="week-date"><span>${escapeHtml(compactDate(week.course_date))}</span><span>${escapeHtml(classTime)}</span></span></span>`;
     const slideMaterials = week.materials.filter(material => material.type === 'slides' || material.href.startsWith('lectures/'));
@@ -370,7 +370,7 @@ function renderAgenda() {
     const preview = `<span class="week-preview"><span><b>${copy('PRACTICE', '実践')}</b>${escapeHtml(copy(week.learn, week.learn_ja))}</span><span><b>${copy('TOOLS', 'ツール')}</b>${escapeHtml(copy(week.tools, week.tools_ja))}</span></span>`;
     const weekMain = `<span class="week-summary-main"><span class="week-meta"><span>${week.act}</span><span>${copy(`Week ${week.week}`, `第${week.week}週`)}</span>${locked ? '' : status}</span><span class="week-title">${escapeHtml(copy(week.title, week.title_ja))}</span>${locked ? '' : preview}</span>`;
     if (locked) {
-      const opens = compactDate(availabilityDate(week.course_date));
+      const opens = weekOpeningLabel(week);
       html += `<section class="week week--locked" id="week-${week.week}" aria-label="${escapeHtml(copy(`Week ${week.week}, available ${opens}`, `第${week.week}週、${opens}公開`))}"><div class="week-summary">${weekIndex}${weekMain}<span class="week-toggle week-toggle--locked">${escapeHtml(copy(`Opens ${opens}`, `${opens} 公開`))}</span></div></section>`;
       if (!weeks[index + 1] || weeks[index + 1].act !== active) html += '</section>';
       return;
@@ -471,6 +471,19 @@ function availabilityDate(courseDate) {
   return new Date(Date.UTC(year, month - 1, day - 1)).toISOString().slice(0, 10);
 }
 
+function weekIsLocked(week, preview = false, now = Date.now()) {
+  const opens = week.opens_at || `${availabilityDate(week.course_date)}T00:00:00+09:00`;
+  return !preview && now < new Date(opens).getTime();
+}
+
+function weekOpeningLabel(week) {
+  if (!week.opens_at) return compactDate(availabilityDate(week.course_date));
+  return new Intl.DateTimeFormat(isJapanese() ? 'ja-JP' : 'en-US', {
+    timeZone: 'Asia/Tokyo', month: 'numeric', day: 'numeric',
+    hour: 'numeric', minute: '2-digit', hour12: false
+  }).format(new Date(week.opens_at)) + ' JST';
+}
+
 function addDays(isoDate, numberOfDays) {
   const [year, month, day] = isoDate.split('-').map(Number);
   const date = new Date(Date.UTC(year, month - 1, day + numberOfDays));
@@ -533,13 +546,14 @@ function renderHome() {
   const current = weeks.find(week => week.course_date >= todayInTokyo()) || weeks.at(-1);
   if (!current) return;
   const no = String(current.week).padStart(2, '0');
-  const previewAll = new URLSearchParams(location.search).get('preview') === 'all';
-  const locked = !previewAll && todayInTokyo() < availabilityDate(current.course_date);
-  const href = `agenda.html${previewAll ? '?preview=all' : ''}#week-${current.week}`;
+  const params = new URLSearchParams(location.search);
+  const previewAll = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname) || params.has('p') || params.get('preview') === 'all';
+  const locked = weekIsLocked(current, previewAll);
+  const href = `agenda.html${previewAll ? '?p' : ''}#week-${current.week}`;
   root.href = href;
   root.setAttribute('aria-label', copy(`Open week ${current.week}`, `第${current.week}週を開く`));
   root.innerHTML = locked
-    ? `<p class="eyebrow">${copy('THIS WEEK', '今週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(current.title, current.title_ja))}</h2><p>${escapeHtml(copy(`Details open ${compactDate(availabilityDate(current.course_date))}.`, `内容は${compactDate(availabilityDate(current.course_date))}に公開します。`))}</p><span class="next-cta">${copy('See the schedule →', '日程を見る →')}</span>`
+    ? `<p class="eyebrow">${copy('THIS WEEK', '今週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(current.title, current.title_ja))}</h2><p>${escapeHtml(copy(`Details open ${weekOpeningLabel(current)}.`, `内容は${weekOpeningLabel(current)}に公開します。`))}</p><span class="next-cta">${copy('See the schedule →', '日程を見る →')}</span>`
     : `<p class="eyebrow">${copy('THIS WEEK', '今週')}</p><p class="next-number">${no}</p><h2>${escapeHtml(copy(current.challenge, current.challenge_ja))}</h2><p>${escapeHtml(copy(current.homework, current.homework_ja))}</p><span class="next-cta">${copy('Open this week →', 'この週を開く →')}</span>`;
 }
 

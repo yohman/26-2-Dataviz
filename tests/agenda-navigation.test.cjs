@@ -2,6 +2,17 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 const test = require('node:test');
+test('Week 5 opens exactly at 9 AM JST October 23, with preview bypass', () => {
+  const context = { document: { addEventListener() {} }, window: {} };
+  vm.createContext(context);
+  vm.runInContext(fs.readFileSync('assets/site.js', 'utf8'), context);
+  context.source = fs.readFileSync('content/weeks/05-python-history-evidence.md', 'utf8');
+  vm.runInContext("var week = parseWeek(source, '05-python-history-evidence.md')", context);
+  assert.equal(vm.runInContext("weekIsLocked(week, false, Date.parse('2026-10-23T08:59:59+09:00'))", context), true);
+  assert.equal(vm.runInContext("weekIsLocked(week, false, Date.parse('2026-10-23T09:00:00+09:00'))", context), false);
+  assert.equal(vm.runInContext("weekIsLocked(week, true, Date.parse('2026-10-22T09:00:00+09:00'))", context), false);
+  assert.equal(vm.runInContext("weekIsLocked({course_date:'2026-10-30'}, false, Date.parse('2026-10-23T09:00:00+09:00'))", context), true);
+});
 test('agenda scrolls to an asynchronously rendered hash target and expands it', () => {
   let frame, scrolled;
   const panel = { open: false, isConnected: true, matches: () => true, scrollIntoView: options => { scrolled = options; } };
