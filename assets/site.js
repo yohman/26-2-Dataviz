@@ -881,7 +881,9 @@ function requestGalleryItems() {
       clearTimeout(timer);
       script.remove();
       delete window.courseGalleryReceive;
-      if (error || !Array.isArray(payload?.items)) reject(error || new Error('Invalid gallery data'));
+      // An empty live feed is ambiguous (for example, a changed form header).
+      // Never let it erase the last published, known-good gallery.
+      if (error || !Array.isArray(payload?.items) || payload.items.length === 0) reject(error || new Error('Gallery live feed returned no submissions; keeping the published snapshot'));
       else resolve(payload.items);
     }
     window.courseGalleryReceive = payload => finish(null, payload);

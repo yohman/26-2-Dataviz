@@ -50,7 +50,7 @@ let payload;
 let usePublishedSnapshot = false;
 try {
   payload = await request({}, 'gallerySnapshotReceive');
-  if (!Array.isArray(payload.items)) throw new Error('Gallery feed has no items array');
+  if (!Array.isArray(payload.items) || payload.items.length === 0) throw new Error('Gallery feed returned no submissions; preserving the published gallery');
 } catch (error) {
   console.warn(`Gallery feed unavailable (${error.message}); reusing the published snapshot.`);
   payload = await publishedSnapshot();
