@@ -108,18 +108,6 @@
     "Concrete requests make it easier to compare results with intent. Ambiguous requests leave missing conditions to the model’s assumptions. Short prompts can still become precise through successive exchanges."
   ],
   [
-    "コーディングはコードを書く作業。プログラミングには手順の設計と検証も含まれ、アプリ開発には利用者、目的、公開、運用などの判断も含まれる。図はその入れ子関係を表す。",
-    "Coding concerns writing code. Programming also includes designing procedures and checking behavior; app development adds decisions about users, purpose, delivery, and operation. The nested diagram depicts these broader scopes."
-  ],
-  [
-    "小さな変更は、結果と原因の対応を追いやすい。失敗時の具体的な観察や再現条件は、同じ依頼の繰り返しよりも原因の特定に役立つ。",
-    "Small changes make it easier to connect an outcome to its cause. Concrete observations and reproducible conditions are more informative for diagnosis than repeated identical requests."
-  ],
-  [
-    "エラーメッセージには、失敗した場所や種類の手がかりが含まれる。AIの説明と実行結果は別の証拠であり、出力・軸・値の確認が重要。共有するログには秘密情報が含まれる場合もある。",
-    "Error messages contain clues about where and how execution failed. An AI explanation and an observed result are different kinds of evidence. Logs can also contain secrets, while charts require checks of their outputs, axes, and values."
-  ],
-  [
     "Colabの左側のフォルダアイコンからセッションストレージにCSVをアップロードできる。この保存領域は一時的で、ランタイムのリセット後にはファイルの再アップロードが必要になる。",
     "Colab’s left-hand folder panel provides uploads to session storage. This storage is temporary; files need to be uploaded again after a runtime reset."
   ],

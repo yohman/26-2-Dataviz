@@ -13,17 +13,17 @@ function fixture(fetcher) {
   vm.runInNewContext(fs.readFileSync('assets/slide-notes.js', 'utf8'), { window, URL });
   return { root, nodes, create: window.createSlideNotes };
 }
-test('all 33 revised slides retain aligned bilingual notes', () => {
-  assert.equal(payload.slides.length, 33);
+test('all 30 revised slides retain aligned bilingual notes', () => {
+  assert.equal(payload.slides.length, 30);
   payload.slides.forEach((slide, index) => {
     assert.equal(slide.page, index + 1);
     assert.ok(slide.ja && slide.en && typeof slide.originalText === 'string');
   });
-  assert.match(payload.slides[27].ja, /コーディング/);
+  assert.equal(payload.slides[27].title, 'ColabにCSVをアップロード');
   assert.equal(payload.slides[19].title, 'Exploratory Data Analysis');
   assert.equal(payload.slides[20].title, 'EDA workflow');
   assert.equal(payload.slides[21].title, '要約で消える形');
-  assert.equal(payload.slides[31].title, 'Colab × Gemini');
+  assert.equal(payload.slides[28].title, 'Colab × Gemini');
   assert.equal(payload.slides[26].title, '具体的な依頼と曖昧な依頼');
   assert.match(payload.slides[18].ja, /Princeton/);
 });
@@ -35,7 +35,7 @@ test('notes follow page changes and JP/EN without refetching', async () => {
   assert.equal(f.nodes.get('[data-notes-text]').textContent, payload.slides[26].ja);
   language = 'en'; notes.render();
   assert.equal(f.nodes.get('[data-notes-text]').textContent, payload.slides[26].en);
-  notes.setPage(32);
+  notes.setPage(29);
   assert.match(f.nodes.get('[data-notes-text]').textContent, /Accept and run/);
   assert.equal(calls, 1);
   assert.equal(f.root.hidden, false);
