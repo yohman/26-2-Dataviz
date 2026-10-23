@@ -93,7 +93,7 @@ image_page(7)
 image_page(2, fill=True)
 crop_page(4, (360, 110, 600, 430))
 lamp_page = writer.pages[-1]
-lamp_page.add_transformation(Transformation().scale(.85).translate(W*.075, 81))
+lamp_page.add_transformation(Transformation().scale(.75).translate(W*.125, 81))
 caption_stream = BytesIO()
 caption = canvas.Canvas(caption_stream, pagesize=(W, H))
 label(caption, 'The Lady with the Lamp', W/2, 47, 23)
