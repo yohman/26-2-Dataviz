@@ -76,8 +76,8 @@
     "John Wilder Tukey (1915–2000) was a statistician at Princeton and Bell Laboratories. His 1977 book Exploratory Data Analysis promoted graphical investigation of structure, outliers, and unexpected features, and helped popularize box plots.\n\nHe also contributed to the fast Fourier transform with James Cooley. A central part of his legacy is the idea that analysis can generate new questions, not merely confirm existing hypotheses."
   ],
   [
-    "EDAはExploratory Data Analysis（探索的データ分析）の略。観察、可視化、比較、問いの修正を繰り返し、構造や例外を探る。最初の図は結論ではなく探索の出発点となる。",
-    "EDA stands for Exploratory Data Analysis. Observation, visualization, comparison, and revised questions form an iterative search for structure and exceptions. The first chart is a starting point rather than a conclusion."
+    "CSV・JSON・API・アンケート・自分の記録などが生データの入り口になる。ExcelやGoogle Sheetsで整理・修正・確認したデータを、問い→可視化→気づきの循環で探索する。Excel・Tableau・Python・GIS・Flourish・AIはその道具。探索からデータの整備に戻ることもある。公開・共有は発見を伝え、意思決定の材料にする段階であり、最初の図を作ることがゴールではない。",
+    "Raw data can come from CSV, JSON, APIs, surveys, and personal records. Cleaning and preparation in Excel or Google Sheets lead into a loop of asking, visualizing, and noticing, using tools such as Excel, Tableau, Python, GIS, Flourish, and AI. Exploration can reveal a need to revisit data preparation. Publishing and sharing communicate discoveries to inform decisions; producing the first chart is not the endpoint."
   ],
   [
     "探索的データ分析では、図から得た気づきが次の問いにつながる。仮説を検証する分析と補い合うが、探索で見つかったパターンだけで因果関係が確定するわけではない。",

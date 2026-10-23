@@ -171,8 +171,8 @@ def tukey(c):
     label(c, 'John Tukey · 1977', 640, 135, 20)
 page(tukey)
 def eda(c):
-    label(c, 'EDA', 480, 245, 180)
-    label(c, 'Exploratory Data Analysis', 480, 160, 30)
+    im = ImageReader(str(root / 'assets/images/lecture/eda-architectural-workflow.png'))
+    c.drawImage(im, 0, 0, W, H)
 page(eda)
 image_page(11)
 image_page(18)
