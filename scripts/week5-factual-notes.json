@@ -40,6 +40,14 @@
     "Blue denotes preventable or mitigable disease, red wounds, and black other causes. Values are encoded by sector area measured from the center, not by radius alone."
   ],
   [
+    "扇形は中心を共通の頂点とし、半径ではなく面積が数量を表す。最初の強調は、凡例に書かれた面積の測り方に対応する。",
+    "The wedges share the center as a common vertex. Quantity is encoded by area rather than radius; the first highlight identifies this measurement rule in the original key."
+  ],
+  [
+    "面積の規則に加えて、死因の説明を強調。青は予防・軽減可能な病気、赤は負傷、黒はその他の死因を表す。",
+    "The second layer retains the area rule and highlights causes of death: blue for preventable or mitigable disease, red for wounds, and black for other causes."
+  ],
+  [
     "大きい図は1854年4月–1855年3月。冬に病気による死亡の青い領域が大きくなり、負傷による死亡を上回っている。",
     "The larger diagram covers April 1854–March 1855. Blue disease sectors expand markedly in winter and exceed deaths from wounds."
   ],

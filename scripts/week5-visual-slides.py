@@ -135,6 +135,37 @@ detail('chart-title', chart, (1230, 0, 2710, 205), 'Diagram of the Causes of Mor
 detail('chart-key', chart, (310, 1300, 1880, 2070), '面積と色の説明',
        '青は予防・軽減可能な病気、赤は負傷、黒はその他の死因。各扇形の面積を中心から測るという説明を読む。半径の長さではなく面積に注目する。',
        'Read the original key: blue denotes preventable or mitigable disease, red wounds, and black other causes. The encoding uses sector area measured from the center, not radius alone.', book_source)
+# Two cumulative overlays retain exactly the same crop, scale, and alignment.
+key_page = writer.pages[-1]
+key_snapshot = BytesIO()
+key_writer = PdfWriter()
+key_writer.add_page(key_page)
+key_writer.write(key_snapshot)
+key_scale = min(W/1570, H/770)
+key_x, key_y = (W-1570*key_scale)/2, (H-770*key_scale)/2
+for stage in [1, 2]:
+    overlay_stream = BytesIO()
+    overlay = canvas.Canvas(overlay_stream, pagesize=(W, H))
+    def highlight(x, y, width, height, color):
+        overlay.saveState()
+        overlay.setFillColor(HexColor(color))
+        overlay.setFillAlpha(.23)
+        overlay.rect(key_x+x*key_scale, key_y+(770-y-height)*key_scale,
+                     width*key_scale, height*key_scale, fill=1, stroke=0)
+        overlay.restoreState()
+    highlight(95, 30, 1340, 60, '#e6b53a')
+    highlight(105, 90, 1030, 54, '#e6b53a')
+    if stage == 2:
+        highlight(560, 207, 945, 54, '#5c9fc0')
+        highlight(1080, 268, 390, 52, '#c46b70')
+        highlight(1000, 328, 505, 52, '#a29a87')
+    overlay.showPage()
+    overlay.save()
+    highlighted = PdfReader(BytesIO(key_snapshot.getvalue())).pages[0]
+    highlighted.merge_page(PdfReader(overlay_stream).pages[0])
+    writer.add_page(highlighted)
+    detail_notes[f'chart-key-highlight-{stage}'] = (
+        f'面積と色の説明 · {stage}', '', '', chart_source)
 detail('chart-large', chart, (1940, 75, 3530, 1980), '1854–1855',
        '最初の年の大きい図。冬に青い領域がどれほど増えるか。負傷による死と比較してもらう。',
        'The larger diagram shows April 1854–March 1855. Compare the winter disease sectors with deaths from wounds.', book_source)
@@ -304,7 +335,7 @@ notes = [
 ('datasaurus.csv', '1,846点、13種類のデータ。datasetはデータ名、xとyは各点の座標。活動1ではこのCSVだけをダウンロードする。表をクリックするとプレビューを開ける。', 'The CSV has 1,846 points across 13 datasets. dataset names the group, while x and y are point coordinates. Click the table to preview the CSV.')
 ]
 order = list(range(1, 8)) + list(detail_notes) + [8, 9, 10, 'eda-title', 'eda', 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 'instructions', 31]
-assert len(writer.pages) == len(order) == 33
+assert len(writer.pages) == len(order) == 35
 # Keep the full chart directly after the book spread, followed by its four details.
 book_index = order.index('book-page')
 book_page = writer.pages[book_index]
@@ -334,7 +365,7 @@ order = []
 for p, origin in kept:
     writer.add_page(p)
     order.append(origin)
-assert len(order) == 30
+assert len(order) == 32
 sources = {
     1: ['https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg'],
     7: ['https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg'],
