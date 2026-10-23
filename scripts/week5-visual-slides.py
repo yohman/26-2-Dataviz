@@ -166,9 +166,22 @@ for stage in [1, 2]:
     writer.add_page(highlighted)
     detail_notes[f'chart-key-highlight-{stage}'] = (
         f'面積と色の説明 · {stage}', '', '', chart_source)
-detail('chart-large', chart, (1940, 75, 3530, 1980), '1854–1855',
-       '最初の年の大きい図。冬に青い領域がどれほど増えるか。負傷による死と比較してもらう。',
-       'The larger diagram shows April 1854–March 1855. Compare the winter disease sectors with deaths from wounds.', book_source)
+def large_chart_with_title(c):
+    paper = chart.convert('RGB').getpixel((20, chart.height//2))
+    c.setFillColorRGB(*(v/255 for v in paper))
+    c.rect(0, 0, W, H, fill=1, stroke=0)
+    title_image = chart.crop((1230, 0, 2710, 205))
+    title_width = 620
+    title_height = title_width*205/1480
+    c.drawImage(ImageReader(title_image), (W-title_width)/2, H-title_height-8,
+                title_width, title_height)
+    label(c, 'April 1854 to March 1855', W/2, 425, 14)
+    diagram = chart.crop((1940, 210, 3530, 1980))
+    scale = min(650/diagram.width, 405/diagram.height)
+    c.drawImage(ImageReader(diagram), (W-diagram.width*scale)/2, 8,
+                diagram.width*scale, diagram.height*scale)
+page(large_chart_with_title)
+detail_notes['chart-large'] = ('1854–1855', '', '', chart_source)
 detail('chart-small', chart, (345, 70, 1290, 1180), '1855–1856',
        '次の年の小さい図。同じ面積の尺度で比較する。縮小を読み取りつつ、この図だけで特定の個人や介入の因果効果を断定しない。',
        'The smaller diagram shows April 1855–March 1856 on the same area scale. Compare the reduction without treating the chart alone as proof of any individual intervention’s causal effect.', book_source)
