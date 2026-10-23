@@ -211,6 +211,7 @@ image_page(19)
 image_page(20)
 def gemini(c):
     brand(c, 'gemini-logo.svg', 330, 325, 300, 150)
+    label(c, 'Gemini', 480, 305, 32)
     brand(c, 'deepmind-logo.svg', 435, 170, 90, 90)
     label(c, 'Google DeepMind', 480, 135, 32)
     label(c, 'Google Brain  +  DeepMind', 480, 65, 26)
