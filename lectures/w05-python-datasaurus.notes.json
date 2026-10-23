@@ -143,6 +143,16 @@
     },
     {
       "page": 16,
+      "title": "Nightingale · full chart",
+      "ja": "全体図では、2年間の死亡原因を同じ面積尺度で比較できる。右は1854–1855年、左は1855–1856年。凡例の色と面積の規則が両方の図に共通する。",
+      "en": "The complete diagram compares causes of death across two years on the same area scale: 1854–1855 at right and 1855–1856 at left. The legend’s color and area rules apply to both.",
+      "originalText": "",
+      "sources": [
+        "https://upload.wikimedia.org/wikipedia/commons/1/17/Nightingale-mortality.jpg"
+      ]
+    },
+    {
+      "page": 17,
       "title": "Diagrams K · 1858",
       "ja": "初期の図では半径が死亡率を表すため、塗られた面積は値に比例しない。後の扇形面積による表現とは、同じ値でも視覚的な印象が異なる。出典：Duke University Libraries、1858年。",
       "en": "These early diagrams encode mortality through radius, so shaded area is not proportional to the value. This differs from the later polar-area design and changes the visual impression of magnitude. Source: Duke University Libraries, 1858.",
@@ -152,7 +162,7 @@
       ]
     },
     {
-      "page": 17,
+      "page": 18,
       "title": "Scutari · 1854–1855",
       "ja": "Scutariの病人集団の死亡率を扱う初期の図。対象集団・期間・分母が異なるため、軍全体の死亡率の図とは単純比較できない。",
       "en": "This early Scutari diagram concerns mortality among the sick population. Its population, dates, and denominator differ from army-wide mortality, preventing a simple direct comparison.",
@@ -162,7 +172,7 @@
       ]
     },
     {
-      "page": 18,
+      "page": 19,
       "title": "Scutari and Kulali hospitals",
       "ja": "ScutariとKulaliの1854年10月–1855年9月の病院死亡率。点線はロンドン周辺の軍病院の比較値。衛生改善開始の注記と領域の変化が示されるが、比較と因果の証明は別である。",
       "en": "Hospital mortality at Scutari and Kulali, October 1854–September 1855. A dotted line gives a London-area military hospital comparison. Sanitation annotations accompany changing areas, but comparison is distinct from causal proof.",
@@ -172,7 +182,7 @@
       ]
     },
     {
-      "page": 19,
+      "page": 20,
       "title": "Why Python?",
       "ja": "Pythonはデータの読み込み、加工、集計、可視化を同じ環境で繰り返せる。コードは分析手順の記録にもなり、条件を変えた再実行ができる。",
       "en": "Python supports repeated loading, transformation, summarization, and visualization in one environment. Code also records the analytical procedure and makes it possible to rerun it with different conditions.",
@@ -182,7 +192,7 @@
       ]
     },
     {
-      "page": 20,
+      "page": 21,
       "title": "Pythonの可視化ライブラリ",
       "ja": "matplotlib、seaborn、Plotly、BokehはPythonの可視化ライブラリ。静的な図、統計的な図、対話的な表示など、得意な表現と操作方法が異なる。",
       "en": "Matplotlib, seaborn, Plotly, and Bokeh are Python visualization libraries. They differ in their approaches to static graphics, statistical plots, and interactive displays.",
@@ -190,7 +200,7 @@
       "sources": []
     },
     {
-      "page": 21,
+      "page": 22,
       "title": "John Tukey",
       "ja": "John Wilder Tukey（1915–2000）はPrinceton大学とBell研究所の統計学者。1977年の『Exploratory Data Analysis』は、図から構造・外れ値・予想外の特徴を探す姿勢を広め、箱ひげ図の普及にも貢献した。\n\nJames Cooleyとともに高速フーリエ変換（FFT）の発展にも貢献。探索は仮説の確認だけではなく、新しい問いを見つける仕事でもある、という考えが彼の重要な遺産。",
       "en": "John Wilder Tukey (1915–2000) was a statistician at Princeton and Bell Laboratories. His 1977 book Exploratory Data Analysis promoted graphical investigation of structure, outliers, and unexpected features, and helped popularize box plots.\n\nHe also contributed to the fast Fourier transform with James Cooley. A central part of his legacy is the idea that analysis can generate new questions, not merely confirm existing hypotheses.",
@@ -202,7 +212,7 @@
       ]
     },
     {
-      "page": 22,
+      "page": 23,
       "title": "Exploratory Data Analysis",
       "ja": "EDAはExploratory Data Analysis（探索的データ分析）の略。可視化と比較を通して構造・例外・予想外の特徴を探る。",
       "en": "EDA stands for Exploratory Data Analysis: investigating structure, exceptions, and unexpected features through visualization and comparison.",
@@ -210,7 +220,7 @@
       "sources": []
     },
     {
-      "page": 23,
+      "page": 24,
       "title": "EDA workflow",
       "ja": "CSV・JSON・API・アンケート・自分の記録などが生データの入り口になる。ExcelやGoogle Sheetsで整理・修正・確認したデータを、問い→可視化→気づきの循環で探索する。Excel・Tableau・Python・GIS・Flourish・AIはその道具。探索からデータの整備に戻ることもある。公開・共有は発見を伝え、意思決定の材料にする段階であり、最初の図を作ることがゴールではない。",
       "en": "Raw data can come from CSV, JSON, APIs, surveys, and personal records. Cleaning and preparation in Excel or Google Sheets lead into a loop of asking, visualizing, and noticing, using tools such as Excel, Tableau, Python, GIS, Flourish, and AI. Exploration can reveal a need to revisit data preparation. Publishing and sharing communicate discoveries to inform decisions; producing the first chart is not the endpoint.",
@@ -218,7 +228,7 @@
       "sources": []
     },
     {
-      "page": 24,
+      "page": 25,
       "title": "要約で消える形",
       "ja": "平均やヒストグラムは情報を要約する一方、個々の値や配置を失う。異なるデータが同じ要約を持つことがあり、要約から元の形は一意に復元できない。",
       "en": "Means and histograms summarize information while discarding individual values or arrangements. Different datasets can share a summary, so the original structure cannot be uniquely reconstructed from it.",
@@ -226,7 +236,7 @@
       "sources": []
     },
     {
-      "page": 25,
+      "page": 26,
       "title": "点を重ねて見る",
       "ja": "個々の点を表示すると、要約だけでは見えにくい密度、ばらつき、外れ値が現れる。一方、点の重なりは密度を隠すこともある。",
       "en": "Individual points reveal density, variation, and outliers that summaries can conceal. Overlapping points can in turn obscure density.",
@@ -234,7 +244,7 @@
       "sources": []
     },
     {
-      "page": 26,
+      "page": 27,
       "title": "視覚的な手がかり",
       "ja": "位置・長さ・角度は、数値を視覚に変換する異なる手がかり。同じデータでも符号化の選択によって比較のしやすさが変わる。元の図の出典はNature。",
       "en": "Position, length, and angle are different visual encodings of quantity. Encoding choices affect how easily values can be compared. The original figure links to Nature.",
@@ -244,7 +254,7 @@
       ]
     },
     {
-      "page": 27,
+      "page": 28,
       "title": "Gemini",
       "ja": "GeminiはGoogle DeepMindのAIモデル群で、2023年12月に初公開された。名前は「双子」を意味し、CastorとPollux、BrainとDeepMindの合流を連想させる。",
       "en": "Gemini is Google DeepMind’s AI model family, introduced in December 2023. Its name evokes twins, Castor and Pollux, and the joining of the Brain and DeepMind teams.",
@@ -255,7 +265,7 @@
       ]
     },
     {
-      "page": 28,
+      "page": 29,
       "title": "Vibe coding",
       "ja": "Andrej Karpathyは2025年2月に「vibe coding」という呼び名を広めた。自然言語でAIに依頼し、結果を見て反復するスタイルを指す。速さと引き換えに、コードの理解や検証が後回しになるリスクもある。",
       "en": "Andrej Karpathy popularized the term ‘vibe coding’ in February 2025. It describes conversational iteration with AI-generated code. Speed can come at the cost of deferred understanding and verification.",
@@ -267,7 +277,7 @@
       ]
     },
     {
-      "page": 29,
+      "page": 30,
       "title": "具体的な依頼と曖昧な依頼",
       "ja": "具体的な依頼は出力と意図を比較しやすい。曖昧な依頼ではAIが不足した条件を仮定する。短いプロンプトでも対話を重ねて条件を明確にできる。",
       "en": "Concrete requests make it easier to compare results with intent. Ambiguous requests leave missing conditions to the model’s assumptions. Short prompts can still become precise through successive exchanges.",
@@ -277,7 +287,7 @@
       ]
     },
     {
-      "page": 30,
+      "page": 31,
       "title": "ColabにCSVをアップロード",
       "ja": "Colabの左側のフォルダアイコンからセッションストレージにCSVをアップロードできる。この保存領域は一時的で、ランタイムのリセット後にはファイルの再アップロードが必要になる。",
       "en": "Colab’s left-hand folder panel provides uploads to session storage. This storage is temporary; files need to be uploaded again after a runtime reset.",
@@ -287,7 +297,7 @@
       ]
     },
     {
-      "page": 31,
+      "page": 32,
       "title": "Colab × Gemini",
       "ja": "右側のGeminiパネルは、自然言語の依頼からノートブックのコードセルを生成する。「データを読み込んで」が探索の最初の依頼となる。\n\n「Accept and run」は、提案されたコードを受け入れて実行する操作。出力やエラーは次の対話の材料になる。\n\nコードが実行できることと、分析が正しいことは別。データ、軸、単位、集計方法の確認が必要で、ノートブック自体はDriveに保存できる。",
       "en": "Gemini’s right-hand panel generates notebook code cells from natural-language requests. ‘Load the data’ provides an initial request for exploration.\n\n‘Accept and run’ accepts and executes proposed code. Outputs and errors provide evidence for the next exchange.\n\nSuccessful execution does not guarantee a valid analysis. Data, axes, units, and aggregation still require verification. The notebook itself can be saved to Drive.",
@@ -298,7 +308,7 @@
       ]
     },
     {
-      "page": 32,
+      "page": 33,
       "title": "datasaurus.csv",
       "ja": "CSVは13種類のデータ、計1,846点を含む。dataset列はグループ名、xとy列は座標。似た要約統計を持つデータでも、散布図の形は大きく異なる。",
       "en": "The CSV contains 1,846 points across 13 datasets. The dataset column identifies the group; x and y provide coordinates. Datasets with similar summary statistics can have strikingly different scatterplot shapes.",

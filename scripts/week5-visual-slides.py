@@ -185,6 +185,8 @@ detail_notes['chart-large'] = ('1854–1855', '', '', chart_source)
 detail('chart-small', chart, (345, 70, 1290, 1180), '1855–1856',
        '次の年の小さい図。同じ面積の尺度で比較する。縮小を読み取りつつ、この図だけで特定の個人や介入の因果効果を断定しない。',
        'The smaller diagram shows April 1855–March 1856 on the same area scale. Compare the reduction without treating the chart alone as proof of any individual intervention’s causal effect.', book_source)
+detail('chart-return', chart, (0, 0, 3840, 2100), 'Nightingale · full chart',
+       '', '', chart_source)
 from PIL import Image
 early = Image.open(root / 'assets/images/lecture/nightingale-diagrams-k.jpg')
 duke_source = 'https://exhibits.library.duke.edu/items/show/13722'
@@ -348,7 +350,7 @@ notes = [
 ('datasaurus.csv', '1,846点、13種類のデータ。datasetはデータ名、xとyは各点の座標。活動1ではこのCSVだけをダウンロードする。表をクリックするとプレビューを開ける。', 'The CSV has 1,846 points across 13 datasets. dataset names the group, while x and y are point coordinates. Click the table to preview the CSV.')
 ]
 order = list(range(1, 8)) + list(detail_notes) + [8, 9, 10, 'eda-title', 'eda', 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 'instructions', 31]
-assert len(writer.pages) == len(order) == 35
+assert len(writer.pages) == len(order) == 36
 # Follow the book spread with its right-hand title page, then the chart sequence.
 book_index = order.index('book-page')
 book_page = writer.pages[book_index]
@@ -378,7 +380,7 @@ order = []
 for p, origin in kept:
     writer.add_page(p)
     order.append(origin)
-assert len(order) == 32
+assert len(order) == 33
 sources = {
     1: ['https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg'],
     7: ['https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg'],
