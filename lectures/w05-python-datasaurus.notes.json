@@ -184,13 +184,21 @@
     {
       "page": 20,
       "title": "Exploratory Data Analysis",
+      "ja": "EDAはExploratory Data Analysis（探索的データ分析）の略。可視化と比較を通して構造・例外・予想外の特徴を探る。",
+      "en": "EDA stands for Exploratory Data Analysis: investigating structure, exceptions, and unexpected features through visualization and comparison.",
+      "originalText": "",
+      "sources": []
+    },
+    {
+      "page": 21,
+      "title": "EDA workflow",
       "ja": "CSV・JSON・API・アンケート・自分の記録などが生データの入り口になる。ExcelやGoogle Sheetsで整理・修正・確認したデータを、問い→可視化→気づきの循環で探索する。Excel・Tableau・Python・GIS・Flourish・AIはその道具。探索からデータの整備に戻ることもある。公開・共有は発見を伝え、意思決定の材料にする段階であり、最初の図を作ることがゴールではない。",
       "en": "Raw data can come from CSV, JSON, APIs, surveys, and personal records. Cleaning and preparation in Excel or Google Sheets lead into a loop of asking, visualizing, and noticing, using tools such as Excel, Tableau, Python, GIS, Flourish, and AI. Exploration can reveal a need to revisit data preparation. Publishing and sharing communicate discoveries to inform decisions; producing the first chart is not the endpoint.",
       "originalText": "",
       "sources": []
     },
     {
-      "page": 21,
+      "page": 22,
       "title": "EDA",
       "ja": "探索的データ分析では、図から得た気づきが次の問いにつながる。仮説を検証する分析と補い合うが、探索で見つかったパターンだけで因果関係が確定するわけではない。",
       "en": "In exploratory data analysis, observations from a chart lead to further questions. Exploration complements confirmatory analysis, but a pattern discovered during exploration does not by itself establish causation.",
@@ -198,7 +206,7 @@
       "sources": []
     },
     {
-      "page": 22,
+      "page": 23,
       "title": "要約で消える形",
       "ja": "平均やヒストグラムは情報を要約する一方、個々の値や配置を失う。異なるデータが同じ要約を持つことがあり、要約から元の形は一意に復元できない。",
       "en": "Means and histograms summarize information while discarding individual values or arrangements. Different datasets can share a summary, so the original structure cannot be uniquely reconstructed from it.",
@@ -206,7 +214,7 @@
       "sources": []
     },
     {
-      "page": 23,
+      "page": 24,
       "title": "点を重ねて見る",
       "ja": "個々の点を表示すると、要約だけでは見えにくい密度、ばらつき、外れ値が現れる。一方、点の重なりは密度を隠すこともある。",
       "en": "Individual points reveal density, variation, and outliers that summaries can conceal. Overlapping points can in turn obscure density.",
@@ -214,7 +222,7 @@
       "sources": []
     },
     {
-      "page": 24,
+      "page": 25,
       "title": "視覚的な手がかり",
       "ja": "位置・長さ・角度は、数値を視覚に変換する異なる手がかり。同じデータでも符号化の選択によって比較のしやすさが変わる。元の図の出典はNature。",
       "en": "Position, length, and angle are different visual encodings of quantity. Encoding choices affect how easily values can be compared. The original figure links to Nature.",
@@ -224,7 +232,7 @@
       ]
     },
     {
-      "page": 25,
+      "page": 26,
       "title": "Gemini",
       "ja": "GeminiはGoogle DeepMindのAIモデル群で、2023年12月に初公開された。名前は「双子」を意味し、CastorとPollux、BrainとDeepMindの合流を連想させる。",
       "en": "Gemini is Google DeepMind’s AI model family, introduced in December 2023. Its name evokes twins, Castor and Pollux, and the joining of the Brain and DeepMind teams.",
@@ -235,7 +243,7 @@
       ]
     },
     {
-      "page": 26,
+      "page": 27,
       "title": "Vibe coding",
       "ja": "Andrej Karpathyは2025年2月に「vibe coding」という呼び名を広めた。自然言語でAIに依頼し、結果を見て反復するスタイルを指す。速さと引き換えに、コードの理解や検証が後回しになるリスクもある。",
       "en": "Andrej Karpathy popularized the term ‘vibe coding’ in February 2025. It describes conversational iteration with AI-generated code. Speed can come at the cost of deferred understanding and verification.",
@@ -247,7 +255,7 @@
       ]
     },
     {
-      "page": 27,
+      "page": 28,
       "title": "具体的な依頼と曖昧な依頼",
       "ja": "具体的な依頼は出力と意図を比較しやすい。曖昧な依頼ではAIが不足した条件を仮定する。短いプロンプトでも対話を重ねて条件を明確にできる。",
       "en": "Concrete requests make it easier to compare results with intent. Ambiguous requests leave missing conditions to the model’s assumptions. Short prompts can still become precise through successive exchanges.",
@@ -257,7 +265,7 @@
       ]
     },
     {
-      "page": 28,
+      "page": 29,
       "title": "どこまでAIに任せる？",
       "ja": "コーディングはコードを書く作業。プログラミングには手順の設計と検証も含まれ、アプリ開発には利用者、目的、公開、運用などの判断も含まれる。図はその入れ子関係を表す。",
       "en": "Coding concerns writing code. Programming also includes designing procedures and checking behavior; app development adds decisions about users, purpose, delivery, and operation. The nested diagram depicts these broader scopes.",
@@ -267,7 +275,7 @@
       ]
     },
     {
-      "page": 29,
+      "page": 30,
       "title": "小さく変え、確かめる",
       "ja": "小さな変更は、結果と原因の対応を追いやすい。失敗時の具体的な観察や再現条件は、同じ依頼の繰り返しよりも原因の特定に役立つ。",
       "en": "Small changes make it easier to connect an outcome to its cause. Concrete observations and reproducible conditions are more informative for diagnosis than repeated identical requests.",
@@ -277,7 +285,7 @@
       ]
     },
     {
-      "page": 30,
+      "page": 31,
       "title": "エラーと検証",
       "ja": "エラーメッセージには、失敗した場所や種類の手がかりが含まれる。AIの説明と実行結果は別の証拠であり、出力・軸・値の確認が重要。共有するログには秘密情報が含まれる場合もある。",
       "en": "Error messages contain clues about where and how execution failed. An AI explanation and an observed result are different kinds of evidence. Logs can also contain secrets, while charts require checks of their outputs, axes, and values.",
@@ -287,7 +295,7 @@
       ]
     },
     {
-      "page": 31,
+      "page": 32,
       "title": "ColabにCSVをアップロード",
       "ja": "Colabの左側のフォルダアイコンからセッションストレージにCSVをアップロードできる。この保存領域は一時的で、ランタイムのリセット後にはファイルの再アップロードが必要になる。",
       "en": "Colab’s left-hand folder panel provides uploads to session storage. This storage is temporary; files need to be uploaded again after a runtime reset.",
@@ -297,7 +305,7 @@
       ]
     },
     {
-      "page": 32,
+      "page": 33,
       "title": "Colab × Gemini",
       "ja": "右側のGeminiパネルは、自然言語の依頼からノートブックのコードセルを生成する。「データを読み込んで」が探索の最初の依頼となる。\n\n「Accept and run」は、提案されたコードを受け入れて実行する操作。出力やエラーは次の対話の材料になる。\n\nコードが実行できることと、分析が正しいことは別。データ、軸、単位、集計方法の確認が必要で、ノートブック自体はDriveに保存できる。",
       "en": "Gemini’s right-hand panel generates notebook code cells from natural-language requests. ‘Load the data’ provides an initial request for exploration.\n\n‘Accept and run’ accepts and executes proposed code. Outputs and errors provide evidence for the next exchange.\n\nSuccessful execution does not guarantee a valid analysis. Data, axes, units, and aggregation still require verification. The notebook itself can be saved to Drive.",
@@ -308,7 +316,7 @@
       ]
     },
     {
-      "page": 33,
+      "page": 34,
       "title": "datasaurus.csv",
       "ja": "CSVは13種類のデータ、計1,846点を含む。dataset列はグループ名、xとy列は座標。似た要約統計を持つデータでも、散布図の形は大きく異なる。",
       "en": "The CSV contains 1,846 points across 13 datasets. The dataset column identifies the group; x and y provide coordinates. Datasets with similar summary statistics can have strikingly different scatterplot shapes.",

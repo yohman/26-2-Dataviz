@@ -170,6 +170,38 @@ def tukey(c):
         label(c, line, 640, 330-i*49, 29)
     label(c, 'John Tukey · 1977', 640, 135, 20)
 page(tukey)
+def eda_title(c):
+    c.setFillColor(HexColor('#fcfbf8'))
+    c.rect(0, 0, W, H, fill=1, stroke=0)
+    # Outline lettering and fine construction guides, like a drafted elevation.
+    baseline, size = 222, 215
+    width = pdfmetrics.stringWidth('EDA', 'Helvetica', size)
+    left, right = (W-width)/2, (W+width)/2
+    c.setStrokeColor(HexColor('#d9dedb'))
+    c.setLineWidth(.35)
+    for y in [baseline, baseline+size*.718]:
+        c.line(left-42, y, right+42, y)
+    for x in [left, right]:
+        c.line(x, baseline-26, x, baseline+size*.718+26)
+        c.line(x-5, baseline-5, x+5, baseline+5)
+    c.setStrokeColor(HexColor('#344b51'))
+    c.setFillColor(HexColor('#fcfbf8'))
+    c.setLineWidth(.95)
+    text = c.beginText(left, baseline)
+    text.setFont('Helvetica', size)
+    text.setTextRenderMode(2)
+    text.textOut('EDA')
+    c.drawText(text)
+    c.setFillColor(HexColor('#344b51'))
+    subtitle = c.beginText()
+    subtitle.setFont('Helvetica', 20)
+    subtitle.setCharSpace(2.3)
+    caption = 'Exploratory Data Analysis'
+    caption_width = pdfmetrics.stringWidth(caption, 'Helvetica', 20)+(len(caption)-1)*2.3
+    subtitle.setTextOrigin((W-caption_width)/2, 153)
+    subtitle.textOut(caption)
+    c.drawText(subtitle)
+page(eda_title)
 def eda(c):
     im = ImageReader(str(root / 'assets/images/lecture/eda-architectural-workflow.png'))
     c.drawImage(im, 0, 0, W, H)
@@ -259,8 +291,8 @@ notes = [
 ('結果を自分で確かめる', '図がアップロードしたデータを表しているか、軸や数値は合っているかを確認。知らないコードは説明してもらう。個人情報・APIキーは入れず、ノートブックはDriveに保存する。', 'Check that the chart uses the uploaded data and that axes and values make sense. Ask for code explanations. Keep out personal information and API keys, and save the notebook to Drive.'),
 ('datasaurus.csv', '1,846点、13種類のデータ。datasetはデータ名、xとyは各点の座標。活動1ではこのCSVだけをダウンロードする。表をクリックするとプレビューを開ける。', 'The CSV has 1,846 points across 13 datasets. dataset names the group, while x and y are point coordinates. Click the table to preview the CSV.')
 ]
-order = list(range(1, 8)) + list(detail_notes) + [8, 9, 10, 'eda', 11, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 'instructions', 31]
-assert len(writer.pages) == len(order) == 33
+order = list(range(1, 8)) + list(detail_notes) + [8, 9, 10, 'eda-title', 'eda', 11, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 'instructions', 31]
+assert len(writer.pages) == len(order) == 34
 # Keep the full chart directly after the book spread, followed by its four details.
 book_index = order.index('book-page')
 book_page = writer.pages[book_index]
@@ -320,8 +352,8 @@ for i, origin in enumerate(order):
         if origin in ['chart-title', 'chart-key', 'chart-large', 'chart-small']:
             link = chart_source
         text, links = '', [link]
-    elif origin == 'eda':
-        title, ja, en = ('Exploratory Data Analysis', notes[10][1], notes[10][2])
+    elif origin in ['eda-title', 'eda']:
+        title, ja, en = ('Exploratory Data Analysis' if origin == 'eda-title' else 'EDA workflow', notes[10][1], notes[10][2])
         text, links = '', []
     elif origin == 'instructions':
         title = 'Colab × Gemini'
