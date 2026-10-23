@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const payload = JSON.parse(fs.readFileSync('lectures/w05-python-datasaurus.notes.json', 'utf8'));
 function fixture(fetcher) {
-  const nodes = new Map(['[data-notes-heading]', '[data-notes-text]', '[data-notes-original]', 'details', 'summary', '[data-notes-sources]'].map(key => [key, {
+  const nodes = new Map(['[data-notes-heading]', '[data-notes-text]', '[data-notes-sources]'].map(key => [key, {
     textContent: '', hidden: false, open: false, children: [],
     replaceChildren() { this.children = []; }, append(node) { this.children.push(node); }
   }]));
@@ -30,6 +30,11 @@ test('all 32 revised slides retain aligned bilingual notes', () => {
   assert.equal(payload.slides[10].title, '面積と色の説明');
   assert.equal(payload.slides[11].title, '面積と色の説明 · 1');
   assert.equal(payload.slides[12].title, '面積と色の説明 · 2');
+});
+test('viewer exposes revised notes only, with no original-text disclosure', () => {
+  const html = fs.readFileSync('viewer.html', 'utf8');
+  const script = fs.readFileSync('assets/slide-notes.js', 'utf8');
+  assert.doesNotMatch(html + script, /data-notes-original|Original slide text|元スライドの説明/);
 });
 test('notes follow page changes and JP/EN without refetching', async () => {
   let calls = 0, language = 'ja';

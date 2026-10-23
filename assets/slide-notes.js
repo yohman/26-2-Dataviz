@@ -11,25 +11,18 @@
       const ja = language() === 'ja';
       const heading = root.querySelector('[data-notes-heading]');
       const text = root.querySelector('[data-notes-text]');
-      const original = root.querySelector('[data-notes-original]');
-      const details = root.querySelector('details');
       const sources = root.querySelector('[data-notes-sources]');
       heading.textContent = ja ? `スライドノート · ${currentPage}` : `Slide notes · ${currentPage}`;
-      root.querySelector('summary').textContent = ja ? '元スライドの説明' : 'Original slide text';
       sources.replaceChildren();
       if (!slides) {
         text.textContent = failed
           ? (ja ? 'ノートを読み込めませんでした。再読み込みしてください。' : 'Could not load notes. Please reload.')
           : (ja ? 'ノートを読み込んでいます…' : 'Loading notes…');
-        details.hidden = true;
         return;
       }
       const note = slides.find(item => item.page === currentPage);
       if (!note) { root.hidden = true; return; }
       text.textContent = ja ? note.ja : note.en;
-      original.textContent = note.originalText || '';
-      details.hidden = !note.originalText?.trim();
-      details.open = false;
       for (const [index, href] of (note.sources || []).entries()) {
         let url;
         try { url = new URL(href); } catch { continue; }
