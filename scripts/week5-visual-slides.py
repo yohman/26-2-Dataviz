@@ -246,9 +246,12 @@ source = copy(original.pages[14])
 source.cropbox = source.trimbox = RectangleObject((417, 205, 550, 330))
 writer.pages[-1].merge_transformed_page(source, Transformation().translate(-417, -205).translate(413.5, 235))
 def instructions(c):
-    label(c, 'Colab × Gemini', 480, 435, 38)
+    c.drawImage(str(root / 'assets/images/lecture/colab-logo.png'), 338, 420, 90, 90, mask='auto')
+    label(c, '×', 480, 449, 30)
+    brand(c, 'gemini-logo.svg', 542, 430, 70, 70)
+    label(c, 'Colab × Gemini', 480, 380, 38)
     for i, line in enumerate(['1   Gemini →「データを読み込んで」', '2   Accept and run → 出力を見る', '3   質問を重ねて、恐竜を探す']):
-        label(c, line, 480, 325-i*85, 34)
+        label(c, line, 480, 285-i*80, 34)
 page(instructions)
 def csv_slide(c):
     rows = list(csv.DictReader((root / 'data/datasaurus.csv').open()))
