@@ -374,13 +374,13 @@ for p in pages:
     reordered.add_page(p)
 writer = reordered
 # Remove the three superseded AI-scope/iteration/debugging slides (formerly 28–30).
-kept = [(p, origin) for p, origin in zip(writer.pages, order) if origin not in {23, 25, 26}]
+kept = [(p, origin) for p, origin in zip(writer.pages, order) if origin not in {19, 23, 25, 26}]
 writer = PdfWriter()
 order = []
 for p, origin in kept:
     writer.add_page(p)
     order.append(origin)
-assert len(order) == 33
+assert len(order) == 32
 sources = {
     1: ['https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg'],
     7: ['https://commons.wikimedia.org/wiki/File:Nightingale-mortality.jpg'],

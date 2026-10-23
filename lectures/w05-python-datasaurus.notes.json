@@ -237,14 +237,6 @@
     },
     {
       "page": 26,
-      "title": "点を重ねて見る",
-      "ja": "個々の点を表示すると、要約だけでは見えにくい密度、ばらつき、外れ値が現れる。一方、点の重なりは密度を隠すこともある。",
-      "en": "Individual points reveal density, variation, and outliers that summaries can conceal. Overlapping points can in turn obscure density.",
-      "originalText": "2 52 5",
-      "sources": []
-    },
-    {
-      "page": 27,
       "title": "視覚的な手がかり",
       "ja": "位置・長さ・角度は、数値を視覚に変換する異なる手がかり。同じデータでも符号化の選択によって比較のしやすさが変わる。元の図の出典はNature。",
       "en": "Position, length, and angle are different visual encodings of quantity. Encoding choices affect how easily values can be compared. The original figure links to Nature.",
@@ -254,7 +246,7 @@
       ]
     },
     {
-      "page": 28,
+      "page": 27,
       "title": "Gemini",
       "ja": "GeminiはGoogle DeepMindのAIモデル群で、2023年12月に初公開された。名前は「双子」を意味し、CastorとPollux、BrainとDeepMindの合流を連想させる。",
       "en": "Gemini is Google DeepMind’s AI model family, introduced in December 2023. Its name evokes twins, Castor and Pollux, and the joining of the Brain and DeepMind teams.",
@@ -265,7 +257,7 @@
       ]
     },
     {
-      "page": 29,
+      "page": 28,
       "title": "Vibe coding",
       "ja": "Andrej Karpathyは2025年2月に「vibe coding」という呼び名を広めた。自然言語でAIに依頼し、結果を見て反復するスタイルを指す。速さと引き換えに、コードの理解や検証が後回しになるリスクもある。",
       "en": "Andrej Karpathy popularized the term ‘vibe coding’ in February 2025. It describes conversational iteration with AI-generated code. Speed can come at the cost of deferred understanding and verification.",
@@ -277,7 +269,7 @@
       ]
     },
     {
-      "page": 30,
+      "page": 29,
       "title": "具体的な依頼と曖昧な依頼",
       "ja": "具体的な依頼は出力と意図を比較しやすい。曖昧な依頼ではAIが不足した条件を仮定する。短いプロンプトでも対話を重ねて条件を明確にできる。",
       "en": "Concrete requests make it easier to compare results with intent. Ambiguous requests leave missing conditions to the model’s assumptions. Short prompts can still become precise through successive exchanges.",
@@ -287,7 +279,7 @@
       ]
     },
     {
-      "page": 31,
+      "page": 30,
       "title": "ColabにCSVをアップロード",
       "ja": "Colabの左側のフォルダアイコンからセッションストレージにCSVをアップロードできる。この保存領域は一時的で、ランタイムのリセット後にはファイルの再アップロードが必要になる。",
       "en": "Colab’s left-hand folder panel provides uploads to session storage. This storage is temporary; files need to be uploaded again after a runtime reset.",
@@ -297,7 +289,7 @@
       ]
     },
     {
-      "page": 32,
+      "page": 31,
       "title": "Colab × Gemini",
       "ja": "右側のGeminiパネルは、自然言語の依頼からノートブックのコードセルを生成する。「データを読み込んで」が探索の最初の依頼となる。\n\n「Accept and run」は、提案されたコードを受け入れて実行する操作。出力やエラーは次の対話の材料になる。\n\nコードが実行できることと、分析が正しいことは別。データ、軸、単位、集計方法の確認が必要で、ノートブック自体はDriveに保存できる。",
       "en": "Gemini’s right-hand panel generates notebook code cells from natural-language requests. ‘Load the data’ provides an initial request for exploration.\n\n‘Accept and run’ accepts and executes proposed code. Outputs and errors provide evidence for the next exchange.\n\nSuccessful execution does not guarantee a valid analysis. Data, axes, units, and aggregation still require verification. The notebook itself can be saved to Drive.",
@@ -308,7 +300,7 @@
       ]
     },
     {
-      "page": 33,
+      "page": 32,
       "title": "datasaurus.csv",
       "ja": "CSVは13種類のデータ、計1,846点を含む。dataset列はグループ名、xとy列は座標。似た要約統計を持つデータでも、散布図の形は大きく異なる。",
       "en": "The CSV contains 1,846 points across 13 datasets. The dataset column identifies the group; x and y provide coordinates. Datasets with similar summary statistics can have strikingly different scatterplot shapes.",

@@ -100,10 +100,6 @@
     "Means and histograms summarize information while discarding individual values or arrangements. Different datasets can share a summary, so the original structure cannot be uniquely reconstructed from it."
   ],
   [
-    "個々の点を表示すると、要約だけでは見えにくい密度、ばらつき、外れ値が現れる。一方、点の重なりは密度を隠すこともある。",
-    "Individual points reveal density, variation, and outliers that summaries can conceal. Overlapping points can in turn obscure density."
-  ],
-  [
     "位置・長さ・角度は、数値を視覚に変換する異なる手がかり。同じデータでも符号化の選択によって比較のしやすさが変わる。元の図の出典はNature。",
     "Position, length, and angle are different visual encodings of quantity. Encoding choices affect how easily values can be compared. The original figure links to Nature."
   ],

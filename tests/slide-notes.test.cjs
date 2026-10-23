@@ -13,18 +13,19 @@ function fixture(fetcher) {
   vm.runInNewContext(fs.readFileSync('assets/slide-notes.js', 'utf8'), { window, URL });
   return { root, nodes, create: window.createSlideNotes };
 }
-test('all 33 revised slides retain aligned bilingual notes', () => {
-  assert.equal(payload.slides.length, 33);
+test('all 32 revised slides retain aligned bilingual notes', () => {
+  assert.equal(payload.slides.length, 32);
   payload.slides.forEach((slide, index) => {
     assert.equal(slide.page, index + 1);
     assert.ok(slide.ja && slide.en && typeof slide.originalText === 'string');
   });
-  assert.equal(payload.slides[30].title, 'ColabにCSVをアップロード');
+  assert.equal(payload.slides[29].title, 'ColabにCSVをアップロード');
   assert.equal(payload.slides[22].title, 'Exploratory Data Analysis');
   assert.equal(payload.slides[23].title, 'EDA workflow');
   assert.equal(payload.slides[24].title, '要約で消える形');
-  assert.equal(payload.slides[31].title, 'Colab × Gemini');
-  assert.equal(payload.slides[29].title, '具体的な依頼と曖昧な依頼');
+  assert.equal(payload.slides[30].title, 'Colab × Gemini');
+  assert.equal(payload.slides[28].title, '具体的な依頼と曖昧な依頼');
+  assert.ok(!payload.slides.some(s => s.title === '点を重ねて見る'));
   assert.match(payload.slides[21].ja, /Princeton/);
   assert.equal(payload.slides[15].title, 'Nightingale · full chart');
   assert.equal(payload.slides[7].title, 'England and Her Soldiers');
@@ -45,7 +46,7 @@ test('notes follow page changes and JP/EN without refetching', async () => {
   assert.equal(f.nodes.get('[data-notes-text]').textContent, payload.slides[26].ja);
   language = 'en'; notes.render();
   assert.equal(f.nodes.get('[data-notes-text]').textContent, payload.slides[26].en);
-  notes.setPage(32);
+  notes.setPage(31);
   assert.match(f.nodes.get('[data-notes-text]').textContent, /Accept and run/);
   assert.equal(calls, 1);
   assert.equal(f.root.hidden, false);
