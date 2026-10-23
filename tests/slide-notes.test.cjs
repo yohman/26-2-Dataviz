@@ -26,9 +26,10 @@ test('all 32 revised slides retain aligned bilingual notes', () => {
   assert.equal(payload.slides[30].title, 'Colab × Gemini');
   assert.equal(payload.slides[28].title, '具体的な依頼と曖昧な依頼');
   assert.match(payload.slides[20].ja, /Princeton/);
-  assert.equal(payload.slides[9].title, '面積と色の説明');
-  assert.equal(payload.slides[10].title, '面積と色の説明 · 1');
-  assert.equal(payload.slides[11].title, '面積と色の説明 · 2');
+  assert.equal(payload.slides[7].title, 'England and Her Soldiers');
+  assert.equal(payload.slides[10].title, '面積と色の説明');
+  assert.equal(payload.slides[11].title, '面積と色の説明 · 1');
+  assert.equal(payload.slides[12].title, '面積と色の説明 · 2');
 });
 test('notes follow page changes and JP/EN without refetching', async () => {
   let calls = 0, language = 'ja';

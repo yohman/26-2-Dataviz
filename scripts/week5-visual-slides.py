@@ -349,13 +349,13 @@ notes = [
 ]
 order = list(range(1, 8)) + list(detail_notes) + [8, 9, 10, 'eda-title', 'eda', 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 'instructions', 31]
 assert len(writer.pages) == len(order) == 35
-# Keep the full chart directly after the book spread, followed by its four details.
+# Follow the book spread with its right-hand title page, then the chart sequence.
 book_index = order.index('book-page')
 book_page = writer.pages[book_index]
 pages = list(writer.pages)
 pages.pop(book_index)
 order.pop(book_index)
-book_index = order.index('chart-small') + 1
+book_index = 7
 pages.insert(book_index, book_page)
 order.insert(book_index, 'book-page')
 reordered = PdfWriter()

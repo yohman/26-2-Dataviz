@@ -63,6 +63,16 @@
     },
     {
       "page": 8,
+      "title": "England and Her Soldiers",
+      "ja": "右ページはHarriet Martineau著『England and Her Soldiers』（1859）の扉。Nightingaleの証拠を一般読者へ伝える出版と協力の文脈が見える。",
+      "en": "The right page is the title page of Harriet Martineau’s England and Her Soldiers (1859). It places Nightingale’s evidence in a context of collaboration and communication with a wider readership.",
+      "originalText": "",
+      "sources": [
+        "https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/"
+      ]
+    },
+    {
+      "page": 9,
       "title": "Diagram of the Causes of Mortality · full chart",
       "ja": "Nightingaleの死亡原因の図。左右の図は同じ面積尺度で1854–1855年と1855–1856年を示す。色は死因、扇形の面積は死亡の大きさを表す。",
       "en": "Nightingale’s mortality diagram compares 1854–1855 with 1855–1856 on the same area scale. Color identifies causes of death and sector area encodes magnitude.",
@@ -72,7 +82,7 @@
       ]
     },
     {
-      "page": 9,
+      "page": 10,
       "title": "Diagram of the Causes of Mortality",
       "ja": "題名は、東方の軍隊における死亡原因を扱う図であることを明示している。題名自体が、図の対象と範囲を定めている。",
       "en": "The title identifies causes of mortality in the army in the East. It establishes the subject and scope of the diagram before the individual marks are read.",
@@ -82,7 +92,7 @@
       ]
     },
     {
-      "page": 10,
+      "page": 11,
       "title": "面積と色の説明",
       "ja": "青は予防・軽減可能な病気、赤は負傷、黒はその他の死因。値を表すのは中心から測った各扇形の面積で、半径だけではない。",
       "en": "Blue denotes preventable or mitigable disease, red wounds, and black other causes. Values are encoded by sector area measured from the center, not by radius alone.",
@@ -92,7 +102,7 @@
       ]
     },
     {
-      "page": 11,
+      "page": 12,
       "title": "面積と色の説明 · 1",
       "ja": "扇形は中心を共通の頂点とし、半径ではなく面積が数量を表す。最初の強調は、凡例に書かれた面積の測り方に対応する。",
       "en": "The wedges share the center as a common vertex. Quantity is encoded by area rather than radius; the first highlight identifies this measurement rule in the original key.",
@@ -102,7 +112,7 @@
       ]
     },
     {
-      "page": 12,
+      "page": 13,
       "title": "面積と色の説明 · 2",
       "ja": "面積の規則に加えて、死因の説明を強調。青は予防・軽減可能な病気、赤は負傷、黒はその他の死因を表す。",
       "en": "The second layer retains the area rule and highlights causes of death: blue for preventable or mitigable disease, red for wounds, and black for other causes.",
@@ -112,7 +122,7 @@
       ]
     },
     {
-      "page": 13,
+      "page": 14,
       "title": "1854–1855",
       "ja": "大きい図は1854年4月–1855年3月。冬に病気による死亡の青い領域が大きくなり、負傷による死亡を上回っている。",
       "en": "The larger diagram covers April 1854–March 1855. Blue disease sectors expand markedly in winter and exceed deaths from wounds.",
@@ -122,23 +132,13 @@
       ]
     },
     {
-      "page": 14,
+      "page": 15,
       "title": "1855–1856",
       "ja": "小さい図は1855年4月–1856年3月で、前の年と同じ面積尺度を使う。領域は縮小しているが、この比較だけで特定の介入の因果効果は確定しない。",
       "en": "The smaller diagram covers April 1855–March 1856 on the same area scale. The areas shrink, but the comparison alone does not establish the causal effect of a particular intervention.",
       "originalText": "",
       "sources": [
         "https://upload.wikimedia.org/wikipedia/commons/1/17/Nightingale-mortality.jpg"
-      ]
-    },
-    {
-      "page": 15,
-      "title": "England and Her Soldiers",
-      "ja": "右ページはHarriet Martineau著『England and Her Soldiers』（1859）の扉。Nightingaleの証拠を一般読者へ伝える出版と協力の文脈が見える。",
-      "en": "The right page is the title page of Harriet Martineau’s England and Her Soldiers (1859). It places Nightingale’s evidence in a context of collaboration and communication with a wider readership.",
-      "originalText": "",
-      "sources": [
-        "https://journal.sciencemuseum.ac.uk/article/nightingale-and-martineau/"
       ]
     },
     {
