@@ -296,6 +296,7 @@ def debugging(c):
 page(debugging)
 def upload(c):
     label(c, 'datasaurus.csv', 480, 155, 30)
+    label(c, 'Find rex!', 480, 100, 36)
 page(upload)
 source = copy(original.pages[14])
 source.cropbox = source.trimbox = RectangleObject((417, 205, 550, 330))
