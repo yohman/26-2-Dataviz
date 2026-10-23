@@ -84,10 +84,6 @@
     "Raw data can come from CSV, JSON, APIs, surveys, and personal records. Cleaning and preparation in Excel or Google Sheets lead into a loop of asking, visualizing, and noticing, using tools such as Excel, Tableau, Python, GIS, Flourish, and AI. Exploration can reveal a need to revisit data preparation. Publishing and sharing communicate discoveries to inform decisions; producing the first chart is not the endpoint."
   ],
   [
-    "探索的データ分析では、図から得た気づきが次の問いにつながる。仮説を検証する分析と補い合うが、探索で見つかったパターンだけで因果関係が確定するわけではない。",
-    "In exploratory data analysis, observations from a chart lead to further questions. Exploration complements confirmatory analysis, but a pattern discovered during exploration does not by itself establish causation."
-  ],
-  [
     "平均やヒストグラムは情報を要約する一方、個々の値や配置を失う。異なるデータが同じ要約を持つことがあり、要約から元の形は一意に復元できない。",
     "Means and histograms summarize information while discarding individual values or arrangements. Different datasets can share a summary, so the original structure cannot be uniquely reconstructed from it."
   ],

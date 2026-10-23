@@ -206,7 +206,6 @@ def eda(c):
     im = ImageReader(str(root / 'assets/images/lecture/eda-architectural-workflow.png'))
     c.drawImage(im, 0, 0, W, H)
 page(eda)
-image_page(11)
 image_page(18)
 image_page(19)
 image_page(20)
@@ -291,8 +290,8 @@ notes = [
 ('結果を自分で確かめる', '図がアップロードしたデータを表しているか、軸や数値は合っているかを確認。知らないコードは説明してもらう。個人情報・APIキーは入れず、ノートブックはDriveに保存する。', 'Check that the chart uses the uploaded data and that axes and values make sense. Ask for code explanations. Keep out personal information and API keys, and save the notebook to Drive.'),
 ('datasaurus.csv', '1,846点、13種類のデータ。datasetはデータ名、xとyは各点の座標。活動1ではこのCSVだけをダウンロードする。表をクリックするとプレビューを開ける。', 'The CSV has 1,846 points across 13 datasets. dataset names the group, while x and y are point coordinates. Click the table to preview the CSV.')
 ]
-order = list(range(1, 8)) + list(detail_notes) + [8, 9, 10, 'eda-title', 'eda', 11, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 'instructions', 31]
-assert len(writer.pages) == len(order) == 34
+order = list(range(1, 8)) + list(detail_notes) + [8, 9, 10, 'eda-title', 'eda', 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 'instructions', 31]
+assert len(writer.pages) == len(order) == 33
 # Keep the full chart directly after the book spread, followed by its four details.
 book_index = order.index('book-page')
 book_page = writer.pages[book_index]
