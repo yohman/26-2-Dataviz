@@ -122,6 +122,7 @@ function materialLinks(materials, context = {}) {
     const href = safeResourceHref(material.href);
     if (!href) return '';
     if (href === 'pokemon-variables.html' && window.POKEMON_VARIABLES) return pokemonVariableGuide();
+    if (href === 'dubois-data-guide.html' && window.renderDuBoisGuide) return window.renderDuBoisGuide(isJapanese());
     const external = /^https?:\/\//i.test(href);
     const extension = href.split(/[?#]/)[0].split('.').pop().toLowerCase();
     const lecture = material.type === 'slides' || /^lectures\/.+\.pdf$/i.test(href);

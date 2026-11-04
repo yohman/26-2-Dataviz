@@ -4,7 +4,11 @@
     let currentPage = page;
     let slides;
     let failed = false;
-    const enabled = root && file === 'lectures/w05-python-datasaurus.pdf';
+    const notesFiles = {
+      'lectures/w05-python-datasaurus.pdf': 'lectures/w05-python-datasaurus.notes.json',
+      'lectures/w06-dubois-public-argument.pdf': 'lectures/w06-dubois-public-argument.notes.json'
+    };
+    const enabled = root && Boolean(notesFiles[file]);
     function render() {
       if (!enabled) return;
       root.hidden = false;
@@ -35,7 +39,7 @@
         sources.append(link);
       }
     }
-    const ready = enabled ? fetcher('lectures/w05-python-datasaurus.notes.json?v=visual-20261023', { cache: 'no-store' })
+    const ready = enabled ? fetcher(`${notesFiles[file]}?v=week6-20261105`, { cache: 'no-store' })
       .then(response => {
         if (!response.ok) throw new Error('Notes unavailable');
         return response.json();
