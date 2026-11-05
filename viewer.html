@@ -118,7 +118,8 @@
     const zoomLevel = document.querySelector('[data-zoom-level]');
     const pageInput = document.querySelector('[data-page-input]');
     const pageTotal = document.querySelector('[data-page-total]');
-    const ink = window.bindSlideAnnotations({surface:pdfPage,viewport:stage,toolbar:document.querySelector('.pdf-toolbar'),file});
+    const inkFile = file === 'lectures/w06_lores.pdf' ? `${file}:social-justice-20261105` : file;
+    const ink = window.bindSlideAnnotations({surface:pdfPage,viewport:stage,toolbar:document.querySelector('.pdf-toolbar'),file:inkFile});
     fullscreen.before(document.querySelector('.slide-ink-toggle'));
     let pdf;
     let activePage = Math.max(1, Number(parameters.get('page')) || 1);
@@ -240,7 +241,7 @@
       try {
         if (!file || !window.pdfjsLib) throw new Error('PDF preview unavailable');
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        const response = await fetch(`${encodeURI(file)}?v=week6-brookes-20261105`);
+        const response = await fetch(`${encodeURI(file)}?v=week6-social-justice-20261105`);
         if (!response.ok) throw new Error('PDF unavailable');
         pdf = await window.pdfjsLib.getDocument({ data: await response.arrayBuffer() }).promise;
         await renderPage(activePage);
