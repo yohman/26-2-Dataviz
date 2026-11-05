@@ -1,27 +1,28 @@
-/* Same compact annotation palette as Stats B, in the course's paper/crimson palette. */
+/* A small tray of drawing instruments, in the pigments of the course. */
 .slide-ink{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;touch-action:none}
-.pdf-toolbar .slide-ink-toggle{min-width:44px;min-height:44px;padding:7px 9px;font-size:22px;line-height:1;letter-spacing:0}
-.slide-ink-toggle span{font-size:13px}
-.pdf-toolbar .slide-ink-toggle[aria-expanded="true"]{background:var(--paper);color:var(--ink)}
-.slide-ink-tools{display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding:6px 12px;background:var(--paper);border-bottom:1px solid var(--line);color:var(--ink);font:500 12px var(--sans);flex:none}
+.pdf-toolbar .slide-ink-toggle{margin-left:.2rem;color:#a2464e}
+.pdf-toolbar .slide-ink-toggle[aria-expanded=true]{background:#ecd8cc;color:#873b42}
+.slide-ink-tools{display:flex;align-items:center;gap:5px;max-width:100%;padding:7px 12px 10px;color:var(--ink);background:var(--paper);font:500 12px var(--sans);flex:none;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#cbbca5 transparent}
 .slide-ink-tools[hidden]{display:none!important}
-.slide-ink-tools button{display:grid;place-items:center;flex:none;width:36px;height:36px;padding:5px;border:1px solid transparent;background:transparent;color:var(--ink);font:500 24px var(--sans);line-height:1;cursor:pointer}
-.slide-ink-tools button:hover{background:#e9dfce}
+.slide-ink-tools button{display:grid;place-items:center;flex:none;width:32px;height:32px;padding:6px;border:0;border-radius:50%;background:transparent;color:#665b4d;font:400 23px/1 var(--sans);cursor:pointer;transition:background .18s,color .18s,transform .18s}
+.slide-ink-tools button:hover{background:#e9dfcf;transform:translateY(-1px)}
 .slide-ink-tools button:focus-visible,.slide-ink-toggle:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
-.slide-ink-tools button[aria-pressed="true"]{background:#eed9d5;border-color:var(--signal)}
-.slide-ink-tools button:disabled{opacity:.3;cursor:default}
-.slide-ink-tools svg{width:22px;height:22px}
-.slide-ink-presets{display:flex;align-items:center;gap:2px;padding:0 7px;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.slide-ink-tools button[aria-pressed=true]{background:#e6d7c3;color:#963d48}
+.slide-ink-tools button:disabled{opacity:.25;cursor:default}
+.slide-ink-tools svg{width:20px;height:20px}
+.slide-ink-presets{display:flex;align-items:center;gap:0;padding:0 6px;margin-inline:2px;border:0;border-inline:1px solid #b9a98b35;flex:none}
 .slide-ink-presets+.slide-ink-presets{border-left:0}
-.slide-ink-color span{display:block;width:18px;height:18px;border-radius:50%;background:var(--ink-color);box-shadow:inset 0 0 0 1px #40382f55}
-.slide-ink-width svg{width:24px;height:16px}
+.slide-ink-color span{display:block;width:16px;height:16px;border-radius:50%;background:var(--ink-color);box-shadow:inset 0 0 0 1px #40382f20;transition:transform .18s}
+.slide-ink-tools .slide-ink-color[aria-pressed=true]{background:transparent}
+.slide-ink-color[aria-pressed=true] span{outline:1px solid var(--ink-color);outline-offset:3px;transform:scale(.9)}
+.slide-ink-width svg{width:22px;height:14px}
 .slide-ink-status{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-.slide-ink-tools button[data-confirm="true"]{background:var(--signal);color:#fff;border-color:var(--signal)}
-.slide-ink-clear-hint{color:var(--signal);font-size:11px;line-height:1.2}
+.slide-ink-tools button[data-confirm=true]{background:var(--signal);color:#fff}
+.slide-ink-clear-hint{color:var(--signal);font-size:11px;white-space:nowrap}
 .slide-ink-clear-hint[hidden]{display:none}
 .pdf-viewer.is-fullscreen{display:flex;flex-direction:column}
 .pdf-viewer.is-fullscreen .pdf-toolbar{flex:none}
 .pdf-viewer.is-fullscreen .pdf-stage{flex:1;min-height:0}
-.pdf-toolbar-actions{flex-wrap:wrap;align-items:center}
-@media(max-width:600px){.slide-ink-tools{gap:3px;padding:6px}.slide-ink-presets{padding:0 3px}.slide-ink-tools button{width:32px;height:36px}}
+@media(max-width:600px){.slide-ink-tools{gap:2px;padding:5px 6px 8px}.slide-ink-presets{padding:0 3px}.slide-ink-tools button{width:32px;height:34px}}
+@media(prefers-reduced-motion:reduce){.slide-ink-tools button,.slide-ink-color span{transition:none}.slide-ink-tools button:hover{transform:none}}
 @media print{.slide-ink-tools,.slide-ink-toggle{display:none!important}}

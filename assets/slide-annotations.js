@@ -9,31 +9,31 @@
       const b=document.createElement('button');b.type='button';b.innerHTML=glyph;
       b.title=label;b.setAttribute('aria-label',label);b.addEventListener('click',action);parent.append(b);return b;
     };
-    let mode='view',page=1,active=null,pointer=null,ready=false,penColor='#e04b35',penWidth=3;
+    let mode='view',page=1,active=null,pointer=null,ready=false,penColor='#b74650',penWidth=3;
     const key=`dataviz-slide-ink:${file}`;
     const validStroke=s=>s&&/^#[0-9a-f]{6}$/i.test(s.color)&&Number.isFinite(s.width)&&s.width>0&&s.width<=48&&Array.isArray(s.points)&&s.points.length>0&&s.points.length<=5000&&s.points.every(p=>Array.isArray(p)&&p.length===2&&p.every(n=>Number.isFinite(n)&&n>=0&&n<=1));
     let pages={};try{const saved=JSON.parse(localStorage.getItem(key)||'{}');for(const [n,list] of Object.entries(saved||{}))if(/^[1-9]\d*$/.test(n)&&Array.isArray(list)&&list.every(validStroke))pages[n]=list;}catch{}
     const save=()=>{try{localStorage.setItem(key,JSON.stringify(pages));}catch{status.textContent='このタブ内のみ保存 / Saved in this tab only';}};
     const setMode=value=>{disarmClear();finish();mode=value;viewport.dataset.slideDrawing=String(value!=='view');layer.style.pointerEvents=value==='view'?'none':'auto';layer.style.cursor=value==='erase'?'cell':'crosshair';pen.setAttribute('aria-pressed',String(value==='pen'));highlighter.setAttribute('aria-pressed',String(value==='highlight'));eraser.setAttribute('aria-pressed',String(value==='erase'));status.textContent=value==='view'?'閲覧 / View':value==='erase'?'消しゴム / Eraser':value==='highlight'?'蛍光ペン / Highlighter':'ペン / Pen';};
-    const toggle=button('✎ <span aria-hidden="true">⌄</span>','Drawing tools / 書き込みツール',()=>{
+    const toggle=button('<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 16 10-11 4 4L9 20l-5 1zM13 7l4 4M5 16l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>','Drawing tools / 書き込みツール',()=>{
       controls.hidden=!controls.hidden;toggle.setAttribute('aria-expanded',String(!controls.hidden));
       setMode(controls.hidden?'view':'pen');
     },toolbar);
     toggle.className='slide-ink-toggle';toggle.setAttribute('aria-expanded','false');
     controls.id='slide-ink-tools';toggle.setAttribute('aria-controls',controls.id);controls.hidden=true;
-    const pen=button('✎','Pen / ペン',()=>setMode(mode==='pen'?'view':'pen'));pen.setAttribute('aria-pressed','false');
-    const highlighter=button('▰','Highlighter / 蛍光ペン',()=>setMode(mode==='highlight'?'view':'highlight'));highlighter.setAttribute('aria-pressed','false');
+    const pen=button('<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 16 10-11 4 4L9 20l-5 1zM13 7l4 4M5 16l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>','Pen / ペン',()=>setMode(mode==='pen'?'view':'pen'));pen.setAttribute('aria-pressed','false');
+    const highlighter=button('<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 13 8-9 5 5-8 9zM8 13l-3 5 3 3 5-3M4 22h13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>','Highlighter / 蛍光ペン',()=>setMode(mode==='highlight'?'view':'highlight'));highlighter.setAttribute('aria-pressed','false');
     const group=label=>{const g=document.createElement('div');g.className='slide-ink-presets';g.setAttribute('role','group');g.setAttribute('aria-label',label);controls.append(g);return g;};
     const colors=group('Pen colors / ペンの色');
-    for(const [value,label] of [['#e04b35','Red / 赤'],['#176dba','Blue / 青'],['#21816a','Green / 緑'],['#f2ae30','Yellow / 黄'],['#182f38','Black / 黒'],['#ffffff','White / 白']]){
+    for(const [value,label] of [['#b74650','Red / 赤'],['#527d95','Blue / 青'],['#5f8069','Green / 緑'],['#d1a04c','Yellow / 黄'],['#40382f','Black / 黒'],['#ffffff','White / 白']]){
       const b=button('<span aria-hidden="true"></span>',label,()=>{
-        penColor=value;for(const child of colors.children)child.setAttribute('aria-pressed',String(child===b));setMode('pen');
+        penColor=value;for(const child of colors.children)child.setAttribute('aria-pressed',String(child===b));setMode(mode==='highlight'?'highlight':'pen');
       },colors);b.className='slide-ink-color';b.style.setProperty('--ink-color',value);b.setAttribute('aria-pressed',String(value===penColor));
     }
     const widths=group('Pen widths / ペンの太さ');
     for(const value of [2,3,5,8]){
       const b=button(`<svg viewBox="0 0 24 16" aria-hidden="true"><path d="M3 8H21" stroke="currentColor" stroke-width="${value}" stroke-linecap="round"/></svg>`,`Width ${value} / 太さ ${value}`,()=>{
-        penWidth=value;for(const child of widths.children)child.setAttribute('aria-pressed',String(child===b));setMode('pen');
+        penWidth=value;for(const child of widths.children)child.setAttribute('aria-pressed',String(child===b));setMode(mode==='highlight'?'highlight':'pen');
       },widths);b.className='slide-ink-width';b.setAttribute('aria-pressed',String(value===penWidth));
     }
     const eraser=button('<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 14 9-10 8 7-9 10H9zM9 9l8 7M12 21h9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>','Eraser / 消しゴム',()=>setMode(mode==='erase'?'view':'erase'));eraser.setAttribute('aria-pressed','false');
@@ -65,7 +65,7 @@
       const w=surface.clientWidth,h=surface.clientHeight,dpr=Math.min(devicePixelRatio||1,3);
       layer.width=Math.round(w*dpr);layer.height=Math.round(h*dpr);
       const ctx=layer.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.lineCap=ctx.lineJoin='round';
-      for(const s of pages[page]||[]){ctx.globalCompositeOperation=s.erase?'destination-out':'source-over';ctx.globalAlpha=s.highlight ? .25 : 1;ctx.strokeStyle=ctx.fillStyle=s.color;ctx.lineWidth=s.width*w/1000;ctx.beginPath();s.points.forEach(([x,y],i)=>i?ctx.lineTo(x*w,y*h):ctx.moveTo(x*w,y*h));if(s.points.length===1){const [x,y]=s.points[0];ctx.arc(x*w,y*h,ctx.lineWidth/2,0,2*Math.PI);ctx.fill();}else ctx.stroke();}
+      for(const s of pages[page]||[]){ctx.globalCompositeOperation=s.erase?'destination-out':'source-over';ctx.globalAlpha=s.highlight ? .25 : 1;ctx.strokeStyle=ctx.fillStyle=s.color;ctx.lineWidth=s.width*w/1000;ctx.beginPath();s.points.forEach(([x,y],i)=>{if(!i)ctx.moveTo(x*w,y*h);else if(ctx.quadraticCurveTo&&i<s.points.length-1){const next=s.points[i+1];ctx.quadraticCurveTo(x*w,y*h,(x+next[0])*w/2,(y+next[1])*h/2);}else ctx.lineTo(x*w,y*h);});if(s.points.length===1){const [x,y]=s.points[0];ctx.arc(x*w,y*h,ctx.lineWidth/2,0,2*Math.PI);ctx.fill();}else ctx.stroke();}
       undo.disabled=clear.disabled=!(pages[page]||[]).length;
     };
     const point=e=>{const r=layer.getBoundingClientRect();return [Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))];};

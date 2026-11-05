@@ -9,8 +9,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400..800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css?v=zoom-controls-20261001">
-  <link rel="stylesheet" href="assets/slide-annotations.css?v=20261105">
+  <link rel="stylesheet" href="assets/styles.css?v=studio-20261106">
+  <link rel="stylesheet" href="assets/slide-annotations.css?v=studio-20261106">
+  <link rel="stylesheet" href="assets/design-refinements.css?v=studio-20261106">
+  <link rel="stylesheet" href="assets/viewer-studio.css?v=studio-20261106">
 </head>
 <body class="viewer-page">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -28,19 +30,21 @@
     </header>
     <section class="pdf-viewer" aria-label="Lecture slide preview">
       <div class="pdf-toolbar">
-        <button type="button" data-previous><span data-copy="previous">Previous</span></button>
-        <label><span data-copy="page">Page</span> <input data-page-input type="number" min="1" value="1" inputmode="numeric"> <span data-page-total>/ —</span></label>
+        <div class="pdf-navigation">
+          <button type="button" data-previous aria-label="Previous / 前へ" title="Previous / 前へ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button>
+          <label><span class="sr-only" data-copy="page">Page</span><input aria-label="Page / ページ" data-page-input type="number" min="1" value="1" inputmode="numeric"><span data-page-total>/ —</span></label>
+          <button type="button" data-next aria-label="Next / 次へ" title="Next / 次へ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button>
+        </div>
         <div class="pdf-toolbar-actions">
-          <button type="button" data-next><span data-copy="next">Next</span></button>
           <span class="pdf-zoom-controls" aria-label="Slide zoom controls">
-            <button type="button" data-zoom-out aria-label="Zoom out">−</button>
-            <output data-zoom-level>100%</output>
-            <button type="button" data-zoom-in aria-label="Zoom in">+</button>
+            <button type="button" data-zoom-out aria-label="Zoom out" title="Zoom out / 縮小">−</button>
+            <button type="button" data-zoom-reset aria-label="Fit slide / 全体を表示" title="Fit slide / 全体を表示"><output data-zoom-level>100%</output></button>
+            <button type="button" data-zoom-in aria-label="Zoom in" title="Zoom in / 拡大">＋</button>
           </span>
-          <button type="button" data-fullscreen aria-pressed="false"><span data-fullscreen-label>Full screen</span> ⛶</button>
+          <button type="button" data-fullscreen aria-pressed="false" aria-label="Full screen / 全画面" title="Full screen / 全画面"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg><span class="sr-only" data-fullscreen-label>Full screen</span></button>
         </div>
       </div>
-      <div class="pdf-stage" data-pdf-stage>
+      <div class="pdf-stage" data-pdf-stage aria-label="Pinch or Ctrl/⌘ + scroll to zoom; drag to pan / ピンチ・Ctrl/⌘＋スクロールで拡大、ドラッグで移動">
         <p class="pdf-loading" data-status><span data-copy="loading">Loading slides…</span></p>
         <div class="pdf-page" data-pdf-page hidden>
           <canvas class="pdf-canvas" data-pdf-canvas></canvas>
@@ -55,10 +59,11 @@
     </section>
   </main>
   <link rel="stylesheet" href="assets/slide-notes.css?v=20261023">
-  <script src="assets/slide-notes.js?v=historical-justice-20261105"></script>
+  <script src="assets/slide-notes.js?v=justice-order-20261106"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="assets/slide-swipe.js?v=20261016"></script>
-  <script src="assets/slide-annotations.js?v=20261105"></script>
+  <script src="assets/slide-viewport.js?v=studio-20261106"></script>
+  <script src="assets/slide-annotations.js?v=studio-20261106"></script>
   <script>
     const parameters = new URLSearchParams(location.search);
     const requestedFile = parameters.get('file') || '';
@@ -66,7 +71,7 @@
     const title = parameters.get('title') || 'Lecture slides';
     const week = parameters.get('week') || '';
     const requestedReturn = parameters.get('return') || '';
-    const returnTo = /^(?:agenda\.html(?:\?preview=all)?#week-\d+|resources\.html)$/.test(requestedReturn) ? requestedReturn : 'agenda.html';
+    const returnTo = /^(?:agenda\.html(?:\?(?:p|preview=all))?#week-\d+|resources\.html)$/.test(requestedReturn) ? requestedReturn : 'agenda.html';
     const strings = {
       back: ['Back to the Agenda', 'AGENDAに戻る'], eyebrow: ['LECTURE SLIDE PREVIEW', '講義スライドのプレビュー'],
       previous: ['Previous', '前へ'], next: ['Next', '次へ'],
@@ -118,130 +123,120 @@
     const zoomLevel = document.querySelector('[data-zoom-level]');
     const pageInput = document.querySelector('[data-page-input]');
     const pageTotal = document.querySelector('[data-page-total]');
-    const inkFile = file === 'lectures/w06_lores.pdf' ? `${file}:historical-justice-20261105` : file;
+    const inkFile = file === 'lectures/w06_lores.pdf' ? `${file}:justice-order-20261106` : file;
     const ink = window.bindSlideAnnotations({surface:pdfPage,viewport:stage,toolbar:document.querySelector('.pdf-toolbar'),file:inkFile});
     fullscreen.before(document.querySelector('.slide-ink-toggle'));
     let pdf;
     let activePage = Math.max(1, Number(parameters.get('page')) || 1);
-    let renderTask;
-    let renderRevision = 0;
-    let zoomScale = 1;
-    const minimumZoom = .75;
-    const maximumZoom = 4;
-
+    let renderTask, currentPdfPage, currentViewport;
+    let renderRevision = 0, paintRevision = 0, zoomScale = 1;
+    const minimumZoom = 1, maximumZoom = 4;
+    const viewer = document.querySelector('.pdf-viewer');
+    const viewportControl = window.createSlideViewport({viewport:stage,surface:pdfPage,
+      onChange(scale) {
+        zoomScale=scale;
+        zoomLevel.value=`${Math.round(scale*100)}%`;
+        zoomOut.disabled=scale<=minimumZoom;zoomIn.disabled=scale>=maximumZoom;
+      },
+      onSettle() { if(currentPdfPage && currentViewport) paintPage(currentPdfPage,currentViewport,renderRevision); }
+    });
     const showFailure = () => {
-      ink.loading();
-      status.hidden = false;
-      status.textContent = copy('failed');
-      pdfPage.hidden = true;
-      previous.disabled = true; next.disabled = true; pageInput.disabled = true;
+      ink.loading();status.hidden=false;status.textContent=copy('failed');pdfPage.hidden=true;
+      previous.disabled=true;next.disabled=true;pageInput.disabled=true;
     };
     const updateUrl = () => {
-      const url = new URL(location.href);
-      if (activePage === 1) url.searchParams.delete('page'); else url.searchParams.set('page', activePage);
-      history.replaceState(null, '', url);
+      const url=new URL(location.href);
+      if(activePage===1) url.searchParams.delete('page');else url.searchParams.set('page',activePage);
+      history.replaceState(null,'',url);
     };
+    // Draw offscreen, then swap in one frame. Gestures transform the existing
+    // slide immediately; PDF detail is refreshed only when movement settles.
+    async function paintPage(page,viewport,revision) {
+      const paint=++paintRevision;
+      if(renderTask) {try{renderTask.cancel();}catch{}}
+      const budget=Math.sqrt(16000000/(viewport.width*viewport.height));
+      const density=Math.min(budget,(window.devicePixelRatio||1)*Math.max(1,zoomScale));
+      const buffer=document.createElement('canvas');
+      buffer.width=Math.round(viewport.width*density);buffer.height=Math.round(viewport.height*density);
+      renderTask=page.render({canvasContext:buffer.getContext('2d'),viewport,transform:[density,0,0,density,0,0]});
+      try {await renderTask.promise;}catch(error){if(error?.name==='RenderingCancelledException')return;throw error;}
+      if(revision!==renderRevision||paint!==paintRevision)return;
+      canvas.width=buffer.width;canvas.height=buffer.height;
+      canvas.getContext('2d').drawImage(buffer,0,0);
+      buffer.width=buffer.height=0;
+    }
     async function renderPage(requestedPage) {
-      if (!pdf) return;
-      const revision = ++renderRevision;
-      activePage = Math.min(pdf.numPages, Math.max(1, Number(requestedPage) || 1));
+      if(!pdf)return;
+      const requested=Math.min(pdf.numPages,Math.max(1,Number(requestedPage)||1));
+      const reset=requested!==activePage || !currentViewport;
+      const revision=++renderRevision;activePage=requested;currentPdfPage=null;
       ink.loading();
-      if (renderTask) { try { renderTask.cancel(); } catch { /* The prior render already finished. */ } }
-      const page = await pdf.getPage(activePage);
-      const base = page.getViewport({ scale: 1 });
-      const availableWidth = Math.max(280, Math.min(1280, stage.clientWidth - 32));
-      const viewport = page.getViewport({ scale: availableWidth / base.width * zoomScale });
-      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = Math.floor(viewport.width * pixelRatio);
-      canvas.height = Math.floor(viewport.height * pixelRatio);
-      canvas.style.width = `${Math.floor(viewport.width)}px`;
-      canvas.style.height = `${Math.floor(viewport.height)}px`;
-      pdfPage.style.width = `${Math.floor(viewport.width)}px`;
-      pdfPage.style.height = `${Math.floor(viewport.height)}px`;
+      const page=await pdf.getPage(activePage);
+      if(revision!==renderRevision)return;
+      const base=page.getViewport({scale:1});
+      const fit=Math.min((stage.clientWidth-16)/base.width,(stage.clientHeight-16)/base.height);
+      const viewport=page.getViewport({scale:Math.max(.1,fit)});
+      for(const element of [canvas,pdfPage]) {element.style.width=`${viewport.width}px`;element.style.height=`${viewport.height}px`;}
+      viewportControl.layout(viewport.width,viewport.height,{reset});
+      currentViewport=viewport;
+      await paintPage(page,viewport,revision);
+      if(revision!==renderRevision)return;
+      const annotations=await page.getAnnotations({intent:'display'});
+      if(revision!==renderRevision)return;
       linkLayer.replaceChildren();
-      const context = canvas.getContext('2d');
-      context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-      renderTask = page.render({ canvasContext: context, viewport });
-      try { await renderTask.promise; } catch (error) { if (error?.name !== 'RenderingCancelledException') throw error; }
-      if (revision !== renderRevision) return;
-      const annotations = await page.getAnnotations({ intent: 'display' });
-      annotations.forEach((annotation, index) => {
-        if (annotation.subtype !== 'Link' || !annotation.url || !annotation.rect) return;
-        let target;
-        try {
-          target = new URL(annotation.url);
-          if (!['http:', 'https:'].includes(target.protocol)) return;
-        } catch { return; }
-        const [x1, y1, x2, y2] = viewport.convertToViewportRectangle(annotation.rect);
-        const link = document.createElement('a');
-        link.href = target.href;
-        link.target = '_blank';
-        link.rel = 'noopener';
-        link.setAttribute('aria-label', `${copy('openSource')} ${index + 1}`);
-        link.style.left = `${Math.min(x1, x2)}px`;
-        link.style.top = `${Math.min(y1, y2)}px`;
-        link.style.width = `${Math.abs(x2 - x1)}px`;
-        link.style.height = `${Math.abs(y2 - y1)}px`;
+      annotations.forEach((annotation,index)=>{
+        if(annotation.subtype!=='Link'||!annotation.url||!annotation.rect)return;
+        let target;try{target=new URL(annotation.url);if(!['http:','https:'].includes(target.protocol))return;}catch{return;}
+        const [x1,y1,x2,y2]=viewport.convertToViewportRectangle(annotation.rect);
+        const link=document.createElement('a');link.href=target.href;link.target='_blank';link.rel='noopener';
+        link.setAttribute('aria-label',`${copy('openSource')} ${index+1}`);
+        Object.assign(link.style,{left:`${Math.min(x1,x2)}px`,top:`${Math.min(y1,y2)}px`,width:`${Math.abs(x2-x1)}px`,height:`${Math.abs(y2-y1)}px`});
         linkLayer.append(link);
       });
-      pdfPage.hidden = false; status.hidden = true;
-      ink.rendered(activePage);
-      slideNotes.setPage(activePage);
-      stage.classList.toggle('is-zoomed', zoomScale > 1);
-      zoomLevel.value = `${Math.round(zoomScale * 100)}%`;
-      zoomOut.disabled = zoomScale <= minimumZoom;
-      zoomIn.disabled = zoomScale >= maximumZoom;
-      pageInput.value = activePage; pageInput.max = pdf.numPages; pageTotal.textContent = `/ ${pdf.numPages}`;
-      previous.disabled = activePage === 1; next.disabled = activePage === pdf.numPages;
+      currentPdfPage=page;pdfPage.hidden=false;status.hidden=true;
+      ink.rendered(activePage);slideNotes.setPage(activePage);
+      pageInput.value=activePage;pageInput.max=pdf.numPages;pageTotal.textContent=`/ ${pdf.numPages}`;
+      previous.disabled=activePage===1;next.disabled=activePage===pdf.numPages;
       updateUrl();
     }
-    previous.addEventListener('click', () => renderPage(activePage - 1));
-    next.addEventListener('click', () => renderPage(activePage + 1));
-    window.installSlideSwipes(stage, {
-      canSwipe: () => Boolean(pdf) && !pdfPage.hidden && stage.dataset.slideDrawing !== 'true' && zoomScale <= 1 && (window.visualViewport?.scale || 1) <= 1.01,
-      next: () => { if (activePage < pdf.numPages) renderPage(activePage + 1); },
-      previous: () => { if (activePage > 1) renderPage(activePage - 1); }
+    previous.addEventListener('click',()=>renderPage(activePage-1));
+    next.addEventListener('click',()=>renderPage(activePage+1));
+    window.installSlideSwipes(stage,{
+      canSwipe:()=>Boolean(pdf)&&!pdfPage.hidden&&stage.dataset.slideDrawing !== 'true'&&stage.dataset.pinching!=='true'&&zoomScale<=1.01&&(window.visualViewport?.scale||1)<=1.01,
+      next:()=>{if(activePage<pdf.numPages)renderPage(activePage+1);},
+      previous:()=>{if(activePage>1)renderPage(activePage-1);}
     });
-    const setZoom = requestedZoom => {
-      zoomScale = Math.min(maximumZoom, Math.max(minimumZoom, requestedZoom));
-      renderPage(activePage).then(() => {
-        if (zoomScale > 1) stage.scrollLeft = Math.max(0, (stage.scrollWidth - stage.clientWidth) / 2);
-      });
+    const setZoom=value=>viewportControl.zoomTo(Math.min(maximumZoom,Math.max(minimumZoom,value)));
+    zoomOut.addEventListener('click',()=>setZoom(zoomScale/1.2));
+    zoomIn.addEventListener('click',()=>setZoom(zoomScale*1.2));
+    document.querySelector('[data-zoom-reset]').addEventListener('click',()=>viewportControl.fit());
+    const setFullscreen=active=>{
+      viewer.classList.toggle('is-fullscreen',active);document.body.classList.toggle('viewer-fullscreen',active);
+      fullscreen.setAttribute('aria-pressed',String(active));
+      fullscreen.setAttribute('aria-label',copy(active?'exitFullscreen':'fullscreen'));
+      document.querySelector('[data-fullscreen-label]').textContent=copy(active?'exitFullscreen':'fullscreen');
+      requestAnimationFrame(()=>renderPage(activePage));
     };
-    zoomOut.addEventListener('click', () => setZoom(zoomScale - .25));
-    zoomIn.addEventListener('click', () => setZoom(zoomScale + .25));
-    const viewer = document.querySelector('.pdf-viewer');
-    const setFullscreen = active => {
-      viewer.classList.toggle('is-fullscreen', active);
-      document.body.classList.toggle('viewer-fullscreen', active);
-      fullscreen.setAttribute('aria-pressed', String(active));
-      document.querySelector('[data-fullscreen-label]').textContent = copy(active ? 'exitFullscreen' : 'fullscreen');
-      setTimeout(() => renderPage(activePage), 100);
-    };
-    fullscreen.addEventListener('click', () => setFullscreen(!viewer.classList.contains('is-fullscreen')));
-    pageInput.addEventListener('change', () => renderPage(pageInput.value));
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && viewer.classList.contains('is-fullscreen')) { setFullscreen(false); return; }
-      if (event.target.matches('input,textarea,select') || event.altKey || event.ctrlKey || event.metaKey) return;
-      if (event.key === 'ArrowLeft') { event.preventDefault(); renderPage(activePage - 1); }
-      if (event.key === 'ArrowRight') { event.preventDefault(); renderPage(activePage + 1); }
-      if (event.key === '+' || event.key === '=') { event.preventDefault(); setZoom(zoomScale + .25); }
-      if (event.key === '-') { event.preventDefault(); setZoom(zoomScale - .25); }
-      if (event.key === '0') { event.preventDefault(); setZoom(1); }
+    fullscreen.addEventListener('click',()=>setFullscreen(!viewer.classList.contains('is-fullscreen')));
+    pageInput.addEventListener('change',()=>renderPage(pageInput.value));
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape'&&viewer.classList.contains('is-fullscreen')){setFullscreen(false);return;}
+      if(event.target.matches('input,textarea,select')||event.altKey||event.ctrlKey||event.metaKey)return;
+      if(event.key==='ArrowLeft'){event.preventDefault();renderPage(activePage-1);}
+      if(event.key==='ArrowRight'){event.preventDefault();renderPage(activePage+1);}
+      if(event.key==='+'||event.key==='='){event.preventDefault();setZoom(zoomScale*1.2);}
+      if(event.key==='-'){event.preventDefault();setZoom(zoomScale/1.2);}
+      if(event.key==='0'){event.preventDefault();viewportControl.fit();}
     });
-    stage.addEventListener('wheel', event => {
-      if (!event.ctrlKey && !event.metaKey) return;
-      event.preventDefault();
-      setZoom(zoomScale + (event.deltaY < 0 ? .25 : -.25));
-    }, { passive: false });
     let resizeTimer;
-    addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => renderPage(activePage), 150); });
+    const resizeSlides=()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>renderPage(activePage),150);};
+    new ResizeObserver(resizeSlides).observe(stage);
 
     (async () => {
       try {
         if (!file || !window.pdfjsLib) throw new Error('PDF preview unavailable');
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        const response = await fetch(`${encodeURI(file)}?v=week6-historical-justice-20261105`);
+        const response = await fetch(`${encodeURI(file)}?v=week6-justice-order-20261106`);
         if (!response.ok) throw new Error('PDF unavailable');
         pdf = await window.pdfjsLib.getDocument({ data: await response.arrayBuffer() }).promise;
         await renderPage(activePage);

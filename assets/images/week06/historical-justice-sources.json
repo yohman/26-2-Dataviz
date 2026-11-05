@@ -1,5 +1,5 @@
 {
-  "insertion_after": 22,
+  "insertion_after": 0,
   "cases": [
     {
       "id": "brookes",
@@ -114,5 +114,6 @@
       "detail_ja": "Los Angeles中央部の部分図。緑・青・黄・赤は当時の評価区分A-Dであり、実測された人種構成の割合を表す色ではない。現在の犯罪率の地図でもない。境界・色は元の地図のまま。地図の存在だけで個々の融資拒否との因果関係までは立証できない。",
       "detail_en": "Detail of central Los Angeles. Green, blue, yellow, and red encode grades A-D, not measured percentages of racial groups or present-day crime rates. Boundaries and colors are unchanged from the historic map. The map alone does not establish the cause of an individual lending decision."
     }
-  ]
+  ],
+  "presentation_order": "Brookes plan, Brookes section, context; then each graphic before its context."
 }

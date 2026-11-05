@@ -1,0 +1,33 @@
+/* Shared course controls: pigment, paper, and a lighter editorial rhythm. */
+:root{--control-wash:#ece3d6;--control-quiet:#746b5f}
+.site-header{box-shadow:none;border:0}
+.site-nav{font-weight:500;letter-spacing:.035em}
+.site-nav a{position:relative;padding:.55rem 0;transition:color .2s}
+.site-nav a::after{content:'';position:absolute;left:0;right:0;bottom:.25rem;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .2s}
+.site-nav a:hover::after,.site-nav a[aria-current=page]::after{transform:scaleX(1)}
+.language-toggle{border:0;background:#ffffff50;border-radius:50%;min-width:36px;min-height:36px;padding:.4rem;color:var(--ink);font-weight:500}
+.language-toggle:hover,.language-toggle:focus-visible{background:var(--control-wash);color:var(--playfair-crimson)}
+.menu-toggle{border:0;background:transparent;border-radius:50%;min-width:38px;min-height:38px}
+.button{font-weight:600;letter-spacing:.01em;padding:.7rem 1rem;border-radius:4px;transition:background .2s,transform .2s}
+.button:hover{transform:translateY(-1px)}
+.button:focus-visible,.course-resource-actions a:focus-visible,.activity-tab-list button:focus-visible{outline:2px solid var(--playfair-crimson);outline-offset:3px}
+.agenda-page .assignment-submit .button{border-radius:4px;background:var(--playfair-crimson)}
+.course-resource{background:#fff8ee65;padding:.8rem 1rem;gap:.75rem;border-bottom:1px solid #b8a58b25}
+.course-resource-name{font-weight:500;font-size:.84rem}
+.course-resource-type{background:transparent;color:var(--control-quiet);font-size:.58rem;letter-spacing:.05em}
+.course-resource-actions a{min-height:38px;padding:.45rem .65rem;font-weight:500;border:0;border-radius:4px}
+.course-resource-preview{background:transparent;text-decoration:underline!important;text-decoration-color:#ad3d5045;text-underline-offset:5px;color:var(--playfair-crimson)}
+.course-resource-download{background:#e7dcc9;color:var(--ink)}
+.course-resource-preview:hover{background:#efe5d4}
+.course-resource-download:hover{background:#dbc8a7;color:var(--ink)}
+.activity-tab-list{gap:0;background:#f8f3e8;border:0;border-bottom:1px solid #c4ab7e60}
+.activity-tab-list button{position:relative;background:transparent;border:0;color:var(--control-quiet);font-weight:500;letter-spacing:0;padding:.85rem .8rem}
+.activity-tab-list button[aria-selected=true],.activity-tab-list button[aria-selected=true]:hover{background:#eadbbd65;color:var(--ink)}
+.activity-tab-list button[aria-selected=true]::after{content:'';position:absolute;left:.8rem;right:.8rem;bottom:0;height:2px;background:var(--playfair-crimson)}
+.activity-tab-list button:hover{background:#eadbbd45}
+.gallery-filter select,.csv-preview-pagination button{border:1px solid #c2b49d80;border-radius:4px;background:#fff9ef80;font-weight:500}
+.csv-preview-pagination button:hover:not(:disabled){background:var(--control-wash)}
+.gallery-work-zoom-controls button{border:0;border-radius:50%;background:#fff9efc9;color:var(--ink);font-weight:500}
+@media(prefers-reduced-motion:reduce){.button,.site-nav a,.site-nav a::after{transition:none}.button:hover{transform:none}}
+[hidden]{display:none!important}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
