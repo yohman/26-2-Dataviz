@@ -12,11 +12,20 @@ immediately, so a classroom of phones does not multiply presentation-rate traffi
 
 - Create a session, then project **Invite / QR**. No student accounts are needed.
 - Themes are chosen by participants, not inferred by AI. Up to two per voice.
+- The default is a typographic landscape. Drag, wheel/pinch, or use the quiet
+  zoom controls to wander. Arrow keys pan; Home fits the landscape. Selecting a
+  voice opens its story. **Let it wander** takes a slow camera walk.
+- Text size expresses self-reported urgency; a colored dot identifies the first
+  chosen theme. Positions are thematic layout, not measured geography or distance.
+- **Threads** reveals sparse paths between voices with a shared participant-chosen
+  theme. Search, theme filters, and the original analytic views live in the explore
+  drawer; invitation, pause, moderation, and export are available from session tools.
 - Wall: text size is urgency. Clusters/map: circle area is 1 + echoes.
 - Map axes use self-reported reach and urgency. Jitter has no data meaning.
 - Network links count co-occurring themes; distances are only layout.
 - Echoes are limited to one per browser per voice and can be reversed.
-- Incoming voices slide into the wall, ripple into bubbles, and briefly illuminate
+- Incoming voices materialize in the current landscape and settle among related
+  themes. Other views slide them into the wall, ripple into bubbles, and illuminate
   their network themes and links. Existing cluster positions are retained. A short
   bilingual arrival notice keeps new voices visible without changing the current
   filter or interrupting the individual listening view. Initial history and reaction
