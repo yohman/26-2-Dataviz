@@ -1,12 +1,13 @@
 import { commentsApi } from './comments.mjs';
+import { voicesApi } from './voices.mjs';
 import { activitiesApi, activityImage } from './activities.mjs';
 import { galleryApi, courseImage, homeworkApi } from './course.mjs';
 export default {
   async fetch(request, env) {
     const origin = request.headers.get('Origin');
     const headers = { 'Content-Type': 'application/json', 'Cache-Control': 'no-store',
-      Vary: 'Origin', 'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, X-Browser-ID', 'Access-Control-Max-Age': '86400' };
+      Vary: 'Origin', 'Access-Control-Allow-Methods': 'GET, PUT, POST, PATCH, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, X-Browser-ID, X-Host-Key', 'Access-Control-Max-Age': '86400' };
     const reply = (data, status = 200) => new Response(JSON.stringify(data), { status, headers });
     const path = new URL(request.url).pathname;
     if (request.method === 'GET' && ['/gallery','/gallery-image'].includes(path)) {
@@ -23,9 +24,10 @@ export default {
     const browser = request.headers.get('X-Browser-ID');
     if (!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(browser || '')) return reply({ error: 'Invalid browser ID' }, 400);
     if (path === '/activity-image' && request.method === 'GET') return activityImage(request,env,headers);
-    if (!['/likes', '/comments', '/activities', '/homework'].includes(path)) return reply({ error: 'Not found' }, 404);
+    if (!['/likes', '/comments', '/activities', '/homework', '/voices'].includes(path)) return reply({ error: 'Not found' }, 404);
     try {
       if (env.RATE_LIMITER && !(await env.RATE_LIMITER.limit({ key: browser })).success) return reply({ error: 'Please wait before retrying' }, 429);
+      if (path === '/voices') return await voicesApi(request, env, browser, reply);
       if (path === '/comments') return await commentsApi(request, env, browser, reply);
       if (path === '/activities') return await activitiesApi(request,env,browser,reply);
       if (path === '/homework') return await homeworkApi(request,env,browser,reply);

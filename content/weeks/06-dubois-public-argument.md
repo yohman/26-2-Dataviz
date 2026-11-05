@@ -12,6 +12,7 @@ look_ja: Du BoisとAtlanta Universityのチーム：証拠・デザイン・1900
 learn: connect a visual argument to its audience, check the evidence, and compare an original with a redesign
 learn_ja: 誰に何を伝える図なのかを考え、証拠を確かめ、原図と再設計を比べる
 lecture_gallery_week: 5
+voices_session: voices/?room=31e86995
 schedule: 10:40–10:50|Submission review|Discoveries from Python and EDA;10:50–11:10|Lecture|Du Bois and the public argument;11:10–11:40|Individual remake|Read an original and make your version;11:40–12:00|Group critique|Everyone shares and receives feedback;12:00–12:15|Refinement|Improve your individual work;12:15–12:20|Closing|Homework and next week
 schedule_ja: 10:40–10:50|提出作品レビュー|Python・EDAで見つけたこと;10:50–11:10|講義|Du Boisとデータの主張;11:10–11:40|個人で再制作|原図を読み、自分の図をつくる;11:40–12:00|グループで講評|全員が見せ合い、意見をもらう;12:00–12:15|改善|個人の作品を磨く;12:15–12:20|まとめ|宿題と次週の案内
 in_class: Choose one historical chart, make an individual version, then compare and improve it in groups of four.
