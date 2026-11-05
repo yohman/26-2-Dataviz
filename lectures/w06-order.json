@@ -9,8 +9,10 @@
     15
   ],
   "order": [
-    "brookes-plan",
+    "brookes-exterior",
+    "brookes-plans",
     "brookes-section",
+    "brookes-complete",
     23,
     26,
     25,
