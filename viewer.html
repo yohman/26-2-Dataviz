@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:opsz,wght@9..144,400..800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css?v=zoom-controls-20261001">
+  <link rel="stylesheet" href="assets/slide-annotations.css?v=20261105">
 </head>
 <body class="viewer-page">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -57,6 +58,7 @@
   <script src="assets/slide-notes.js?v=week6-20261105"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="assets/slide-swipe.js?v=20261016"></script>
+  <script src="assets/slide-annotations.js?v=20261105"></script>
   <script>
     const parameters = new URLSearchParams(location.search);
     const requestedFile = parameters.get('file') || '';
@@ -116,6 +118,8 @@
     const zoomLevel = document.querySelector('[data-zoom-level]');
     const pageInput = document.querySelector('[data-page-input]');
     const pageTotal = document.querySelector('[data-page-total]');
+    const ink = window.bindSlideAnnotations({surface:pdfPage,viewport:stage,toolbar:document.querySelector('.pdf-toolbar'),file});
+    fullscreen.before(document.querySelector('.slide-ink-toggle'));
     let pdf;
     let activePage = Math.max(1, Number(parameters.get('page')) || 1);
     let renderTask;
@@ -125,6 +129,7 @@
     const maximumZoom = 4;
 
     const showFailure = () => {
+      ink.loading();
       status.hidden = false;
       status.textContent = copy('failed');
       pdfPage.hidden = true;
@@ -139,6 +144,7 @@
       if (!pdf) return;
       const revision = ++renderRevision;
       activePage = Math.min(pdf.numPages, Math.max(1, Number(requestedPage) || 1));
+      ink.loading();
       if (renderTask) { try { renderTask.cancel(); } catch { /* The prior render already finished. */ } }
       const page = await pdf.getPage(activePage);
       const base = page.getViewport({ scale: 1 });
@@ -178,6 +184,7 @@
         linkLayer.append(link);
       });
       pdfPage.hidden = false; status.hidden = true;
+      ink.rendered(activePage);
       slideNotes.setPage(activePage);
       stage.classList.toggle('is-zoomed', zoomScale > 1);
       zoomLevel.value = `${Math.round(zoomScale * 100)}%`;
@@ -190,7 +197,7 @@
     previous.addEventListener('click', () => renderPage(activePage - 1));
     next.addEventListener('click', () => renderPage(activePage + 1));
     window.installSlideSwipes(stage, {
-      canSwipe: () => Boolean(pdf) && !pdfPage.hidden && zoomScale <= 1 && (window.visualViewport?.scale || 1) <= 1.01,
+      canSwipe: () => Boolean(pdf) && !pdfPage.hidden && stage.dataset.slideDrawing !== 'true' && zoomScale <= 1 && (window.visualViewport?.scale || 1) <= 1.01,
       next: () => { if (activePage < pdf.numPages) renderPage(activePage + 1); },
       previous: () => { if (activePage > 1) renderPage(activePage - 1); }
     });
