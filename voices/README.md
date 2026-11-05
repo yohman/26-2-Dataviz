@@ -3,7 +3,10 @@
 A standalone bilingual classroom activity at `voices/`. The landing page creates
 separate sessions for future presentations. The participation link opens the
 short anonymous form; the session URL opens the live wall. Updates poll Cloudflare
-every 2.8 seconds while visible, with revision checks to avoid unnecessary redraws.
+every 2.8 seconds on the presentation wall while visible, with revision checks to
+avoid unnecessary redraws. Participation links refresh about every 15 seconds;
+open intake forms and hidden tabs do not poll. Submitting or reacting refreshes
+immediately, so a classroom of phones does not multiply presentation-rate traffic.
 
 ## Presenting
 
