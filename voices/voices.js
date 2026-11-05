@@ -1,5 +1,5 @@
 import { openTextEntry } from './open-text.mjs';
-import { createVoiceAtlas } from './voice-atlas.mjs?v=open-box-20261106';
+import { createVoiceAtlas } from './voice-atlas.mjs?v=open-box-20261106b';
 import { createArrivalTracker, captureLayout, animateArrivals, reducedMotion } from './arrival-motion.mjs';
 const API='https://dataviz-gallery-likes.ykawano.workers.dev/voices';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];

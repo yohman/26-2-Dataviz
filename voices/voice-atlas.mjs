@@ -1,4 +1,4 @@
-import { WORLD,hash,themeCenters,voiceTarget,sharedThreads } from './atlas-model.mjs';
+import { WORLD,hash,themeCenters,voiceTarget,sharedThreads } from './atlas-model.mjs?v=open-box-20261106';
 import { reducedMotion } from './arrival-motion.mjs';
 
 export function createVoiceAtlas(root,{themes,openVoice,language,onTourChange=()=>{}}) {
