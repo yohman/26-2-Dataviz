@@ -29,7 +29,7 @@ image: assets/images/lecture/dubois-portrait.png
 
 ## Materials
 
-- [Lecture slides](lectures/w06-dubois-public-argument.pdf) {slides}
+- [Lecture slides](lectures/w06_lores.pdf) {slides}
 
 ## Lecture Resources
 

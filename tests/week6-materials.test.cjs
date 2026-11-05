@@ -18,7 +18,7 @@ test('Week 6 is locked until November 6 at 9 AM JST with preview bypass',()=>{
 test('Week 6 has a 100-minute agenda, 20-minute lecture and concise bilingual activities',()=>{
   assert.equal(week.course_date,'2026-11-06');
   assert.equal(week.lecture_gallery_week,'5');
-  assert.equal(week.materials[0].href,'lectures/w06-dubois-public-argument.pdf');
+  assert.equal(week.materials[0].href,'lectures/w06_lores.pdf');
   assert.match(week.schedule,/10:50–11:10/);
   assert.match(week.schedule,/11:10–11:40/);
   assert.match(week.schedule,/12:15–12:20/);
