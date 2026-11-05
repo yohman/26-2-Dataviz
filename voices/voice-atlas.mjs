@@ -65,7 +65,7 @@ export function createVoiceAtlas(root,{themes,openVoice,language,onTourChange=()
   }
   function drawTerrain(){
     const active=Object.keys(centers).filter(k=>nodes.some(n=>n.categories.includes(k)));
-    const loop=d3.line().curve(d3.curveBasisClosed);
+    const loop=d3.line().curve(d3.curveLinearClosed);
     const rings=active.flatMap((key,index)=>[0,1,2].map(level=>({key:`${key}-${level}`,theme:key,index,level})));
     terrain.selectAll('path').data(rings,d=>d.key).join('path').attr('stroke',d=>themes[d.theme][2]).attr('d',d=>{
       const center=centers[d.theme],r=210+d.level*130;
@@ -116,7 +116,9 @@ export function createVoiceAtlas(root,{themes,openVoice,language,onTourChange=()
         field.append(button);elements.set(node.id,button);
       }
       button.classList.toggle('is-hidden',Boolean(node.hidden));button.classList.toggle('is-arriving',incoming.has(node.id));
-      button.style.setProperty('--tone',themes[node.categories[0]][2]);button.style.setProperty('--voice-size',`${22+node.urgency*3.3}px`);
+      button.dataset.urgency=String(node.urgency);
+      button.style.setProperty('--voice-tilt',`${(hash(node.id+'tilt')-.5)*5}deg`);
+      button.style.setProperty('--tone',themes[node.categories[0]][2]);button.style.setProperty('--voice-size',`${23+node.urgency*3.6}px`);
       button.style.setProperty('--voice-width',`${245+node.urgency*19}px`);button.style.setProperty('--breath-time',`${17+hash(node.id)*15}s`);button.style.setProperty('--breath-delay',`${-hash(node.id)*15}s`);
       button.querySelector('h3').textContent=node.headline;
       button.querySelector('.voice-whisper>span').textContent=node.categories.map(k=>themes[k][language()==='ja'?0:1]).join(' / ');
@@ -126,7 +128,7 @@ export function createVoiceAtlas(root,{themes,openVoice,language,onTourChange=()
     measure();drawTerrain();drawThreads();
     empty.hidden=items.length>0;
     root.classList.toggle('is-empty',!items.length);root.classList.toggle('is-loading',loading);
-    eyebrow.textContent=loading?'…':failed?(language()==='ja'?'接続を確かめています':'Reconnecting'):total?'':language()==='ja'?'声が届く、その前に。':'Before the first voice.';
+    eyebrow.textContent=loading?'…':failed?(language()==='ja'?'接続を確かめています':'Reconnecting'):total?'':language()==='ja'?'小さな声も、黙らせない。':'NO VOICE TOO SMALL.';
     headline.textContent=failed?(language()==='ja'?'声への道を、つなぎ直しています。':'Finding our way back to the voices.'):loading?(language()==='ja'?'声を、待っています。':'Listening for voices.'):
       total?(language()==='ja'?'まだ、出会っていない声。':'No voices on this path.'):(language()==='ja'?'何が、不公平だと思う？':'What feels unfair?');
     hint.textContent=failed?(language()==='ja'?'接続が戻ると、声が届きます。':'Voices will return when the connection does.'):

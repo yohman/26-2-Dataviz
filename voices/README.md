@@ -1,6 +1,9 @@
 # Voices for Justice / 声を、かたちに。
 
-A standalone bilingual classroom activity at `voices/`. The landing page creates
+A standalone bilingual classroom activity at `voices/`.
+The visual identity is a dark protest-poster wall: charcoal, red/gold/green
+accents, bold type, angled statements and restrained restless movement.
+New arrivals rise into the field; reduced-motion and pause preferences still apply. The landing page creates
 separate sessions for future presentations. The participation link opens the
 short anonymous form; the session URL opens the live wall. Updates poll Cloudflare
 every 2.8 seconds on the presentation wall while visible, with revision checks to
