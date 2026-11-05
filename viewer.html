@@ -55,7 +55,7 @@
     </section>
   </main>
   <link rel="stylesheet" href="assets/slide-notes.css?v=20261023">
-  <script src="assets/slide-notes.js?v=week6-20261105"></script>
+  <script src="assets/slide-notes.js?v=historical-justice-20261105"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="assets/slide-swipe.js?v=20261016"></script>
   <script src="assets/slide-annotations.js?v=20261105"></script>
@@ -118,7 +118,7 @@
     const zoomLevel = document.querySelector('[data-zoom-level]');
     const pageInput = document.querySelector('[data-page-input]');
     const pageTotal = document.querySelector('[data-page-total]');
-    const inkFile = file === 'lectures/w06_lores.pdf' ? `${file}:social-justice-20261105` : file;
+    const inkFile = file === 'lectures/w06_lores.pdf' ? `${file}:historical-justice-20261105` : file;
     const ink = window.bindSlideAnnotations({surface:pdfPage,viewport:stage,toolbar:document.querySelector('.pdf-toolbar'),file:inkFile});
     fullscreen.before(document.querySelector('.slide-ink-toggle'));
     let pdf;
@@ -241,7 +241,7 @@
       try {
         if (!file || !window.pdfjsLib) throw new Error('PDF preview unavailable');
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        const response = await fetch(`${encodeURI(file)}?v=week6-social-justice-20261105`);
+        const response = await fetch(`${encodeURI(file)}?v=week6-historical-justice-20261105`);
         if (!response.ok) throw new Error('PDF unavailable');
         pdf = await window.pdfjsLib.getDocument({ data: await response.arrayBuffer() }).promise;
         await renderPage(activePage);

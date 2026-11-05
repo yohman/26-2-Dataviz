@@ -1,0 +1,95 @@
+{
+  "file": "lectures/w06_lores.pdf",
+  "slides": [
+    {
+      "page": 23,
+      "title": "The Brookes diagram and the abolition campaign",
+      "ja": "Brookes号の図は1788年にPlymouthの奴隷貿易廃止団体から出版され、その後広く複製・配布された。廃止運動の視覚的な訴えの一部であり、この図だけで廃止が実現したわけではない。図は規制後の配置を表し、実際の航海の過密状態をそのまま記録した写真ではない。",
+      "en": "First published by abolitionists in Plymouth in 1788 and widely reproduced afterward, the Brookes diagram formed part of the campaign against the slave trade. It did not bring about abolition on its own. The layout represents regulated stowage rather than a photograph or an average of actual voyages.",
+      "sources": [
+        "https://archives.history.ac.uk/1807commemorated/exhibitions/museums/brookes.html",
+        "https://upload.wikimedia.org/wikipedia/commons/8/82/Slaveshipposter.jpg"
+      ]
+    },
+    {
+      "page": 24,
+      "title": "The Brookes diagram and the abolition campaign / detail",
+      "ja": "下甲板と追加の棚状区画の部分図。各人の身体を並べることで、収容人数と空間の関係が見える。元の印刷物には現在では差別的とされる表現が含まれる。人々の抵抗・主体性までを、この配置図だけで表せるわけではない。巻末には従来の全図も残している。",
+      "en": "Detail of the lower deck and additional platforms. Repeated human figures connect capacity to physical space. The historic print contains dehumanizing language, and the arrangement cannot communicate the full lives, resistance, and agency of the people represented. The previously added complete poster remains at the end of the deck.",
+      "sources": [
+        "https://upload.wikimedia.org/wikipedia/commons/8/82/Slaveshipposter.jpg",
+        "https://archives.history.ac.uk/1807commemorated/exhibitions/museums/brookes.html"
+      ]
+    },
+    {
+      "page": 25,
+      "title": "Charles Booth: making urban poverty visible",
+      "ja": "Charles Boothのロンドン調査は1886-1903年。最初の貧困地図は1889年で、この図は1898-99年版の第5図。調査員は警察官の巡回に同行するなどして街路の情報を集めた。Boothは公的な老齢年金を提唱したが、地図が単独で制度を生んだという因果関係は示せない。",
+      "en": "Booth’s London inquiry ran from 1886 to 1903. The first poverty map appeared in 1889; this is Sheet 5 of the 1898-99 edition. Investigators gathered street-level evidence, including walks with police officers. Booth advocated state old-age pensions; that does not establish that a map alone caused the policy.",
+      "sources": [
+        "https://booth.lse.ac.uk/learn-more/what-were-the-poverty-maps",
+        "https://booth.lse.ac.uk/learn-more/who-was-charles-booth"
+      ]
+    },
+    {
+      "page": 26,
+      "title": "Charles Booth: making urban poverty visible / detail",
+      "ja": "East Central Districtの部分図。色は住民の所得・社会階層の分類で、人口密度ではない。複数色が同じ街路に使われることもある。凡例は前のスライドに原図のまま掲載。最下層を道徳的に評価する当時の言葉が残り、分類は観察者の視点にも依存している。",
+      "en": "Detail of the East Central District. Street colors classify income and social class, not population density; mixed colors can represent different classes on one street. The preceding slide reproduces the original legend. Its moralizing language about poor people also reveals the investigators’ perspective.",
+      "sources": [
+        "https://client-files.humap.site/booth/sheet5.jpg",
+        "https://booth.lse.ac.uk/learn-more/what-were-the-poverty-maps"
+      ]
+    },
+    {
+      "page": 27,
+      "title": "Hull-House: evidence from the neighborhood",
+      "ja": "Hull-House Maps and Papersは1895年に刊行され、Chicagoの移民の多い地区の賃金と出身の分類を地図化した。Jane AddamsとEllen Gates Starrが1889年に設立したHull Houseを拠点とする共同の調査。個人の伝記ではなく、住宅・労働条件を街区の証拠として見せる試みだった。",
+      "en": "Published in 1895, Hull-House Maps and Papers mapped wages and nationality classifications in a Chicago immigrant neighborhood. This was collaborative research associated with the settlement founded by Jane Addams and Ellen Gates Starr in 1889. The maps made household and labor conditions visible block by block.",
+      "sources": [
+        "https://dcc.newberry.org/?p=17805",
+        "https://socialwelfare.library.vcu.edu/settlement-houses/hull-house-sociological-laboratory-1894/"
+      ]
+    },
+    {
+      "page": 28,
+      "title": "Hull-House: evidence from the neighborhood / detail",
+      "ja": "Wage Map No. 1の部分図。色は家族全体の1週間の収入区分であり、個人の時給ではない。建物には複数の色が並ぶ。凡例の紫は「不明」で、高所得を示さない。前のスライドには原図の凡例を掲載し、図のリンクから全体を確認できる。",
+      "en": "Detail of Wage Map No. 1. Colors represent total weekly family earnings, not individual hourly pay. Several colors can appear within a building. Purple means unknown, not high income. The preceding slide reproduces the historic legend; the linked original supplies the complete map.",
+      "sources": [
+        "https://upload.wikimedia.org/wikipedia/commons/4/4e/WAGEMAP1.pdf",
+        "https://dcc.newberry.org/?p=17805"
+      ]
+    },
+    {
+      "page": 29,
+      "title": "Redlining: housing discrimination in color",
+      "ja": "1939年のHOLC住宅地評価図。評価には住宅・経済的な条件に加え、人種や民族に対する偏見が組み込まれていた。これは正義を実現した地図ではなく、差別的な制度の記録。現在のMapping Inequalityなどは、地図と地区説明書を公開し、その仕組みの検証を可能にしている。",
+      "en": "The 1939 HOLC residential-security map incorporated racial and ethnic prejudice alongside housing and economic criteria. This is a record of discriminatory institutions, not a map that advanced justice when created. Projects such as Mapping Inequality now make the maps and neighborhood descriptions available for scrutiny.",
+      "sources": [
+        "https://dsl.richmond.edu/panorama/redlining/map/CA/LosAngeles",
+        "https://planning.lacity.gov/odocument/7db8747f-87fb-4c6f-bb95-5482be050683/SurveyLA_AfricanAmericanHCS_05242019.pdf"
+      ]
+    },
+    {
+      "page": 30,
+      "title": "Redlining: housing discrimination in color / detail",
+      "ja": "Los Angeles中央部の部分図。緑・青・黄・赤は当時の評価区分A-Dであり、実測された人種構成の割合を表す色ではない。現在の犯罪率の地図でもない。境界・色は元の地図のまま。地図の存在だけで個々の融資拒否との因果関係までは立証できない。",
+      "en": "Detail of central Los Angeles. Green, blue, yellow, and red encode grades A-D, not measured percentages of racial groups or present-day crime rates. Boundaries and colors are unchanged from the historic map. The map alone does not establish the cause of an individual lending decision.",
+      "sources": [
+        "https://scalar.usc.edu/hc/jewish-histories-boyle-heights/media/losangelesholc-med.jpg",
+        "https://dsl.richmond.edu/panorama/redlining/map/CA/LosAngeles"
+      ]
+    },
+    {
+      "page": 50,
+      "title": "Brookes / complete poster",
+      "ja": "以前追加したBrookes号の全図。新しい歴史事例の部分図と同じ資料で、図をクリックすると原解像度のスキャンが開く。",
+      "en": "The previously added complete Brookes poster. This is the same source as the new historical detail. Its link opens the full-resolution scan.",
+      "sources": [
+        "https://upload.wikimedia.org/wikipedia/commons/8/82/Slaveshipposter.jpg",
+        "https://archives.history.ac.uk/1807commemorated/exhibitions/museums/brookes.html"
+      ]
+    }
+  ]
+}

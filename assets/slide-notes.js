@@ -6,6 +6,7 @@
     let failed = false;
     const notesFiles = {
       'lectures/w05-python-datasaurus.pdf': 'lectures/w05-python-datasaurus.notes.json',
+      'lectures/w06_lores.pdf': 'lectures/w06_lores.notes.json',
       'lectures/w06-dubois-public-argument.pdf': 'lectures/w06-dubois-public-argument.notes.json'
     };
     const enabled = root && Boolean(notesFiles[file]);
