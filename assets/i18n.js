@@ -1,6 +1,10 @@
 // English remains in each HTML page for searchability and no-JavaScript fallback.
 // Add or revise Japanese copy here; weekly dynamic content lives in site.js.
 window.COURSE_TRANSLATIONS = { ja: {
+  'Open Week 6 →': '第6週を開く →',
+  'WEEK 6 · SOCIAL JUSTICE': '第6週 · 社会正義',
+  'Data and social justice': 'データと社会正義',
+  'W.E.B. Du Bois · 1868–1963': 'W.E.B. Du Bois · 1868–1963',
   'Open Week 5 →': '第5週を開く →',
   'WEEK 5 · EXPLORATION': '第5週 · 探索',
   'Vibe Coding with Python': 'Pythonでバイブコーディング',

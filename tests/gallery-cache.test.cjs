@@ -13,8 +13,9 @@ test('gallery requests a fresh snapshot before falling back to embedded HTML', (
 });
 
 test('gallery and individual work pages load the cache fix', () => {
+  const current = fs.readFileSync('index.html','utf8').match(/src="(assets\/site\.js\?v=[^"]+)"/)[1];
   for (const page of ['gallery.html', 'gallery-work.html']) {
-    assert.match(fs.readFileSync(page, 'utf8'), /site\.js\?v=cloudflare-course-20261023/);
+    assert.ok(fs.readFileSync(page, 'utf8').includes(current), `${page} must load the current shared script`);
   }
 });
 

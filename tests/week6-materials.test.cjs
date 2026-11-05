@@ -29,6 +29,10 @@ test('Week 6 has a 100-minute agenda, 20-minute lecture and concise bilingual ac
   }
   assert.match(week.activities[1].text,/Groups of four/);
   assert.match(week.activities[1].text,/No separate group submission/);
+  assert.match(week.homework,/social injustice/);
+  assert.equal(week.homework_choices.split(';').length,3);
+  assert.equal(week.homework_choices_ja.split(';').length,3);
+  assert.match(week.homework_choices,/modern data.*modern tools.*original visualization/);
   assert.equal(week.requirements.split(';').length,3);
   assert.equal(week.requirements_ja.split(';').length,3);
   assert.match(week.requirements,/one screenshot or photo.*second is optional/);

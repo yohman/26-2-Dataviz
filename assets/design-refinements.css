@@ -31,3 +31,17 @@
 @media(prefers-reduced-motion:reduce){.button,.site-nav a,.site-nav a::after{transition:none}.button:hover{transform:none}}
 [hidden]{display:none!important}
 .sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+
+/* Week 6: the portrait is the image, the lecture supplies the story. */
+.dubois-hero{position:relative}
+.dubois-hero .history-map{background:#e9e2d3;box-shadow:none}
+.dubois-hero .history-map-trigger{height:clamp(440px,44vw,590px);overflow:hidden}
+.history-feature.dubois-hero .history-map-image{display:block;width:56%;height:100%;margin-left:auto;aspect-ratio:auto;object-fit:cover;object-position:50% 15%;background:transparent}
+.dubois-hero figcaption{position:absolute;left:4%;top:50%;transform:translateY(-50%);width:37%;display:block;padding:0;pointer-events:none}
+.dubois-hero .eyebrow{margin-bottom:1.4rem;font-size:.65rem}
+.dubois-hero h1{text-wrap:balance;font-size:clamp(3rem,5.3vw,5.5rem);line-height:1.04;letter-spacing:-.035em}
+.dubois-hero .history-author{margin-top:1.8rem;text-align:left;font-size:.8rem;font-weight:500}
+.homework-choices{margin:1.3rem 0 1.5rem}
+.homework-choices h5{margin:0 0 .6rem}
+.homework-choices ul{padding-left:1.2rem;margin:0;display:grid;gap:.5rem;font-size:.88rem;line-height:1.6}
+@media(max-width:650px){.dubois-hero .history-map-trigger{height:clamp(360px,110vw,510px)}.history-feature.dubois-hero .history-map-image{width:100%;object-position:50% 20%}.dubois-hero figcaption{position:static;transform:none;width:auto;padding:1.3rem 0 0}.dubois-hero .eyebrow{margin-bottom:.6rem}.dubois-hero h1{text-wrap:balance;font-size:2.6rem;line-height:1.15}.dubois-hero .history-author{margin-top:.8rem}.dubois-hero .history-map-hint{background:var(--paper)}}

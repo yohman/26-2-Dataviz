@@ -71,7 +71,7 @@
     const title = parameters.get('title') || 'Lecture slides';
     const week = parameters.get('week') || '';
     const requestedReturn = parameters.get('return') || '';
-    const returnTo = /^(?:agenda\.html(?:\?(?:p|preview=all))?#week-\d+|resources\.html)$/.test(requestedReturn) ? requestedReturn : 'agenda.html';
+    const returnTo = /^(?:agenda\.html(?:\?[-\w.~%=&+]*)?#week-\d+|resources\.html)$/.test(requestedReturn) ? requestedReturn : 'agenda.html';
     const strings = {
       back: ['Back to the Agenda', 'AGENDAに戻る'], eyebrow: ['LECTURE SLIDE PREVIEW', '講義スライドのプレビュー'],
       previous: ['Previous', '前へ'], next: ['Next', '次へ'],
