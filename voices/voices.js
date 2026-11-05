@@ -1,4 +1,5 @@
-import { createVoiceAtlas } from './voice-atlas.mjs?v=rebel-20261106';
+import { openTextEntry } from './open-text.mjs';
+import { createVoiceAtlas } from './voice-atlas.mjs?v=open-box-20261106';
 import { createArrivalTracker, captureLayout, animateArrivals, reducedMotion } from './arrival-motion.mjs';
 const API='https://dataviz-gallery-likes.ykawano.workers.dev/voices';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -25,7 +26,7 @@ Object.assign(captions,{
   threads:['共通のテーマを選んだ声に、道が生まれます。','Paths connect voices whose contributors selected a shared theme.']
 });
 Object.assign(keys,{
-  wander:['文字の大きさ＝本人の切実さ。色＝最初に選んだテーマ。切実さ5の声は文字にも色を使います。空間はテーマから構成したレイアウトで、地理や統計的距離ではありません。','Type size represents self-reported urgency. Color identifies the first chosen theme; urgency-5 headlines also carry that color. Space is composed around themes, not geographic or statistical distance.'],
+  wander:['文字の大きさ＝本人の切実さ。色＝最初に選んだテーマ。切実さ5の声は文字にも色を使います。自由記述の声には分類や評価を付けず、標準サイズで表示します。空間は地理や統計的距離ではありません。','Type size represents self-reported urgency. Color identifies the first chosen theme; urgency-5 headlines also carry that color. Open-text voices have no assigned theme or rating and use a standard type size. Space is a composition, not geographic or statistical distance.'],
   threads:['線は、共通のテーマを選んだ声どうしを結びます。読みやすさのため近くの関係を一部表示。意味をAIで推測した線ではありません。','Lines connect voices sharing a participant-chosen theme. A selection of nearby relationships is shown for legibility; no AI-inferred relationships are used.']
 });
 const questions=[['これは「不便」？ それとも「不公平」？ 違いは何だろう。','Is this an inconvenience or an injustice? What makes the difference?'],['誰には見えていて、誰には見えていない？','Who can see this problem, and who cannot?'],['この声を裏づけるデータは、どこにありそう？','What data could help investigate this experience?'],['ここに参加していない人の声は、何だろう。','Whose experience is missing from this room?'],['ひとつ変えられるなら、何から始める？','If one thing could change, where would we start?'],['同じルールなのに、違う影響を受ける人は？','Who is affected differently by the same rule?']];
@@ -59,9 +60,7 @@ async function api(method='GET',body=null,query='') {
 }
 function language(){
   document.documentElement.lang=lang;document.title=lang==='ja'?'声を、かたちに。 · Voices for Justice':'Voices for Justice';
-  $$('[data-i]').forEach(el=>setText(el,t(el.dataset.i)));$('#language').textContent=lang==='ja'?'EN':'日本語';$('#search').placeholder=t('search');
-  const chosen=$$('#category-choices input:checked').map(el=>el.value);$('#category-choices').replaceChildren();
-  for(const k of Object.keys(themes)){const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.value=k;input.checked=chosen.includes(k);input.addEventListener('change',()=>{if($$('#category-choices input:checked').length>2){input.checked=false;setText($('#submit-status'),t('chooseError'));}});label.append(input,document.createTextNode(tn(k)));$('#category-choices').append(label);}
+  $$('[data-i]').forEach(el=>setText(el,t(el.dataset.i)));$('#language').textContent=lang==='ja'?'EN':'日本語';$('#search').placeholder=t('search');$('#voice-text').placeholder=lang==='ja'?'ここに、自由に書いてください。':'Write freely here.';
   const filter=$('#theme-filter').value;$('#theme-filter').replaceChildren(new Option(t('allThemes'),'all'),...Object.keys(themes).map(k=>new Option(tn(k),k)));$('#theme-filter').value=filter||'all';
   setText($('#discussion'),questions[question][lang==='ja'?0:1]);setText($('#pause'),t(paused?'resume':'pause'));if(room){updateRoom();render();}savedRooms();if(selected)renderDetail();
 }
@@ -78,13 +77,13 @@ async function load(force=false){
   }catch(e){failed=true;connection();if(e.status===404){setText($('#room-title'),t('badRoom'));}if(!loaded)render();}finally{busy=false;}
 }
 function filtered(){const q=$('#search').value.trim().toLocaleLowerCase(),cat=$('#theme-filter').value,lens=$('#lens').value;return entries.filter(e=>(!e.hidden||isHost&&$('#show-hidden').checked)&&(!q||[e.headline,e.detail,e.change,...e.categories.map(tn)].join(' ').toLocaleLowerCase().includes(q))&&(cat==='all'||e.categories.includes(cat))&&(lens==='all'||lens==='urgent'&&e.urgency>=4||lens==='shared'&&e.resonance>=2||lens==='unheard'&&!e.resonance||lens==='change'&&e.change));}
-const tone=e=>themes[e.categories[0]][2];
+const tone=e=>themes[e.categories[0]]?.[2]||'#eac65d';
 function render(newIds=[]){
   arriving=new Set(newIds);
   const previousLayout=captureLayout($('#visual'));
   if(!room)return;const items=filtered(),visible=entries.filter(e=>!e.hidden);setText($('#total'),loaded?visible.length:'—');setText($('#visible-count'),loaded?`${items.length} / ${visible.length}`:'');
-  const urgent=visible.filter(e=>e.urgency>=4).length,hopes=visible.filter(e=>e.change).length;
-  setText($('#insight-summary'),!loaded?t('loading'):lang==='ja'?`${urgent}の声が切実さ4–5。${hopes}の声に、変化への希望があります。`:`${urgent} voices rate urgency 4–5. ${hopes} include a hope for change.`);
+  const rated=visible.filter(e=>Number.isInteger(e.urgency)&&e.urgency>0),urgent=rated.filter(e=>e.urgency>=4).length,hopes=visible.filter(e=>e.change).length;
+  setText($('#insight-summary'),!loaded?t('loading'):lang==='ja'?`自由記述の声は、分類・評価なしでそのまま表示します。${rated.length?`以前の評価付き投稿：${rated.length}件（切実さ4–5：${urgent}件）。`:''}`:`Open-text voices appear without assigned themes or ratings.${rated.length?` Earlier rated submissions: ${rated.length} (${urgent} high urgency).`:''}`);
   const max=Math.max(1,...Object.keys(themes).map(k=>visible.filter(e=>e.categories.includes(k)).length));$('#theme-bars').replaceChildren();
   Object.keys(themes).forEach(k=>{const n=visible.filter(e=>e.categories.includes(k)).length,b=document.createElement('button');b.type='button';b.className='theme-bar';b.style.setProperty('--tone',themes[k][2]);b.setAttribute('aria-pressed',String($('#theme-filter').value===k));const s=document.createElement('span'),count=document.createElement('b');s.append(document.createTextNode(tn(k)));count.textContent=loaded?n:'—';s.append(count);const track=document.createElement('i'),bar=document.createElement('b');bar.style.width=`${n/max*100}%`;track.append(bar);b.append(s,track);b.onclick=()=>{$('#theme-filter').value=$('#theme-filter').value===k?'all':k;render();atlas?.home();};$('#theme-bars').append(b);});
   setText($('#view-caption'),captions[view][lang==='ja'?0:1]);setText($('#visual-key'),keys[view][lang==='ja'?0:1]);simulation?.stop();
@@ -103,11 +102,13 @@ function render(newIds=[]){
   animateArrivals(root,previousLayout,newIds);
   if(newIds.length&&!reducedMotion())$('#total').animate([{transform:'scale(1)'},{transform:'scale(1.14)',offset:.4},{transform:'scale(1)'}],{duration:800});
 }
-function drawWall(items,root){const grid=document.createElement('div');grid.className='wall-grid';[...items].reverse().forEach(e=>{const b=document.createElement('button');b.className=`voice-card${e.hidden?' is-hidden':''}${arriving.has(e.id)?' is-new':''}`;b.dataset.voiceId=e.id;b.dataset.motionKey=e.id;b.style.setProperty('--tone',tone(e));b.style.setProperty('--tint',tone(e)+'0d');b.style.setProperty('--size',`${1.05+e.urgency*.12}rem`);const cat=document.createElement('p');cat.className='card-theme';cat.textContent=e.categories.map(tn).join(' / ');const h=document.createElement('h3');h.textContent=e.headline;const foot=document.createElement('div');foot.className='card-foot';const urgency=document.createElement('span');urgency.textContent=`${t('urgency')} ${e.urgency}/5`;const count=document.createElement('span');count.textContent=`${e.mine?'↗✓':'↗'} ${e.resonance}`;foot.append(urgency,count);b.append(cat,h,foot);b.onclick=()=>openDetail(e);grid.append(b);});root.append(grid);}
+function drawWall(items,root){const grid=document.createElement('div');grid.className='wall-grid';[...items].reverse().forEach(e=>{const b=document.createElement('button');b.className=`voice-card${e.hidden?' is-hidden':''}${arriving.has(e.id)?' is-new':''}`;b.dataset.voiceId=e.id;b.dataset.motionKey=e.id;b.style.setProperty('--tone',tone(e));b.style.setProperty('--tint',tone(e)+'0d');b.style.setProperty('--size',`${1.05+(e.urgency??3)*.12}rem`);const cat=document.createElement('p');cat.className='card-theme';cat.textContent=e.categories.map(tn).join(' / ');const h=document.createElement('h3');h.textContent=e.headline;const foot=document.createElement('div');foot.className='card-foot';const urgency=document.createElement('span');urgency.textContent=e.urgency?`${t('urgency')} ${e.urgency}/5`:'';const count=document.createElement('span');count.textContent=`${e.mine?'↗✓':'↗'} ${e.resonance}`;foot.append(urgency,count);b.append(cat,h,foot);b.onclick=()=>openDetail(e);grid.append(b);});root.append(grid);}
 const seed=id=>[...id].reduce((s,c)=>(s*31+c.charCodeAt(0))>>>0,0)/4294967296;
 const radius=e=>Math.sqrt(1+e.resonance)*8;
 function svgRoot(root,height=600){if(!window.d3){root.textContent=lang==='ja'?'可視化ライブラリを読み込めません。声の壁で閲覧できます。':'Visualization library unavailable. Use Voice wall.';return null;}return d3.select(root).append('svg').attr('viewBox',`0 0 1000 ${height}`).attr('role','group').attr('aria-label',t(view));}
 function drawBubbles(items,root){
+  items=items.filter(e=>view==='map'?e.reach&&e.urgency:e.categories.length);
+  if(!items.length){const p=document.createElement('p');p.className='network-note';p.textContent=lang==='ja'?'この表示に必要な分類・評価はありません。自由記述の声は「歩く」や「聴く」で表示できます。':'These voices have no theme or rating data. Read them in Wander or Listen.';root.append(p);return;}
   const svg=svgRoot(root);if(!svg)return;
   const centers={}, motion=!reducedMotion();
   if(view==='clusters'){
@@ -168,7 +169,7 @@ function drawNetwork(items,root){
 function drawListen(items,root){listenIndex=((listenIndex%items.length)+items.length)%items.length;const e=items[listenIndex],stage=document.createElement('div');stage.className='listen-stage';const theme=document.createElement('p');theme.className='listen-theme';theme.textContent=e.categories.map(tn).join(' / ');const quote=document.createElement('blockquote');quote.textContent=e.headline;quote.style.color=tone(e);const controls=document.createElement('div');controls.className='listen-controls';const prev=document.createElement('button'),next=document.createElement('button'),play=document.createElement('button'),more=document.createElement('button');prev.textContent='←';prev.setAttribute('aria-label',lang==='ja'?'前の声':'Previous voice');next.textContent='→';next.setAttribute('aria-label',lang==='ja'?'次の声':'Next voice');play.textContent=auto?(lang==='ja'?'自動送りを停止':'Stop autoplay'):(lang==='ja'?'8秒ずつ自動送り':'Autoplay · 8 seconds');more.textContent=lang==='ja'?'この声を聴く ↗':'Read this voice ↗';prev.onclick=()=>{listenIndex--;render();};next.onclick=()=>{listenIndex++;render();};play.onclick=()=>{auto=!auto;render();};more.onclick=()=>openDetail(e);const n=document.createElement('span');n.textContent=`${listenIndex+1} / ${items.length}`;controls.append(prev,n,next,play,more);stage.append(theme,quote,controls);root.append(stage);}
 function selectView(){$$('#view-tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));}
 function openDetail(e){selected=entries.find(item=>item.id===e.id)||e;renderDetail();if(!$('#detail-dialog').open)$('#detail-dialog').showModal();}
-function renderDetail(){const e=selected;setText($('#detail-category'),e.categories.map(tn).join(' / '));setText($('#detail-headline'),e.headline);setText($('#detail-body'),e.detail);setText($('#detail-change'),e.change);$('#detail-change-wrap').hidden=!e.change;setText($('#detail-meta'),`${t('urgency')}: ${e.urgency}/5 · ${t(['me','community','society'][e.reach-1])} · ${new Intl.DateTimeFormat(lang,{dateStyle:'short',timeStyle:'short'}).format(new Date(e.createdAt))}`);setText($('#resonate'),`${t(e.mine?'echoed':'echo')} · ${e.resonance}`);$('#resonate').setAttribute('aria-pressed',String(e.mine));$('#hide-entry').hidden=!isHost||demo;setText($('#hide-entry'),t(e.hidden?'restore':'hide'));}
+function renderDetail(){const e=selected;setText($('#detail-category'),e.categories.length?e.categories.map(tn).join(' / '):(lang==='ja'?'あなたの言葉、そのまま。':'In your own words.'));setText($('#detail-headline'),e.headline);setText($('#detail-body'),e.detail);setText($('#detail-change'),e.change);$('#detail-change-wrap').hidden=!e.change;setText($('#detail-meta'),`${e.urgency?`${t('urgency')}: ${e.urgency}/5 · `:''}${e.reach?`${t(['me','community','society'][e.reach-1])} · `:''}${new Intl.DateTimeFormat(lang,{dateStyle:'short',timeStyle:'short'}).format(new Date(e.createdAt))}`);setText($('#resonate'),`${t(e.mine?'echoed':'echo')} · ${e.resonance}`);$('#resonate').setAttribute('aria-pressed',String(e.mine));$('#hide-entry').hidden=!isHost||demo;setText($('#hide-entry'),t(e.hidden?'restore':'hide'));}
 $('#language').onclick=()=>{lang=lang==='ja'?'en':'ja';safeStore('voices-language',lang);language();};
 $('#join-form').onsubmit=e=>{e.preventDefault();location.href=`?room=${$('#room-code').value.trim().toLowerCase()}&join=1`;};
 $('#create-form').onsubmit=async e=>{e.preventDefault();const button=e.submitter;button.disabled=true;try{if(!safeStore('voices-storage-check','1'))throw new Error(t('needStorage'));const old=code;code='';const data=await api('POST',{action:'create',title:$('#session-title').value});code=old;const keys=hostKeys();keys[data.code]={key:data.hostKey,title:data.title};if(!safeStore('voices-hosts',JSON.stringify(keys)))throw new Error(t('needStorage'));location.href=`?room=${data.code}`;}catch(err){setText($('#lobby-error'),err.message===t('needStorage')?err.message:t('error'));button.disabled=false;}};
@@ -184,9 +185,17 @@ $('#demo-arrival').onclick=()=>{
 $('#contribute').onclick=()=>{$('#submit-dialog').showModal();};
 $$('.close-dialog').forEach(b=>b.onclick=()=>b.closest('dialog').close());
 $$('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}}));
-$('#urgency').oninput=()=>setText($('#urgency-value'),`${$('#urgency').value} / 5`);
 let submissionId=crypto.randomUUID();
-$('#voice-form').onsubmit=async e=>{e.preventDefault();const categories=$$('#category-choices input:checked').map(x=>x.value);if(!categories.length){setText($('#submit-status'),t('chooseError'));return;}const item={id:submissionId,headline:$('#headline').value,detail:$('#detail').value,change:$('#change').value,categories,reach:Number($('#reach').value),urgency:Number($('#urgency').value)};$('#send').disabled=true;setText($('#submit-status'),t('posting'));try{if(demo){entries.push({...item,seq:entries.length+1,resonance:0,mine:false,createdAt:new Date().toISOString()});const fresh=arrivals.update(entries);render(fresh);announce(fresh);}else await api('POST',item);submissionId=crypto.randomUUID();$('#voice-form').reset();setText($('#urgency-value'),'3 / 5');setText($('#submit-status'),t('saved'));setText($('#send'),t('another'));await load(true);}catch(err){setText($('#submit-status'),err.status===409?t('closed'):t('error'));}finally{$('#send').disabled=false;}};
+$('#voice-form').onsubmit=async e=>{
+  e.preventDefault();const text=$('#voice-text').value,voice=openTextEntry(text);if(!voice){setText($('#submit-status'),lang==='ja'?'ひとこと、書いてください（500文字以内）。':'Write a voice of up to 500 characters.');return;}
+  $('#send').disabled=true;setText($('#submit-status'),t('posting'));
+  try{
+    if(demo){entries.push({...voice,id:submissionId,seq:entries.length+1,resonance:0,mine:false,hidden:false,createdAt:new Date().toISOString()});const fresh=arrivals.update(entries);render(fresh);announce(fresh);}
+    else await api('POST',{id:submissionId,text});
+    submissionId=crypto.randomUUID();$('#voice-form').reset();setText($('#submit-status'),t('saved'));setText($('#send'),t('another'));await load(true);
+  }catch(err){setText($('#submit-status'),err.status===409?t('closed'):t('error'));}
+  finally{$('#send').disabled=false;}
+};
 document.addEventListener('click',e=>{const b=e.target.closest('[data-view]');if(!b)return;view=b.dataset.view;auto=false;selectView();$('#explore-dialog').close();render();});
 $('#explore-open').onclick=()=>{$('#explore-dialog').showModal();$('#search').focus();};
 $('#tools-open').onclick=()=>$('#tools-dialog').showModal();

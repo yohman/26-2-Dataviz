@@ -29,3 +29,9 @@ test('paths connect only participant-chosen shared themes, without duplicates or
   assert.ok(!links.some(e=>e.source.id==='c'||e.target.id==='c'));
   assert.deepEqual(sharedThreads([]),[]);
 });
+test('unclassified open-text voices have finite positions and no invented relationships',()=>{
+ const centers=themeCenters(['other','education'],80);
+ const nodes=Array.from({length:80},(_,i)=>{const voice={id:`open-${i}`,categories:[]};return {...voice,...voiceTarget(voice,centers,80,i)};});
+ for(const n of nodes){assert.ok(Number.isFinite(n.x)&&n.x>0&&n.x<WORLD.width);assert.ok(Number.isFinite(n.y)&&n.y>0&&n.y<WORLD.height);}
+ assert.deepEqual(sharedThreads(nodes),[]);
+});

@@ -15,6 +15,7 @@ export function themeCenters(keys,count) {
 export function voiceTarget(voice,centers,count,index=0) {
   if(count<4)return {x:WORLD.width/2+(index-(count-1)/2)*420,y:WORLD.height/2+(index%2)*75};
   const a=centers[voice.categories[0]],b=centers[voice.categories[1]]||a;
+  if(!a)return {x:WORLD.width/2+(hash(voice.id)-.5)*1300,y:WORLD.height/2+(hash(voice.id+'y')-.5)*900};
   return {x:a.x*.74+b.x*.26+(hash(voice.id)-.5)*360,y:a.y*.74+b.y*.26+(hash(voice.id+'y')-.5)*260};
 }
 // Draw a sparse set of authentic shared-theme relationships, never inferred ones.

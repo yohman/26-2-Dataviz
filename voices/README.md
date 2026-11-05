@@ -14,7 +14,12 @@ immediately, so a classroom of phones does not multiply presentation-rate traffi
 ## Presenting
 
 - Create a session, then project **Invite / QR**. No student accounts are needed.
-- Themes are chosen by participants, not inferred by AI. Up to two per voice.
+- The intake is one open text box (up to 500 characters) and Send. No themes,
+  urgency rating, or reach questions are required or inferred. Long messages
+  retain their full text behind a short headline.
+- Earlier structured submissions retain their participant-chosen themes and ratings.
+  New open-text voices remain unclassified and unrated; they use a standard
+  display size and never receive invented network links or map coordinates.
 - The default is a typographic landscape. Drag, wheel/pinch, or use the quiet
   zoom controls to wander. Arrow keys pan; Home fits the landscape. Selecting a
   voice opens its story. **Let it wander** takes a slow camera walk.
@@ -24,7 +29,8 @@ immediately, so a classroom of phones does not multiply presentation-rate traffi
   theme. Search, theme filters, and the original analytic views live in the explore
   drawer; invitation, pause, moderation, and export are available from session tools.
 - Wall: text size is urgency. Clusters/map: circle area is 1 + echoes.
-- Map axes use self-reported reach and urgency. Jitter has no data meaning.
+- Map axes use self-reported reach and urgency on older rated voices only.
+  Unrated voices are omitted from that view. Jitter has no data meaning.
 - Network links count co-occurring themes; distances are only layout.
 - Echoes are limited to one per browser per voice and can be reversed.
 - Incoming voices materialize in the current landscape and settle among related
@@ -60,3 +66,7 @@ wrangler deploy --config cloudflare/gallery-likes/wrangler.jsonc
 ```
 
 Vendored libraries: D3 7.9.0 (ISC), QRCode.js 1.0.0 (MIT).
+
+Open-text metadata: the existing NOT NULL integer columns store 0 as an unset
+sentinel; public feeds expose those values as null, with an empty category list.
+Older structured clients remain compatible.

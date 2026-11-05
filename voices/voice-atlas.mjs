@@ -54,7 +54,7 @@ export function createVoiceAtlas(root,{themes,openVoice,language,onTourChange=()
     paths.selectAll('path').data(links,d=>d.key).join(
       enter=>enter.append('path').attr('class','atlas-thread is-thread-new').attr('pathLength',1),
       update=>update.classed('is-thread-new',false),exit=>exit.remove())
-      .attr('d',d=>curved(d.source,d.target)).attr('stroke',d=>themes[d.source.categories[0]][2])
+      .attr('d',d=>curved(d.source,d.target)).attr('stroke',d=>themes[d.source.categories[0]]?.[2]||'#eac65d')
       .classed('is-related',d=>focused&&(d.source.id===focused||d.target.id===focused));
   }
   function emphasis(id){
@@ -116,10 +116,10 @@ export function createVoiceAtlas(root,{themes,openVoice,language,onTourChange=()
         field.append(button);elements.set(node.id,button);
       }
       button.classList.toggle('is-hidden',Boolean(node.hidden));button.classList.toggle('is-arriving',incoming.has(node.id));
-      button.dataset.urgency=String(node.urgency);
+      button.dataset.urgency=String(node.urgency);button.dataset.classified=String(node.categories.length>0);
       button.style.setProperty('--voice-tilt',`${(hash(node.id+'tilt')-.5)*5}deg`);
-      button.style.setProperty('--tone',themes[node.categories[0]][2]);button.style.setProperty('--voice-size',`${23+node.urgency*3.6}px`);
-      button.style.setProperty('--voice-width',`${245+node.urgency*19}px`);button.style.setProperty('--breath-time',`${17+hash(node.id)*15}s`);button.style.setProperty('--breath-delay',`${-hash(node.id)*15}s`);
+      button.style.setProperty('--tone',themes[node.categories[0]]?.[2]||'#eac65d');button.style.setProperty('--voice-size',`${23+(node.urgency??3)*3.6}px`);
+      button.style.setProperty('--voice-width',`${245+(node.urgency??3)*19}px`);button.style.setProperty('--breath-time',`${17+hash(node.id)*15}s`);button.style.setProperty('--breath-delay',`${-hash(node.id)*15}s`);
       button.querySelector('h3').textContent=node.headline;
       button.querySelector('.voice-whisper>span').textContent=node.categories.map(k=>themes[k][language()==='ja'?0:1]).join(' / ');
       button.querySelector('.voice-echo').textContent=node.resonance?`${node.mine?'↗✓':'↗'} ${node.resonance}`:'';

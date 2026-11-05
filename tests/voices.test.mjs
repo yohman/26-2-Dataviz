@@ -44,3 +44,24 @@ test('validation, room isolation, rate limits and CORS protect the new endpoint'
  env.COMMENT_LIMITER={limit:async()=>({success:false})};assert.equal((await call('POST',entry(),host.code)).status,429);
  const preflight=await worker.fetch(new Request('https://test/voices',{method:'OPTIONS',headers:{Origin:origin}}),env);assert.match(preflight.headers.get('Access-Control-Allow-Methods'),/PATCH/);assert.match(preflight.headers.get('Access-Control-Allow-Headers'),/X-Host-Key/);
 });
+
+test('one open text field accepts a voice without inventing themes, reach or urgency',async()=>{
+ const {call}=setup(),host=await (await call('POST',{action:'create',title:'Open box'})).json();
+ const id=crypto.randomUUID(),text='授業とバイトを両立する時間が足りない。';
+ assert.equal((await call('POST',{id,text},host.code)).status,201);
+ assert.equal((await call('POST',{id,text},host.code)).status,201);
+ const data=await (await call('GET',null,host.code,b)).json();
+ assert.equal(data.items.length,1);assert.equal(data.items[0].headline,text);
+ assert.deepEqual(data.items[0].categories,[]);assert.equal(data.items[0].urgency,null);assert.equal(data.items[0].reach,null);
+ await call('PUT',{id,active:true},host.code,b);
+ assert.equal((await (await call('GET',null,host.code,b)).json()).items[0].resonance,1);
+});
+test('open text preserves the full message, rejects empty or oversized input and keeps browser isolation',async()=>{
+ const {call}=setup(),host=await (await call('POST',{action:'create',title:'Open box'})).json();
+ for(const text of ['', '   ', 'x'.repeat(501),null,3])assert.equal((await call('POST',{id:crypto.randomUUID(),text},host.code)).status,400);
+ const id=crypto.randomUUID(),text='伝えたいこと。'.repeat(30);
+ assert.equal((await call('POST',{id,text},host.code)).status,201);
+ const item=(await (await call('GET',null,host.code)).json()).items[0];
+ assert.equal(item.detail,text);assert.ok(item.headline.length<=90);assert.ok(item.headline.endsWith('…'));
+ assert.equal((await call('POST',{id,text:'Different browser'},host.code,b)).status,409);
+});

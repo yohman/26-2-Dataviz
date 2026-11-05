@@ -118,3 +118,12 @@ select option{background:#1c231e;color:var(--ink)}
 /* The most urgent voices carry their theme's pigment as well as extra weight. */
 .voice-utterance[data-urgency='5'] .voice-headline{color:var(--tone)}
 #session::after{left:auto;right:-95px;bottom:120px;width:280px;height:185px;opacity:.45;transform:rotate(-23deg);background:linear-gradient(0deg,transparent 0 14%,#7dc28a45 14% 29%,transparent 29% 37%,#eac65d45 37% 52%,transparent 52% 60%,#ee695a45 60% 75%,transparent 75%);clip-path:polygon(0 7%,100% 0,94% 30%,100% 53%,92% 100%,4% 94%,8% 67%,0 45%)}
+
+.open-voice-dialog{max-width:700px}
+.open-voice-dialog h2{margin-bottom:25px}
+.open-voice-dialog textarea{display:block;min-height:200px;padding:20px;background:#111812;border:1px solid #6b795b;border-left:3px solid var(--gold);font:400 1rem/1.9 'DM Sans','Noto Sans JP',sans-serif;resize:vertical}
+.open-voice-dialog textarea:focus{outline:1px solid var(--gold);outline-offset:3px}
+.open-voice-dialog .small{margin:14px 0 0;font-size:.72rem}
+.open-voice-dialog .primary{margin-top:12px}
+
+.voice-utterance[data-classified=false] .voice-whisper>i{display:none}

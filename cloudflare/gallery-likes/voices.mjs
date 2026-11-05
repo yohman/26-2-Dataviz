@@ -1,3 +1,4 @@
+import { openTextEntry } from '../../voices/open-text.mjs';
 const uuid = v => /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(v || '');
 const categories = new Set(['money','education','work','identity','access','environment','care','voice','other']);
 const hash = async v => [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)))].map(v=>v.toString(16).padStart(2,'0')).join('');
@@ -36,7 +37,7 @@ export async function voicesApi(request,env,browser,reply) {
       (SELECT COUNT(*) FROM voice_resonance r WHERE r.entry=e.id) AS resonance,
       EXISTS(SELECT 1 FROM voice_resonance r WHERE r.entry=e.id AND r.browser=?) AS mine
       FROM voice_entries e WHERE e.room=? AND e.seq>? ${host?'':'AND e.hidden=0'} ORDER BY e.seq LIMIT 501`).bind(browser,code,cursor).all();
-    const items=rows.results.slice(0,500).map(e=>({...e,categories:JSON.parse(e.categories),mine:Boolean(e.mine),hidden:Boolean(e.hidden)}));
+    const items=rows.results.slice(0,500).map(e=>({...e,reach:e.reach||null,urgency:e.urgency||null,categories:JSON.parse(e.categories),mine:Boolean(e.mine),hidden:Boolean(e.hidden)}));
     return reply({room:publicRoom,items,nextCursor:rows.results.length>500?items.at(-1).seq:null,host});
   }
   if(method==='PATCH') {
@@ -63,13 +64,17 @@ export async function voicesApi(request,env,browser,reply) {
     return reply({saved:true});
   }
   if(!room.open) return reply({error:'This session is closed'},409);
-  const headline=text(body.headline,90),detail=text(body.detail||'',500),change=text(body.change||'',180);
-  if(!headline || detail===null || change===null || !Array.isArray(body.categories) || body.categories.length<1 || body.categories.length>2 || new Set(body.categories).size!==body.categories.length || body.categories.some(c=>!categories.has(c)) || !Number.isInteger(body.reach)||body.reach<1||body.reach>3 || !Number.isInteger(body.urgency)||body.urgency<1||body.urgency>5) return reply({error:'Check the submission fields'},400);
+  const plain=Object.hasOwn(body,'text');
+  const open=plain?openTextEntry(body.text):null;
+  if(plain&&!open)return reply({error:'Write a voice of 1–500 characters'},400);
+  const headline=plain?open.headline:text(body.headline,90),detail=plain?open.detail:text(body.detail||'',500),change=plain?'':text(body.change||'',180);
+  const chosen=plain?[]:body.categories,reach=plain?0:body.reach,urgency=plain?0:body.urgency;
+  if(!plain&&(!headline || detail===null || change===null || !Array.isArray(chosen) || chosen.length<1 || chosen.length>2 || new Set(chosen).size!==chosen.length || chosen.some(c=>!categories.has(c)) || !Number.isInteger(reach)||reach<1||reach>3 || !Number.isInteger(urgency)||urgency<1||urgency>5)) return reply({error:'Check the submission fields'},400);
   if(env.COMMENT_LIMITER && !(await env.COMMENT_LIMITER.limit({key:`voice-post:${browser}`})).success) return reply({error:'Please wait before posting again'},429);
   const existing=await db.prepare('SELECT browser,room FROM voice_entries WHERE id=?').bind(body.id).first();
   if(existing && (existing.browser!==browser || existing.room!==code)) return reply({error:'Entry ID already used'},409);
   await db.batch([
-    db.prepare('INSERT OR IGNORE INTO voice_entries(id,room,browser,headline,detail,change_text,categories,reach,urgency) VALUES(?,?,?,?,?,?,?,?,?)').bind(body.id,code,browser,headline,detail,change,JSON.stringify(body.categories),body.reach,body.urgency),
+    db.prepare('INSERT OR IGNORE INTO voice_entries(id,room,browser,headline,detail,change_text,categories,reach,urgency) VALUES(?,?,?,?,?,?,?,?,?)').bind(body.id,code,browser,headline,detail,change,JSON.stringify(chosen),reach,urgency),
     db.prepare('UPDATE voice_rooms SET revision=revision+1 WHERE code=?').bind(code)
   ]);
   return reply({saved:true},201);
