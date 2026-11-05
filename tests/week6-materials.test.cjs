@@ -7,6 +7,13 @@ vm.createContext(context);
 vm.runInContext(fs.readFileSync('assets/site.js','utf8'),context);
 context.source = fs.readFileSync('content/weeks/06-dubois-public-argument.md','utf8');
 const week = vm.runInContext("parseWeek(source,'06-dubois-public-argument.md')",context);
+test('Week 6 is locked until November 6 at 9 AM JST with preview bypass',()=>{
+  context.week6=week;
+  assert.equal(week.opens_at,'2026-11-06T09:00:00+09:00');
+  assert.equal(vm.runInContext("weekIsLocked(week6,false,Date.parse('2026-11-06T08:59:59+09:00'))",context),true);
+  assert.equal(vm.runInContext("weekIsLocked(week6,false,Date.parse('2026-11-06T09:00:00+09:00'))",context),false);
+  assert.equal(vm.runInContext("weekIsLocked(week6,true,Date.parse('2026-11-05T09:00:00+09:00'))",context),false);
+});
 
 test('Week 6 has a 100-minute agenda, 20-minute lecture and concise bilingual activities',()=>{
   assert.equal(week.course_date,'2026-11-06');

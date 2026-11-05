@@ -2,6 +2,7 @@
 week: 6
 act: MAKE
 course_date: 2026-11-06
+opens_at: 2026-11-06T09:00:00+09:00
 date: Fri 6 Nov 2026 · P2 · 10:40–12:20
 date_ja: 2026年11月6日（金） · 2限 · 10:40–12:20
 title: Du Bois: Data as a Public Argument
