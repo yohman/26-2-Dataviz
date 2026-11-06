@@ -873,6 +873,8 @@ function galleryPageUrl(item, week, tool, chart, sort = '') {
   if (tool) params.set('tool', tool);
   if (chart) params.set('chart', chart);
   if (['likes', 'mine'].includes(sort)) params.set('sort', sort);
+  const view = new URLSearchParams(typeof location === 'undefined' ? '' : location.search).get('view');
+  if (['wall','subjects','words','tools'].includes(view)) params.set('view', view);
   return `gallery-work.html?${params}`;
 }
 
@@ -1081,6 +1083,7 @@ function paintGalleryWork(items) {
   if (tool) backParams.set('tool', tool);
   if (chart) backParams.set('chart', chart);
   if (sort) backParams.set('sort', sort);
+  if (['wall','subjects','words','tools'].includes(params.get('view'))) backParams.set('view', params.get('view'));
   const nav = element('nav', '', 'gallery-work-navigation');
   nav.setAttribute('aria-label', copy('Work navigation', '作品の移動'));
   const back = element('a', copy('← Back to gallery', '← ギャラリーに戻る'), 'gallery-work-back');
@@ -1419,6 +1422,7 @@ async function renderGallery() {
     const shown = galleryVisibleItems(items, weekSelect.value, selectedTool, selectedForm, sortSelect.value);
     root.replaceChildren();
     renderGalleryInsights(weekItems, weekSelect.value, selectedTool, selectedForm, shown.length, chooseTool, chooseForm);
+    window.renderGalleryExplore?.({root, items: shown, copy, matchTools: matchedGalleryTools, image: galleryImageSource, redraw: paint, url: item => galleryPageUrl(item, weekSelect.value, selectedTool, selectedForm, sortSelect.value)});
     status.hidden = shown.length > 0;
     if (!shown.length) {
       const message = selectedTool || selectedForm ? copy('No works match these filters.', '条件に合う作品はありません。')
@@ -1426,6 +1430,7 @@ async function renderGallery() {
       root.append(element('p', message, 'gallery-status'));
       return;
     }
+    if (root.hidden) return;
     const showImage = async (placeholder, item, eager = false) => {
       const data = await galleryImageSource(item, 1);
       if (!placeholder.isConnected) return;
