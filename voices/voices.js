@@ -1,5 +1,5 @@
 import { openTextEntry } from './open-text.mjs';
-import { createVoiceAtlas } from './voice-atlas.mjs?v=open-box-20261106b';
+import { createVoiceAtlas } from './voice-atlas.mjs?v=galaxy-20261106';
 import { createArrivalTracker, captureLayout, animateArrivals, reducedMotion } from './arrival-motion.mjs';
 const API='https://dataviz-gallery-likes.ykawano.workers.dev/voices';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -19,15 +19,18 @@ Object.assign(words,{
   live:['声が届く場所','Listening, live'],paused:['ひと息 / 声は受付中','Paused · still accepting voices'],
   wall:['一覧で読む','Read all voices'],network:['テーマの関係','Theme relationships']
 });
+Object.assign(words,{galaxy:['声の銀河','Grievance galaxy']});
 const captions={wall:['一人ひとりの言葉。大きさは本人の切実さ、色は最初に選んだテーマ。','Each person’s words. Text size represents self-reported urgency; color represents their first theme.'],clusters:['共通のテーマで集まる声。円をクリックすると、その声を聴けます。','Voices gather around their first theme. Select a circle to listen to its story.'],map:['横：影響する範囲。縦：本人の切実さ。少しずらした位置に意味はありません。','Horizontal: perceived reach. Vertical: self-reported urgency. Small offsets only prevent overlap.'],network:['投稿者が選んだ2つのテーマを結ぶ。同じ投稿に現れるテーマの関係。','Links join the two themes a contributor selected. They show co-occurrence, not causation.'],listen:['ひとつの声を、急がずに。','One voice at a time. Let it land.']};
 const keys={wall:['色＝テーマ · 文字の大きさ＝切実さ1〜5 · ↗＝共感した人数（このブラウザで各声に1回）','Color = theme · text size = urgency 1–5 · ↗ = echoes (one per voice per browser)'],clusters:['色＝最初のテーマ · 円の面積＝1＋共感数 · 点線＝このブラウザで共感 · 距離＝テーマごとの配置（測定値ではありません）','Color = first theme · circle area = 1 + echoes · dashed ring = your echo · distance organizes themes; it is not a measured value'],map:['色＝最初のテーマ · 円の面積＝1＋共感数 · 切実さ・範囲は投稿者の自己評価','Color = first theme · circle area = 1 + echoes · urgency and reach are self-reported'],network:['円の面積＝テーマへの投稿数 · 線の太さ＝その組み合わせの投稿数 · 距離＝見やすさのための配置','Node area = theme mentions · line width = voices sharing that pair · distances are for layout only'],listen:['「私もそう思う」は支持の大きさではなく、この場での共感の数です。','Echoes express resonance in this session, not a vote on whose experience matters.']};
 Object.assign(captions,{
   wander:['言葉の風景を、ドラッグして歩く。声を選ぶと、その経験が開きます。','Drag to wander through the words. Select a voice to read the experience behind it.'],
-  threads:['共通のテーマを選んだ声に、道が生まれます。','Paths connect voices whose contributors selected a shared theme.']
+  galaxy:['声の銀河','Grievance galaxy'],
+  threads:['共通する言葉で、声がつながります。','Voices connect through shared words.']
 });
 Object.assign(keys,{
-  wander:['文字の大きさ＝本人の切実さ。色＝最初に選んだテーマ。切実さ5の声は文字にも色を使います。自由記述の声には分類や評価を付けず、標準サイズで表示します。空間は地理や統計的距離ではありません。','Type size represents self-reported urgency. Color identifies the first chosen theme; urgency-5 headlines also carry that color. Open-text voices have no assigned theme or rating and use a standard type size. Space is a composition, not geographic or statistical distance.'],
-  threads:['線は、共通のテーマを選んだ声どうしを結びます。読みやすさのため近くの関係を一部表示。意味をAIで推測した線ではありません。','Lines connect voices sharing a participant-chosen theme. A selection of nearby relationships is shown for legibility; no AI-inferred relationships are used.']
+ galaxy:['語句から自動検出。金の線＝共通語、緑の線＝テーマ。星はその語句が登場する声の数。離れた声も残します。分類や距離は判断の補助であり、重要さの順位ではありません。','Detected locally from text. Gold links = repeated words; green = themes. Hub counts = voices mentioning that topic. Isolated voices remain visible. Position is exploratory, not a ranking.'],
+  wander:['すべての声を、重ならない一覧に配置。長い声は選ぶと全文を読めます。見渡すボタンで画面に合わせて表示。','All voices are laid out without overlap. Select a long voice to read the full text. Use Fit to see the whole collection.'],
+  threads:['共通語・テーマは本文からキーワードで検出。灰色は共通の語句が検出されていない声。意味や重要さの自動判定ではありません。','Words and themes are detected with local keywords. Grey nodes have no detected shared terms. These are not judgements of meaning or importance.']
 });
 const questions=[['これは「不便」？ それとも「不公平」？ 違いは何だろう。','Is this an inconvenience or an injustice? What makes the difference?'],['誰には見えていて、誰には見えていない？','Who can see this problem, and who cannot?'],['この声を裏づけるデータは、どこにありそう？','What data could help investigate this experience?'],['ここに参加していない人の声は、何だろう。','Whose experience is missing from this room?'],['ひとつ変えられるなら、何から始める？','If one thing could change, where would we start?'],['同じルールなのに、違う影響を受ける人は？','Who is affected differently by the same rule?']];
 let lang='ja';try{lang=localStorage.getItem('voices-language')||localStorage.getItem('dv-language')||'ja';}catch{}if(!['ja','en'].includes(lang))lang='ja';
@@ -87,10 +90,10 @@ function render(newIds=[]){
   const max=Math.max(1,...Object.keys(themes).map(k=>visible.filter(e=>e.categories.includes(k)).length));$('#theme-bars').replaceChildren();
   Object.keys(themes).forEach(k=>{const n=visible.filter(e=>e.categories.includes(k)).length,b=document.createElement('button');b.type='button';b.className='theme-bar';b.style.setProperty('--tone',themes[k][2]);b.setAttribute('aria-pressed',String($('#theme-filter').value===k));const s=document.createElement('span'),count=document.createElement('b');s.append(document.createTextNode(tn(k)));count.textContent=loaded?n:'—';s.append(count);const track=document.createElement('i'),bar=document.createElement('b');bar.style.width=`${n/max*100}%`;track.append(bar);b.append(s,track);b.onclick=()=>{$('#theme-filter').value=$('#theme-filter').value===k?'all':k;render();atlas?.home();};$('#theme-bars').append(b);});
   setText($('#view-caption'),captions[view][lang==='ja'?0:1]);setText($('#visual-key'),keys[view][lang==='ja'?0:1]);simulation?.stop();
-  const wandering=view==='wander'||view==='threads',root=$('#visual');
+  const wandering=view==='wander'||view==='threads'||view==='galaxy',root=$('#visual');
   root.hidden=wandering;$('#scene').hidden=!wandering;
   $('#tour').hidden=!wandering;['atlas-out','atlas-home','atlas-in'].forEach(id=>$('#'+id).hidden=!wandering);
-  setText($('#wander-hint'),wandering?(lang==='ja'?'ドラッグして歩く。声に触れる。':'Drag to wander. Touch a voice.'):'');
+  setText($('#wander-hint'),wandering?(view==='wander'?(lang==='ja'?'ドラッグして歩く。声に触れる。':'Drag to wander. Select a voice.'):(lang==='ja'?'語句から自動検出したつながり。星を選ぶと仲間が浮かぶ。孤立した声も、そのまま。':'Local keyword matches. Select a topic to follow its voices; isolated voices remain visible.')):'');
   if(wandering){
     if(!atlas&&window.d3)atlas=createVoiceAtlas($('#scene'),{themes,openVoice:openDetail,language:()=>lang,onTourChange:active=>{setText($('#tour'),t(active?'tourStop':'tour'));$('#tour').setAttribute('aria-pressed',String(active));}});
     atlas?.update(items,{arrivals:newIds,mode:view,loading:!loaded,failed,total:visible.length});atlas?.pause(paused);
@@ -202,7 +205,7 @@ $('#tools-open').onclick=()=>$('#tools-dialog').showModal();
 $('#tools-share').onclick=()=>{$('#tools-dialog').close();$('#share').click();};
 $$('[data-entry]').forEach(b=>b.onclick=()=>{$$('[data-entry-panel]').forEach(panel=>panel.hidden=panel.dataset.entryPanel!==b.dataset.entry);$('#entry-dialog').showModal();});
 $('#atlas-out').onclick=()=>atlas?.zoomBy(.82);$('#atlas-in').onclick=()=>atlas?.zoomBy(1.22);$('#atlas-home').onclick=()=>atlas?.home();$('#tour').onclick=()=>atlas?.toggleTour();
-['search','theme-filter','lens','show-hidden'].forEach(id=>$('#'+id).addEventListener(id==='search'?'input':'change',()=>{listenIndex=0;render();if(view==='wander'||view==='threads')atlas?.home();}));
+['search','theme-filter','lens','show-hidden'].forEach(id=>$('#'+id).addEventListener(id==='search'?'input':'change',()=>{listenIndex=0;render();if(view==='wander'||view==='threads'||view==='galaxy')atlas?.home();}));
 $('#reset').onclick=()=>{$('#search').value='';$('#theme-filter').value='all';$('#lens').value='all';render();atlas?.home();};
 $('#pause').onclick=()=>{paused=!paused;setText($('#pause'),t(paused?'resume':'pause'));connection();atlas?.pause(paused);if(!paused)load(true);};
 $('#next-question').onclick=()=>{question=(question+1)%questions.length;setText($('#discussion'),questions[question][lang==='ja'?0:1]);};
