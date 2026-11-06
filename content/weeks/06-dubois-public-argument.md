@@ -42,15 +42,14 @@ image: assets/images/lecture/dubois-portrait.png
 ## Activity 1 Materials
 
 - [Original charts and source tables / 原図とデータ](dubois-data-guide.html) {reference}
-- [Google Colab](https://colab.research.google.com/) {reference}
 
 ## In Class Activities
 
 ### Activity 1
 title: Du Bois remake
 title_ja: Du Boisの図をつくり直す
-text: Work individually for 30 minutes. Choose City and rural population or Illiteracy from the guide below. A simple chart is enough: reproducing the spiral is optional.
-text_ja: 30分間、個人で制作します。下のガイドから「都市と農村の人口」か「識字に関する図」を選びましょう。普通の棒グラフや折れ線でもOK。渦巻きを再現する必要はありません。
+text: Work individually for 30 minutes. Choose one of the five original charts in the guide below. A simple chart is enough: reproducing the spiral is optional.
+text_ja: 30分間、個人で制作します。下のガイドにある5つの原図から1つ選びましょう。普通の棒グラフや折れ線でもOK。渦巻きを再現する必要はありません。
 steps:
 - Read the original: who, where, when, and what unit? Write one finding that the numbers support.
 - Copy the small source table below into your tool. Recreate the original or redesign it for today's readers. Keep all values and label the 1900 literacy value as an estimate.

@@ -9,8 +9,11 @@ from reportlab.lib.colors import HexColor
 
 W,H=960,540
 FONT='JusticeTitleJP'
+LATIN='JusticeBaskerville'
+if LATIN not in pdfmetrics.getRegisteredFontNames():
+    pdfmetrics.registerFont(TTFont(LATIN,'/System/Library/Fonts/Supplemental/Baskerville.ttc',subfontIndex=0))
 if FONT not in pdfmetrics.getRegisteredFontNames():
-    pdfmetrics.registerFont(TTFont(FONT,'/System/Library/Fonts/Supplemental/Arial Unicode.ttf'))
+    pdfmetrics.registerFont(TTFont(FONT,str(Path(__file__).resolve().parents[1]/'assets/fonts/NotoSerifJP-history.ttf')))
 
 def lines(text,font,size,width):
     result=[]
@@ -31,15 +34,15 @@ def original_title_card(work):
     stream=BytesIO();c=canvas.Canvas(stream,pagesize=(W,H))
     c.setFillColor(HexColor('#faf8f2'));c.rect(0,0,W,H,fill=1,stroke=0)
     x,width=70,820
-    english=lines(work['original_title'],'Helvetica',36,width)
+    english=lines(work['original_title'],LATIN,36,width)
     japanese=lines(work['title_translation_ja'],FONT,24,width)
     total=len(english)*45+28+len(japanese)*34+48+22
     top=(H+total)/2-35;y=top
-    c.setFillColor(HexColor('#40382f'));c.setFont('Helvetica',36)
+    c.setFillColor(HexColor('#40382f'));c.setFont(LATIN,36)
     for line in english:c.drawString(x,y,line);y-=45
     y-=20;c.setFont(FONT,24)
     for line in japanese:c.drawString(x,y,line);y-=34
-    y-=35;c.setFont('Helvetica',18);c.setFillColor(HexColor('#70685f'))
+    y-=35;c.setFont(LATIN,18);c.setFillColor(HexColor('#70685f'))
     c.drawString(x,y,f"{work['year']}  /  {work['place']}")
     assert y>45 and top<485,(work['id'],top,y)
     c.linkURL(work['title_source'],(x,55,890,485),relative=0,thickness=0)

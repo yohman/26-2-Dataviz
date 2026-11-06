@@ -1,0 +1,23 @@
+{
+  "created": "2026-11-06",
+  "charts": [
+    {
+      "id": "land-value",
+      "original_scan_mirror": "https://raw.githubusercontent.com/ajstarks/dubois-data-portraits/master/plate18/original-plate-18.jpg",
+      "transcription": "https://github.com/ajstarks/dubois-data-portraits/tree/master/plate18",
+      "verification": "Values checked against printed chart labels. Freedom percentages use the original years (1800, not the mirror free.d typo 1880)."
+    },
+    {
+      "id": "occupations",
+      "original_scan_mirror": "https://raw.githubusercontent.com/ajstarks/dubois-data-portraits/master/plate27/original-plate-27.jpg",
+      "transcription": "https://github.com/ajstarks/dubois-data-portraits/tree/master/plate27",
+      "verification": "Values checked against printed chart labels. Freedom percentages use the original years (1800, not the mirror free.d typo 1880)."
+    },
+    {
+      "id": "freedom",
+      "original_scan_mirror": "https://raw.githubusercontent.com/ajstarks/dubois-data-portraits/master/plate51/original-plate-51.jpg",
+      "transcription": "https://github.com/ajstarks/dubois-data-portraits/tree/master/plate51",
+      "verification": "Values checked against printed chart labels. Freedom percentages use the original years (1800, not the mirror free.d typo 1880)."
+    }
+  ]
+}
