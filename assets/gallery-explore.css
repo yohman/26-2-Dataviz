@@ -9,3 +9,25 @@
 .image-wall .explore-media{padding:0}
 .image-wall .wall-work:focus-visible{outline:4px solid #ad4052;outline-offset:-4px}
 .image-wall .image-unavailable{min-height:120px;display:grid;place-items:center;font-size:2rem;line-height:1}
+/* A living atlas: springs keep related nodes together, with room to wander. */
+.floating-map{overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 48% 50%,#ece1cc77,transparent 68%)}
+.floating-map:before{content:'';position:absolute;inset:8%;border:1px dotted #c6b89d55;border-radius:50%;pointer-events:none}
+.floating-link{opacity:.18;transition:opacity .35s,stroke-width .35s;pointer-events:stroke}
+.floating-link.is-lit{opacity:.65}
+.floating-map .thread-node{cursor:grab;touch-action:none;user-select:none;transition:opacity .35s,box-shadow .35s,background .35s;box-shadow:0 4px 24px #6553380a}
+.floating-map .thread-node.is-dragging{cursor:grabbing;box-shadow:0 8px 28px #65533822;z-index:4}
+.floating-map .thread-node.is-distant{opacity:.35}
+.floating-map .thread-node[aria-pressed=true]{box-shadow:0 0 0 8px color-mix(in srgb,var(--thread-color),transparent 91%),0 0 38px color-mix(in srgb,var(--thread-color),transparent 85%)}
+.constellation-controls,.word-explore-controls{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin:0 0 1.3rem;font-size:.75rem;color:#827463}
+.constellation-controls span{margin-right:auto}.constellation-controls button,.word-explore-controls button,.thread-related button{border:0;background:#ece3d4;padding:.55rem .9rem;border-radius:2rem;font:500 .78rem Manrope,sans-serif;color:#665743;cursor:pointer;transition:background .2s,transform .2s}
+.constellation-controls button:hover,.word-explore-controls button:hover,.thread-related button:hover{background:#ded0ba;transform:translateY(-2px)}
+.thread-related{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.4rem}.thread-related button{font-size:.7rem;padding:.4rem .7rem}
+.thread-results .thread-work,.word-results .thread-work{animation:thread-arrival .45s both;animation-delay:var(--arrival,0ms)}
+@keyframes thread-arrival{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.thread-work{transition:background .25s,transform .25s}.thread-work:hover{background:#eee6d877;transform:translateX(4px)}
+.word-explore-controls input{font:inherit;min-width:180px;border:0;border-bottom:1px solid #b5a78e;background:transparent;padding:.65rem .2rem;color:#514739}
+.word-layout{grid-template-columns:minmax(210px,1fr) minmax(0,1.7fr)}.word-trail{border:0;margin:.25rem 0 .6rem;padding:.6rem .8rem .8rem calc(.8rem + var(--trail-offset,0px));font:500 1.35rem Fraunces,serif;transition:padding .35s,color .25s,background .25s;isolation:isolate}
+.word-trail:after{height:1px;opacity:.3;left:.8rem;max-width:calc(100% - 1.6rem);transition:height .25s,opacity .25s}.word-trail:hover{padding-left:calc(1.3rem + var(--trail-offset,0px));color:var(--thread-color)}.word-trail[aria-pressed=true]{background:transparent;color:var(--thread-color)}.word-trail[aria-pressed=true]:after{height:4px;opacity:.8}.word-trail[hidden]{display:none}
+.image-wall .wall-work img{transition:transform .65s cubic-bezier(.2,.7,.2,1),filter .4s}.image-wall .wall-work:hover img{transform:scale(1.045);filter:contrast(1.04)}
+@media(max-width:600px){.word-layout{grid-template-columns:1fr}.word-trail{min-width:140px;font-size:1.1rem}.constellation-controls span{width:100%}.thread-related{margin-top:.5rem}}
+@media(prefers-reduced-motion:reduce){.thread-results .thread-work,.word-results .thread-work{animation:none}.floating-map .thread-node,.floating-link,.word-trail,.word-trail:after,.thread-work,.image-wall .wall-work img,.constellation-controls button,.word-explore-controls button,.thread-related button{transition:none}.thread-work:hover,.image-wall .wall-work:hover img{transform:none}}
