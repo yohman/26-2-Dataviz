@@ -13,6 +13,16 @@
     },
     {
       "page": 2,
+      "title": "Voices for Justice / Japanese demo",
+      "ja": "Voices for Justiceのデモ画面。日本語の声は架空のサンプルであり、学生の実際の投稿ではない。スライド全体から授業用のライブセッションへ移動できる。",
+      "en": "Screenshot of the Voices for Justice demo. The Japanese voices are fictional examples, not real student submissions. The entire slide links to the live class session.",
+      "sources": [
+        "https://yohman.github.io/26-2-Dataviz/voices/?room=31e86995",
+        "https://yohman.github.io/26-2-Dataviz/voices/?demo"
+      ]
+    },
+    {
+      "page": 3,
       "title": "1788",
       "ja": "1788年、英国で奴隷船の収容人数を制限する法律（Dolben法）が成立。次のBrookesの図版の表題はこの法律を指す。図版自体の資料目録上の年は1789年。奴隷貿易の廃止法ではない。",
       "en": "In 1788 Britain passed the Dolben Act regulating capacity aboard slave ships. The following Brookes plate refers to this law; the plate itself is catalogued as 1789. This was regulation of the trade, not its abolition.",
@@ -21,7 +31,7 @@
       ]
     },
     {
-      "page": 3,
+      "page": 4,
       "title": "Brookes / exterior",
       "ja": "Brookes号の外観を示す提供画像。続くスライドでは船内の配置図を見る。",
       "en": "Supplied exterior image of the ship, followed by diagrams of its interior.",
@@ -30,7 +40,7 @@
       ]
     },
     {
-      "page": 4,
+      "page": 5,
       "title": "Brookes / two deck plans",
       "ja": "Brookes号の下甲板と、その側面に設けた棚状の区画を上から見た二つの配置図。繰り返す人の身体が、人数と空間の関係を示す。規制後の収容配置であり、実際の航海の平均を示したものではない。",
       "en": "Two top-down plans of the Brookes: the lower deck, followed by the platforms or shelves around its sides. Repeated human figures connect capacity to physical space. This represents regulated stowage, not an average of actual voyages.",
@@ -40,7 +50,7 @@
       ]
     },
     {
-      "page": 5,
+      "page": 6,
       "title": "Brookes / longitudinal section",
       "ja": "Brookes号の縦断面。棚状の区画と高さ方向の制約が見える。元の印刷物には人間性を奪う歴史的な表現が含まれる。この図だけでは、描かれた人々の人生、抵抗、主体性を表せない。",
       "en": "Longitudinal section of the Brookes, showing platforms and vertical constraints. The historic print contains dehumanizing language. The diagram cannot convey the full lives, resistance, and agency of the people represented.",
@@ -50,7 +60,7 @@
       ]
     },
     {
-      "page": 6,
+      "page": 7,
       "title": "Brookes / complete poster",
       "ja": "1789年の図版の全体。縦断面、二つの平面図、横断面と縮尺を一枚にまとめている。表題の1788年は規制法の年。",
       "en": "Complete 1789 plate, combining the longitudinal section, two deck plans, cross sections, and scale. The year 1788 in the title refers to the regulation act.",
@@ -60,7 +70,7 @@
       ]
     },
     {
-      "page": 7,
+      "page": 8,
       "title": "Stowage of the British slave ship \"Brookes\" under the regulated slave trade act of 1788",
       "ja": "この図版の資料目録上の年は1789年。表題にある1788年は規制法の年。Brookes号の図は1788年にPlymouthの奴隷貿易廃止団体から出版され、その後広く複製・配布された。廃止運動の視覚的な訴えの一部であり、この図だけで廃止が実現したわけではない。図は規制後の配置を表し、実際の航海の過密状態をそのまま記録した写真ではない。",
       "en": "The catalog dates this plate to 1789; 1788 in the title is the year of the regulation act. First published by abolitionists in Plymouth in 1788 and widely reproduced afterward, the Brookes diagram formed part of the campaign against the slave trade. It did not bring about abolition on its own. The layout represents regulated stowage rather than a photograph or an average of actual voyages.",
@@ -71,7 +81,7 @@
       ]
     },
     {
-      "page": 16,
+      "page": 17,
       "title": "Thirteenth Amendment / 1865",
       "ja": "1865年1月31日に議会を通過した、合衆国憲法修正第13条を提案する共同決議の原本。12月6日に批准。奴隷制と強制労働を廃止したが、有罪判決を受けた犯罪への刑罰という例外を残した。法的廃止は、人種差別や不平等の終わりを意味しなかった。",
       "en": "Original joint resolution proposing the Thirteenth Amendment, passed by Congress on January 31, 1865 and ratified on December 6. It abolished slavery and involuntary servitude with an exception for punishment for crime after conviction. Legal abolition did not end racial discrimination or inequality.",
