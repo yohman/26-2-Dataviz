@@ -1,5 +1,5 @@
 import { openTextEntry } from './open-text.mjs';
-import { createVoiceAtlas } from './voice-atlas.mjs?v=galaxy-20261106';
+import { createVoiceAtlas } from './voice-atlas.mjs?v=unrest-20261107';
 import { createArrivalTracker, captureLayout, animateArrivals, reducedMotion } from './arrival-motion.mjs';
 const API='https://dataviz-gallery-likes.ykawano.workers.dev/voices';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -19,7 +19,7 @@ Object.assign(words,{
   live:['声が届く場所','Listening, live'],paused:['ひと息 / 声は受付中','Paused · still accepting voices'],
   wall:['一覧で読む','Read all voices'],network:['テーマの関係','Theme relationships']
 });
-Object.assign(words,{galaxy:['声の銀河','Grievance galaxy']});
+Object.assign(words,{wander:['声の中へ','Into the voices'],threads:['糸をたどる','Follow threads'],galaxy:['共鳴','Resonance']});
 const captions={wall:['一人ひとりの言葉。大きさは本人の切実さ、色は最初に選んだテーマ。','Each person’s words. Text size represents self-reported urgency; color represents their first theme.'],clusters:['共通のテーマで集まる声。円をクリックすると、その声を聴けます。','Voices gather around their first theme. Select a circle to listen to its story.'],map:['横：影響する範囲。縦：本人の切実さ。少しずらした位置に意味はありません。','Horizontal: perceived reach. Vertical: self-reported urgency. Small offsets only prevent overlap.'],network:['投稿者が選んだ2つのテーマを結ぶ。同じ投稿に現れるテーマの関係。','Links join the two themes a contributor selected. They show co-occurrence, not causation.'],listen:['ひとつの声を、急がずに。','One voice at a time. Let it land.']};
 const keys={wall:['色＝テーマ · 文字の大きさ＝切実さ1〜5 · ↗＝共感した人数（このブラウザで各声に1回）','Color = theme · text size = urgency 1–5 · ↗ = echoes (one per voice per browser)'],clusters:['色＝最初のテーマ · 円の面積＝1＋共感数 · 点線＝このブラウザで共感 · 距離＝テーマごとの配置（測定値ではありません）','Color = first theme · circle area = 1 + echoes · dashed ring = your echo · distance organizes themes; it is not a measured value'],map:['色＝最初のテーマ · 円の面積＝1＋共感数 · 切実さ・範囲は投稿者の自己評価','Color = first theme · circle area = 1 + echoes · urgency and reach are self-reported'],network:['円の面積＝テーマへの投稿数 · 線の太さ＝その組み合わせの投稿数 · 距離＝見やすさのための配置','Node area = theme mentions · line width = voices sharing that pair · distances are for layout only'],listen:['「私もそう思う」は支持の大きさではなく、この場での共感の数です。','Echoes express resonance in this session, not a vote on whose experience matters.']};
 Object.assign(captions,{
@@ -28,9 +28,9 @@ Object.assign(captions,{
   threads:['共通する言葉で、声がつながります。','Voices connect through shared words.']
 });
 Object.assign(keys,{
- galaxy:['語句から自動検出。金の線＝共通語、緑の線＝テーマ。星はその語句が登場する声の数。離れた声も残します。分類や距離は判断の補助であり、重要さの順位ではありません。','Detected locally from text. Gold links = repeated words; green = themes. Hub counts = voices mentioning that topic. Isolated voices remain visible. Position is exploratory, not a ranking.'],
-  wander:['すべての声を、重ならない一覧に配置。長い声は選ぶと全文を読めます。見渡すボタンで画面に合わせて表示。','All voices are laid out without overlap. Select a long voice to read the full text. Use Fit to see the whole collection.'],
-  threads:['共通語・テーマは本文からキーワードで検出。灰色は共通の語句が検出されていない声。意味や重要さの自動判定ではありません。','Words and themes are detected with local keywords. Grey nodes have no detected shared terms. These are not judgements of meaning or importance.']
+ galaxy:['言葉は投稿された声。糸は共通語・テーマのキーワード一致。語句の数字はその声の数です。位置・文字の大きさ・傾きは構図であり、重要さや賛否を示しません。','Words are submitted voices. Threads come from matching shared words and theme keywords. Topic numbers count voices. Position, type size, and tilt are composition—not importance or agreement.'],
+  wander:['声をつかんで動かし、選んで全文を読む。文字の大きさ・傾きは構図です。「見渡す」で全体へ。','Pull a voice, select it to read the full text. Type size and tilt are composition. Use Fit to see the whole field.'],
+  threads:['共通する言葉を持つ声の間に、一部の糸を引いています。結びつかない声も消しません。意味や重要さの判定ではありません。','Selected threads connect voices sharing keywords. Unconnected voices stay. This is not a judgement of meaning or importance.']
 });
 const questions=[['これは「不便」？ それとも「不公平」？ 違いは何だろう。','Is this an inconvenience or an injustice? What makes the difference?'],['誰には見えていて、誰には見えていない？','Who can see this problem, and who cannot?'],['この声を裏づけるデータは、どこにありそう？','What data could help investigate this experience?'],['ここに参加していない人の声は、何だろう。','Whose experience is missing from this room?'],['ひとつ変えられるなら、何から始める？','If one thing could change, where would we start?'],['同じルールなのに、違う影響を受ける人は？','Who is affected differently by the same rule?']];
 let lang='ja';try{lang=localStorage.getItem('voices-language')||localStorage.getItem('dv-language')||'ja';}catch{}if(!['ja','en'].includes(lang))lang='ja';
@@ -93,7 +93,7 @@ function render(newIds=[]){
   const wandering=view==='wander'||view==='threads'||view==='galaxy',root=$('#visual');
   root.hidden=wandering;$('#scene').hidden=!wandering;
   $('#tour').hidden=!wandering;['atlas-out','atlas-home','atlas-in'].forEach(id=>$('#'+id).hidden=!wandering);
-  setText($('#wander-hint'),wandering?(view==='wander'?(lang==='ja'?'ドラッグして歩く。声に触れる。':'Drag to wander. Select a voice.'):(lang==='ja'?'語句から自動検出したつながり。星を選ぶと仲間が浮かぶ。孤立した声も、そのまま。':'Local keyword matches. Select a topic to follow its voices; isolated voices remain visible.')):'');
+  setText($('#wander-hint'),wandering?(view==='wander'?(lang==='ja'?'声をつかむ。動かす。選んで読む。':'Pull a voice. Move it. Select it to read.'):(lang==='ja'?'ひとつの声に触れると、響き合う声が浮かぶ。':'Touch one voice to reveal the others it resonates with.')):'');
   if(wandering){
     if(!atlas&&window.d3)atlas=createVoiceAtlas($('#scene'),{themes,openVoice:openDetail,language:()=>lang,onTourChange:active=>{setText($('#tour'),t(active?'tourStop':'tour'));$('#tour').setAttribute('aria-pressed',String(active));}});
     atlas?.update(items,{arrivals:newIds,mode:view,loading:!loaded,failed,total:visible.length});atlas?.pause(paused);

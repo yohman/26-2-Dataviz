@@ -22,12 +22,25 @@ export function detectTopics(entries){
  const words=[...terms].filter(([,ids])=>ids.length>=2&&ids.length<Math.max(4,entries.length*.7)).sort((a,b)=>b[1].length-a[1].length||a[0].localeCompare(b[0])).slice(0,16).map(([term,members])=>({id:`term:${term}`,ja:term,en:term,kind:'term',members}));
  const groups=[...buckets,...words];const membership=new Map(entries.map(e=>[e.id,groups.filter(g=>g.members.includes(e.id)).map(g=>g.id)]));return {groups,membership};
 }
-export function packVoices(nodes,aspect=1.7,gap=48){
- if(!nodes.length)return {width:1200,height:700};
- const width=Math.max(430,...nodes.map(n=>n.w))+gap;
- const area=nodes.reduce((s,n)=>s+(n.w+gap)*(n.h+gap),0);
- const columns=Math.max(1,Math.ceil(Math.sqrt(area*Math.max(.7,aspect))/width));
- const heights=Array(columns).fill(70);
- nodes.forEach(n=>{const col=heights.indexOf(Math.min(...heights));n.x=70+col*width+width/2;n.y=heights[col]+n.h/2;n.tx=n.x;n.ty=n.y;n.vx=n.vy=0;heights[col]+=n.h+gap;});
- return {width:columns*width+140,height:Math.max(...heights)+40};
+// A loose field of words, seeded by identity rather than rows, sectors, or ranks.
+export function scatterVoices(nodes,aspect=1.7){
+ const h=s=>{let n=2166136261;for(const c of s){n^=c.charCodeAt(0);n=Math.imul(n,16777619);}return (n>>>0)/4294967296;};
+ const area=Math.max(800000,nodes.reduce((s,n)=>s+(n.w+65)*(n.h+70),0)*1.32);
+ const width=Math.sqrt(area*Math.max(.65,aspect)),height=area/width,placed=[];
+ for(const n of [...nodes].sort((a,b)=>h(a.id)-h(b.id))){let best,cost=Infinity;
+  for(let k=0;k<36;k++){const x=(.06+h(n.id+'x'+k)*.88)*width,y=(.07+h(n.id+'y'+k)*.86)*height;let score=0;
+   for(const a of placed){const nx=Math.abs(x-a.x)/((n.w+a.w)/2+30),ny=Math.abs(y-a.y)/((n.h+a.h)/2+30);if(nx<1&&ny<1)score+=(1-nx)*(1-ny)*20;score+=.002/(.05+nx*nx+ny*ny);}
+   if(score<cost){cost=score;best={x,y};}
+  }n.tx=best.x;n.ty=best.y;placed.push({...n,x:best.x,y:best.y});
+ }
+ return {width,height};
+}
+
+// Sparse voice-to-voice ties; no invented links for unmatched voices.
+export function resonanceLinks(nodes,groups,neighbors=3){
+ const membership=new Map(nodes.map(n=>[n.id,new Set(n.topics||[])])),groupMap=new Map(groups.map(g=>[g.id,g])),edges=new Map();
+ for(const a of nodes){const candidates=nodes.filter(b=>b.id!==a.id).map(b=>{const common=[...membership.get(a.id)].filter(id=>membership.get(b.id).has(id));const weight=common.reduce((sum,id)=>sum+(groupMap.get(id)?.kind==='term'?2:1),0);return {a,b,common,weight,distance:Math.hypot(a.tx-b.tx,a.ty-b.ty)};}).filter(e=>e.weight).sort((a,b)=>b.weight-a.weight||a.distance-b.distance).slice(0,neighbors);
+  for(const e of candidates){const key=[e.a.id,e.b.id].sort().join('|');edges.set(key,{...e,key});}
+ }
+ return [...edges.values()];
 }

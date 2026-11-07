@@ -36,14 +36,24 @@ test('unclassified open-text voices have finite positions and no invented relati
  assert.deepEqual(sharedThreads(nodes),[]);
 });
 
-const {detectTopics,packVoices}=await import('../voices/topic-model.mjs');
+const {detectTopics}=await import('../voices/topic-model.mjs');
 test('detected topics connect open text while preserving isolated voices and original categories',()=>{
  const entries=[{id:'a',headline:'学費が高い。バイトで払う',categories:[]},{id:'b',headline:'学費と奨学金で困っている',categories:[]},{id:'c',headline:'zyxw uncommon isolated',categories:[]}];
  const model=detectTopics(entries);assert.ok(model.membership.get('a').includes('theme:money'));assert.ok(model.membership.get('b').includes('theme:money'));assert.deepEqual(model.membership.get('c'),[]);assert.deepEqual(entries[0].categories,[]);
  for(const g of model.groups)assert.ok(g.members.length>=2);
 });
-test('adaptive layout keeps 120 variable-height voice rectangles separate at wide and narrow aspects',()=>{
- for(const aspect of [.7,1.8,2.4]){const nodes=Array.from({length:120},(_,i)=>({w:300+i%3*20,h:90+i%7*25}));const box=packVoices(nodes,aspect);
- for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const a=nodes[i],b=nodes[j];assert.ok(Math.abs(a.x-b.x)>=(a.w+b.w)/2||Math.abs(a.y-b.y)>=(a.h+b.h)/2);}
- assert.ok(nodes.every(n=>n.x-n.w/2>=0&&n.x+n.w/2<=box.width&&n.y+n.h/2<=box.height));}
+
+
+const {scatterVoices,resonanceLinks}=await import('../voices/topic-model.mjs');
+test('the dissent field uses irregular identity-seeded positions rather than shared rows or orbits',()=>{
+ const nodes=Array.from({length:94},(_,i)=>({id:`voice-${i}`,w:260+i%4*25,h:90+i%5*23}));const box=scatterVoices(nodes,1.8);
+ const again=nodes.map(n=>({id:n.id,w:n.w,h:n.h}));scatterVoices(again,1.8);
+ assert.deepEqual(nodes.map(n=>[n.tx,n.ty]),again.map(n=>[n.tx,n.ty]));
+ assert.equal(new Set(nodes.map(n=>n.tx)).size,94);assert.equal(new Set(nodes.map(n=>n.ty)).size,94);
+ assert.ok(nodes.every(n=>Number.isFinite(n.tx)&&n.tx>0&&n.tx<box.width&&n.ty>0&&n.ty<box.height));
+});
+test('resonance ties join actual voices by shared terms and retain unmatched voices without manufactured links',()=>{
+ const nodes=[{id:'a',topics:['term:学費'],tx:0,ty:0},{id:'b',topics:['term:学費','theme:money'],tx:120,ty:50},{id:'c',topics:[],tx:250,ty:80}];
+ const links=resonanceLinks(nodes,[{id:'term:学費',kind:'term'},{id:'theme:money',kind:'theme'}]);
+ assert.equal(links.length,1);assert.equal(links[0].weight,2);assert.deepEqual(links[0].common,['term:学費']);assert.equal(nodes.length,3);assert.ok(!links.some(l=>l.a.id==='c'||l.b.id==='c'));
 });
