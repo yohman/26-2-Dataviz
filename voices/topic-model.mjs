@@ -44,3 +44,23 @@ export function resonanceLinks(nodes,groups,neighbors=3){
  }
  return [...edges.values()];
 }
+
+// Uneven gathering places. A primary match anchors a voice; other matches pull it toward neighboring concerns.
+export function resonanceTargets(nodes,groups,aspect=1.7){
+ const h=s=>{let v=2166136261;for(const c of s){v^=c.charCodeAt(0);v=Math.imul(v,16777619);}return(v>>>0)/4294967296;};
+ const used=groups.filter(g=>g.kind==='theme'||!groups.some(t=>t.kind==='theme'&&g.members.every(id=>t.members.includes(id))));
+ const anchors=used.map(g=>({id:g.id,w:650+Math.sqrt(g.members.length)*190,h:450+Math.sqrt(g.members.length)*160}));
+ const box=scatterVoices(anchors,aspect),byId=new Map(anchors.map(a=>[a.id,a]));
+ const targets=new Map();
+ for(const n of nodes){let matches=used.filter(g=>g.members.includes(n.id));const themes=matches.filter(g=>g.kind==='theme');if(themes.length)matches=themes;
+  if(matches.length){matches.sort((a,b)=>a.members.length-b.members.length||a.id.localeCompare(b.id));const primary=byId.get(matches[0].id),weight=.88;const x=primary.tx*weight+matches.reduce((s,g)=>s+byId.get(g.id).tx,0)/matches.length*(1-weight),y=primary.ty*weight+matches.reduce((s,g)=>s+byId.get(g.id).ty,0)/matches.length*(1-weight);
+   targets.set(n.id,{x:x+(h(n.id+'rx')-.5)*650,y:y+(h(n.id+'ry')-.5)*500,groups:matches.map(g=>g.id)});
+  }else targets.set(n.id,{x:(.06+h(n.id+'alone-x')*.88)*box.width,y:(.06+h(n.id+'alone-y')*.88)*box.height,groups:[]});
+ }
+ return {targets,anchors:anchors.map(a=>({...a,x:a.tx,y:a.ty})),...box};
+}
+
+export function threadNeighborhood(id,links){
+ const adjacent=links.filter(l=>l.a.id===id||l.b.id===id).sort((a,b)=>b.weight-a.weight||a.key.localeCompare(b.key));
+ return {id,neighbors:adjacent.map(l=>({id:l.a.id===id?l.b.id:l.a.id,common:l.common,weight:l.weight})),edges:adjacent};
+}

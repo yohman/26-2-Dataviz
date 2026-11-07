@@ -57,3 +57,19 @@ test('resonance ties join actual voices by shared terms and retain unmatched voi
  const links=resonanceLinks(nodes,[{id:'term:学費',kind:'term'},{id:'theme:money',kind:'theme'}]);
  assert.equal(links.length,1);assert.equal(links[0].weight,2);assert.deepEqual(links[0].common,['term:学費']);assert.equal(nodes.length,3);assert.ok(!links.some(l=>l.a.id==='c'||l.b.id==='c'));
 });
+
+const {resonanceTargets,threadNeighborhood}=await import('../voices/topic-model.mjs');
+test('resonance moves voices toward real shared themes while retaining bridges and unconnected voices',()=>{
+ const nodes=[{id:'a',w:300,h:150},{id:'b',w:300,h:150},{id:'bridge',w:300,h:150},{id:'c',w:300,h:150},{id:'alone',w:300,h:150}];scatterVoices(nodes);
+ const groups=[{id:'theme:money',kind:'theme',members:['a','b','bridge']},{id:'theme:work',kind:'theme',members:['bridge','c']}];
+ const result=resonanceTargets(nodes,groups);assert.equal(result.targets.size,5);assert.equal(result.anchors.length,2);
+ assert.deepEqual(new Set(result.targets.get('bridge').groups),new Set(['theme:money','theme:work']));assert.deepEqual(result.targets.get('alone').groups,[]);
+ assert.deepEqual(result,resonanceTargets(nodes,groups));for(const n of nodes){const p=result.targets.get(n.id);assert.ok(Number.isFinite(p.x)&&Number.isFinite(p.y));}
+ assert.ok(nodes.some(n=>Math.hypot(n.tx-result.targets.get(n.id).x,n.ty-result.targets.get(n.id).y)>200));
+});
+test('a thread step contains only direct matches and an isolated voice has no invented next step',()=>{
+ const nodes=[{id:'a',topics:['term:pay'],tx:0,ty:0},{id:'b',topics:['term:pay','theme:work'],tx:10,ty:10},{id:'c',topics:['theme:work'],tx:20,ty:20},{id:'d',topics:[],tx:30,ty:30}];
+ const links=resonanceLinks(nodes,[{id:'term:pay',kind:'term'},{id:'theme:work',kind:'theme'}]);
+ assert.deepEqual(threadNeighborhood('a',links).neighbors.map(n=>n.id),['b']);assert.deepEqual(threadNeighborhood('d',links).neighbors,[]);
+ assert.deepEqual(threadNeighborhood('b',links).neighbors.map(n=>n.id),['a','c']);
+});

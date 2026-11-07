@@ -151,3 +151,44 @@ select option{background:#1c231e;color:var(--ink)}
 .coalesce-toggle{z-index:20;text-shadow:0 1px 8px #000,0 1px 5px #000;background:#111512cc;padding:7px 3px}
 .session-caption,.field-navigation,.field-controls{filter:drop-shadow(0 1px 5px #111512)}
 .atlas-voices{pointer-events:none;z-index:auto}.voice-utterance{pointer-events:auto}.resonance-annotations{z-index:4}.resonance-label{z-index:5}.voice-utterance.is-focus,.voice-utterance:hover{z-index:12}
+
+/* A thread is a journey through voices; a gathering is a different spatial lens. */
+.scene[data-atlas-mode=threads] .voice-utterance:not(.is-related){opacity:.09!important}
+.scene[data-atlas-mode=threads] .voice-utterance.is-trace-source{z-index:13}
+.scene[data-atlas-mode=threads] .is-trace-source .voice-headline{color:var(--gold);-webkit-line-clamp:unset;display:block;font-size:calc(var(--voice-size) * 1.15);text-decoration:none}
+.scene[data-atlas-mode=threads] .is-trace-source .voice-breath{animation:none;transform:rotate(-1.5deg)}
+.scene[data-atlas-mode=threads] .atlas-threads path:not(.is-related){opacity:.015!important}
+.scene[data-atlas-mode=threads] .atlas-threads path.is-related{stroke-width:2.7;stroke-dasharray:14 5;animation:thread-current 20s linear infinite;opacity:.8!important}
+.thread-trail{position:absolute;left:50%;bottom:110px;transform:translateX(-50%) rotate(-.7deg);max-width:min(700px,80vw);width:max-content;z-index:21;text-align:center;background:radial-gradient(ellipse,#111512f2,transparent 75%);padding:10px 25px;color:var(--ink)}
+.thread-trail p{font:11px/1.4 'DM Mono','Noto Sans JP',monospace;margin:0 0 5px;color:var(--muted)}
+.thread-trail>button{font-size:11px;margin:0 12px;min-height:30px}.thread-trail>button:disabled{opacity:.25;cursor:default}
+.thread-choices{display:flex;flex-wrap:wrap;gap:4px 20px;justify-content:center}.thread-choices button{color:var(--gold);font:800 17px/1.4 var(--display);border-bottom:1px dashed #eac65d77;min-height:34px;text-align:left}
+.thread-choices button:hover{color:var(--red)}
+.scene[data-atlas-mode=galaxy] .resonance-label{font-size:clamp(28px,3vw,56px);opacity:.55;max-width:650px;white-space:nowrap}
+.scene[data-atlas-mode=galaxy] .resonance-label small{font-size:.4em}.scene[data-atlas-mode=galaxy] .resonance-label:hover,.scene[data-atlas-mode=galaxy] .resonance-label.is-related{opacity:1}
+.scene[data-atlas-mode=galaxy] .atlas-threads path{opacity:.38;stroke-width:1.5}.scene[data-atlas-mode=galaxy]:not(.is-coalescing) .atlas-threads path{opacity:.06}
+@keyframes thread-current{to{stroke-dashoffset:-190}}
+/* Reading a voice is an open, full-space typographic intervention, never a card. */
+#detail-dialog.voice-solo{position:fixed;inset:0;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;margin:0;padding:0;border:0!important;border-radius:0;box-shadow:none;background:transparent;color:var(--ink);overflow:auto;scrollbar-width:thin;overscroll-behavior:contain}
+#detail-dialog::backdrop{background:#101410e6;backdrop-filter:none}
+.solo-top{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:22px;padding:20px 5vw;color:var(--muted);font:10px 'DM Mono','Noto Sans JP',monospace;background:linear-gradient(#111512dd,transparent)}
+#detail-category{margin-right:auto}#detail-language{font-size:11px}.solo-top .close-dialog{font-size:34px;font-weight:400;transform:rotate(-7deg);color:var(--ink)}
+.solo-words{width:min(86vw,1400px);margin:clamp(25px,5vh,90px) auto 25px;transform:rotate(var(--solo-angle));transform-origin:50% 30%}
+#detail-dialog #detail-headline{font:700 var(--solo-size)/1.23 var(--display);letter-spacing:-.015em;white-space:pre-line;overflow-wrap:anywhere;text-wrap:pretty;margin:0 0 30px;max-width:26em;text-shadow:2px 3px #0009}
+#detail-dialog .voice-detail{font:500 clamp(1.05rem,2vw,1.7rem)/1.8 'DM Sans','Noto Sans JP',sans-serif;color:#c6cab9;max-width:38em;white-space:pre-line}
+#detail-change-wrap h3{font:11px 'DM Mono','Noto Sans JP',monospace;margin-bottom:12px;color:var(--green)}
+.solo-actions{display:flex;flex-wrap:wrap;gap:12px 38px;align-items:center;margin:30px 0 5px}
+.solo-actions button{background:none;border:0;padding:8px 0;font:700 clamp(.85rem,1.6vw,1.15rem)/1.5 var(--display);letter-spacing:.01em;color:var(--gold);text-decoration:underline;text-underline-offset:8px;text-decoration-thickness:1px;transform:rotate(-1deg)}
+.solo-actions #resonate[aria-pressed=true]{color:var(--green);text-decoration-style:double}.solo-actions button:hover{color:var(--red)}
+#detail-meta{font:9px 'DM Mono',monospace;color:#6d7868;margin:20px 0}#detail-status:empty{display:none}
+.solo-echoes{display:flex;flex-wrap:wrap;align-items:start;gap:45px;margin:40px 7vw 65px 17vw}
+.solo-echoes button{width:clamp(180px,22vw,300px);padding:0;text-align:left;transform:rotate(var(--echo-angle));opacity:.65;transition:opacity .2s}
+.solo-echoes button:hover{opacity:1}.solo-echoes span{display:block;font:10px 'DM Mono','Noto Sans JP',monospace;color:var(--red);margin-bottom:10px}.solo-echoes strong{font:700 clamp(1rem,2vw,1.7rem)/1.4 var(--display);color:var(--green);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:620px){.thread-trail{bottom:140px;max-width:92vw;width:92vw;padding:5px 12px}.thread-trail p{font-size:9px}.thread-choices{gap:3px 12px}.thread-choices button{font-size:13px}.thread-trail>button{font-size:10px;margin:0 8px}.solo-words{width:84vw;margin-top:6vh}.solo-echoes{margin-left:12vw;gap:28px}.solo-echoes button{width:67vw}.solo-top{padding:16px 7vw}}
+@media(prefers-reduced-motion:reduce){.scene[data-atlas-mode=threads] .atlas-threads path.is-related{animation:none}}
+
+.scene[data-atlas-mode=threads] .voice-utterance.is-trace-source{width:460px!important}.scene[data-atlas-mode=threads] .is-trace-source .voice-headline{font-size:52px!important;color:var(--gold)!important}
+.thread-choices button{max-width:210px}.thread-choices small{display:block;max-width:190px;font:500 11px/1.5 'DM Sans','Noto Sans JP',sans-serif;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.thread-trail{bottom:105px}.solo-echoes button:nth-child(2){margin-top:25px}.solo-echoes button:nth-child(3){margin-top:8px}
+@media(max-width:620px){.thread-trail{bottom:140px}.thread-choices button{max-width:25vw}.thread-choices small{font-size:9px}}
+
+.scene[data-atlas-mode=galaxy] .resonance-label{transform:translate(-50%,-50%) rotate(var(--annotation-tilt)) scale(var(--label-scale,1));transform-origin:center;font-weight:900;opacity:.75;text-shadow:0 2px 5px #111512,0 -2px 8px #111512}.scene[data-atlas-mode=galaxy] .resonance-label small{margin-left:10px;color:var(--ink)}
