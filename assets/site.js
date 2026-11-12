@@ -362,7 +362,7 @@ function renderAgenda() {
     const slideLabel = copy('Preview lecture slides', '講義スライドをプレビュー');
     const slideHref = slideFile && /^lectures\/[A-Za-z0-9._-]+\.pdf$/i.test(slideFile)
       ? `viewer.html?file=${encodeURIComponent(slideFile)}&title=${encodeURIComponent(slideLabel)}&week=${encodeURIComponent(`Week ${week.week}`)}&return=${encodeURIComponent(returnTo)}`
-      : '';
+      : slideFile && /^lecture\.html\?week=\d+$/.test(slideFile) ? `${slideFile}&return=${encodeURIComponent(returnTo)}` : '';
     const media = image ? `${slideHref ? `<a class="week-visual-link" href="${escapeHtml(slideHref)}" aria-label="${escapeHtml(slideLabel)}">` : ''}<figure class="week-visual"><img src="${escapeHtml(image)}" alt="" loading="lazy"><figcaption>${escapeHtml(slideLabel)}${slideHref ? '<b aria-hidden="true">→</b>' : ''}</figcaption></figure>${slideHref ? '</a>' : ''}` : '';
     const slides = !image && slideMaterials.length ? `<div class="lecture-slides">${materialLinks(slideMaterials.map(material => ({ ...material, label: slideLabel })), { week: week.week, returnTo })}</div>` : '';
     const activityLinks = activityMaterials.length ? `<div class="activity-materials"><p>${copy('MATERIALS FOR THIS ACTIVITY', 'この課題で使う資料')}</p><div>${materialLinks(activityMaterials, { week: week.week, returnTo })}</div></div>` : '';

@@ -4,6 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex">
+  <script>
+    // Keep existing Week 7 bookmarks pointed at the current HTML lecture.
+    { const q = new URLSearchParams(location.search);
+      if (q.get('file') === 'lectures/w07.pdf') {
+        q.delete('file'); q.delete('title'); q.set('week', '7');
+        location.replace(`lecture.html?${q}`);
+      }
+    }
+  </script>
   <title>Lecture slides · 2026–2 Data Visualization</title>
   <link rel="icon" href="favicon.svg?v=course-family-20261026" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">

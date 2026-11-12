@@ -1,0 +1,425 @@
+{
+  "week": 7,
+  "title": {
+    "ja": "共有データセットを選ぶ",
+    "en": "Choose a Shared Dataset"
+  },
+  "lectureMinutes": 20,
+  "lectureSlides": 12,
+  "slides": [
+    {
+      "kind": "scatter",
+      "title": {
+        "ja": "2018",
+        "en": "2018"
+      },
+      "notes": {
+        "ja": "授業のgapminder.csvから2018年の値を表示。点は地域名（Countryが空欄の場合はgeo）、横位置はIncome per personの対数、縦位置は平均寿命、円の面積は人口、色はRegionを表す。Regionが空欄の点は灰色。数値が足りない行は描画しない。この授業用ファイルは2018年までの版であり、現在の世界ではない。通貨・物価基準はCSVだけでは確定できないため、金額の解釈には元の指標解説の確認が必要。",
+        "en": "Values are from the 2018 rows of the course gapminder.csv. A mark represents a geography, using geo as a label where Country is blank. Horizontal position is log income per person, vertical position is life expectancy, circle area is population, and color is Region. Blank regions are gray; rows missing required numeric values are not plotted. This file ends in 2018 and is not a picture of the world today. The CSV does not document the currency/price base, so monetary interpretation needs the original indicator documentation."
+      },
+      "minutes": 1.5,
+      "sources": [
+        {
+          "label": {
+            "ja": "授業のGapminder CSV",
+            "en": "Course Gapminder CSV"
+          },
+          "href": "csv-preview.html?file=data%2Fgapminder.csv&return=agenda.html%3Fp%23week-7"
+        },
+        {
+          "label": {
+            "ja": "Gapminderのデータと解説",
+            "en": "Gapminder data documentation"
+          },
+          "href": "https://www.gapminder.org/data/"
+        }
+      ],
+      "id": "w07-1",
+      "page": 1
+    },
+    {
+      "kind": "line",
+      "title": {
+        "ja": "寿命の変化",
+        "en": "Life expectancy over time"
+      },
+      "notes": {
+        "ja": "同じCSVから日本・インド・中国・スウェーデン・米国の1950〜2018年を抽出。1行の国・年を点にし、年順につなぐ。同じ国でも時間軸を加えると、比較できる内容が変わる。平均寿命は集団の指標であり、個人の寿命や国内の格差そのものを表すわけではない。",
+        "en": "The same CSV supplies annual life expectancy for Japan, India, China, Sweden, and the United States, 1950–2018. Each value is a country-year observation. A time axis makes change visible rather than only a single-year comparison. Life expectancy is a population measure; it does not describe an individual lifespan or within-country inequality."
+      },
+      "minutes": 2,
+      "sources": [
+        {
+          "label": {
+            "ja": "授業のGapminder CSV",
+            "en": "Course Gapminder CSV"
+          },
+          "href": "csv-preview.html?file=data%2Fgapminder.csv&return=agenda.html%3Fp%23week-7"
+        },
+        {
+          "label": {
+            "ja": "Gapminderのデータと解説",
+            "en": "Gapminder data documentation"
+          },
+          "href": "https://www.gapminder.org/data/"
+        }
+      ],
+      "id": "w07-2",
+      "page": 2
+    },
+    {
+      "kind": "bars",
+      "title": {
+        "ja": "2018年を比べる",
+        "en": "Comparing 2018"
+      },
+      "notes": {
+        "ja": "前の図と同じ5か国の2018年を棒グラフにしたもの。棒の長さは平均寿命を表し、軸は0から始まる。一時点の国の比較と、一つの国の変化は別の問いである。これは選んだ5か国の例で、世界全体の順位ではない。",
+        "en": "This chart compares the same five countries in 2018, with bars starting at zero. Comparing countries at one moment is a different question from following change within one country. These are five selected examples, not a worldwide ranking."
+      },
+      "minutes": 1.5,
+      "sources": [
+        {
+          "label": {
+            "ja": "授業のGapminder CSV",
+            "en": "Course Gapminder CSV"
+          },
+          "href": "csv-preview.html?file=data%2Fgapminder.csv&return=agenda.html%3Fp%23week-7"
+        },
+        {
+          "label": {
+            "ja": "Gapminderのデータと解説",
+            "en": "Gapminder data documentation"
+          },
+          "href": "https://www.gapminder.org/data/"
+        }
+      ],
+      "id": "w07-3",
+      "page": 3
+    },
+    {
+      "kind": "row",
+      "title": {
+        "ja": "1行は、何を表す？",
+        "en": "What does one row represent?"
+      },
+      "notes": {
+        "ja": "この行は「日本 × 2018年」の観測値。1行を人だと考えたり、年をまたいで人口を足し合わせたりすると、問いと集計が食い違う。行の単位を決めてから、列・集計方法・グラフを選ぶ。Countryの空欄はこのファイルの2018年に14行あり、別のgeo列には名前が残っている。結合の失敗や表記の違いも、使う前に確かめたい点である。",
+        "en": "This row is a Japan–2018 observation, not a person. Treating rows as people or adding population across multiple years would answer the wrong question. The unit of observation determines aggregation and chart choice. Fourteen 2018 rows have blank Country values but retain geography labels in geo. Missing join labels and naming differences are practical checks before a group adopts a dataset."
+      },
+      "minutes": 2,
+      "sources": [
+        {
+          "label": {
+            "ja": "授業のGapminder CSV",
+            "en": "Course Gapminder CSV"
+          },
+          "href": "csv-preview.html?file=data%2Fgapminder.csv&return=agenda.html%3Fp%23week-7"
+        },
+        {
+          "label": {
+            "ja": "Gapminderのデータと解説",
+            "en": "Gapminder data documentation"
+          },
+          "href": "https://www.gapminder.org/data/"
+        }
+      ],
+      "id": "w07-4",
+      "page": 4
+    },
+    {
+      "kind": "question",
+      "title": {
+        "ja": "日本の寿命は、\nいつ伸びた？",
+        "en": "When did life expectancy rise in Japan?"
+      },
+      "notes": {
+        "ja": "「健康」のようなテーマを、対象・指標・時間がある問いにした例。「いつ」は時系列を必要とする。一方で、このデータだけでは変化の原因は証明できない。探索中に問いが変わってもよいが、何を観察したかと、なぜ起きたかは区別される。",
+        "en": "This turns the broad topic of health into a question with a population, measure, and time dimension. “When” calls for a time series. The file alone does not establish why a change happened. Questions can evolve during exploration, while observed patterns remain distinct from causal explanations."
+      },
+      "minutes": 1.5,
+      "sources": [
+        {
+          "label": {
+            "ja": "授業のGapminder CSV",
+            "en": "Course Gapminder CSV"
+          },
+          "href": "csv-preview.html?file=data%2Fgapminder.csv&return=agenda.html%3Fp%23week-7"
+        },
+        {
+          "label": {
+            "ja": "Gapminderのデータと解説",
+            "en": "Gapminder data documentation"
+          },
+          "href": "https://www.gapminder.org/data/"
+        }
+      ],
+      "id": "w07-5",
+      "page": 5
+    },
+    {
+      "kind": "missing",
+      "title": {
+        "ja": "まず、数行を読む",
+        "en": "Read a few rows first"
+      },
+      "notes": {
+        "ja": "授業のdisasters.csvの先頭4行を、そのまま抜粋。2024年の干ばつ3件はTotal Deathsが空欄、タンザニアの洪水の行は15。空欄の理由はこのCSVだけでは判断できない。日付・場所・種類・値の意味を見ずに「大きいデータだから良い」と判断しないための例である。",
+        "en": "These are the first four records of the course disasters.csv. Total Deaths is blank in the three 2024 drought records; the Tanzania flood record contains 15. This CSV alone does not explain the blanks. A large row count is not enough to establish whether a dataset suits a particular question."
+      },
+      "minutes": 2,
+      "sources": [
+        {
+          "label": {
+            "ja": "授業の災害CSV",
+            "en": "Course disaster CSV"
+          },
+          "href": "csv-preview.html?file=data%2Fdisasters.csv&return=agenda.html%3Fp%23week-7"
+        }
+      ],
+      "id": "w07-6",
+      "page": 6
+    },
+    {
+      "kind": "blank",
+      "title": {
+        "ja": "空欄 ≠ 0",
+        "en": "Blank ≠ zero"
+      },
+      "notes": {
+        "ja": "空欄を0に置き換えると、「記録がない・不明」を「ゼロだった」に変えてしまう。欠損値をどう扱うかは、集計結果と図の意味を変える。グループでデータを選ぶ時点で、空欄・定義・出典を確認しておく必要がある。",
+        "en": "Replacing a blank with zero changes an absent or unknown value into a claim that none occurred. Missing-value choices can alter a summary and its visual meaning. Definitions, blanks, and source documentation are part of dataset selection, not only later polishing."
+      },
+      "minutes": 1.5,
+      "sources": [
+        {
+          "label": {
+            "ja": "授業の災害CSV",
+            "en": "Course disaster CSV"
+          },
+          "href": "csv-preview.html?file=data%2Fdisasters.csv"
+        }
+      ],
+      "id": "w07-7",
+      "page": 7
+    },
+    {
+      "kind": "compare",
+      "title": {
+        "ja": "どちらで、何を調べる？",
+        "en": "What could you investigate with each?"
+      },
+      "notes": {
+        "ja": "比較するのは授業用ファイルの実際の内容。Gapminderは国・年、災害データは国・災害・時期の記録で、同じ災害が国をまたぐ場合など、行と出来事が一対一とは限らない。期間や行数はファイルの特徴であり、網羅性・新しさ・正確さの保証ではない。配布データ以外も選べる。",
+        "en": "These are properties of the actual course files. Gapminder is organized by geography and year; disaster records combine countries, disaster types, and dates. A disaster row should not automatically be treated as one unique global event. Row counts and time ranges do not guarantee completeness, recency, or accuracy. Groups may choose other data."
+      },
+      "minutes": 2,
+      "sources": [
+        {
+          "label": {
+            "ja": "授業のGapminder CSV",
+            "en": "Course Gapminder CSV"
+          },
+          "href": "csv-preview.html?file=data%2Fgapminder.csv&return=agenda.html%3Fp%23week-7"
+        },
+        {
+          "label": {
+            "ja": "災害CSV",
+            "en": "Disaster CSV"
+          },
+          "href": "csv-preview.html?file=data%2Fdisasters.csv"
+        }
+      ],
+      "id": "w07-8",
+      "page": 8
+    },
+    {
+      "kind": "criteria",
+      "title": {
+        "ja": "問い・実データ・みんなの関心",
+        "en": "Question · actual data · shared interest"
+      },
+      "notes": {
+        "ja": "グループの選択は、答えたい問いがあるか、実際に使えるデータがあるか、全員が関心を持って試せるか、の三つで考えられる。規模や高度なツールはそれ自体が目的ではない。自分たちで調査する場合は、収集できる範囲と共通の列の定義が必要になる。",
+        "en": "A workable group choice joins an answerable question, accessible data, and shared interest. Dataset size and sophisticated tools are not ends in themselves. A self-collected dataset needs a feasible scope and consistent column definitions."
+      },
+      "minutes": 1.5,
+      "id": "w07-9",
+      "page": 9
+    },
+    {
+      "kind": "ideas",
+      "title": {
+        "ja": "一つのデータ、2〜3の案",
+        "en": "One dataset, 2–3 ideas"
+      },
+      "notes": {
+        "ja": "この3図はすべて同じ授業用CSVの値を使っている。時系列・一時点の比較・二つの指標の関係は、それぞれ別の問いを扱う。個人案は単なる配色違いにせず、調べたいことや読者への伝え方を変えてみる。今週は案を試す段階で、完成した作品は必要ない。",
+        "en": "All three views use values from the same course CSV. Change over time, a one-year comparison, and the relationship between two measures address different questions. Individual ideas can vary the question or the communication approach rather than merely changing colors. This week calls for exploration, not finished pieces."
+      },
+      "minutes": 1,
+      "sources": [
+        {
+          "label": {
+            "ja": "授業のGapminder CSV",
+            "en": "Course Gapminder CSV"
+          },
+          "href": "csv-preview.html?file=data%2Fgapminder.csv&return=agenda.html%3Fp%23week-7"
+        },
+        {
+          "label": {
+            "ja": "Gapminderのデータと解説",
+            "en": "Gapminder data documentation"
+          },
+          "href": "https://www.gapminder.org/data/"
+        }
+      ],
+      "id": "w07-10",
+      "page": 10
+    },
+    {
+      "kind": "timeline",
+      "title": {
+        "ja": "中間発表まで",
+        "en": "Toward the midterm"
+      },
+      "notes": {
+        "ja": "現在の授業計画では11月13日（第7週）にデータ選択、11月20日（第8週）に案を共有・統合、11月27日（第9週）に試作・改善、12月4日（第10週）に中間グループ発表を行う。過去のPDFにある3週間の予定より、現在の授業計画を優先する。",
+        "en": "The current calendar allocates November 13 (Week 7) to dataset choice, November 20 (Week 8) to combining ideas, November 27 (Week 9) to testing and improvement, and December 4 (Week 10) to midterm group presentations."
+      },
+      "minutes": 2,
+      "sources": [
+        {
+          "label": {
+            "ja": "授業の予定",
+            "en": "Course agenda"
+          },
+          "href": "agenda.html?p#week-7"
+        }
+      ],
+      "id": "w07-11",
+      "page": 11
+    },
+    {
+      "kind": "brief",
+      "title": {
+        "ja": "今日、残すもの",
+        "en": "The group decision to keep"
+      },
+      "notes": {
+        "ja": "共有ドキュメントは、グループが何を選んだかを記録する短いメモ。グループ名と全員の名前、データ・出典のリンク、1行の意味、最初の問いが分かればよい。メンバー全員が開ける状態にする。グループの方向性は次週の個人案の共有を経て変わることがある。",
+        "en": "A short shared document records the group name and all members, the dataset and source link, the meaning of a row, and one starting question. Every member needs access. This is a provisional decision that can evolve when individual ideas are discussed next week."
+      },
+      "minutes": 1.5,
+      "id": "w07-12",
+      "page": 12
+    },
+    {
+      "kind": "activity1",
+      "title": {
+        "ja": "4人で、候補を二つ",
+        "en": "Four people, two candidates"
+      },
+      "notes": {
+        "ja": "各自の関心を持ち寄り、実際のファイルや表を二つ開く。以前の課題のデータも使える。",
+        "en": "Everyone contributes an interest. Open two actual files or tables; data from earlier assignments is welcome."
+      },
+      "minutes": 0,
+      "steps": {
+        "ja": [
+          "一人一つ、気になる問いを話す",
+          "候補のデータを二つ見つける",
+          "ファイルか表を、実際に開く"
+        ],
+        "en": [
+          "Each person shares one question",
+          "Find two candidate datasets",
+          "Open the actual files or tables"
+        ]
+      },
+      "duration": 15,
+      "id": "w07-13",
+      "page": 13
+    },
+    {
+      "kind": "activity2",
+      "title": {
+        "ja": "一つ選び、共有する",
+        "en": "Choose one and share it"
+      },
+      "notes": {
+        "ja": "候補ごとに行の単位・期間・列・欠損を確認し、一つ選ぶ。収集型の場合は同じ列で試行データを作り、試行と明記する。共有メモを全員が開けるか確認する。",
+        "en": "Inspect row meaning, dates, columns, and blanks before choosing. Self-collected projects can make labeled trial rows with a common structure. Check that every member can access the group note."
+      },
+      "minutes": 0,
+      "steps": {
+        "ja": [
+          "1行・時期・列・空欄を確かめる",
+          "データ一つと、問い一つを選ぶ",
+          "全員の名前と出典を、共有メモに残す"
+        ],
+        "en": [
+          "Check rows, dates, columns, and blanks",
+          "Choose one dataset and one question",
+          "Save members, source, and question in a shared note"
+        ]
+      },
+      "duration": 25,
+      "id": "w07-14",
+      "page": 14
+    },
+    {
+      "kind": "activity3",
+      "title": {
+        "ja": "個人で試す → 見せ合う",
+        "en": "Try individually → share"
+      },
+      "notes": {
+        "ja": "同じデータで10分ずつ個人制作と共有を行う。完成度より、試した問いや発見・未解決の点を共有する段階。下書きは宿題に引き継ぐ。",
+        "en": "Ten minutes of individual exploration is followed by ten minutes of group sharing. The emphasis is on questions tried, discoveries, and unresolved issues; drafts feed into homework."
+      },
+      "minutes": 0,
+      "steps": {
+        "ja": [
+          "10分：一人でグラフやスケッチを試す",
+          "10分：全員が見せて、発見や疑問を話す",
+          "自分の下書きを宿題につなげる"
+        ],
+        "en": [
+          "10 min: try a chart or sketch on your own",
+          "10 min: everyone shares a discovery or question",
+          "Keep your draft for homework"
+        ]
+      },
+      "duration": 20,
+      "id": "w07-15",
+      "page": 15
+    },
+    {
+      "kind": "homework",
+      "title": {
+        "ja": "同じデータから、2〜3案",
+        "en": "2–3 ideas from your shared dataset"
+      },
+      "notes": {
+        "ja": "個人で提出。各案に問いや発見を付け、2〜3案を1〜2枚の画像にまとめる。データ・出典リンクと、グループ名から始まる2〜4文の説明を添える。締切は次回授業前日、2026年11月19日（木）23:59 JST。締切までは再提出できる。",
+        "en": "Submit individually: combine 2–3 ideas into one or two images, each with a question or finding. Add the dataset/source link and 2–4 sentences beginning with your group name. The deadline is Thursday, November 19, 2026, 23:59 JST. Resubmissions are allowed until the deadline."
+      },
+      "minutes": 0,
+      "steps": {
+        "ja": [
+          "手描き・デジタル、どちらでもOK",
+          "全案を画像1〜2枚にまとめる",
+          "出典リンクと、短い説明を添える"
+        ],
+        "en": [
+          "Sketches or any digital tool are welcome",
+          "Combine all ideas into one or two images",
+          "Add the source link and a short explanation"
+        ]
+      },
+      "id": "w07-16",
+      "page": 16
+    }
+  ]
+}
