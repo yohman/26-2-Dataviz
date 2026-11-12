@@ -23,7 +23,22 @@
  new Set(tokens).forEach(term=>{if(stop.has(term)||term.length<2||/^\d+$/.test(term)||/^[ぁ-ん]+$/.test(term)||/^[a-z]{1,2}$/.test(term))return;if(!terms.has(term))terms.set(term,[]);terms.get(term).push(item);});});
  return [...terms].filter(([,list])=>list.length>=2).sort((a,b)=>b[1].length-a[1].length||a[0].localeCompare(b[0])).slice(0,30).map(([en,items])=>({id:en,en,ja:en,items}));
  }
- window.galleryExploreModel={subjectGroups,toolGraph,wordGroups};
+ // Rectangular collision packing keeps Japanese and English words readable at any width.
+ function wordCloudLayout(words,width,height,gap=5){
+  const placed=[];
+  for(const word of [...words].sort((a,b)=>b.w*b.h-a.w*a.h)){
+   let found=null;const seed=[...word.id].reduce((n,c)=>n+c.charCodeAt(0),0)*.17;
+   for(let step=0;step<6500;step++){
+    const angle=step*.43+seed,radius=3.4*Math.sqrt(step),x=width/2+Math.cos(angle)*radius*Math.max(1,width/height*.72)-word.w/2,y=height/2+Math.sin(angle)*radius-word.h/2;
+    if(x<gap||y<gap||x+word.w>width-gap||y+word.h>height-gap)continue;
+    if(placed.some(p=>x<p.x+p.w+gap&&x+word.w+gap>p.x&&y<p.y+p.h+gap&&y+word.h+gap>p.y))continue;
+    found={...word,x,y};break;
+   }
+   if(!found)return null;placed.push(found);
+  }
+  return placed;
+ }
+ window.galleryExploreModel={subjectGroups,toolGraph,wordGroups,wordCloudLayout};
  window.renderGalleryExplore=({root,items,copy,url,image,matchTools,redraw})=>{
   let host=document.querySelector('[data-gallery-explore]');
   if(!host){host=node('section','','gallery-explore');host.dataset.galleryExplore='';root.before(host);}
@@ -33,7 +48,7 @@
   if(!['cards','wall','subjects','words','tools'].includes(mode))mode='cards';
   const tabs=node('div','','explore-tabs');tabs.setAttribute('role','tablist');tabs.setAttribute('aria-label',copy('Explore submissions','作品の見方'));
   const panel=node('div','','explore-panel');panel.id='gallery-explore-panel';
-  const labels=[['cards','Cards','カード'],['wall','Image wall','作品の壁'],['subjects','Common threads','共通する関心'],['words','Language trails','言葉をたどる'],['tools','Tool connections','ツールのつながり']];
+  const labels=[['cards','Cards','カード'],['wall','Image wall','作品の壁'],['subjects','Common threads','共通する関心'],['words','Word cloud','ワードクラウド'],['tools','Tool connections','ツールのつながり']];
   const buttons=labels.map(([id,en,ja])=>{const b=node('button',copy(en,ja));b.type='button';b.setAttribute('role','tab');b.id=`explore-tab-${id}`;b.setAttribute('aria-controls',id==='cards'?'gallery-cards':'gallery-explore-panel');b.onclick=()=>{mode=id;const u=new URL(location.href);if(id==='cards')u.searchParams.delete('view');else u.searchParams.set('view',id);history.replaceState(null,'',u);redraw();document.getElementById(`explore-tab-${id}`)?.focus({preventScroll:true});};tabs.append(b);return b;});
   tabs.onkeydown=e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();let i=buttons.indexOf(document.activeElement);i=e.key==='Home'?0:e.key==='End'?buttons.length-1:(i+(e.key==='ArrowRight'?1:buttons.length-1))%buttons.length;buttons[i].focus();buttons[i].click();};
   root.id='gallery-cards';root.setAttribute('role','tabpanel');root.setAttribute('aria-labelledby','explore-tab-cards');host.append(tabs,panel);
@@ -41,13 +56,27 @@
   function paint(){buttons.forEach((b,i)=>{const on=labels[i][0]===mode;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;});root.hidden=mode!=='cards';panel.hidden=mode==='cards';panel.replaceChildren();panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby',`explore-tab-${mode}`);if(mode==='cards')return;
    if(mode==='wall'){const wall=node('div','','image-wall');items.forEach(i=>wall.append(workLink(i,true)));panel.append(wall);return;}
    if(mode==='words'){
-    panel.append(node('p',copy('Words that recur across different works—not repetitions within one text. Pick a word and follow the images behind it.','同じ文章の繰り返しではなく、別々の作品に登場する言葉。言葉を選んで、その先の作品へ。'),'explore-intro'));
-    const terms=wordGroups(items),ledger=node('div','','word-ledger'),results=node('div','','word-results');const layout=node('div','','word-layout');
+    panel.append(node('p',copy('Larger words appear in more works. Select a word to see those submissions.','文字の大きさは、その言葉が登場する作品数。言葉を選ぶと作品が見られます。'),'explore-intro'));
+    const terms=wordGroups(items),cloud=node('div','','word-cloud'),results=node('div','','word-cloud-results');
     if(!terms.length){panel.append(node('p',copy('No repeated terms in this selection yet.','この条件では共通する言葉がまだありません。')));return;}
-    results.setAttribute('aria-live','polite');const choices=[];
-    const wordControls=node('div','','word-explore-controls');const search=node('input');search.type='search';search.placeholder=copy('Find a word…','言葉を探す…');search.setAttribute('aria-label',copy('Find a recurring word','共通する言葉を探す'));const wander=node('button',copy('Take me somewhere','どこかへ、ひと跳び'));wander.type='button';wordControls.append(search,wander);panel.append(wordControls);
-    search.oninput=()=>choices.forEach((b,i)=>{b.hidden=!terms[i].en.includes(search.value.toLowerCase().trim());});wander.onclick=()=>{const visible=choices.filter(b=>!b.hidden);visible[Math.floor(Math.random()*visible.length)]?.click();};
-    terms.forEach((g,i)=>{const b=node('button','','word-trail');b.type='button';b.style.setProperty('--word-width',`${g.items.length/terms[0].items.length*100}%`);b.style.setProperty('--thread-color',palette[i%palette.length]);b.style.setProperty('--trail-offset',`${i%4*8}px`);b.append(node('span',g.en),node('small',String(g.items.length)));b.onclick=()=>{choices.forEach(n=>n.setAttribute('aria-pressed',String(n===b)));results.replaceChildren(node('h2',g.en));g.items.forEach((item,i)=>{const a=workLink(item);a.style.setProperty('--arrival',`${Math.min(i,7)*35}ms`);results.append(a);});};b.setAttribute('aria-pressed','false');choices.push(b);ledger.append(b);});layout.append(ledger,results);panel.append(layout);choices[0].click();panel.append(node('p',copy('Up to 30 recurring words, with common filler words removed. Japanese and English are counted separately; wording is not translated or inferred.','共通語を最大30語表示。一般的な補助語を除外。日英の語は別々に数え、翻訳・推測はしていません。'),'explore-method'));return;
+    cloud.setAttribute('role','group');cloud.setAttribute('aria-label',copy('Recurring words in the selected submissions','選択中の作品に登場する共通語'));
+    results.setAttribute('aria-live','polite');results.id='word-cloud-results';let selected=null,frame=0,lastWidth=0;
+    const choices=terms.map((g,i)=>{const button=node('button',g.en,'cloud-word');button.type='button';button.style.setProperty('--cloud-color',palette[i%palette.length]);button.setAttribute('aria-pressed','false');button.setAttribute('aria-controls',results.id);const label=copy(`${g.en} · ${g.items.length} works`,`${g.en} · ${g.items.length}点の作品`);button.title=label;button.setAttribute('aria-label',label);button.onclick=()=>select(selected===g.id?null:g);cloud.append(button);return button;});
+    function select(group){selected=group?.id||null;choices.forEach((b,i)=>b.setAttribute('aria-pressed',String(terms[i].id===selected)));results.replaceChildren();if(!group){results.append(node('p',copy('Choose a word to explore the works behind it.','気になる言葉を選んで、作品をたどってみましょう。'),'word-cloud-hint'));return;}
+     const heading=node('div','','word-cloud-heading');heading.append(node('h2',group.en),node('span',copy(`${group.items.length} works`,`${group.items.length}点`)));const clear=node('button',copy('Clear selection','選択を解除'));clear.type='button';clear.onclick=()=>{select(null);choices[terms.indexOf(group)].focus({preventScroll:true});};heading.append(clear);results.append(heading);
+     const grid=node('div','','word-cloud-works');group.items.forEach((item,i)=>{const a=workLink(item);a.style.setProperty('--arrival',`${Math.min(i,7)*35}ms`);grid.append(a);});results.append(grid);
+    }
+    function arrange(){if(!cloud.isConnected)return;const width=cloud.clientWidth;if(!width)return;const height=width<600?380:430,maxSize=width<600?45:88,minSize=width<600?16:23,counts=terms.map(g=>g.items.length),max=Math.max(...counts),min=Math.min(...counts);let positions;
+     for(let attempt=0;attempt<9;attempt++){
+      const boxes=choices.map((button,i)=>{const share=max===min?.5:(terms[i].items.length-min)/(max-min),size=(minSize+Math.sqrt(share)*(maxSize-minSize))*Math.pow(.91,attempt);button.style.fontSize=`${size}px`;button.style.fontWeight=share>.5?'700':'500';let w=button.offsetWidth,h=button.offsetHeight;
+       if(w>width*.8){button.style.fontSize=`${size*width*.8/w}px`;w=button.offsetWidth;h=button.offsetHeight;}
+       const vertical=i%7===5&&share<.5;button.style.setProperty('--cloud-angle',vertical?'-90deg':'0deg');return {id:terms[i].id,index:i,w:vertical?h:w,h:vertical?w:h};});
+      positions=wordCloudLayout(boxes,width,height);if(positions)break;
+     }
+     cloud.style.height=`${height}px`;if(!positions){cloud.classList.add('cloud-flow');return;}cloud.classList.remove('cloud-flow');for(const p of positions){const b=choices[p.index];b.style.left=`${p.x+p.w/2}px`;b.style.top=`${p.y+p.h/2}px`;}cloud.classList.add('is-ready');
+    }
+    panel.append(cloud,results);select(null);panel.append(node('p',copy('Counts are distinct works, not repetitions within one text. Up to 30 recurring terms; common filler words are removed. Japanese and English are counted separately.','同じ文章内の繰り返しではなく、登場する作品の数を集計。補助語を除いた共通語を最大30語表示。日英の語は別々に数えます。'),'explore-method'));
+    const observer=new ResizeObserver(()=>{if(cloud.clientWidth===lastWidth)return;lastWidth=cloud.clientWidth;cancelAnimationFrame(frame);frame=requestAnimationFrame(arrange);});observer.observe(cloud);arrange();document.fonts?.ready.then(()=>{if(cloud.isConnected)arrange();});host.exploreCleanup=()=>{observer.disconnect();cancelAnimationFrame(frame);};return;
    }
    const tools=mode==='tools';const model=tools?toolGraph(items,matchTools):null;const groups=tools?model.groups:subjectGroups(items);
    panel.append(node('p',tools?copy('A line joins tools named in the same submission. Thicker lines mean more shared works. Select a tool.','同じ作品で使われたツールを線で接続。太い線ほど共用された作品が多い。ツールを選んでみよう。'):copy('Shared subjects, traced through titles and descriptions in Japanese and English. Select a subject to discover the works behind it.','日英のタイトルと説明に登場する言葉から、共通する関心をたどる。テーマを選ぶと作品が見えます。'),'explore-intro'));
