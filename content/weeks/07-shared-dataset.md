@@ -13,8 +13,8 @@ learn_ja: みんなで使えるデータを一つ選び、それぞれの案を�
 lecture_gallery_week: 6
 schedule: 10:40–10:50|Review|Last week's visual arguments;10:50–11:10|Short lecture|Questions, data, and visual possibilities;11:10–11:25|Activity 1|Groups of four and two candidates;11:25–11:50|Activity 2|Inspect the files and choose one;11:50–12:10|Activity 3|Individual trial and group share;12:10–12:20|Closing|Group decisions and homework
 schedule_ja: 10:40–10:50|作品レビュー|先週の「伝える」可視化;10:50–11:10|ミニ講義|問い・データ・見せ方;11:10–11:25|活動1|4人で集まり、候補を二つ;11:25–11:50|活動2|データを開いて一つ選ぶ;11:50–12:10|活動3|個人で試し、見せ合う;12:10–12:20|まとめ|選んだデータと宿題
-in_class: Groups of four choose one shared dataset. Everyone then tries their own question. Reusing data from earlier assignments is welcome.
-in_class_ja: 4人グループでデータを一つ選び、その後は各自の問いを試します。これまでの課題で使ったデータも歓迎です。
+in_class: Groups of four choose one shared dataset. Everyone then tries their own question. Gapminder and Disasters are optional starting points. Groups are encouraged to find their own data; reusing earlier data is welcome too.
+in_class_ja: 4人グループでデータを一つ選び、その後は各自の問いを試します。GapminderとDisastersは任意の候補です。自分たちの関心に合うデータを探すことを勧めます。以前の課題のデータも歓迎です。
 homework: Using your group's dataset, make 2–3 different visualization ideas. Sketches or any digital tool are welcome. Rough ideas are enough this week.
 homework_ja: グループで選んだデータから、異なる可視化案を2〜3つつくりましょう。手描きでもデジタルでもOK。今週はラフな案で十分です。
 requirements: Give each idea a question or finding. Vary what you investigate or how you show it.;Combine all 2–3 ideas into one or two images. Submit individually through the usual form, with the dataset/source link.;Start your commentary with your group name. In 2–4 sentences, explain the ideas and which one you want to develop next. Bring them to the next class.
@@ -48,8 +48,8 @@ image: assets/images/lecture/week07-shared-data.svg
 ### Activity 1
 title: Find a question together · 15 min
 title_ja: 気になる問いを持ち寄る · 15分
-text: Form groups of four. Everyone should have a question they care about.
-text_ja: 4人で集まり、全員が「気になる問い」を一つ出します。
+text: Form groups of four. Everyone should have a question they care about. The two course datasets are optional; groups are encouraged to find their own.
+text_ja: 4人で集まり、全員が「気になる問い」を一つ出します。配布の二つのデータは任意の候補です。自分たちの関心に合うデータを探すことを勧めます。
 steps:
 - Take about one minute each to share an interest or an earlier assignment.
 - Choose two candidate datasets together. Reuse earlier data, find new data, or plan a small survey you can actually collect.
@@ -62,8 +62,8 @@ steps_ja:
 ### Activity 2
 title: Open, compare, choose · 25 min
 title_ja: 開く・比べる・選ぶ · 25分
-text: Choose one dataset that everyone can access and wants to explore. The two course CSVs below are optional fallbacks, not required topics.
-text_ja: 全員が開けて、調べてみたいと思えるデータを一つ選びます。下の二つのCSVは、迷ったときの候補です。使う必要はありません。
+text: Choose one dataset that everyone can access and wants to explore. The two CSVs below are optional starting points. Groups are encouraged to find their own.
+text_ja: 全員が開けて、調べてみたいと思えるデータを一つ選びます。下の二つのCSVは任意の候補です。自分たちの関心に合うデータを探すことを勧めます。
 steps:
 - Inspect a few rows in each candidate. What does one row represent? Which places, dates, units, and missing values are involved?
 - Choose one dataset and one question it could answer. If collecting your own data, agree on the same columns and make a few clearly labeled trial rows today.
