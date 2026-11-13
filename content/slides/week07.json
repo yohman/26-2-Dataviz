@@ -210,8 +210,8 @@
         "en": "What could you investigate with each?"
       },
       "notes": {
-        "ja": "比較するのは授業用ファイルの実際の内容。Gapminderは国・年、災害データは国・災害・時期の記録で、同じ災害が国をまたぐ場合など、行と出来事が一対一とは限らない。期間や行数はファイルの特徴であり、網羅性・新しさ・正確さの保証ではない。配布データ以外も選べる。",
-        "en": "These are properties of the actual course files. Gapminder is organized by geography and year; disaster records combine countries, disaster types, and dates. A disaster row should not automatically be treated as one unique global event. Row counts and time ranges do not guarantee completeness, recency, or accuracy. Groups may choose other data."
+        "ja": "比較するのは授業用ファイルの実際の内容。Gapminderは国・年、災害データは国・災害・時期の記録で、同じ災害が国をまたぐ場合など、行と出来事が一対一とは限らない。期間や行数はファイルの特徴であり、網羅性・新しさ・正確さの保証ではない。GapminderとDisastersは任意の候補であり、使用は必須ではない。グループの関心に合うデータを自分たちで探すことを勧める。",
+        "en": "These are properties of the actual course files. Gapminder is organized by geography and year; disaster records combine countries, disaster types, and dates. A disaster row should not automatically be treated as one unique global event. Row counts and time ranges do not guarantee completeness, recency, or accuracy. Gapminder and Disasters are optional starting points, not required datasets. Groups are encouraged to find their own data that matches their interests."
       },
       "minutes": 2,
       "sources": [
@@ -231,7 +231,11 @@
         }
       ],
       "id": "w07-8",
-      "page": 8
+      "page": 8,
+      "note": {
+        "ja": "この二つは任意の候補です。\n自分たちの関心に合うデータを探すことを勧めます。",
+        "en": "These two datasets are optional starting points.\nGroups are encouraged to find their own."
+      }
     },
     {
       "kind": "criteria",

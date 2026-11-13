@@ -21,3 +21,5 @@
 
 .slide-question h1{white-space:pre-line}
 .html-lecture-page .site-nav{display:flex;position:static;flex-direction:row;align-items:center;width:auto;padding:0;background:transparent;border:0}
+
+.slide-compare .dataset-note{font:500 30px/1.65 var(--deck-sans);color:var(--deck-red);white-space:pre-line;margin:35px 0 0}
