@@ -45,3 +45,18 @@
 .homework-choices h5{margin:0 0 .6rem}
 .homework-choices ul{padding-left:1.2rem;margin:0;display:grid;gap:.5rem;font-size:.88rem;line-height:1.6}
 @media(max-width:650px){.dubois-hero .history-map-trigger{height:clamp(360px,110vw,510px)}.history-feature.dubois-hero .history-map-image{width:100%;object-position:50% 20%}.dubois-hero figcaption{position:static;transform:none;width:auto;padding:1.3rem 0 0}.dubois-hero .eyebrow{margin-bottom:.6rem}.dubois-hero h1{text-wrap:balance;font-size:2.6rem;line-height:1.15}.dubois-hero .history-author{margin-top:.8rem}.dubois-hero .history-map-hint{background:var(--paper)}}
+
+/* Week 7: the students' image wall becomes the opening image. */
+.student-home .dashboard--history{padding-top:2rem}
+.student-wall-hero .history-map{box-shadow:none;background:transparent;overflow:hidden;border-radius:0}
+.history-feature.student-wall-hero .history-map-image{width:100%;height:auto;aspect-ratio:1422/640;object-fit:contain;background:transparent}
+.student-wall-hero .history-map-trigger{overflow:hidden;border-radius:0}
+.student-wall-hero figcaption{padding-top:1.2rem;gap:.65rem 2rem}
+.student-wall-hero h1{font-size:clamp(2rem,3.8vw,3.7rem);line-height:1.2;letter-spacing:-.035em}
+.student-wall-hero .history-author{font-weight:500;color:var(--muted)}
+@media(max-width:650px){.student-home .dashboard--history{padding-top:1.2rem}.history-feature.student-wall-hero .history-map-image{aspect-ratio:1.45;object-fit:cover;object-position:50% 45%}.student-wall-hero figcaption{gap:.65rem}.student-wall-hero h1{font-size:2.1rem;line-height:1.3}.student-wall-hero .history-author{font-size:.75rem}.student-wall-hero .history-map-hint{font-size:.6rem}}
+.student-home .history-feature.student-wall-hero{display:block}
+.student-home .student-wall-hero figcaption{position:static;transform:none;width:auto;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end}
+@media(max-width:650px){.student-home .student-wall-hero figcaption{grid-template-columns:1fr}}
+
+.student-home .student-wall-hero figcaption{padding:0 .35rem 1.3rem}

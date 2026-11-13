@@ -1,6 +1,11 @@
 // English remains in each HTML page for searchability and no-JavaScript fallback.
 // Add or revise Japanese copy here; weekly dynamic content lives in site.js.
 window.COURSE_TRANSLATIONS = { ja: {
+  'Open Week 7 →': '第7週を開く →',
+  'WEEK 7 · GROUP PROJECT': '第7週 · グループプロジェクト',
+  'Choose a shared dataset': '共有データセットを選ぶ',
+  'Student work · Week 6': '学生の作品 · 第6週',
+  'Work in groups of four, then develop your own visualization ideas.': '4人グループでデータを選び、それぞれの可視化案を試します。',
   'Open Week 6 →': '第6週を開く →',
   'WEEK 6 · SOCIAL JUSTICE': '第6週 · 社会正義',
   'Data and social justice': 'データと社会正義',
