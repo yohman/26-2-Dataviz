@@ -10,21 +10,66 @@ look: a prototype is a question you can test
 look_ja: プロトタイプは、試すことのできる問い
 learn: create, test, get feedback, and refine in class
 learn_ja: 授業内でつくり、試し、フィードバックを受け、改訂する
-in_class: Show a prototype to two classmates, collect one question from each, and choose one revision.
-in_class_ja: プロトタイプをクラスメイト二人に見せ、それぞれから一つ質問を集め、改訂を一つ選ぶ。
+schedule: 10:40–10:50|Pin up|One A3 printout per group;10:50–11:30|Wall critique|View, respond, discuss;11:30–12:20|Revise|Choose a change and test it
+schedule_ja: 10:40–10:50|壁に掲示|A3をグループで1枚;10:50–11:30|講評|見る・伝える・話す;11:30–12:20|改善|変更を一つ選んで試す
+in_class: Pin one A3 prototype printout per group on the wall. Explore other groups’ work, exchange critique, then revise.
+in_class_ja: 各グループ、A3の試作1枚を壁に掲示。他のグループの作品を見て講評し、改善につなげます。
 homework: Revision log and prototype update
 homework_ja: 改訂記録とプロトタイプの更新
 challenge: Prototype refinement
 challenge_ja: プロトタイプ改訂
-tools: Your project tool + Padlet
-tools_ja: プロジェクトのツールとPadlet
+tools: A3 prototype printout, sticky notes or paper, and your project tool
+tools_ja: A3の試作・付箋やメモ・プロジェクトのツール
 image: assets/images/lecture/week09.png
 ---
 
 ## Materials
 
 - [Lecture slides](lectures/w09.pdf) {slides}
-- [Padlet course wall](https://padlet.com/yohda/dataviz) {reference}
+
+## In Class Activities
+
+### Activity 1
+title: Pin up · 10 min
+title_ja: 壁に掲示 · 10分
+text: Each group pins up one A3 printout of its prototype. Include your group name and the question it explores.
+text_ja: 各グループ、試作を印刷したA3を1枚掲示。グループ名と、取り組む問いを入れます。
+steps:
+- Pin your A3 where everyone can read it.
+- Keep the question and main visualization visible.
+- Put sticky notes or paper nearby for comments.
+steps_ja:
+- みんなが読める場所にA3を貼る。
+- 問いと主な可視化が見えるようにする。
+- 感想を書ける付箋やメモをそばに置く。
+
+### Activity 2
+title: Wall critique · 40 min
+title_ja: 壁の作品を講評 · 40分
+text: Visit at least two other groups’ posters. Leave specific comments, then return to your own poster and discuss the feedback together.
+text_ja: 他のグループの作品を少なくとも二つ見て、具体的なコメントを残します。その後、自分たちの作品に戻り、もらった意見を読みます。
+steps:
+- What comes through clearly? Note one point.
+- What is unclear? Leave one question or suggestion.
+- Return as a group and choose one change to try.
+steps_ja:
+- 伝わったことを一つ書く。
+- 不明な点や改善案を一つ残す。
+- グループで戻り、次に試す変更を一つ選ぶ。
+
+### Activity 3
+title: Revise and compare · 50 min
+title_ja: 改善して、比べる · 50分
+text: Use the critique to improve your prototype. Keep the A3 as a record of the version you tested.
+text_ja: 講評をもとに試作を改善します。掲示したA3は、試した版の記録として残します。
+steps:
+- Make the change you chose.
+- Compare it with the printed version. Is the question clearer?
+- Save the new version and one sentence on what changed and why.
+steps_ja:
+- 選んだ変更を試す。
+- 印刷した版と比べ、問いが伝わりやすくなったか確認する。
+- 新しい版と、何をなぜ変えたかを一文で残す。
 
 ## Mori's Corner
 

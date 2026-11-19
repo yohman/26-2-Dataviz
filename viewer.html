@@ -10,8 +10,8 @@
       if (['lectures/w07.pdf','lectures/w08.pdf'].includes(q.get('file'))) {
         const week = q.get('file').includes('w08') ? '8' : '7';
         if (week === '8') {
-          const legacy = ['framework','xaviz','schon','history','double-diamond','make-critique-revise','group-project','last-week','combine','combine','next'];
-          q.set('slide', legacy[(Number(q.get('page')) || 1) - 1] || 'framework');
+          const legacy = ['xaviz','xaviz','schon','history','double-diamond','make-critique-revise','group-project','last-week','combine','combine','next'];
+          q.set('slide', legacy[(Number(q.get('page')) || 1) - 1] || 'xaviz');
         }
         q.delete('file'); q.delete('title'); q.set('week', week);
         location.replace(`lecture.html?${q}`);

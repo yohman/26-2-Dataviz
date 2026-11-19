@@ -1,27 +1,40 @@
 /* Week 8: native type, paths, marks and classroom interactions. Photos are source art. */
 const e=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const phaseNames=['Discover','Define','Develop','Deliver'];
-const phaseJa=['探る','問いを絞る','試す','確かめて届ける'];
 const phaseColors=['#ac3d4d','#b87b26','#52716c','#77618a'];
-const points=[[190,450],[495,165],[800,450],[1105,165],[1410,450]];
 const tag=(x,y,t,cls='',more='')=>`<text x="${x}" y="${y}" class="${cls}" ${more}>${e(t)}</text>`;
 const svg=(s,label)=>`<svg viewBox="0 0 1600 900" role="img" aria-label="${e(label)}"><title>${e(label)}</title>${s}</svg>`;
 function diamond(s,ja){
- const p=s.phase;let content=tag(100,104,'Double Diamond','w8-diagram-title')+tag(1495,104,'2004','w8-diagram-year','text-anchor="end"');
- const triangles=['190,450 495,165 495,735','495,165 800,450 495,735','800,450 1105,165 1105,735','1105,165 1410,450 1105,735'];
- for(let i=0;i<4;i++){
-  const visible=i<p,active=i===p-1;
-  content+=`<polygon class="w8-phase${visible?' is-revealed':''}${active?' is-active':''}" points="${triangles[i]}" fill="${visible?phaseColors[i]:'#e8e3d8'}" fill-opacity="${visible?(active?'.18':'.08'):'.35'}" stroke="${visible?phaseColors[i]:'#d4cdbf'}" stroke-width="${visible?'3':'2'}"/>`;
-  if(visible){const cx=342+i*305,cy=i%2?540:375;
-   // Branching strokes, then a convergent counterpart: abstract alternatives, not observations.
-   for(let k=0;k<5;k++){const x=i%2?cx-105:cx+100,y=cy+(k-2)*42;
-    content+=`<path d="M${i%2?x:cx-90} ${i%2?y:cy}L${i%2?cx+90:x} ${i%2?cy:y}" stroke="${phaseColors[i]}" stroke-width="2" opacity=".45"/><circle cx="${x}" cy="${y}" r="7" fill="${phaseColors[i]}"/>`;}
-   content+=tag(cx,817,phaseNames[i],'w8-phase-name','text-anchor="middle"')+tag(cx,861,ja?phaseJa[i]:'','w8-phase-translation','text-anchor="middle"');
-  }
+ const p=s.phase,red='#ac3d4d',blue='#b78631';
+ const phaseLabels=['Discover','Define','Develop','Deliver'];
+ const phaseTranslations=['探る','問いを決める','案をつくる','試して改善'];
+ const edges=[[[190,450],[470,205],[470,695]],[[470,205],[750,450],[470,695]],[[750,450],[1030,205],[1030,695]],[[1030,205],[1310,450],[1030,695]]];
+ let c=`<defs><marker id="w8-blue-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M1 1 11 6 1 11Z" fill="${blue}"/></marker></defs>`;
+ c+=tag(80,85,'Double Diamond','w8-diagram-title')+tag(1520,85,'Design Council · 2004','w8-diagram-year','text-anchor="end"');
+ // Same paired widening and narrowing as the source; the red edges carry the process.
+ c+=`<path d="M190 450 470 205 750 450 1030 205 1310 450 1030 695 750 450 470 695Z" fill="none" stroke="#e6e0d5" stroke-width="4"/>`;
+ c+=`<circle cx="88" cy="450" r="69" fill="#fff" stroke="${red}" stroke-width="4"/>`+tag(88,459,ja?'気になること':'Challenge','w8-endpoint','text-anchor="middle"');
+ if(p>=1)c+=`<path d="M470 235V666" stroke="#bfc0c2" stroke-width="4" stroke-dasharray="16 18"/>`;
+ if(p>=3)c+=`<path d="M1030 235V666" stroke="#bfc0c2" stroke-width="4" stroke-dasharray="16 18"/>`;
+ const arrow=(a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy),ux=dx/len,uy=dy/len,x=a[0]+dx*.59,y=a[1]+dy*.59;return `<path d="M${x+ux*17} ${y+uy*17}L${x-ux*12-uy*12} ${y-uy*12+ux*12}L${x-ux*12+uy*12} ${y-uy*12-ux*12}Z" fill="${red}"/>`;};
+ for(let i=0;i<p;i++){
+  const [a,b,d]=edges[i];
+  const pairs=i%2?[[a,b],[d,b]]:[[a,b],[a,d]];
+  c+=`<g class="w8-process-stage" data-phase="${i+1}"><path d="${pairs.map(([from,to])=>`M${from.join(' ')}L${to.join(' ')}`).join(' ')}" fill="none" stroke="${red}" stroke-width="10" stroke-linejoin="miter"/>${pairs.map(([from,to])=>arrow(from,to)).join('')}`;
+  c+=tag(330+i*280,455,ja?(i%2?'絞る':'広げる'):(i%2?'Focus':'Explore'),'w8-diverge-label','text-anchor="middle"');
+  const x=330+i*280,y=535,rot=i%2?-41:41;
+  c+=`<text x="${x}" y="${y}" text-anchor="middle" transform="rotate(${rot} ${x} ${y})" class="w8-source-phase-name">${phaseLabels[i]}</text>`;
+  c+=tag(330+i*280,800,ja?phaseTranslations[i]:'','w8-source-translation','text-anchor="middle"')+'</g>';
  }
- content+=`<path d="M190 450 495 165 800 450 1105 165 1410 450 1105 735 800 450 495 735Z" fill="none" stroke="#b5aa98" stroke-width="2"/>`;
- if(s.iterate)content+=`<path id="w8-return-path" d="M1390 475C1470 820 1110 880 817 716C490 530 420 838 220 500" class="w8-return-path" fill="none" stroke="#ac3d4d" stroke-width="6" stroke-dasharray="10 12"/><path d="m216 500 7 33 25-25" fill="none" stroke="#ac3d4d" stroke-width="6"/><circle class="w8-return-traveller" r="12" fill="#ac3d4d"/>`;
- return `<div class="w8-diamond">${svg(content,`Double Diamond · ${p?phaseNames.slice(0,p).join(', '):'2004'}`)}${s.question?`<p class="w8-phase-question" style="color:${phaseColors[p-1]}">${e(s.question[ja?'ja':'en'])}</p>`:''}${s.iterate?`<button class="w8-replay" data-replay>${ja?'もう一度 ↶':'Replay ↶'}</button>`:''}</div>`;
+ c+=`<circle cx="750" cy="450" r="16" fill="#faf8f0"/>`;
+ if(p>=4){
+  c+=`<circle cx="1414" cy="450" r="69" fill="#fff" stroke="${red}" stroke-width="5"/>`+tag(1414,459,ja?'伝わる試作':'Prototype','w8-endpoint','text-anchor="middle"');
+  c+=`<path d="M729 416C680 68 240 68 188 390" class="w8-source-feedback" fill="none" stroke="${blue}" stroke-width="5" stroke-dasharray="12 13" marker-end="url(#w8-blue-arrow)"/><path d="M1130 416C1112 296 959 296 925 403" class="w8-source-feedback" fill="none" stroke="${blue}" stroke-width="5" stroke-dasharray="12 13" marker-end="url(#w8-blue-arrow)"/>`;
+  c+=`<path id="w8-return-path" d="M1270 558C1200 818 305 818 220 564" class="w8-source-feedback" fill="none" stroke="${blue}" stroke-width="5" stroke-dasharray="12 13" marker-end="url(#w8-blue-arrow)"/>`;
+  if(s.iterate)c+=`<circle class="w8-source-traveller" r="11" fill="${blue}"/>`;
+ }
+ const courseActions=ja?['データや、気になることを探す','みんなの案から、問いを一つ選ぶ','同じデータで、2〜3案をつくる','別のグループに見せて、改善する']:['Explore data and what matters to you','Choose one question together','Try 2–3 views of the same data','Show another group. Improve it.'];
+ const caption=s.iterate?(ja?'問いも、見せ方も、見直していい。':'The question can change too.'):(p?courseActions[p-1]:(ja?'広げる。絞る。もう一度。':'Open up. Focus. Again.'));
+ return `<div class="w8-diamond w8-source-diamond">${svg(c,`Double Diamond · ${phaseLabels.slice(0,p).join(', ')}`)}<p class="w8-course-caption">${e(caption)}</p>${s.iterate?`<button class="w8-replay" data-replay>${ja?'もう一度 ↶':'Replay ↶'}</button>`:''}</div>`;
 }
 export function feedbackChart(data,state,ja){
  let rows=data.scatter.filter(r=>['Japan','India','China','Sweden','United States'].includes(r.country));
@@ -45,6 +58,7 @@ export function renderWeek8(s,{ja,data,returnTo}){
  if(s.kind==='framework-cover')return `<a class="w8-cover" href="https://www.designcouncil.org.uk/resources/framework-for-innovation/" target="_blank" rel="noopener"><img src="${e(s.image)}" alt="${ja?'赤い額縁に入ったDesign CouncilのDouble Diamondポスター':'Design Council’s Double Diamond poster in a red frame'}"><h1>Framework<br>for Innovation</h1><span class="w8-credit">Design Council ↗</span></a>`;
  if(s.kind==='history-question')return `<div class="w8-history"><time>2003</time><h1>${e(tr(s.title))}</h1><p>Richard Eisermann · Design Council</p></div>`;
  if(s.kind==='diamond')return diamond(s,ja);
+ if(s.kind==='framework-context')return `<div class="w8-framework-context"><h1>Framework for Innovation</h1><div class="w8-context-engagement"><strong>Engagement</strong><span>${ja?'人と関わり、共につくる':'Connect with people. Co-create.'}</span></div><div class="w8-context-core">${diamond({phase:4},ja)}</div><div class="w8-context-principles"><h2>${ja?'デザインの原則':'Design principles'}</h2><p>${ja?'人を中心に · 視覚で共有 · 協働 · 反復':'People first · Visual communication · Collaboration · Iteration'}</p></div><div class="w8-context-methods"><h2>${ja?'使える方法':'Methods bank'}</h2><p>${ja?'探る · 形にする · つくる':'Explore · Shape · Build'}</p></div><div class="w8-context-leadership"><strong>Leadership</strong><span>${ja?'試せる環境をつくる':'Create the conditions to experiment.'}</span></div></div>`;
  if(s.kind==='schon')return `<div class="w8-schon"><div><time>1983</time><h1>${e(tr(s.title))}</h1>${ja?'<p class="w8-english">Reflection-in-action</p>':''}<p>Donald Schön</p></div><a href="${e(s.sources[1].href)}" target="_blank" rel="noopener"><img src="${e(s.image)}" alt="The Reflective Practitioner · Donald Schön"></a></div>`;
  if(s.kind==='feedback')return `<div class="w8-feedback"><div data-feedback-chart>${feedbackChart(data,1,ja)}</div><nav class="w8-loop" aria-label="${ja?'試作を切り替える':'Switch prototype'}">${[ja?'つくる':'Make',ja?'見せる':'Critique',ja?'つくり直す':'Revise'].map((t,i)=>`<button data-feedback="${i+1}" aria-pressed="${i===0}"><small>0${i+1}</small>${t}</button>${i<2?'<span aria-hidden="true">→</span>':''}`).join('')}<span class="w8-loop-return" aria-hidden="true">↶</span></nav><p data-feedback-caption>${ja?'まず、つくる。':'Make a first version.'}</p></div>`;
  if(s.kind==='xaviz')return `<a class="w8-xaviz" href="${e(s.href)}" target="_blank" rel="noopener" aria-label="XAVIZ"><h1>XAVIZ<span aria-hidden="true">↗</span></h1><img src="${e(s.image)}" alt="XAVIZ"></a>`;
@@ -52,8 +66,8 @@ export function renderWeek8(s,{ja,data,returnTo}){
  if(s.kind==='ideas-native')return `<div class="w8-ideas"><h1>${e(tr(s.title))}</h1><span class="w8-ideas-number">2–3</span>${ideaCharts(data,ja)}<a href="${e(s.href)}">${ja?'先週の作品を見る':'Last week’s gallery'} ↗</a></div>`;
  if(s.kind==='combine')return `<div class="w8-combine"><h1>${e(tr(s.title))}</h1><svg viewBox="0 0 1400 520" aria-hidden="true">${[0,1,2].map(i=>`<path d="M100 ${100+i*150}C600 ${100+i*150} 500 250 900 250" fill="none" stroke="${phaseColors[i]}" stroke-width="8"/><circle cx="100" cy="${100+i*150}" r="22" fill="${phaseColors[i]}"/>`).join('')}<circle cx="950" cy="250" r="75" fill="#40392f"/><path d="m925 250 18 18 35-42" fill="none" stroke="#faf8f0" stroke-width="7"/></svg><p>${ja?'問い一つ。試作一つ。':'One question. One prototype.'}</p></div>`;
  if(s.kind==='studio-activity')return `<div class="w8-activity"><div class="w8-time">${s.duration}<small>min</small></div><div><h1>${e(tr(s.title))}</h1><ol>${tr(s.steps).map(t=>`<li>${e(t)}</li>`).join('')}</ol>${s.href?`<a href="${e(s.href)}">${ja?'先週の作品を見る':'Last week’s gallery'} ↗</a>`:''}</div></div>`;
- if(s.kind==='studio-timeline')return `<div class="w8-timeline"><h1>${e(tr(s.title))}</h1><div>${(ja?['試作を改善','中間発表','地図','ネットワーク','最終制作','最終発表']:['Refine','Midterm','Maps','Networks','Final studio','Final presentations']).map((t,i)=>`<p><span>W${i+9}</span><strong>${t}</strong></p>`).join('')}</div></div>`;
- if(s.kind==='studio-homework')return `<div class="w8-homework"><h1>${e(tr(s.title))}</h1><ul>${tr(s.steps).map(t=>`<li>${e(t)}</li>`).join('')}</ul><footer><a href="homework-submit.html?week=8">${ja?'宿題を提出':'Submit homework'} ↗</a><a href="${e(returnTo)}">${ja?'課題の説明':'Assignment details'} ↗</a><time>11.26 Thu · 23:59 JST</time></footer></div>`;
+ if(s.kind==='studio-timeline')return `<div class="w8-timeline"><h1>${e(tr(s.title))}</h1><div>${(ja?['A3の壁で講評','中間発表','地図','ネットワーク','最終制作','最終発表']:['A3 pin-up critique','Midterm','Maps','Networks','Final studio','Final presentations']).map((t,i)=>`<p><span>W${i+9}</span><strong>${t}</strong></p>`).join('')}</div></div>`;
+ if(s.kind==='studio-homework')return `<div class="w8-homework w8-print-homework"><div class="w8-a3-sheet" aria-hidden="true"><b>A3</b><svg viewBox="0 0 220 170"><path d="M20 15V145H205" fill="none" stroke="#c7b8a2" stroke-width="2"/><path d="m25 120 40-25 35 10 30-55 35 10 30-35" fill="none" stroke="#ac3d4d" stroke-width="5"/></svg><span>11.27 · ${ja?'持参':'Bring to class'}</span></div><h1>${e(tr(s.title))}</h1><ul>${tr(s.steps).map(t=>`<li>${e(t)}</li>`).join('')}</ul><footer><a href="homework-submit.html?week=8">${ja?'宿題を提出':'Submit homework'} ↗</a><a href="${e(returnTo)}">${ja?'課題の説明':'Assignment details'} ↗</a><time>11.26 Thu · 23:59 JST</time></footer></div>`;
  return '';
 }
 export function bindWeek8(root,{s,data,ja}){

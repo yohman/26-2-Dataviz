@@ -6,10 +6,17 @@
   },
   "chapters": [
     {
+      "id": "xaviz",
+      "label": {
+        "ja": "XAVIZ",
+        "en": "XAVIZ"
+      }
+    },
+    {
       "id": "framework",
       "label": {
-        "ja": "講義",
-        "en": "Lecture"
+        "ja": "Framework for Innovation",
+        "en": "Framework for Innovation"
       }
     },
     {
@@ -17,13 +24,6 @@
       "label": {
         "ja": "Double Diamond",
         "en": "Double Diamond"
-      }
-    },
-    {
-      "id": "xaviz",
-      "label": {
-        "ja": "XAVIZ",
-        "en": "XAVIZ"
       }
     },
     {
@@ -57,6 +57,21 @@
   ],
   "slides": [
     {
+      "id": "xaviz",
+      "kind": "xaviz",
+      "title": {
+        "ja": "XAVIZ",
+        "en": "XAVIZ"
+      },
+      "notes": {
+        "ja": "",
+        "en": ""
+      },
+      "image": "assets/images/lecture/xaviz-hero.jpg",
+      "href": "https://docs.google.com/presentation/d/1nzo8jO-YejXe_3wUdZwXTMdqLpY96ang8nzZu2FokTU/edit?usp=sharing",
+      "page": 1
+    },
+    {
       "id": "framework",
       "kind": "framework-cover",
       "title": {
@@ -74,7 +89,7 @@
         }
       ],
       "image": "assets/images/lecture/week08-framework.jpg",
-      "page": 1
+      "page": 2
     },
     {
       "id": "history",
@@ -94,7 +109,7 @@
           "href": "https://www.designcouncil.org.uk/resources/the-double-diamond/history-of-the-double-diamond/"
         }
       ],
-      "page": 2
+      "page": 3
     },
     {
       "id": "two-diamonds",
@@ -110,11 +125,11 @@
       "phase": 0,
       "sources": [
         {
-          "label": "Design Council · History",
-          "href": "https://www.designcouncil.org.uk/resources/the-double-diamond/history-of-the-double-diamond/"
+          "label": "Design Council · Framework for Innovation · adapted (CC BY 4.0)",
+          "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 3
+      "page": 4
     },
     {
       "id": "discover",
@@ -124,8 +139,8 @@
         "en": "Discover"
       },
       "notes": {
-        "ja": "Discoverは、思い込みで問題を決める前に、当事者や現場から理解を広げる段階。授業では、元データを読み、複数の見方や問いを探ることに対応する。点は可能性を表す模式図で、観測データではない。",
-        "en": "Discover expands understanding before assuming the problem. In this course, inspecting data and considering different questions serve this exploratory role. The dots are a schematic of possibilities, not observations."
+        "ja": "Discoverでは、関心や違和感を手がかりに、データや当事者について広く調べる。第7週にグループで候補のデータを探し、各自の関心を持ち寄った作業に重ねられる。赤い線の広がりは、可能性を広く探ることを表す。",
+        "en": "Discover expands understanding of a concern, the data and the people affected. Looking for candidate datasets and sharing interests in Week 7 are classroom parallels. The widening red paths represent opening up possibilities."
       },
       "phase": 1,
       "question": {
@@ -134,11 +149,11 @@
       },
       "sources": [
         {
-          "label": "Design Council · Framework",
+          "label": "Design Council · Framework for Innovation · adapted (CC BY 4.0)",
           "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 4
+      "page": 5
     },
     {
       "id": "define",
@@ -148,8 +163,8 @@
         "en": "Define"
       },
       "notes": {
-        "ja": "Defineでは、探って得た知見から、取り組む課題を定める。データ可視化なら、誰に何を伝えたいか、どの比較が必要かを具体化する。探索をやめる約束ではなく、必要なら問いを見直す。",
-        "en": "Define turns insights into a focused challenge. In visualization, this includes the audience, question and comparison. The question can still change when new evidence appears."
+        "ja": "Defineでは、調べて分かったことから、取り組む問いを定める。グループの関心や発見を比べ、一つの問いと見る人を決める作業に重なる。赤い線が一点に集まるのは、可能性から焦点を絞ることを表す。",
+        "en": "Define focuses what has been learned into a challenge. Comparing group interests and discoveries helps specify a shared question and audience. The red paths converge to represent that focus."
       },
       "phase": 2,
       "question": {
@@ -158,11 +173,11 @@
       },
       "sources": [
         {
-          "label": "Design Council · Framework",
+          "label": "Design Council · Framework for Innovation · adapted (CC BY 4.0)",
           "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 5
+      "page": 6
     },
     {
       "id": "develop",
@@ -172,8 +187,8 @@
         "en": "Develop"
       },
       "notes": {
-        "ja": "Developでは、定めた課題に対して複数の案をつくる。一つのツールや最初のグラフに固定せず、スケッチや別の表現を並べて試す。共同制作や異なる人の視点も含まれる。",
-        "en": "Develop generates alternatives to the defined challenge. Sketches and different visual forms allow comparison before committing to one solution. Collaboration brings other perspectives into that exploration."
+        "ja": "Developでは、一つの問いに対して複数の案をつくる。先週、同じデータから各自が2〜3案をつくった経験とつながる。選んだ案を組み合わせたり、別の見せ方を試したりできる。第7週・第8週の実践は何度も行き来できるもので、週と段階が厳密に一対一で対応するわけではない。",
+        "en": "Develop opens up alternative responses to a focused question. Last week’s 2–3 visualization ideas are a course example. Ideas can be combined or represented differently. Weeks and phases do not form a rigid one-to-one sequence; the process can move back and forth."
       },
       "phase": 3,
       "question": {
@@ -182,11 +197,11 @@
       },
       "sources": [
         {
-          "label": "Design Council · Framework",
+          "label": "Design Council · Framework for Innovation · adapted (CC BY 4.0)",
           "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 6
+      "page": 7
     },
     {
       "id": "double-diamond",
@@ -196,8 +211,8 @@
         "en": "Deliver"
       },
       "notes": {
-        "ja": "Deliverでは小さく試し、うまくいかない案を見直し、改善する。4つのDはDiscover・Define・Develop・Deliver。EngagementやLeadershipは周囲の条件であり、追加のDではない。完成まで一方向に進む図ではない。",
-        "en": "Deliver tests responses at a small scale and improves them. The four Ds are Discover, Define, Develop and Deliver. Engagement and leadership are surrounding conditions, not additional Ds. Progress is not strictly one-way."
+        "ja": "Deliverでは、小さな試作を人に見せ、読み取りや疑問を確かめ、改善する。今週のグループ間の意見交換や、来週のA3ポスター講評に対応する。点線の矢印は、見せ方だけでなく問いにも戻ってよいことを表す。試作が完成品である必要はない。これは原図の中心部分を授業用に単純化した再描画。",
+        "en": "Deliver tests responses with people and improves them. This week’s exchange and next week’s A3 pin-up critique are course examples. Dashed return arrows show that feedback can change the representation or the question. A prototype need not be finished. This native redraw simplifies the center of the original framework for the course."
       },
       "phase": 4,
       "question": {
@@ -206,11 +221,11 @@
       },
       "sources": [
         {
-          "label": "Design Council · Framework",
+          "label": "Design Council · Framework for Innovation · adapted (CC BY 4.0)",
           "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 7
+      "page": 8
     },
     {
       "id": "iterate",
@@ -220,18 +235,45 @@
         "en": "Return and try again"
       },
       "notes": {
-        "ja": "フィードバックによって、案だけでなく問いそのものを見直すこともある。戻る矢印はその非直線性を表す。ボタンで戻る動きを再生できる。授業用の再描画。",
-        "en": "Feedback can change the response or the question itself. The return arrow makes that nonlinearity explicit. Its animation can be replayed. Course adaptation."
+        "ja": "講評で得た疑問から、グラフを直すだけでなく、データを確かめ直したり問いを見直したりする。赤い流れは作業の前進、点線の戻り道は反復を示す。ボタンで戻り道を再生できる。",
+        "en": "Questions raised by critique can lead to revisions of the chart, another look at the data or a changed question. Red paths carry the process forward; dashed return paths represent iteration. The button replays that return."
       },
       "phase": 4,
       "iterate": true,
       "sources": [
         {
-          "label": "Design Council · Framework",
+          "label": "Design Council · Framework for Innovation · adapted (CC BY 4.0)",
           "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 8
+      "page": 9
+    },
+    {
+      "id": "framework-source",
+      "kind": "framework-context",
+      "title": {
+        "ja": "Framework for Innovation",
+        "en": "Framework for Innovation"
+      },
+      "notes": {
+        "ja": "Design CouncilのFramework for Innovationを授業用に再描画した図。中心は4つのD。周囲の原則は、人を中心に置く・視覚的に共有する・協働する・反復すること。Engagementは当事者や仲間との関係、Leadershipは試せる環境づくりに関わる。Methods Bankは探る・形にする・つくるための方法をまとめる。これらは追加の段階ではなく、プロセス全体を支える条件。グループ制作と講評は、協働と反復を実践する場になる。原図はリンクから確認できる。",
+        "en": "A course adaptation of Design Council’s Framework for Innovation. Four Ds form the process. Its principles concern people, visual communication, collaboration and iteration. Engagement involves relationships with affected people and partners; leadership creates conditions for experimentation. The Methods Bank organizes ways to explore, shape and build. These support the whole process rather than adding extra stages. Group work and critique provide a classroom setting for collaboration and iteration. The linked source provides the original diagram."
+      },
+      "sources": [
+        {
+          "label": "Design Council · original framework graphic (CC BY 4.0)",
+          "href": "https://www.designcouncil.org.uk/fileadmin/uploads/dc/Photos/2023_folders/Framework_for_Innovation_transparent.png"
+        },
+        {
+          "label": "Design Council · Framework for Innovation",
+          "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
+        },
+        {
+          "label": "CC BY 4.0",
+          "href": "https://creativecommons.org/licenses/by/4.0/"
+        }
+      ],
+      "page": 10
     },
     {
       "id": "schon",
@@ -255,7 +297,7 @@
           "href": "https://www.routledge.com/The-Reflective-Practitioner-How-Professionals-Think-in-Action/Schon/p/book/9781857423198"
         }
       ],
-      "page": 9
+      "page": 11
     },
     {
       "id": "make-critique-revise",
@@ -282,22 +324,7 @@
           "href": "data/gapminder.csv"
         }
       ],
-      "page": 10
-    },
-    {
-      "id": "xaviz",
-      "kind": "xaviz",
-      "title": {
-        "ja": "XAVIZ",
-        "en": "XAVIZ"
-      },
-      "notes": {
-        "ja": "",
-        "en": ""
-      },
-      "image": "assets/images/lecture/xaviz-hero.jpg",
-      "href": "https://docs.google.com/presentation/d/1nzo8jO-YejXe_3wUdZwXTMdqLpY96ang8nzZu2FokTU/edit?usp=sharing",
-      "page": 11
+      "page": 12
     },
     {
       "id": "group-project",
@@ -310,7 +337,7 @@
         "ja": "各自の探索から、共有する問いと一つの試作へ進む。",
         "en": "Individual explorations come together as a shared question and a prototype."
       },
-      "page": 12
+      "page": 13
     },
     {
       "id": "last-week",
@@ -324,7 +351,7 @@
         "en": "Last week each group chose data and each member prepared 2–3 ideas. These three native charts use the course Gapminder data to illustrate different views. The gallery links to the actual submissions."
       },
       "href": "gallery.html?week=7",
-      "page": 13
+      "page": 14
     },
     {
       "id": "combine",
@@ -337,7 +364,7 @@
         "ja": "グループの案を並べ、共通点や強い方向性を考え、一つの問いにまとめて試作する。誰の案かより、何を明らかにするかが中心になる。",
         "en": "The group compares ideas, discusses shared interests, agrees on a direction and builds a prototype. The shared question organizes the work."
       },
-      "page": 14
+      "page": 15
     },
     {
       "id": "show",
@@ -364,7 +391,7 @@
         ]
       },
       "href": "gallery.html?week=7",
-      "page": 15
+      "page": 16
     },
     {
       "id": "make",
@@ -390,7 +417,7 @@
           "Save with the data"
         ]
       },
-      "page": 16
+      "page": 17
     },
     {
       "id": "critique",
@@ -416,7 +443,7 @@
           "Choose one change"
         ]
       },
-      "page": 17
+      "page": 18
     },
     {
       "id": "next",
@@ -426,10 +453,10 @@
         "en": "The project ahead"
       },
       "notes": {
-        "ja": "第9週は試作の改善、第10週は中間グループ発表。第11週は地図、第12週はネットワークと複数ビュー、第13週は最終制作、第14週は最終発表。",
-        "en": "Week 9: prototype refinement. Week 10: midterm group presentations. Week 11: maps. Week 12: networks and multiple views. Week 13: final studio. Week 14: final presentations."
+        "ja": "第9週はA3の試作を壁に掲示し、講評を受けて改善、第10週は中間グループ発表。第11週は地図、第12週はネットワークと複数ビュー、第13週は最終制作、第14週は最終発表。",
+        "en": "Week 9: A3 pin-up critique and prototype refinement. Week 10: midterm group presentations. Week 11: maps. Week 12: networks and multiple views. Week 13: final studio. Week 14: final presentations."
       },
-      "page": 18
+      "page": 19
     },
     {
       "id": "homework",
@@ -439,22 +466,22 @@
         "en": "Develop your prototype."
       },
       "notes": {
-        "ja": "フィードバックをもとにグループで問い一つと試作一つを育てる。各自で画像1〜2枚、共有の作品・データリンクを提出。短い説明はグループ名、自分の担当、次の一歩。締切は2026年11月26日23:59 JST。",
-        "en": "Develop one shared question and one prototype using feedback. Each person submits 1–2 images and the shared project/data link, with group name, contribution and next step. Due November 26, 2026 at 23:59 JST."
+        "ja": "フィードバックをもとにグループで問い一つと試作一つを育てる。各自で画像1〜2枚、共有の作品・データリンクを提出。短い説明はグループ名、自分の担当、次の一歩。締切は2026年11月26日23:59 JST。 グループで試作をA3（297×420mm）1枚に印刷し、11月27日の授業に持参する。グループ名と問いを入れ、壁に掲示して講評を受ける。オンライン提出は各自、印刷はグループで1枚。",
+        "en": "Develop one shared question and one prototype using feedback. Each person submits 1–2 images and the shared project/data link, with group name, contribution and next step. Due November 26, 2026 at 23:59 JST. Each group also brings one A3 (297 × 420 mm) printout of its prototype to class on November 27, with its group name and question, for the wall critique. Digital submissions remain individual; the printout is one per group."
       },
       "steps": {
         "ja": [
-          "問い一つ ＋ 試作一つ",
+          "試作をA3に印刷：グループで1枚",
           "各自：画像1〜2枚 ＋ 共有リンク",
           "グループ名・担当・次の一歩"
         ],
         "en": [
-          "One question + one prototype",
+          "One A3 prototype printout per group",
           "Each person: 1–2 images + shared link",
           "Group name, contribution, next step"
         ]
       },
-      "page": 19
+      "page": 20
     }
   ]
 }
