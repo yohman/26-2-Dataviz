@@ -1,0 +1,45 @@
+{
+  "file": "lectures/w08.pdf",
+  "slides": [
+    {
+      "page": 3,
+      "title": "Donald Schön · 1983",
+      "ja": "Donald SchönはMITで専門家の実践を研究し、1983年にThe Reflective Practitionerを刊行した。建築設計などを通じ、制作中の驚きや違和感から考え直す「行為の中の省察」を論じた。制作後に立ち止まって振り返ることとは区別される。スタジオの実践を理論化したのであり、講評を発明したわけではない。表紙は出版社が掲載する後年の版。Double Diamondとの直接の系譜を示すものではなく、反復的な設計を考える先行する視点である。",
+      "en": "Donald Schön studied professional practice at MIT and published The Reflective Practitioner in 1983. Architectural design helped him describe reflection-in-action: reconsidering a move when making produces a surprise. He distinguished this from stopping to reflect afterward. He theorized an existing practice rather than inventing studio critique. The publisher-supplied cover shows a later edition. This is a conceptual precursor, not a claim of direct influence on the Double Diamond.",
+      "sources": [
+        "https://hci.stanford.edu/publications/bds/9-schon",
+        "https://www.routledge.com/The-Reflective-Practitioner-How-Professionals-Think-in-Action/Schon/p/book/9781857423198"
+      ]
+    },
+    {
+      "page": 4,
+      "title": "Design Council · 2003",
+      "ja": "英国Design Councilの公式回顧によると、2003年にRichard Eisermannがチームへ「デザインの過程をどう表すか」と問いかけた。さまざまな専門のメンバーが使う方法を整理し、共有できる枠組みにする仕事からDouble Diamondが生まれた。デザインの実践を、専門外の人にも伝わる形に可視化すること自体が課題だった。",
+      "en": "Design Council’s own history traces the project to a question Richard Eisermann posed to his team in 2003. Different specialists needed a shared account of their design practices. The framework emerged from organizing methods already in use. Making a complex process visible to non-designers was itself a communication problem.",
+      "sources": [
+        "https://www.designcouncil.org.uk/resources/the-double-diamond/history-of-the-double-diamond/"
+      ]
+    },
+    {
+      "page": 5,
+      "title": "Double Diamond · 2004",
+      "ja": "Design Councilは2004年にDouble Diamondを会議やプレゼンテーションで共有し始めた。広く探る段階と焦点を絞る段階を二度表す。Discover・Defineで問いを探り、Develop・Deliverで案を試して改善する。公式説明でも、必要に応じて前の段階へ戻る。図は授業用の再描画で、2004年の原図そのものではない。日付は枠組みの公開年であり、反復や講評の起源ではない。",
+      "en": "Design Council began sharing the Double Diamond publicly in 2004. Its two diamonds visualize divergence and convergence: exploring and defining a challenge, then developing and testing responses. The framework allows returns to earlier stages. This course redraw includes a return arrow; it is not a facsimile of the 2004 graphic. The date marks the framework’s public introduction, not the invention of iteration or critique.",
+      "sources": [
+        "https://www.designcouncil.org.uk/resources/the-double-diamond/history-of-the-double-diamond/",
+        "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
+      ]
+    },
+    {
+      "page": 6,
+      "title": "Make · Critique · Revise",
+      "ja": "授業での応用：グループ内で制作し、別のグループの読み取りを受け、改善して再び見せる。IDEO.orgのDesign Kitも、集めた反応を整理し、次の試作へ反映する反復を重視する。別グループは「初めて見る読者」にはなるが、実際の対象者を必ず代表するわけではない。すべての感想に従うのではなく、問い・証拠・伝わり方に照らして変更を判断する。図は授業用Gapminder CSVの選んだ5か国の2018年の平均寿命を使った説明用の試作。測定したユーザーテスト結果ではない。",
+      "en": "The classroom adaptation alternates group work, responses from another group, and revision. IDEO.org’s Design Kit likewise connects feedback synthesis to the next prototype. Another group offers fresh eyes but does not necessarily represent the intended audience. Feedback informs a decision rather than requiring every suggestion to be followed. The chart sequence is illustrative, using 2018 life expectancy for five selected countries from the course Gapminder CSV; it is not a measured user-test result.",
+      "sources": [
+        "https://www.designkit.org/methods/get-feedback.html",
+        "https://www.designkit.org/methods/integrate-feedback-and-iterate.html",
+        "https://www.gapminder.org/data/"
+      ]
+    }
+  ]
+}

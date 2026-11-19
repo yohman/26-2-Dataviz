@@ -65,3 +65,12 @@ test('viewer keeps notes below the PDF section and updates them on navigation', 
   assert.match(html, /slideNotes\.setPage\(activePage\)/);
   assert.match(html, /slideNotes\.render\(\)/);
 });
+
+test('Week 8 history has sourced bilingual notes only on the four inserted slides',()=>{
+ const notes=JSON.parse(fs.readFileSync('lectures/w08.notes.json','utf8'));
+ assert.deepEqual(notes.slides.map(s=>s.page),[3,4,5,6]);
+ for(const s of notes.slides){assert.ok(s.ja&&s.en&&s.sources.length);assert.doesNotMatch(s.en,/ask students|instructor should/i);}
+ assert.match(notes.slides[0].en,/1983/);assert.match(notes.slides[1].en,/2003/);assert.match(notes.slides[2].en,/2004/);
+ assert.ok(!notes.slides.some(s=>s.page===2));
+ assert.match(fs.readFileSync('assets/slide-notes.js','utf8'),/lectures\/w08\.notes\.json/);
+});

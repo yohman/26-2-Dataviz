@@ -5,6 +5,7 @@
     let slides;
     let failed = false;
     const notesFiles = {
+      'lectures/w08.pdf': 'lectures/w08.notes.json',
       'lectures/w05-python-datasaurus.pdf': 'lectures/w05-python-datasaurus.notes.json',
       'lectures/w06_lores.pdf': 'lectures/w06_lores.notes.json',
       'lectures/w06-dubois-public-argument.pdf': 'lectures/w06-dubois-public-argument.notes.json'
@@ -40,7 +41,7 @@
         sources.append(link);
       }
     }
-    const ready = enabled ? fetcher(`${notesFiles[file]}?v=week6-20261105`, { cache: 'no-store' })
+    const ready = enabled ? fetcher(`${notesFiles[file]}?v=week8-feedback-20261119`, { cache: 'no-store' })
       .then(response => {
         if (!response.ok) throw new Error('Notes unavailable');
         return response.json();
