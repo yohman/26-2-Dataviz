@@ -60,7 +60,7 @@ function ideaCharts(data,ja){
 }
 export function renderWeek8(s,{ja,data,returnTo}){
  const tr=v=>typeof v==='string'?v:v?.[ja?'ja':'en']||'';
- if(s.kind==='seam-preview')return `<img class="w8-seam-capture" src="${e(s.image)}" alt="${e(tr(s.alt))}" width="1080" height="2400">`;
+ if(s.kind==='seam-preview')return `<div class="w8-seam-phone"><img class="w8-seam-capture" src="${e(s.image)}" alt="${e(tr(s.alt))}" width="1080" height="2400"></div>`;
  if(s.kind==='visual-thinking'){
   const title=`<h1 class="w8-visual-thinking-title" lang="en">${e(s.title.en)}</h1>`;
   if(!s.subtitle)return title;

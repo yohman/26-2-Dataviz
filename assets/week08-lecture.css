@@ -21,7 +21,15 @@
   place-items:center;
   background:#f7f7f3;
 }
-.w8-seam-capture{display:block;width:auto;height:100%;max-height:900px;object-fit:contain}
+.w8-seam-phone{
+  box-sizing:content-box;
+  height:calc(100% - 58px);
+  aspect-ratio:9 / 20;
+  overflow:hidden;
+  border:5px solid #706b61;
+  border-radius:43px;
+}
+.w8-seam-capture{display:block;width:100%;height:100%;object-fit:contain}
 .w8-feedback-trace.is-tracing{
   animation:w8-trace-return var(--trace-duration) linear both;
 }
