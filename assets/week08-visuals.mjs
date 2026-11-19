@@ -41,15 +41,33 @@ function diamond(s,ja){
  const caption=active?active[ja?'ja':'en']:(p?courseActions[p-1]:(ja?'広げる。絞る。もう一度。':'Open up. Focus. Again.'));
  return `<div class="w8-diamond w8-source-diamond">${svg(c,`Double Diamond · ${phaseLabels.slice(0,p).join(', ')}`)}<p class="w8-course-caption">${e(caption)}</p>${active?`<button class="w8-replay" data-replay>${ja?'もう一度 ↶':'Replay ↶'}</button>`:''}</div>`;
 }
-export function feedbackChart(data,state,ja){
- let rows=data.scatter.filter(r=>['Japan','India','China','Sweden','United States'].includes(r.country));
- if(state===3)rows.sort((a,b)=>b.life-a.life);
- const country=n=>ja?({Japan:'日本',India:'インド',China:'中国',Sweden:'スウェーデン','United States':'米国'}[n]):n;
- const x=v=>340+v/90*1030;let s=tag(120,120,ja?'平均寿命 · 2018年':'Life expectancy · 2018','w8-chart-title');
- for(let v=0;v<=80;v+=20)s+=`<path d="M${x(v)} 180V685" class="grid"/>`+tag(x(v),732,v,'axis-label','text-anchor="middle"');
- rows.forEach((r,i)=>{const y=205+i*96;s+=tag(310,y+35,country(r.country),'chart-label','text-anchor="end"')+`<rect x="340" y="${y}" width="${x(r.life)-340}" height="49" fill="${state===3?'#52716c':'#ac3d4d'}"/>`+(state===3?tag(x(r.life)+15,y+35,r.life,'chart-label'):'');});
- if(state===2)s+=`<g class="w8-critique-mark"><path d="M1280 205q90-60 125 20t-32 70" fill="none" stroke="#b87b26" stroke-width="5"/>${tag(1310,380,'?','w8-question-mark')}</g>`;
- return svg(s,ja?'選んだ5か国の平均寿命。単位：年。':'Life expectancy for five selected countries, in years.');
+// Two rows from the Week 4 Pokémon CSV; checked against that file in the deck tests.
+const specimens=[
+ {id:135,en:'Jolteon',ja:'サンダース',total:525,speed:130,defense:60},
+ {id:197,en:'Umbreon',ja:'ブラッキー',total:525,speed:65,defense:110},
+];
+function reflectionMap(stage,ja){
+ const phases=['Discover','Define','Develop','Deliver'];
+ const translations=['探る','問いを決める','案をつくる','試して改善'];
+ const active=['total','challenge','compare','pinup'].indexOf(stage);
+ const points=['12,31 64,4 64,58','64,4 116,31 64,58','130,31 182,4 182,58','182,4 234,31 182,58'];
+ const paths=points.map((p,i)=>`<polygon points="${p}"${i===active?' class="is-current"':''}/>`).join('');
+ const labels=phases.map((phase,i)=>`<span${i===active?' aria-current="step"':''}>${phase}</span>`).join('');
+ return `<div class="w8-reflection-map" role="group" aria-label="${ja?'ダブルダイヤモンド：':'Double Diamond: '}${ja?translations[active]:phases[active]}" data-phase="${phases[active]}"><svg viewBox="0 0 246 62" preserveAspectRatio="none" aria-hidden="true">${paths}</svg><div class="w8-reflection-map-labels" aria-hidden="true">${labels}</div></div>`;
+}
+function reflection(s,ja,tr){
+ const name=p=>p[ja?'ja':'en'];
+ const portrait=p=>`<img src="assets/images/lecture/week08-pokemon-${p.id}.png" width="475" height="475" alt="">`;
+ if(s.stage==='total'){
+  return `<div class="w8-reflection-totals"><h1>${e(tr(s.title))}</h1><p>${ja?'6つの能力の合計':'Sum of six base stats'}</p><div class="w8-reflection-pair">${specimens.map(p=>`<figure class="pokemon-${p.id}">${portrait(p)}<figcaption>${e(name(p))}<strong data-pokemon="${p.id}" data-stat="total">${p.total}</strong></figcaption></figure>`).join('')}</div></div>`;
+ }
+ if(s.stage==='challenge'||s.stage==='pinup'){
+  return `<div class="w8-reflection-question is-${s.stage}">${s.stage==='pinup'?'<p>A3</p>':''}<h1>${e(tr(s.title))}</h1></div>`;
+ }
+ const headings=ja?['すばやさ','ぼうぎょ']:['Speed','Defense'];
+ const mark=(p,k,i)=>`<div class="w8-stat-track" role="img" aria-label="${e(name(p))} · ${headings[i]}: ${p[k]}"><span data-pokemon="${p.id}" data-stat="${k}" style="--stat-width:${p[k]/150*100}%">${p[k]}</span></div>`;
+ const axis=`<div class="w8-stat-axis" aria-hidden="true">${[0,50,100,150].map(n=>`<span style="--tick:${n/150*100}%">${n}</span>`).join('')}</div>`;
+ return `<div class="w8-reflection-comparison"><h1>${e(tr(s.title))}</h1><div class="w8-stat-chart"><span></span>${headings.map(h=>`<h2>${h}</h2>`).join('')}${specimens.map(p=>`<div class="w8-stat-row pokemon-${p.id}"><div class="w8-stat-name">${portrait(p)}<span>${e(name(p))}</span></div>${mark(p,'speed',0)}${mark(p,'defense',1)}</div>`).join('')}<span></span>${axis}${axis}</div></div>`;
 }
 function ideaCharts(data,ja){
  const rows=data.scatter.filter(r=>['Japan','India','China','Sweden','United States'].includes(r.country));
@@ -72,7 +90,7 @@ export function renderWeek8(s,{ja,data,returnTo}){
  if(s.kind==='diamond')return diamond(s,ja);
  if(s.kind==='framework-context')return `<div class="w8-framework-context"><h1>Framework for Innovation</h1><div class="w8-context-engagement"><strong>Engagement</strong><span>${ja?'人と関わり、共につくる':'Connect with people. Co-create.'}</span></div><div class="w8-context-core">${diamond({phase:4,feedbackCount:returnArrows.length},ja)}</div><div class="w8-context-principles"><h2>${ja?'デザインの原則':'Design principles'}</h2><p>${ja?'人を中心に · 視覚で共有 · 協働 · 反復':'People first · Visual communication · Collaboration · Iteration'}</p></div><div class="w8-context-methods"><h2>${ja?'使える方法':'Methods bank'}</h2><p>${ja?'探る · 形にする · つくる':'Explore · Shape · Build'}</p></div><div class="w8-context-leadership"><strong>Leadership</strong><span>${ja?'試せる環境をつくる':'Create the conditions to experiment.'}</span></div></div>`;
  if(s.kind==='schon')return `<div class="w8-schon"><div><time>1983</time><h1>${e(tr(s.title))}</h1>${ja?'<p class="w8-english">Reflection-in-action</p>':''}<p>Donald Schön</p></div><a href="${e(s.sources[1].href)}" target="_blank" rel="noopener"><img src="${e(s.image)}" alt="The Reflective Practitioner · Donald Schön"></a></div>`;
- if(s.kind==='feedback')return `<div class="w8-feedback"><div data-feedback-chart>${feedbackChart(data,1,ja)}</div><nav class="w8-loop" aria-label="${ja?'試作を切り替える':'Switch prototype'}">${[ja?'つくる':'Make',ja?'見せる':'Critique',ja?'つくり直す':'Revise'].map((t,i)=>`<button data-feedback="${i+1}" aria-pressed="${i===0}"><small>0${i+1}</small>${t}</button>${i<2?'<span aria-hidden="true">→</span>':''}`).join('')}<span class="w8-loop-return" aria-hidden="true">↶</span></nav><p data-feedback-caption>${ja?'まず、つくる。':'Make a first version.'}</p></div>`;
+ if(s.kind==='reflection')return reflection(s,ja,tr)+reflectionMap(s.stage,ja);
  if(s.kind==='xaviz')return `<a class="w8-xaviz" href="${e(s.href)}" target="_blank" rel="noopener" aria-label="XAVIZ"><h1>XAVIZ<span aria-hidden="true">↗</span></h1><img src="${e(s.image)}" alt="XAVIZ"></a>`;
  if(s.kind==='group-title')return `<div class="w8-group-title"><div class="w8-group-marks" aria-hidden="true">${[0,1,2,3].map((v)=>`<i style="--n:${v};--c:${phaseColors[v]}"></i>`).join('')}</div><h1>${e(tr(s.title))}</h1></div>`;
  if(s.kind==='ideas-native')return `<div class="w8-ideas"><h1>${e(tr(s.title))}</h1><span class="w8-ideas-number">2–3</span>${ideaCharts(data,ja)}<a href="${e(s.href)}">${ja?'先週の作品を見る':'Last week’s gallery'} ↗</a></div>`;
@@ -82,12 +100,7 @@ export function renderWeek8(s,{ja,data,returnTo}){
  if(s.kind==='studio-homework')return `<div class="w8-homework w8-print-homework"><div class="w8-a3-sheet" aria-hidden="true"><b>A3</b><svg viewBox="0 0 220 170"><path d="M20 15V145H205" fill="none" stroke="#c7b8a2" stroke-width="2"/><path d="m25 120 40-25 35 10 30-55 35 10 30-35" fill="none" stroke="#ac3d4d" stroke-width="5"/></svg><span>11.27 · ${ja?'持参':'Bring to class'}</span></div><h1>${e(tr(s.title))}</h1><ul>${tr(s.steps).map(t=>`<li>${e(t)}</li>`).join('')}</ul><footer><a href="homework-submit.html?week=8">${ja?'宿題を提出':'Submit homework'} ↗</a><a href="${e(returnTo)}">${ja?'課題の説明':'Assignment details'} ↗</a><time>11.26 Thu · 23:59 JST</time></footer></div>`;
  return '';
 }
-export function bindWeek8(root,{s,data,ja}){
- if(s.kind==='feedback')root.querySelectorAll('[data-feedback]').forEach(b=>b.onclick=()=>{
-  const n=Number(b.dataset.feedback);root.querySelector('[data-feedback-chart]').innerHTML=feedbackChart(data,n,ja);
-  root.querySelectorAll('[data-feedback]').forEach(a=>a.setAttribute('aria-pressed',String(a===b)));
-  root.querySelector('[data-feedback-caption]').textContent=(ja?['まず、つくる。','どこが読み取りにくい？','並べ替え、値を直接示す。']:['Make a first version.','What is difficult to read?','Sort the bars. Label the values.'])[n-1];
- });
+export function bindWeek8(root,{s}){
  if(s.animateFeedback){
   const trace=root.querySelector('.w8-feedback-trace');
   root.querySelector('[data-replay]').onclick=()=>{

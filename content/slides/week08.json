@@ -41,6 +41,13 @@
       }
     },
     {
+      "id": "make-critique-revise",
+      "label": {
+        "ja": "試作と講評",
+        "en": "Prototype critique"
+      }
+    },
+    {
       "id": "show",
       "label": {
         "ja": "活動1",
@@ -515,31 +522,83 @@
     },
     {
       "id": "make-critique-revise",
-      "kind": "feedback",
+      "kind": "reflection",
+      "stage": "total",
       "title": {
-        "ja": "つくる → 見せる → つくり直す",
-        "en": "Make → Critique → Revise"
+        "ja": "どちらが強い？",
+        "en": "Which is stronger?"
       },
       "notes": {
-        "ja": "授業での応用：グループ内で制作し、別のグループの読み取りを受け、改善して再び見せる。IDEO.orgのDesign Kitも、集めた反応を整理し、次の試作へ反映する反復を重視する。別グループは「初めて見る読者」にはなるが、実際の対象者を必ず代表するわけではない。すべての感想に従うのではなく、問い・証拠・伝わり方に照らして変更を判断する。図は授業用Gapminder CSVの選んだ5か国の2018年の平均寿命を使った説明用の試作。測定したユーザーテスト結果ではない。 3つのボタンで、同じ値を使った説明用の試作を切り替えられる。",
-        "en": "The classroom adaptation alternates group work, responses from another group, and revision. IDEO.org’s Design Kit likewise connects feedback synthesis to the next prototype. Another group offers fresh eyes but does not necessarily represent the intended audience. Feedback informs a decision rather than requiring every suggestion to be followed. The chart sequence is illustrative, using 2018 life expectancy for five selected countries from the course Gapminder CSV; it is not a measured user-test result. Three buttons switch between representations of the same values."
+        "ja": "第4週のポケモンデータから。サンダースとブラッキーは6つの能力を足すと、どちらも525。合計だけを見ると互角に見える。合計は能力の配分や実際の対戦結果を表さない。",
+        "en": "From the Week 4 Pokémon dataset. Jolteon and Umbreon each have a base stat total of 525. The totals tie, but a sum tells us neither how those points are distributed nor who would win a battle."
       },
       "sources": [
         {
-          "label": "IDEO.org · Get feedback",
-          "href": "https://www.designkit.org/methods/get-feedback.html"
+          "label": "Week 4 Pokémon CSV",
+          "href": "data/pokemon-review.csv"
         },
         {
-          "label": "IDEO.org · Iterate",
-          "href": "https://www.designkit.org/methods/integrate-feedback-and-iterate.html"
-        },
-        {
-          "label": "Course Gapminder data",
-          "href": "data/gapminder.csv"
+          "label": "Pokémon artwork · PokéAPI",
+          "href": "https://github.com/PokeAPI/sprites/tree/master/sprites/pokemon/other/official-artwork"
         }
       ],
       "page": 22,
-      "annotationPage": 12
+      "annotationPage": 35
+    },
+    {
+      "id": "stronger-at-what",
+      "kind": "reflection",
+      "stage": "challenge",
+      "title": {
+        "ja": "強いって、何に強い？",
+        "en": "Stronger at what?"
+      },
+      "notes": {
+        "ja": "仮の講評で、別のグループから「強いって、何に強い？」と聞かれたとする。ここで見直すのは色やレイアウトではなく、「強い」という問いの意味。次の試作では、すばやさと物理攻撃に対するぼうぎょを別々に比べる。",
+        "en": "An imagined critique: a reader asks what “stronger” means. The next move is to revisit the question. Instead of polishing the total, the designers compare speed and physical defense separately."
+      },
+      "page": 23,
+      "annotationPage": 36
+    },
+    {
+      "id": "pokemon-revision",
+      "kind": "reflection",
+      "stage": "compare",
+      "title": {
+        "ja": "同じ合計、違う強み",
+        "en": "Same total, different strengths"
+      },
+      "notes": {
+        "ja": "同じデータを別の問いで見る。すばやさではサンダースが130対65、ぼうぎょではブラッキーが110対60で上回る。ぼうぎょは物理攻撃に対する能力で、とくぼうとは別。2つの図は同じ0〜150の目盛りを使う。これは試作の説明例で、実際の講評結果ではない。",
+        "en": "Same data, more specific questions. Jolteon leads on Speed, 130 to 65. Umbreon leads on Defense, 110 to 60. Defense here is the physical defense stat, distinct from Special Defense. Both views use the same 0–150 scale. This is an illustrative revision, not a measured critique result."
+      },
+      "sources": [
+        {
+          "label": "Week 4 Pokémon CSV",
+          "href": "data/pokemon-review.csv"
+        },
+        {
+          "label": "Pokémon artwork · PokéAPI",
+          "href": "https://github.com/PokeAPI/sprites/tree/master/sprites/pokemon/other/official-artwork"
+        }
+      ],
+      "page": 24,
+      "annotationPage": 37
+    },
+    {
+      "id": "reflection-pinup",
+      "kind": "reflection",
+      "stage": "pinup",
+      "title": {
+        "ja": "説明する前に、何が読み取れましたか？",
+        "en": "What did you see before we explained it?"
+      },
+      "notes": {
+        "ja": "A3講評では、説明を聞く前に相手が読み取ったことと、制作者が伝えたかったことを比べる。違いがあれば、問いか図を一つ変えて、もう一度見てもらう。試作を見ながら次の一手を変えるのが、ショーンの「行為の中の省察」。",
+        "en": "At the A3 pin-up, compare what someone sees without an explanation with what the group meant to show. If those differ, change one thing about the question or the graphic and show it again. Schön’s reflection-in-action is the moment that reading changes what the group tries next."
+      },
+      "page": 25,
+      "annotationPage": 38
     },
     {
       "id": "group-project",
@@ -552,7 +611,7 @@
         "ja": "各自の探索から、共有する問いと一つの試作へ進む。",
         "en": "Individual explorations come together as a shared question and a prototype."
       },
-      "page": 23,
+      "page": 26,
       "annotationPage": 13
     },
     {
@@ -567,7 +626,7 @@
         "en": "Last week each group chose data and each member prepared 2–3 ideas. These three native charts use the course Gapminder data to illustrate different views. The gallery links to the actual submissions."
       },
       "href": "gallery.html?week=7",
-      "page": 24,
+      "page": 27,
       "annotationPage": 14
     },
     {
@@ -581,7 +640,7 @@
         "ja": "グループの案を並べ、共通点や強い方向性を考え、一つの問いにまとめて試作する。誰の案かより、何を明らかにするかが中心になる。",
         "en": "The group compares ideas, discusses shared interests, agrees on a direction and builds a prototype. The shared question organizes the work."
       },
-      "page": 25,
+      "page": 28,
       "annotationPage": 15
     },
     {
@@ -609,7 +668,7 @@
         ]
       },
       "href": "gallery.html?week=7",
-      "page": 26,
+      "page": 29,
       "annotationPage": 16
     },
     {
@@ -636,7 +695,7 @@
           "Save with the data"
         ]
       },
-      "page": 27,
+      "page": 30,
       "annotationPage": 17
     },
     {
@@ -663,7 +722,7 @@
           "Choose one change"
         ]
       },
-      "page": 28,
+      "page": 31,
       "annotationPage": 18
     },
     {
@@ -677,7 +736,7 @@
         "ja": "第9週はA3の試作を壁に掲示し、講評を受けて改善、第10週は中間グループ発表。第11週は地図、第12週はネットワークと複数ビュー、第13週は最終制作、第14週は最終発表。",
         "en": "Week 9: A3 pin-up critique and prototype refinement. Week 10: midterm group presentations. Week 11: maps. Week 12: networks and multiple views. Week 13: final studio. Week 14: final presentations."
       },
-      "page": 29,
+      "page": 32,
       "annotationPage": 19
     },
     {
@@ -703,7 +762,7 @@
           "Group name, contribution, next step"
         ]
       },
-      "page": 30,
+      "page": 33,
       "annotationPage": 20
     }
   ]

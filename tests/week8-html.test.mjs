@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import {safeDeckReturn} from '../assets/html-lecture-model.mjs';
-import {renderWeek8,feedbackChart} from '../assets/week08-visuals.mjs';
+import {renderWeek8} from '../assets/week08-visuals.mjs';
 const deck=JSON.parse(fs.readFileSync('content/slides/week08.json')),data=JSON.parse(fs.readFileSync('data/week07-examples.json'));
 const source=fs.readFileSync('content/weeks/08-share-discuss-build.md','utf8');
 const context={document:{addEventListener(){}},window:{},URL,URLSearchParams};vm.createContext(context);vm.runInContext(fs.readFileSync('assets/site.js','utf8'),context);context.source=source;const week=vm.runInContext("parseWeek(source,'08-share-discuss-build.md')",context);
@@ -22,11 +22,22 @@ test('Week 8 is entirely native with original source photos, original XAVIZ dest
  const x=deck.slides.find(s=>s.id==='xaviz');assert.equal(x.href,'https://docs.google.com/presentation/d/1nzo8jO-YejXe_3wUdZwXTMdqLpY96ang8nzZu2FokTU/edit?usp=sharing');assert.equal(x.notes.ja,'');assert.equal(x.notes.en,'');
  assert.equal(deck.slides.find(s=>s.id==='double-diamond').phase,4);
 });
-test('chart revision uses the same actual values and labels the sorted result',()=>{
- const html=feedbackChart(data,3,false);const values=[84.2,82.4,79.1,76.9,69.1];let last=-1;
- for(const v of values){const at=html.indexOf(`>${v}</text>`);assert.ok(at>last);last=at;}
- assert.match(html,/Life expectancy · 2018/);
- assert.doesNotMatch(feedbackChart(data,1,false),/>84.2<\/text>/);
+test('four reflection slides advance in order, highlight a phase, and use the Week 4 CSV values',()=>{
+ const stages=deck.slides.slice(21,25);
+ assert.deepEqual(stages.map(s=>s.stage),['total','challenge','compare','pinup']);
+ const csv=fs.readFileSync('data/pokemon-review.csv','utf8').trim().split(/\r?\n/).map(r=>r.split(','));
+ const columns={total:'Base_Stat_Total',speed:'Speed',defense:'Defense'};
+ for(const [i,s] of stages.entries())for(const ja of [false,true]){
+  const html=renderWeek8(s,{ja,data,returnTo:''}),phase=['Discover','Define','Develop','Deliver'][i];
+  assert.ok(html.includes(`data-phase="${phase}"`));
+  assert.ok(html.includes(`aria-current="step">${phase}</span>`));
+  assert.equal((html.match(/class="is-current"/g)||[]).length,1);
+  assert.doesNotMatch(html,/<button|<a |↶/);
+  const values=[...html.matchAll(/data-pokemon="(\d+)" data-stat="(\w+)"[^>]*>(\d+)</g)];
+  assert.equal(values.length,[2,0,4,0][i]);
+  for(const [,id,stat,value] of values)assert.equal(value,csv.find(r=>r[0]===id)[csv[0].indexOf(columns[stat])]);
+ }
+ assert.equal(new Set(deck.slides.map(s=>s.annotationPage??s.page)).size,deck.slides.length);
 });
 test('activities link to the complete Double Diamond while timing and opening gate remain intact',()=>{
  assert.equal(week.activities.length,3);assert.equal(week.feedback_loop,'lecture.html?week=8&slide=double-diamond');

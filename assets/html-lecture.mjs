@@ -1,5 +1,5 @@
 import {clampSlide,scatterMarks,lineSegments,safeDeckReturn} from './html-lecture-model.mjs?v=week8-pinup-20261119';
-import {renderWeek8,bindWeek8} from './week08-visuals.mjs?v=seam-phone-20261120';
+import {renderWeek8,bindWeek8} from './week08-visuals.mjs?v=reflection-20261120';
 const $=s=>document.querySelector(s),params=new URLSearchParams(location.search),stage=$('[data-stage]'),surface=$('[data-surface]'),slide=$('[data-slide]'),viewer=$('.html-deck');
 const week=params.get('week')==='8'?8:7,deckReturn=()=>safeDeckReturn(params.get('return'),week);
 let lang='ja';try{lang=localStorage.getItem('dv-language')==='en'?'en':'ja';}catch{}
@@ -65,7 +65,7 @@ function fullscreen(active){viewer.classList.toggle('is-fullscreen',active);$('[
 async function toggleFullscreen(){const active=!viewer.classList.contains('is-fullscreen');fullscreen(active);try{if(active&&viewer.requestFullscreen)await viewer.requestFullscreen();else if(document.fullscreenElement)await document.exitFullscreen();}catch{/* CSS presentation mode remains available. */}}
 async function start(){
  try{
-  const [a,b]=await Promise.all([fetch(`content/slides/week${String(week).padStart(2,'0')}.json?v=seam-sequence-20261120`,{cache:'no-cache'}),fetch('data/week07-examples.json?v=20261112',{cache:'no-cache'})]);if(!a.ok||!b.ok)throw new Error('Unavailable');[deck,data]=await Promise.all([a.json(),b.json()]);
+  const [a,b]=await Promise.all([fetch(`content/slides/week${String(week).padStart(2,'0')}.json?v=reflection-20261120`,{cache:'no-cache'}),fetch('data/week07-examples.json?v=20261112',{cache:'no-cache'})]);if(!a.ok||!b.ok)throw new Error('Unavailable');[deck,data]=await Promise.all([a.json(),b.json()]);
   viewportControl=window.createSlideViewport({viewport:stage,surface,onChange:value=>{zoom=value;$('[data-zoom-level]').textContent=`${Math.round(value*100)}%`;}});
   ink=window.bindSlideAnnotations({surface,viewport:stage,toolbar:$('.pdf-toolbar'),file:`lectures/week${String(week).padStart(2,'0')}-html-v1`});
   viewer.classList.toggle('week8-deck',week===8);viewer.setAttribute('aria-label',`Week ${week} lecture`);
