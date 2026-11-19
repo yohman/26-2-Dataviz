@@ -1,5 +1,5 @@
 import {clampSlide,scatterMarks,lineSegments,safeDeckReturn} from './html-lecture-model.mjs?v=week8-pinup-20261119';
-import {renderWeek8,bindWeek8} from './week08-visuals.mjs?v=seam-sequence-20261120';
+import {renderWeek8,bindWeek8} from './week08-visuals.mjs?v=seam-dubois-20261120';
 const $=s=>document.querySelector(s),params=new URLSearchParams(location.search),stage=$('[data-stage]'),surface=$('[data-surface]'),slide=$('[data-slide]'),viewer=$('.html-deck');
 const week=params.get('week')==='8'?8:7,deckReturn=()=>safeDeckReturn(params.get('return'),week);
 let lang='ja';try{lang=localStorage.getItem('dv-language')==='en'?'en':'ja';}catch{}
