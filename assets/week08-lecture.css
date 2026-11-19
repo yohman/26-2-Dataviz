@@ -9,9 +9,8 @@
 @media(max-width:600px){.html-lecture-page .pdf-toolbar{top:60px}.html-deck.is-fullscreen .pdf-toolbar{top:0}}
 
 /* Source-led Double Diamond: red process edges and blue paths back into the work. */
-.w8-source-diamond .w8-diagram-title{font-size:48px!important}.w8-source-diamond .w8-diagram-year{font-size:24px!important}.w8-endpoint{font-size:21px!important;font-weight:600}.w8-source-phase-name{font:600 33px var(--deck-sans)!important;fill:#282828!important}.w8-source-translation{font:500 25px var(--deck-sans)!important;fill:#665b4c!important}.w8-course-caption{position:absolute;left:100px;right:100px;bottom:14px;text-align:center;font:500 39px/1.4 var(--deck-serif);margin:0;color:#40392f}.w8-source-diamond .w8-replay{top:92px;right:80px;font-size:24px;padding:10px 20px}.w8-process-stage.is-entering{animation:w8-stage-arrive .5s ease-out}.w8-framework-source{position:absolute;inset:0;display:block;background:#fff}.w8-framework-source img{position:absolute;inset:25px;width:calc(100% - 50px);height:calc(100% - 50px);object-fit:contain}.w8-print-homework ul{max-width:1030px}.w8-print-homework li{font-size:32px}.w8-a3-sheet{position:absolute;right:95px;top:285px;width:275px;height:390px;border:2px solid #b8ac97;background:#fffdf7;padding:35px 20px;transform:rotate(3deg);display:flex;flex-direction:column;justify-content:space-between}.w8-a3-sheet b{font:500 65px var(--deck-serif)}.w8-a3-sheet svg{width:230px;height:175px}.w8-a3-sheet span{font:500 21px var(--deck-sans);color:#ac3d4d}.w8-print-homework footer{margin-top:95px}.w8-print-homework h1{font-size:94px}
+.w8-source-diamond .w8-diagram-title{font-size:48px!important}.w8-source-diamond .w8-diagram-year{font-size:24px!important}.w8-endpoint{font-size:21px!important;font-weight:600}.w8-source-phase-name{font:600 33px var(--deck-sans)!important;fill:#282828!important}.w8-source-translation{font:500 25px var(--deck-sans)!important;fill:#665b4c!important}.w8-course-caption{position:absolute;left:100px;right:100px;bottom:14px;text-align:center;font:500 39px/1.4 var(--deck-serif);margin:0;color:#40392f}.w8-source-diamond .w8-replay{top:92px;right:80px;font-size:24px;padding:10px 20px}.w8-process-stage.is-entering{animation:w8-stage-arrive .5s ease-out}.w8-framework-source{position:absolute;inset:0;display:block;background:#fff}.w8-framework-source img{position:absolute;inset:25px;width:calc(100% - 50px);height:calc(100% - 50px);object-fit:contain}
 @keyframes w8-stage-arrive{from{opacity:.15}to{opacity:1}}@media(prefers-reduced-motion:reduce){.w8-process-stage.is-entering{animation:none}}
-.w8-print-homework footer{position:absolute;left:115px;right:115px;bottom:75px;margin:0}
 
 .w8-diverge-label{font:500 36px var(--deck-serif)!important;fill:#857363!important}
 
@@ -70,39 +69,29 @@
   letter-spacing:-.055em;
 }
 
-/* The same ink identifies each Pokémon on both versions of the comparison. */
-.slide-reflection .pokemon-135{--pokemon-ink:#a13644}
-.slide-reflection .pokemon-197{--pokemon-ink:#3b5e50}
-.w8-reflection-totals,.w8-reflection-comparison{
-  height:100%;padding:66px 104px 54px;text-align:center
+.w8-dubois-draft{padding:103px 100px 0;text-align:center}
+.w8-dubois-draft h1{font-size:79px}
+.w8-dubois-draft p,.w8-dubois-place{margin:0 0 17px;color:#735c42;font-size:29px}
+.w8-dubois-draft svg{position:absolute;inset:0;pointer-events:none}
+.w8-dubois-category,.w8-dubois-value{font-size:34px}
+.w8-dubois-value{font-weight:800;font-variant-numeric:tabular-nums}
+.w8-dubois-reveal{
+  position:absolute;inset:0 0 125px;display:grid;grid-template-columns:1fr 530px;gap:56px;align-items:center;padding:46px 108px 0
 }
-.w8-reflection-totals h1,.w8-reflection-comparison h1{font-size:70px}
-.w8-reflection-pair{display:grid;grid-template-columns:1fr 1fr;gap:135px;margin:16px auto 0;max-width:1060px}
-.w8-reflection-pair figure{margin:0;color:var(--pokemon-ink)}
-.w8-reflection-pair img{display:block;width:310px;height:310px;margin:0 auto 9px}
-.w8-reflection-pair figcaption{font-size:33px;font-weight:650}
-.w8-reflection-pair strong{display:block;font:600 153px/1 var(--deck-sans);letter-spacing:-.075em}
-.w8-reflection-totals p{font-size:29px;color:#615548;margin:16px 0 0}
+.w8-dubois-reveal h1{font-size:65px;max-width:750px;text-wrap:balance}
+.w8-dubois-share{display:block;margin:16px 0 19px;color:#a13644;font:700 154px / 1 var(--deck-sans);letter-spacing:-.065em}
+.w8-dubois-split{height:24px;background:linear-gradient(to left,#a13644 0 var(--rural-share),#3b5e50 var(--rural-share) 100%)}
+.w8-dubois-reveal dl{display:flex;justify-content:space-between;gap:26px;margin:18px 0 0;font-size:29px}
+.w8-dubois-reveal dl div:last-child{text-align:right}
+.w8-dubois-reveal dd{margin:3px 0 0;font-weight:750}
+.w8-dubois-reveal figure{margin:0;text-align:center}
+.w8-dubois-reveal img{display:block;width:100%;height:auto;max-height:655px;object-fit:contain}
+.w8-dubois-reveal figcaption{margin-top:8px;color:#735c42;font-size:23px}
 .w8-reflection-question{height:100%;display:grid;align-content:center;justify-items:center;text-align:center;padding:0 140px}
 .w8-reflection-question.is-challenge{background:#ebbe60;color:#332821}
-.w8-reflection-question.is-pinup{background:#fff}
+.w8-reflection-question.is-test{background:#fff}
 .w8-reflection-question h1{font-size:108px}
-.w8-reflection-question.is-pinup h1{max-width:1200px;font-size:76px;text-wrap:balance}
-.w8-reflection-question p{margin:0 0 36px;color:#a13644;font:700 43px/1 var(--deck-sans);letter-spacing:.11em}
-.w8-stat-chart{
-  margin:72px auto 0;display:grid;grid-template-columns:340px 1fr 1fr;align-items:center;gap:15px 62px;text-align:left
-}
-.w8-stat-chart h2{margin:0 0 13px;font:600 47px/1.2 var(--deck-serif)}
-.w8-stat-row{display:contents}
-.w8-stat-name{height:194px;display:flex;align-items:center;gap:15px;font-size:32px;font-weight:700;color:var(--pokemon-ink);white-space:nowrap}
-.w8-stat-name img{width:158px;height:158px}
-.w8-stat-track{
-  position:relative;height:100%;display:flex;align-items:center;border-left:2px solid #b8ac98;border-right:1px solid #d6cbb9;
-  background:repeating-linear-gradient(to right,transparent 0,transparent calc(100% / 3 - 1px),#dcd1be calc(100% / 3 - 1px),#dcd1be calc(100% / 3))
-}
-.w8-stat-track span{display:block;width:var(--stat-width);min-width:0;padding:9px 16px;color:#fff;background:var(--pokemon-ink);font-size:36px;font-weight:700;text-align:right}
-.w8-stat-axis{position:relative;height:1.5em;color:#665949;font-size:24px;font-variant-numeric:tabular-nums}
-.w8-stat-axis span{position:absolute;left:var(--tick);transform:translateX(-50%)}
+.w8-reflection-question.is-test h1{max-width:1200px;font-size:76px;text-wrap:balance}
 .w8-reflection-map{
   position:absolute;bottom:24px;left:50%;width:434px;transform:translateX(-50%);text-align:center;
   --map-outline:#a99c87;--map-ink:#5c4e3b;--map-accent:#a13644
@@ -113,5 +102,8 @@
 .w8-reflection-map polygon.is-current{fill:var(--map-accent);stroke:var(--map-accent)}
 .w8-reflection-map-labels{display:grid;grid-template-columns:repeat(4,1fr);color:var(--map-ink);font-size:22px}
 .w8-reflection-map-labels [aria-current="step"]{color:var(--map-accent);font-weight:800}
+
+.w8-homework h1{font-size:87px}
+.w8-homework footer{position:absolute;inset:auto 115px 75px}
 
 .w8-framework-context{position:absolute;inset:0;padding:60px 100px}.w8-framework-context h1{font-size:64px}.w8-context-engagement,.w8-context-leadership{display:flex;align-items:center;justify-content:space-between;gap:30px;position:absolute;left:100px;right:100px;font-size:27px;color:#52716c}.w8-context-engagement{top:150px;border-bottom:2px solid #52716c50;padding-bottom:18px}.w8-context-leadership{bottom:35px;border-top:2px solid #b7863170;padding-top:18px;color:#957025}.w8-framework-context strong{font-weight:600}.w8-context-core{position:absolute;top:100px;left:256px;transform:scale(.68);transform-origin:0 0;width:1600px;height:900px}.w8-context-core .w8-diagram-title,.w8-context-core .w8-diagram-year,.w8-context-core .w8-course-caption{display:none}.w8-context-principles,.w8-context-methods{position:absolute;top:705px}.w8-context-principles{left:100px;max-width:850px}.w8-context-methods{right:100px;max-width:480px}.w8-framework-context h2{font:500 24px var(--deck-sans);color:#ac3d4d;margin:0 0 16px}.w8-framework-context p{font:400 25px/1.5 var(--deck-sans);margin:0}

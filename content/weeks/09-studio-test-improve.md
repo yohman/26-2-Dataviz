@@ -12,8 +12,8 @@ learn: create, test, get feedback, and refine in class
 learn_ja: 授業内でつくり、試し、フィードバックを受け、改訂する
 schedule: 10:40–10:50|Pin up|One A3 printout per group;10:50–11:30|Wall critique|View, respond, discuss;11:30–12:20|Revise|Choose a change and test it
 schedule_ja: 10:40–10:50|壁に掲示|A3をグループで1枚;10:50–11:30|講評|見る・伝える・話す;11:30–12:20|改善|変更を一つ選んで試す
-in_class: Pin one A3 prototype printout per group on the wall. Explore other groups’ work, exchange critique, then revise.
-in_class_ja: 各グループ、A3の試作1枚を壁に掲示。他のグループの作品を見て講評し、改善につなげます。
+in_class: Bring one printed A3 prototype poster per group on November 27. Pin it up for critique, then revise.
+in_class_ja: 11月27日に、各グループで試作ポスターをA3で1枚持参します。壁に掲示し、講評をもとに改善します。
 homework: Revision log and prototype update
 homework_ja: 改訂記録とプロトタイプの更新
 challenge: Prototype refinement
@@ -32,15 +32,15 @@ image: assets/images/lecture/week09.png
 ### Activity 1
 title: Pin up · 10 min
 title_ja: 壁に掲示 · 10分
-text: Each group pins up one A3 printout of its prototype. Include your group name and the question it explores.
-text_ja: 各グループ、試作を印刷したA3を1枚掲示。グループ名と、取り組む問いを入れます。
+text: Week 9 group deliverable: bring one printed A3 poster (297 × 420 mm) on November 27. Build it from your Week 8 individual revisions.
+text_ja: 第9週のグループ提出物は、A3（297×420mm）のポスター1枚。第8週の個人作品の改訂版をもとにまとめ、11月27日に持参します。
 steps:
-- Pin your A3 where everyone can read it.
-- Keep the question and main visualization visible.
+- Put your group name, question, and main visualization on the poster.
+- Pin up the group’s one printout where everyone can read it.
 - Put sticky notes or paper nearby for comments.
 steps_ja:
-- みんなが読める場所にA3を貼る。
-- 問いと主な可視化が見えるようにする。
+- グループ名、問い、主な可視化をポスターに載せる。
+- グループで1枚、みんなが読める場所に掲示する。
 - 感想を書ける付箋やメモをそばに置く。
 
 ### Activity 2

@@ -17,12 +17,12 @@ schedule: 10:40–11:05|XAVIZ|;11:05–11:50|Group project|Show, discuss, and pr
 schedule_ja: 10:40–11:05|XAVIZ|;11:05–11:50|グループ制作|見せ合う・話し合う・試作する;11:50–12:20|意見交換・まとめ|隣のグループと共有し、宿題を確認
 in_class: Rejoin last week's group. Share your ideas, agree on one direction, and make a first prototype together.
 in_class_ja: 先週のグループで集まり、各自の案を共有します。方向性を一つ決め、一緒に試作しましょう。
-homework: Improve your prototype using today's feedback. Bring one A3 printout per group on November 27 for a wall critique.
-homework_ja: 今日の意見をもとに試作を改善し、11月27日にグループでA3の印刷物1枚を持参。壁に掲示して講評します。
-requirements: Group: print one prototype on A3 (297 × 420 mm), with your group name and question. Bring it on November 27.;Each person submits 1–2 images and a shared project/data link through the usual form.;In a short comment, give your group name, your contribution, and one next step.
-requirements_ja: グループで試作をA3（297×420mm）1枚に印刷。グループ名と問いを入れ、11月27日に持参する。;各自、画像1〜2枚と共有の作品・データリンクを、いつものフォームから提出する。;短い説明に、グループ名・自分が担当したこと・次に取り組むことを書く。
-challenge: Develop the group prototype
-challenge_ja: グループの試作を進める
+homework: Use feedback from today’s show-and-tell to revise one of your own visualizations. Each student submits their own revision.
+homework_ja: 今日の見せ合いでもらった意見をもとに、自分の可視化を一つ見直し、各自で提出します。
+requirements: Submit one image of your revised graphic and a link to the data you used.;Include your group name and briefly explain what you changed and why.
+requirements_ja: 改訂した可視化の画像1枚と、使ったデータへのリンクを提出する。;グループ名を添え、何をなぜ変えたかを短く書く。
+challenge: Individual visualization revision
+challenge_ja: 個人課題：可視化の改訂
 tools: Paper, slides, Tableau, Python, or your preferred tool
 tools_ja: 紙・スライド・Tableau・Pythonなど、使いやすいもの
 image: assets/images/lecture/week08-framework.jpg

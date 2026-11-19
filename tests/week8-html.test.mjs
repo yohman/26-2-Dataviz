@@ -22,20 +22,22 @@ test('Week 8 is entirely native with original source photos, original XAVIZ dest
  const x=deck.slides.find(s=>s.id==='xaviz');assert.equal(x.href,'https://docs.google.com/presentation/d/1nzo8jO-YejXe_3wUdZwXTMdqLpY96ang8nzZu2FokTU/edit?usp=sharing');assert.equal(x.notes.ja,'');assert.equal(x.notes.en,'');
  assert.equal(deck.slides.find(s=>s.id==='double-diamond').phase,4);
 });
-test('four reflection slides advance in order, highlight a phase, and use the Week 4 CSV values',()=>{
+test('four reflection slides highlight a phase and reveal the population missing from the first draft',()=>{
  const stages=deck.slides.slice(21,25);
- assert.deepEqual(stages.map(s=>s.stage),['total','challenge','compare','pinup']);
- const csv=fs.readFileSync('data/pokemon-review.csv','utf8').trim().split(/\r?\n/).map(r=>r.split(','));
- const columns={total:'Base_Stat_Total',speed:'Speed',defense:'Defense'};
+ assert.deepEqual(stages.map(s=>s.stage),['draft','challenge','reveal','test']);
  for(const [i,s] of stages.entries())for(const ja of [false,true]){
   const html=renderWeek8(s,{ja,data,returnTo:''}),phase=['Discover','Define','Develop','Deliver'][i];
   assert.ok(html.includes(`data-phase="${phase}"`));
   assert.ok(html.includes(`aria-current="step">${phase}</span>`));
   assert.equal((html.match(/class="is-current"/g)||[]).length,1);
   assert.doesNotMatch(html,/<button|<a |↶/);
-  const values=[...html.matchAll(/data-pokemon="(\d+)" data-stat="(\w+)"[^>]*>(\d+)</g)];
-  assert.equal(values.length,[2,0,4,0][i]);
-  for(const [,id,stat,value] of values)assert.equal(value,csv.find(r=>r[0]===id)[csv[0].indexOf(columns[stat])]);
+  const values=[...html.matchAll(/data-count="(\d+)"/g)].map(m=>Number(m[1]));
+  assert.deepEqual(values,[[78139,8025,37699],[],[123863,734952],[]][i]);
+  if(i===2){
+   assert.ok(html.includes(`${(734952/858815*100).toFixed(1)}%`));
+   assert.match(html,/src="assets\/images\/week06\/city-rural.jpg"/);
+   assert.ok(s.sources.some(link=>link.href==='https://www.loc.gov/item/2013650430/'));
+  }
  }
  assert.equal(new Set(deck.slides.map(s=>s.annotationPage??s.page)).size,deck.slides.length);
 });
@@ -47,12 +49,14 @@ test('activities link to the complete Double Diamond while timing and opening ga
  assert.equal(safeDeckReturn('agenda.html#week-7',8),'agenda.html#week-8');
 });
 
-test('the A3 handoff is one printout per group, followed by pin-up, critique and revision',()=>{
- assert.match(week.requirements,/A3.*297.*420/);assert.match(week.requirements,/November 27/);assert.match(week.requirements_ja,/A3.*1枚/);
- assert.match(week.requirements,/Each person submits 1–2 images/);
- const hw=deck.slides.find(s=>s.id==='homework');assert.match(hw.steps.en[0],/one A3|One A3/);assert.match(hw.notes.en,/one per group/);
+test('Week 8 is an individual revision and the A3 poster belongs to the Week 9 group critique',()=>{
+ assert.doesNotMatch(source,/A3/);assert.doesNotMatch(JSON.stringify(deck),/\bA3\b/);
+ assert.match(week.homework,/show-and-tell.*own visualizations.*Each student/);
+ assert.match(week.requirements,/one image of your revised graphic/);assert.match(week.requirements_ja,/改訂した可視化の画像1枚/);
+ const hw=deck.slides.find(s=>s.id==='homework');assert.match(hw.steps.en[0],/your own graphic.*show-and-tell/);assert.match(hw.notes.en,/November 26, 2026 at 23:59 JST/);
+ assert.match(renderWeek8(hw,{ja:false,data,returnTo:''}),/homework-submit\.html\?week=8/);
  const src=fs.readFileSync('content/weeks/09-studio-test-improve.md','utf8');context.source=src;const next=vm.runInContext("parseWeek(source,'09-studio-test-improve.md')",context);
- assert.equal(next.activities.length,3);assert.match(next.activities[0].text,/one A3/);assert.match(next.activities[1].text,/at least two/);assert.match(next.activities[2].text,/improve your prototype/);assert.doesNotMatch(src,/Padlet/);
+ assert.equal(next.activities.length,3);assert.match(next.activities[0].text,/Week 9 group deliverable.*one printed A3.*November 27/);assert.match(next.activities[0].text_ja,/第9週のグループ提出物.*A3.*1枚/);assert.match(next.activities[1].text,/at least two/);assert.match(next.activities[2].text,/improve your prototype/);assert.doesNotMatch(src,/Padlet/);
  const final=renderWeek8(deck.slides.find(s=>s.id==='double-diamond'),{ja:true,data,returnTo:''});assert.doesNotMatch(final,/w8-source-feedback/);assert.doesNotMatch(final,/w8-phase.*polygon/);assert.equal((final.match(/w8-source-phase-name/g)||[]).length,4);
  assert.ok(deck.slides.find(s=>s.kind==='framework-context').sources.some(s=>s.label.includes('CC BY 4.0')));
 });

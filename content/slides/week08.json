@@ -252,8 +252,8 @@
         "en": "Deliver"
       },
       "notes": {
-        "ja": "Deliverでは、小さな試作を人に見せ、どう読み取られるかを確かめて改善する。今週のグループ間の意見交換や、来週のA3ポスター講評がその機会になる。",
-        "en": "Deliver tests a prototype with people and improves it based on what they see. This week’s group exchange and next week’s A3 pin-up critique are opportunities to do that."
+        "ja": "Deliverでは、小さな試作を人に見せ、どう読み取られるかを確かめて改善する。今週のグループ間の意見交換がその機会になる。",
+        "en": "Deliver tests a prototype with people and improves it based on what they see. This week’s group exchange is an opportunity to do that."
       },
       "phase": 4,
       "question": {
@@ -374,8 +374,8 @@
         "en": "Reflection-in-action"
       },
       "notes": {
-        "ja": "MITで専門家の実践を研究したドナルド・ショーンは、『The Reflective Practitioner』（1983年）で「行為の中の省察」を論じた。つくっている途中で予想外のことに気づき、それを受けて次の一手を変えること。作業を終えてから振り返る省察とは、タイミングが異なる。図にある表紙は後年の版。\n\n試作は、考えるための道具でもある。たとえば都市別の件数をグラフにすると、大都市ばかりが目立つことがある。人口あたりの件数も描いてみると、「件数が最も多いのはどこか」と「発生率が最も高いのはどこか」という二つの問いの違いが見えてくる。\n\nジョン・ベネットとのインタビューで、ショーンは、建物を敷地の等高線に重ねて描くうちに、地形と建物の形が合わないと気づく例を挙げた。描いたものから予想外の反応が返ってくることを、ショーンは「backtalk」と呼んだ。別のグループの読み取りからも、同じように思いがけない発見がある。\n\nA3講評の問い：「私たちが説明する前に、このポスターから何が読み取れましたか？」 制作グループの振り返り：「私たちは＿＿が伝わると思っていた。相手には＿＿と見えた。そこで次は＿＿を試す。」 その場で変更を試すと、また行為の中の省察が始まる。\n\n視覚的思考は、つくることで気づきを得ること。ショーンは、その気づきが次の行動をどう変えるかを説明する。ダブルダイヤモンドは、表現・データ・問いのどこに戻るかを考える手がかりになる。",
-        "en": "Donald Schön studied professional practice at MIT and wrote about reflection-in-action in The Reflective Practitioner (1983). It happens when something unexpected during the work changes what you try next. Schön distinguished it from pausing to reflect afterward. The cover shown is from a later edition.\n\nA prototype is something you think with. Suppose a group charts total cases by city and notices that the biggest cities dominate. Plotting cases per person brings out a distinction: Where are there the most cases? Where is the rate highest? Making the charts helps the group clarify its question.\n\nIn his interview with John Bennett, Schön describes an architectural sketch that reveals a mismatch between the building’s shape and the contours of its site. He calls this kind of unexpected response from the work “backtalk.” Another group can surprise you in the same way by reading your visualization differently than you intended.\n\nA3 critique question: “What did you see before we explained it?” The makers can sum up their next move: “We expected people to see ___; they saw ___; so we’ll try ___.” Trying that change on the spot brings the group back to reflection-in-action.\n\nVisual Thinking helps you notice things by making them visible. Schön explains how a surprise changes your next move. The Double Diamond helps you see where to go back: the representation, the data, or the question."
+        "ja": "MITで専門家の実践を研究したドナルド・ショーンは、『The Reflective Practitioner』（1983年）で「行為の中の省察」を論じた。つくっている途中で予想外のことに気づき、それを受けて次の一手を変えること。作業を終えてから振り返る省察とは、タイミングが異なる。図にある表紙は後年の版。\n\n試作は、考えるための道具でもある。たとえば都市別の件数をグラフにすると、大都市ばかりが目立つことがある。人口あたりの件数も描いてみると、「件数が最も多いのはどこか」と「発生率が最も高いのはどこか」という二つの問いの違いが見えてくる。\n\nジョン・ベネットとのインタビューで、ショーンは、建物を敷地の等高線に重ねて描くうちに、地形と建物の形が合わないと気づく例を挙げた。描いたものから予想外の反応が返ってくることを、ショーンは「backtalk」と呼んだ。別のグループの読み取りからも、同じように思いがけない発見がある。\n\n講評の問い：「私たちが説明する前に、この図から何が読み取れましたか？」 制作グループの振り返り：「私たちは＿＿が伝わると思っていた。相手には＿＿と見えた。そこで次は＿＿を試す。」 その場で変更を試すと、また行為の中の省察が始まる。\n\n視覚的思考は、つくることで気づきを得ること。ショーンは、その気づきが次の行動をどう変えるかを説明する。ダブルダイヤモンドは、表現・データ・問いのどこに戻るかを考える手がかりになる。",
+        "en": "Donald Schön studied professional practice at MIT and wrote about reflection-in-action in The Reflective Practitioner (1983). It happens when something unexpected during the work changes what you try next. Schön distinguished it from pausing to reflect afterward. The cover shown is from a later edition.\n\nA prototype is something you think with. Suppose a group charts total cases by city and notices that the biggest cities dominate. Plotting cases per person brings out a distinction: Where are there the most cases? Where is the rate highest? Making the charts helps the group clarify its question.\n\nIn his interview with John Bennett, Schön describes an architectural sketch that reveals a mismatch between the building’s shape and the contours of its site. He calls this kind of unexpected response from the work “backtalk.” Another group can surprise you in the same way by reading your visualization differently than you intended.\n\nCritique question: “What did you see before we explained it?” The makers can sum up their next move: “We expected people to see ___; they saw ___; so we’ll try ___.” Trying that change on the spot brings the group back to reflection-in-action.\n\nVisual Thinking helps you notice things by making them visible. Schön explains how a surprise changes your next move. The Double Diamond helps you see where to go back: the representation, the data, or the question."
       },
       "image": "assets/images/lecture/week08-schon-cover.jpg",
       "sources": [
@@ -523,63 +523,60 @@
     {
       "id": "make-critique-revise",
       "kind": "reflection",
-      "stage": "total",
+      "stage": "draft",
       "title": {
-        "ja": "どちらが強い？",
-        "en": "Which is stronger?"
+        "ja": "都市に暮らす黒人住民",
+        "en": "Black Georgians in cities"
       },
       "notes": {
-        "ja": "第4週のポケモンデータから。サンダースとブラッキーは6つの能力を足すと、どちらも525。合計だけを見ると互角に見える。合計は能力の配分や実際の対戦結果を表さない。",
-        "en": "From the Week 4 Pokémon dataset. Jolteon and Umbreon each have a base stat total of 525. The totals tie, but a sum tells us neither how those points are distributed nor who would win a battle."
+        "ja": "第6週に見たデュボイスの図から、1890年のジョージア州の都市3区分だけを取り出した授業用の試作。各区分は都市の総人口で分け、棒はそこに住む黒人の人数を表す。デュボイス自身の下書きではない。",
+        "en": "A classroom draft using only the three city categories from the Du Bois plate we saw in Week 6. The categories describe city size; the bars count Black residents in those cities. This is not a historical draft by Du Bois."
       },
       "sources": [
         {
-          "label": "Week 4 Pokémon CSV",
-          "href": "data/pokemon-review.csv"
-        },
-        {
-          "label": "Pokémon artwork · PokéAPI",
-          "href": "https://github.com/PokeAPI/sprites/tree/master/sprites/pokemon/other/official-artwork"
+          "label": "City and rural population, 1890 · Library of Congress",
+          "href": "https://www.loc.gov/item/2013650430/"
         }
       ],
       "page": 22,
       "annotationPage": 35
     },
     {
-      "id": "stronger-at-what",
+      "id": "who-is-missing",
       "kind": "reflection",
       "stage": "challenge",
       "title": {
-        "ja": "強いって、何に強い？",
-        "en": "Stronger at what?"
+        "ja": "誰が抜けている？",
+        "en": "Who is missing?"
       },
       "notes": {
-        "ja": "仮の講評で、別のグループから「強いって、何に強い？」と聞かれたとする。ここで見直すのは色やレイアウトではなく、「強い」という問いの意味。次の試作では、すばやさと物理攻撃に対するぼうぎょを別々に比べる。",
-        "en": "An imagined critique: a reader asks what “stronger” means. The next move is to revisit the question. Instead of polishing the total, the designers compare speed and physical defense separately."
+        "ja": "仮の講評で「都市には住んでいなかった人は？」と聞かれたとする。都市だけの図では「州全体でどこに住んでいたか」はわからない。問いの範囲を広げ、農村・村落の区分も含める。",
+        "en": "An imagined reader asks about people who did not live in cities. A chart of cities alone cannot answer where people lived across the state. The critique changes the scope of the question: include the country and villages."
       },
       "page": 23,
       "annotationPage": 36
     },
     {
-      "id": "pokemon-revision",
+      "id": "dubois-revision",
       "kind": "reflection",
-      "stage": "compare",
+      "stage": "reveal",
       "title": {
-        "ja": "同じ合計、違う強み",
-        "en": "Same total, different strengths"
+        "ja": "多くは農村・村落に",
+        "en": "Most lived in the country and villages"
       },
       "notes": {
-        "ja": "同じデータを別の問いで見る。すばやさではサンダースが130対65、ぼうぎょではブラッキーが110対60で上回る。ぼうぎょは物理攻撃に対する能力で、とくぼうとは別。2つの図は同じ0〜150の目盛りを使う。これは試作の説明例で、実際の講評結果ではない。",
-        "en": "Same data, more specific questions. Jolteon leads on Speed, 130 to 65. Umbreon leads on Defense, 110 to 60. Defense here is the physical defense stat, distinct from Special Defense. Both views use the same 0–150 scale. This is an illustrative revision, not a measured critique result."
+        "ja": "原図の赤い渦は、農村・村落の734,952人を表す。都市3区分の合計は123,863人。図の4区分の合計858,815人を分母にすると、農村・村落は約85.6％。左はその割合を示す授業用の図、右は1900年のパリ万博に出品された原図。原図には当時の人種呼称が残っている。",
+        "en": "In the archival plate, the long red spiral represents 734,952 Black residents in the country and villages. The three city groups total 123,863. Of the 858,815 people in the four categories shown, 85.6% lived in the country and villages. The left is a classroom redraw. The right is Du Bois’s original for the 1900 Paris Exposition; it retains its period racial terminology."
+      },
+      "image": "assets/images/week06/city-rural.jpg",
+      "alt": {
+        "ja": "デュボイスの原図。農村・村落の人口を大きな赤い渦で表す。",
+        "en": "Du Bois’s original plate. A large red spiral shows the population in the country and villages."
       },
       "sources": [
         {
-          "label": "Week 4 Pokémon CSV",
-          "href": "data/pokemon-review.csv"
-        },
-        {
-          "label": "Pokémon artwork · PokéAPI",
-          "href": "https://github.com/PokeAPI/sprites/tree/master/sprites/pokemon/other/official-artwork"
+          "label": "City and rural population, 1890 · Library of Congress",
+          "href": "https://www.loc.gov/item/2013650430/"
         }
       ],
       "page": 24,
@@ -588,14 +585,14 @@
     {
       "id": "reflection-pinup",
       "kind": "reflection",
-      "stage": "pinup",
+      "stage": "test",
       "title": {
         "ja": "説明する前に、何が読み取れましたか？",
         "en": "What did you see before we explained it?"
       },
       "notes": {
-        "ja": "A3講評では、説明を聞く前に相手が読み取ったことと、制作者が伝えたかったことを比べる。違いがあれば、問いか図を一つ変えて、もう一度見てもらう。試作を見ながら次の一手を変えるのが、ショーンの「行為の中の省察」。",
-        "en": "At the A3 pin-up, compare what someone sees without an explanation with what the group meant to show. If those differ, change one thing about the question or the graphic and show it again. Schön’s reflection-in-action is the moment that reading changes what the group tries next."
+        "ja": "改訂した図を説明なしで見たとき、農村・村落に住む人の多さが伝わるか。今日の見せ合いでも、相手が読み取ったことと、自分が伝えたかったことを比べる。違いがあれば、問いか図を変えて、もう一度見てもらう。",
+        "en": "Without an explanation, does the revised chart show how many people the first draft left out? The same test works in today’s show-and-tell. Compare what someone read with what you meant to show, then revise and test again."
       },
       "page": 25,
       "annotationPage": 38
@@ -733,8 +730,8 @@
         "en": "The project ahead"
       },
       "notes": {
-        "ja": "第9週はA3の試作を壁に掲示し、講評を受けて改善、第10週は中間グループ発表。第11週は地図、第12週はネットワークと複数ビュー、第13週は最終制作、第14週は最終発表。",
-        "en": "Week 9: A3 pin-up critique and prototype refinement. Week 10: midterm group presentations. Week 11: maps. Week 12: networks and multiple views. Week 13: final studio. Week 14: final presentations."
+        "ja": "第9週はスタジオ講評と試作の改善、第10週は中間グループ発表。第11週は地図、第12週はネットワークと複数ビュー、第13週は最終制作、第14週は最終発表。",
+        "en": "Week 9: studio critique and prototype refinement. Week 10: midterm group presentations. Week 11: maps. Week 12: networks and multiple views. Week 13: final studio. Week 14: final presentations."
       },
       "page": 32,
       "annotationPage": 19
@@ -743,23 +740,23 @@
       "id": "homework",
       "kind": "studio-homework",
       "title": {
-        "ja": "試作を、もう一歩。",
-        "en": "Develop your prototype."
+        "ja": "個人課題：可視化の改訂",
+        "en": "Individual visualization revision"
       },
       "notes": {
-        "ja": "フィードバックをもとにグループで問い一つと試作一つを育てる。各自で画像1〜2枚、共有の作品・データリンクを提出。短い説明はグループ名、自分の担当、次の一歩。締切は2026年11月26日23:59 JST。 グループで試作をA3（297×420mm）1枚に印刷し、11月27日の授業に持参する。グループ名と問いを入れ、壁に掲示して講評を受ける。オンライン提出は各自、印刷はグループで1枚。",
-        "en": "Develop one shared question and one prototype using feedback. Each person submits 1–2 images and the shared project/data link, with group name, contribution and next step. Due November 26, 2026 at 23:59 JST. Each group also brings one A3 (297 × 420 mm) printout of its prototype to class on November 27, with its group name and question, for the wall critique. Digital submissions remain individual; the printout is one per group."
+        "ja": "今日の見せ合いでもらった意見をもとに、自分の可視化を一つ改訂する。グループで一つではなく、各自で改訂した画像1枚とデータへのリンクを提出する。グループ名を添え、何をなぜ変えたかを短く書く。締切は2026年11月26日23:59 JST。",
+        "en": "Use feedback from today’s show-and-tell to revise one of your own visualizations. Each student submits one image of their own revision and a link to the data. Include your group name and briefly explain what you changed and why. Due November 26, 2026 at 23:59 JST."
       },
       "steps": {
         "ja": [
-          "試作をA3に印刷：グループで1枚",
-          "各自：画像1〜2枚 ＋ 共有リンク",
-          "グループ名・担当・次の一歩"
+          "今日の見せ合いをもとに、自分の可視化を改訂",
+          "各自で提出：改訂した画像1枚とデータへのリンク",
+          "グループ名と、何をなぜ変えたか"
         ],
         "en": [
-          "One A3 prototype printout per group",
-          "Each person: 1–2 images + shared link",
-          "Group name, contribution, next step"
+          "Revise your own graphic using today’s show-and-tell feedback",
+          "Submit one image and a data link, individually",
+          "Include your group name, what changed, and why"
         ]
       },
       "page": 33,

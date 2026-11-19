@@ -41,33 +41,39 @@ function diamond(s,ja){
  const caption=active?active[ja?'ja':'en']:(p?courseActions[p-1]:(ja?'広げる。絞る。もう一度。':'Open up. Focus. Again.'));
  return `<div class="w8-diamond w8-source-diamond">${svg(c,`Double Diamond · ${phaseLabels.slice(0,p).join(', ')}`)}<p class="w8-course-caption">${e(caption)}</p>${active?`<button class="w8-replay" data-replay>${ja?'もう一度 ↶':'Replay ↶'}</button>`:''}</div>`;
 }
-// Two rows from the Week 4 Pokémon CSV; checked against that file in the deck tests.
-const specimens=[
- {id:135,en:'Jolteon',ja:'サンダース',total:525,speed:130,defense:60},
- {id:197,en:'Umbreon',ja:'ブラッキー',total:525,speed:65,defense:110},
+// Transcribed from the Week 6 archival plate (LOC ppmsca.33873).
+const settlementCounts=[
+ {en:'Cities over 10,000',ja:'1万人超の都市',count:78139,ink:'#3b5e50'},
+ {en:'Cities of 5,000–10,000',ja:'5千〜1万人の都市',count:8025,ink:'#456387'},
+ {en:'Cities of 2,500–5,000',ja:'2,500〜5千人の都市',count:37699,ink:'#cb922a'},
 ];
+const countryAndVillages=734952;
 function reflectionMap(stage,ja){
  const phases=['Discover','Define','Develop','Deliver'];
  const translations=['探る','問いを決める','案をつくる','試して改善'];
- const active=['total','challenge','compare','pinup'].indexOf(stage);
+ const active=['draft','challenge','reveal','test'].indexOf(stage);
  const points=['12,31 64,4 64,58','64,4 116,31 64,58','130,31 182,4 182,58','182,4 234,31 182,58'];
  const paths=points.map((p,i)=>`<polygon points="${p}"${i===active?' class="is-current"':''}/>`).join('');
  const labels=phases.map((phase,i)=>`<span${i===active?' aria-current="step"':''}>${phase}</span>`).join('');
  return `<div class="w8-reflection-map" role="group" aria-label="${ja?'ダブルダイヤモンド：':'Double Diamond: '}${ja?translations[active]:phases[active]}" data-phase="${phases[active]}"><svg viewBox="0 0 246 62" preserveAspectRatio="none" aria-hidden="true">${paths}</svg><div class="w8-reflection-map-labels" aria-hidden="true">${labels}</div></div>`;
 }
 function reflection(s,ja,tr){
- const name=p=>p[ja?'ja':'en'];
- const portrait=p=>`<img src="assets/images/lecture/week08-pokemon-${p.id}.png" width="475" height="475" alt="">`;
- if(s.stage==='total'){
-  return `<div class="w8-reflection-totals"><h1>${e(tr(s.title))}</h1><p>${ja?'6つの能力の合計':'Sum of six base stats'}</p><div class="w8-reflection-pair">${specimens.map(p=>`<figure class="pokemon-${p.id}">${portrait(p)}<figcaption>${e(name(p))}<strong data-pokemon="${p.id}" data-stat="total">${p.total}</strong></figcaption></figure>`).join('')}</div></div>`;
+ const title=e(tr(s.title)),n=value=>new Intl.NumberFormat(ja?'ja-JP':'en-US').format(value);
+ const place=ja?'ジョージア州 · 1890年':'Georgia · 1890';
+ if(s.stage==='draft'){
+  const bars=settlementCounts.map((row,i)=>{
+   const y=312+i*119,w=row.count/100000*800;
+   return tag(450,y+37,tr(row),'w8-dubois-category','text-anchor="end"')+`<rect x="482" y="${y}" width="${w}" height="53" fill="${row.ink}" data-count="${row.count}"/>`+tag(505+w,y+37,n(row.count),'w8-dubois-value');
+  }).join('');
+  return `<div class="w8-dubois-draft"><p>${place}</p><h1>${title}</h1>${svg('<path d="M482 290V622" stroke="#9d907a" stroke-width="2"/>'+bars,ja?'ジョージア州の黒人人口、都市のみ。1890年。':'Black population of Georgia, cities only, 1890.')}</div>`;
  }
- if(s.stage==='challenge'||s.stage==='pinup'){
-  return `<div class="w8-reflection-question is-${s.stage}">${s.stage==='pinup'?'<p>A3</p>':''}<h1>${e(tr(s.title))}</h1></div>`;
+ if(s.stage==='challenge'||s.stage==='test'){
+  return `<div class="w8-reflection-question is-${s.stage}"><h1>${title}</h1></div>`;
  }
- const headings=ja?['すばやさ','ぼうぎょ']:['Speed','Defense'];
- const mark=(p,k,i)=>`<div class="w8-stat-track" role="img" aria-label="${e(name(p))} · ${headings[i]}: ${p[k]}"><span data-pokemon="${p.id}" data-stat="${k}" style="--stat-width:${p[k]/150*100}%">${p[k]}</span></div>`;
- const axis=`<div class="w8-stat-axis" aria-hidden="true">${[0,50,100,150].map(n=>`<span style="--tick:${n/150*100}%">${n}</span>`).join('')}</div>`;
- return `<div class="w8-reflection-comparison"><h1>${e(tr(s.title))}</h1><div class="w8-stat-chart"><span></span>${headings.map(h=>`<h2>${h}</h2>`).join('')}${specimens.map(p=>`<div class="w8-stat-row pokemon-${p.id}"><div class="w8-stat-name">${portrait(p)}<span>${e(name(p))}</span></div>${mark(p,'speed',0)}${mark(p,'defense',1)}</div>`).join('')}<span></span>${axis}${axis}</div></div>`;
+ const cityCount=settlementCounts.reduce((sum,row)=>sum+row.count,0);
+ const share=countryAndVillages/(cityCount+countryAndVillages)*100;
+ const rural=ja?'農村・村落':'Country and villages',cities=ja?'都市':'Cities';
+ return `<div class="w8-dubois-reveal"><div><p class="w8-dubois-place">${place}</p><h1>${title}</h1><strong class="w8-dubois-share">${share.toFixed(1)}%</strong><div class="w8-dubois-split" style="--rural-share:${share}%" aria-hidden="true"></div><dl><div><dt>${cities}</dt><dd data-count="${cityCount}">${n(cityCount)}</dd></div><div><dt>${rural}</dt><dd data-count="${countryAndVillages}">${n(countryAndVillages)}</dd></div></dl></div><figure><img src="${e(s.image)}" width="1751" height="2200" alt="${e(tr(s.alt))}"><figcaption>W. E. B. Du Bois · 1900</figcaption></figure></div>`;
 }
 function ideaCharts(data,ja){
  const rows=data.scatter.filter(r=>['Japan','India','China','Sweden','United States'].includes(r.country));
@@ -96,8 +102,8 @@ export function renderWeek8(s,{ja,data,returnTo}){
  if(s.kind==='ideas-native')return `<div class="w8-ideas"><h1>${e(tr(s.title))}</h1><span class="w8-ideas-number">2–3</span>${ideaCharts(data,ja)}<a href="${e(s.href)}">${ja?'先週の作品を見る':'Last week’s gallery'} ↗</a></div>`;
  if(s.kind==='combine')return `<div class="w8-combine"><h1>${e(tr(s.title))}</h1><svg viewBox="0 0 1400 520" aria-hidden="true">${[0,1,2].map(i=>`<path d="M100 ${100+i*150}C600 ${100+i*150} 500 250 900 250" fill="none" stroke="${phaseColors[i]}" stroke-width="8"/><circle cx="100" cy="${100+i*150}" r="22" fill="${phaseColors[i]}"/>`).join('')}<circle cx="950" cy="250" r="75" fill="#40392f"/><path d="m925 250 18 18 35-42" fill="none" stroke="#faf8f0" stroke-width="7"/></svg><p>${ja?'問い一つ。試作一つ。':'One question. One prototype.'}</p></div>`;
  if(s.kind==='studio-activity')return `<div class="w8-activity"><div class="w8-time">${s.duration}<small>min</small></div><div><h1>${e(tr(s.title))}</h1><ol>${tr(s.steps).map(t=>`<li>${e(t)}</li>`).join('')}</ol>${s.href?`<a href="${e(s.href)}">${ja?'先週の作品を見る':'Last week’s gallery'} ↗</a>`:''}</div></div>`;
- if(s.kind==='studio-timeline')return `<div class="w8-timeline"><h1>${e(tr(s.title))}</h1><div>${(ja?['A3の壁で講評','中間発表','地図','ネットワーク','最終制作','最終発表']:['A3 pin-up critique','Midterm','Maps','Networks','Final studio','Final presentations']).map((t,i)=>`<p><span>W${i+9}</span><strong>${t}</strong></p>`).join('')}</div></div>`;
- if(s.kind==='studio-homework')return `<div class="w8-homework w8-print-homework"><div class="w8-a3-sheet" aria-hidden="true"><b>A3</b><svg viewBox="0 0 220 170"><path d="M20 15V145H205" fill="none" stroke="#c7b8a2" stroke-width="2"/><path d="m25 120 40-25 35 10 30-55 35 10 30-35" fill="none" stroke="#ac3d4d" stroke-width="5"/></svg><span>11.27 · ${ja?'持参':'Bring to class'}</span></div><h1>${e(tr(s.title))}</h1><ul>${tr(s.steps).map(t=>`<li>${e(t)}</li>`).join('')}</ul><footer><a href="homework-submit.html?week=8">${ja?'宿題を提出':'Submit homework'} ↗</a><a href="${e(returnTo)}">${ja?'課題の説明':'Assignment details'} ↗</a><time>11.26 Thu · 23:59 JST</time></footer></div>`;
+ if(s.kind==='studio-timeline')return `<div class="w8-timeline"><h1>${e(tr(s.title))}</h1><div>${(ja?['スタジオ講評','中間発表','地図','ネットワーク','最終制作','最終発表']:['Studio critique','Midterm','Maps','Networks','Final studio','Final presentations']).map((t,i)=>`<p><span>W${i+9}</span><strong>${t}</strong></p>`).join('')}</div></div>`;
+ if(s.kind==='studio-homework')return `<div class="w8-homework"><h1>${e(tr(s.title))}</h1><ul>${tr(s.steps).map(t=>`<li>${e(t)}</li>`).join('')}</ul><footer><a href="homework-submit.html?week=8">${ja?'宿題を提出':'Submit homework'} ↗</a><a href="${e(returnTo)}">${ja?'課題の説明':'Assignment details'} ↗</a><time datetime="2026-11-26T23:59:00+09:00">11.26 Thu · 23:59 JST</time></footer></div>`;
  return '';
 }
 export function bindWeek8(root,{s}){

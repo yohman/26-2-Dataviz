@@ -3,6 +3,18 @@
   const form=document.querySelector('#homework-form'), status=document.querySelector('#homework-status'), button=form.querySelector('[type=submit]');
   const week=Number(new URLSearchParams(location.search).get('week'));
   const text=(ja,en)=>window.courseLanguage==='en'?en:ja;
+  const isIndividualRevision=week===8;
+  if(isIndividualRevision) {
+    const label=(el,ja,en)=>{
+      el.querySelector('[data-course-lang="ja"]').textContent=ja;
+      el.querySelector('[data-course-lang="en"]').textContent=en;
+    };
+    label(form.elements.description.labels[0],'今日の見せ合いを受けて、何をなぜ変えましたか？ グループ名も書いてください。','What did you change after today’s show-and-tell, and why? Include your group name.');
+    label(form.elements.image1.labels[0],'改訂した可視化の画像（1枚）','Image of your revised graphic (one image)');
+    label(form.elements.image1.closest('fieldset').querySelector('legend'),'改訂した可視化','Revised graphic');
+    form.elements.image2.labels[0].hidden=true;
+    form.elements.image2.disabled=true;
+  }
   let schedule, deadlineTimer, pending;
   const browser=localStorage.getItem('dataviz-heart-browser') || crypto.randomUUID();
   localStorage.setItem('dataviz-heart-browser',browser);
@@ -12,6 +24,8 @@
     const result=await response.json(); if(!response.ok) throw new Error(result.error || text('送信できません。再試行してください。','Please retry.')); return result;
   }
   function updateDeadline() {
+    if(isIndividualRevision) document.querySelector('#homework-week').textContent=text('第8週 · 個人で改訂','Week 8 · Individual revision');
+    else if(schedule) document.querySelector('#homework-week').textContent=schedule.challenge;
     if(!schedule) return;
     const open=Date.now()>=schedule.opensAt && Date.now()<schedule.deadline;
     const date=new Intl.DateTimeFormat(window.courseLanguage==='en'?'en-GB':'ja-JP',{timeZone:'Asia/Tokyo',dateStyle:'full',timeStyle:'short'}).format(new Date(schedule.deadline));
@@ -34,7 +48,8 @@
       const savedKey=`dataviz-revision-${week}-${body.studentId.toLowerCase()}`;
       body.revisionToken=form.elements.revisionCode.value.trim() || localStorage.getItem(savedKey) || crypto.randomUUID();
       localStorage.setItem(savedKey,body.revisionToken);
-      body.images=await Promise.all([form.elements.image1.files[0],form.elements.image2.files[0]].filter(Boolean).map(compress));
+      const imageInputs=isIndividualRevision?['image1']:['image1','image2'];
+      body.images=await Promise.all(imageInputs.map(name=>form.elements[name].files[0]).filter(Boolean).map(compress));
       const signature=JSON.stringify(body);
       if(!pending || pending.signature!==signature)pending={signature,id:crypto.randomUUID()};
       body.requestId=pending.id;
@@ -46,7 +61,8 @@
     } catch(error) {status.textContent=error.message || text('通信に失敗しました。再試行してください。','Connection failed. Please retry.');}
     finally {updateDeadline();}
   });
-  request().then(data=>{schedule=data;document.querySelector('#homework-week').textContent=data.challenge;updateDeadline();deadlineTimer=setInterval(updateDeadline,15000);}).catch(error=>{status.textContent=error.message;});
+  updateDeadline();
+  request().then(data=>{schedule=data;updateDeadline();deadlineTimer=setInterval(updateDeadline,15000);}).catch(error=>{status.textContent=error.message;});
   new MutationObserver(updateDeadline).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
   window.addEventListener('pagehide',()=>clearInterval(deadlineTimer));
 })();
