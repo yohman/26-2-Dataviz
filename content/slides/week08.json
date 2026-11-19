@@ -13,6 +13,13 @@
       }
     },
     {
+      "id": "visual-thinking",
+      "label": {
+        "ja": "Visual Thinking",
+        "en": "Visual Thinking"
+      }
+    },
+    {
       "id": "framework",
       "label": {
         "ja": "Framework for Innovation",
@@ -72,6 +79,20 @@
       "page": 1
     },
     {
+      "id": "visual-thinking",
+      "kind": "visual-thinking",
+      "title": {
+        "ja": "Visual Thinking",
+        "en": "Visual Thinking"
+      },
+      "notes": {
+        "ja": "視覚的思考とは、図を描いたり見比べたりしながら考えること。同じデータでも、棒グラフでは差が、折れ線では変化が見えやすい。見え方が変わると、次に調べたい問いも変わる。ダブルダイヤモンドは探索と絞り込みを捉える枠組みで、行為の中の省察は、試作中に見えたことから判断を見直すこと。",
+        "en": "Visual thinking means working out ideas by making and comparing images. A bar chart can bring differences into view; a line chart can bring change into view. What becomes visible can change the next question. The Double Diamond describes how a team explores and focuses. Reflection-in-action describes how a designer reconsiders a decision while making."
+      },
+      "page": 2,
+      "annotationPage": 21
+    },
+    {
       "id": "framework",
       "kind": "framework-cover",
       "title": {
@@ -89,7 +110,8 @@
         }
       ],
       "image": "assets/images/lecture/week08-framework.jpg",
-      "page": 2
+      "page": 3,
+      "annotationPage": 2
     },
     {
       "id": "history",
@@ -109,7 +131,8 @@
           "href": "https://www.designcouncil.org.uk/resources/the-double-diamond/history-of-the-double-diamond/"
         }
       ],
-      "page": 3
+      "page": 4,
+      "annotationPage": 3
     },
     {
       "id": "two-diamonds",
@@ -129,7 +152,8 @@
           "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 4
+      "page": 5,
+      "annotationPage": 4
     },
     {
       "id": "discover",
@@ -153,7 +177,8 @@
           "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 5
+      "page": 6,
+      "annotationPage": 5
     },
     {
       "id": "define",
@@ -177,7 +202,8 @@
           "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 6
+      "page": 7,
+      "annotationPage": 6
     },
     {
       "id": "develop",
@@ -201,7 +227,8 @@
           "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 7
+      "page": 8,
+      "annotationPage": 7
     },
     {
       "id": "double-diamond",
@@ -225,7 +252,8 @@
           "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 8
+      "page": 9,
+      "annotationPage": 8
     },
     {
       "id": "iterate",
@@ -246,7 +274,8 @@
           "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 9
+      "page": 10,
+      "annotationPage": 9
     },
     {
       "id": "framework-source",
@@ -273,7 +302,8 @@
           "href": "https://creativecommons.org/licenses/by/4.0/"
         }
       ],
-      "page": 10
+      "page": 11,
+      "annotationPage": 10
     },
     {
       "id": "schon",
@@ -297,7 +327,8 @@
           "href": "https://www.routledge.com/The-Reflective-Practitioner-How-Professionals-Think-in-Action/Schon/p/book/9781857423198"
         }
       ],
-      "page": 11
+      "page": 12,
+      "annotationPage": 11
     },
     {
       "id": "make-critique-revise",
@@ -324,7 +355,8 @@
           "href": "data/gapminder.csv"
         }
       ],
-      "page": 12
+      "page": 13,
+      "annotationPage": 12
     },
     {
       "id": "group-project",
@@ -337,7 +369,8 @@
         "ja": "各自の探索から、共有する問いと一つの試作へ進む。",
         "en": "Individual explorations come together as a shared question and a prototype."
       },
-      "page": 13
+      "page": 14,
+      "annotationPage": 13
     },
     {
       "id": "last-week",
@@ -351,7 +384,8 @@
         "en": "Last week each group chose data and each member prepared 2–3 ideas. These three native charts use the course Gapminder data to illustrate different views. The gallery links to the actual submissions."
       },
       "href": "gallery.html?week=7",
-      "page": 14
+      "page": 15,
+      "annotationPage": 14
     },
     {
       "id": "combine",
@@ -364,7 +398,8 @@
         "ja": "グループの案を並べ、共通点や強い方向性を考え、一つの問いにまとめて試作する。誰の案かより、何を明らかにするかが中心になる。",
         "en": "The group compares ideas, discusses shared interests, agrees on a direction and builds a prototype. The shared question organizes the work."
       },
-      "page": 15
+      "page": 16,
+      "annotationPage": 15
     },
     {
       "id": "show",
@@ -391,7 +426,8 @@
         ]
       },
       "href": "gallery.html?week=7",
-      "page": 16
+      "page": 17,
+      "annotationPage": 16
     },
     {
       "id": "make",
@@ -417,7 +453,8 @@
           "Save with the data"
         ]
       },
-      "page": 17
+      "page": 18,
+      "annotationPage": 17
     },
     {
       "id": "critique",
@@ -443,7 +480,8 @@
           "Choose one change"
         ]
       },
-      "page": 18
+      "page": 19,
+      "annotationPage": 18
     },
     {
       "id": "next",
@@ -456,7 +494,8 @@
         "ja": "第9週はA3の試作を壁に掲示し、講評を受けて改善、第10週は中間グループ発表。第11週は地図、第12週はネットワークと複数ビュー、第13週は最終制作、第14週は最終発表。",
         "en": "Week 9: A3 pin-up critique and prototype refinement. Week 10: midterm group presentations. Week 11: maps. Week 12: networks and multiple views. Week 13: final studio. Week 14: final presentations."
       },
-      "page": 19
+      "page": 20,
+      "annotationPage": 19
     },
     {
       "id": "homework",
@@ -481,7 +520,8 @@
           "Group name, contribution, next step"
         ]
       },
-      "page": 20
+      "page": 21,
+      "annotationPage": 20
     }
   ]
 }

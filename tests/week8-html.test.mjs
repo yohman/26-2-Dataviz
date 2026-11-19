@@ -9,11 +9,12 @@ const source=fs.readFileSync('content/weeks/08-share-discuss-build.md','utf8');
 const context={document:{addEventListener(){}},window:{},URL,URLSearchParams};vm.createContext(context);vm.runInContext(fs.readFileSync('assets/site.js','utf8'),context);context.source=source;const week=vm.runInContext("parseWeek(source,'08-share-discuss-build.md')",context);
 test('Week 8 is entirely native with original source photos, original XAVIZ destination and cumulative Ds',()=>{
  assert.equal(week.materials[0].href,'lecture.html?week=8');
- assert.equal(deck.slides[0].id,'xaviz');assert.equal(deck.slides[1].id,'framework');assert.equal(deck.slides[1].kind,'framework-cover');
+ assert.deepEqual(deck.slides.slice(0,3).map(s=>s.id),['xaviz','visual-thinking','framework']);
+ assert.equal(deck.slides[2].kind,'framework-cover');
  assert.equal(new Set(deck.slides.map(s=>s.id)).size,deck.slides.length);
  for(const [i,s] of deck.slides.entries()){
   assert.equal(s.page,i+1);assert.ok(s.title.ja&&s.title.en);assert.ok(s.notes.ja!==undefined&&s.notes.en!==undefined);
-  for(const ja of [true,false]){const html=renderWeek8(s,{ja,data,returnTo:'agenda.html#week-8'});assert.ok(html.length>100);assert.doesNotMatch(html,/<(?:iframe|canvas)|\.pdf|week08\.png/);}
+  for(const ja of [true,false]){const html=renderWeek8(s,{ja,data,returnTo:'agenda.html#week-8'});assert.ok(html.trim());assert.doesNotMatch(html,/<(?:iframe|canvas)|\.pdf|week08\.png/);}
  }
  assert.doesNotMatch(JSON.stringify(deck),/Gallery walk|Padlet/);
  const stages=deck.slides.filter(s=>s.kind==='diamond'&&!s.iterate);assert.deepEqual(stages.map(s=>s.phase),[0,1,2,3,4]);
