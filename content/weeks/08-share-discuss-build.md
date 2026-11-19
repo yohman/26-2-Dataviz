@@ -6,13 +6,13 @@ date: Fri 20 Nov 2026 · P2 · 10:40–12:20
 date_ja: 2026年11月20日（金） · 2限 · 10:40–12:20
 title: Share, Discuss, Agree, Build
 title_ja: 共有、議論、合意、制作
-look: XAVIZ, a collaboration with Vice President Satomi, turns historical household records from Meiji-era Japan into digital visualizations. See how paper records become data, and how new patterns become visible.
-look_ja: Satomi副学長との共同研究XAVIZでは、明治期の日本の世帯記録をデジタルで可視化しています。紙の記録がデータになり、新たなパターンが見えてくる過程を紹介します。
+look: XAVIZ
+look_ja: XAVIZ
 learn: share individual ideas, choose a group direction, and begin a prototype
 learn_ja: 各自の案を共有し、グループの方向性を決めて、試作を始める
 lecture_gallery_week: 7
-schedule: 10:40–10:45|Opening|Rejoin your group and open your ideas;10:45–11:05|XAVIZ|Historical paper records to visual discoveries;11:05–11:35|Show-and-tell|Everyone shares their 2–3 ideas;11:35–11:45|Choose a direction|Agree on one question;11:45–12:05|Make together|Begin a group prototype;12:05–12:15|Exchange|Feedback from a neighboring group;12:15–12:20|Closing|Next steps and homework
-schedule_ja: 10:40–10:45|導入|グループで集まり、各自の案を開く;10:45–11:05|XAVIZ|歴史的な紙の記録から、視覚的な発見へ;11:05–11:35|見せ合う|全員が2〜3案を共有;11:35–11:45|方向を決める|グループの問いを一つ選ぶ;11:45–12:05|一緒につくる|グループで試作を始める;12:05–12:15|意見交換|隣のグループから感想をもらう;12:15–12:20|まとめ|次の作業と宿題
+schedule: 10:40–11:05|XAVIZ|;11:05–12:05|Group project|Show, discuss, and prototype;12:05–12:20|Feedback and closing|Exchange with another group, then homework
+schedule_ja: 10:40–11:05|XAVIZ|;11:05–12:05|グループ制作|見せ合う・話し合う・試作する;12:05–12:20|意見交換・まとめ|隣のグループと共有し、宿題を確認
 in_class: Rejoin last week's group. Share your ideas, agree on one direction, and make a first prototype together.
 in_class_ja: 先週のグループで集まり、各自の案を共有します。方向性を一つ決め、一緒に試作しましょう。
 homework: Develop your group's first prototype using today's feedback. A sketch or a working visualization is welcome.

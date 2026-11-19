@@ -1,6 +1,10 @@
 // English remains in each HTML page for searchability and no-JavaScript fallback.
 // Add or revise Japanese copy here; weekly dynamic content lives in site.js.
 window.COURSE_TRANSLATIONS = { ja: {
+  'WEEK 8': '第8週',
+  'Open Week 8 →': '第8週を開く →',
+  'Develop the group prototype': 'グループの試作を進める',
+  'Share your ideas, choose a direction, and make a first prototype.': '案を共有し、方向性を決め、試作を始めましょう。',
   'Open Week 7 →': '第7週を開く →',
   'WEEK 7 · GROUP PROJECT': '第7週 · グループプロジェクト',
   'Choose a shared dataset': '共有データセットを選ぶ',
