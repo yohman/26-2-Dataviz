@@ -12,6 +12,7 @@ look_ja: XAVIZ
 learn: share individual ideas, choose a group direction, and begin a prototype
 learn_ja: 各自の案を共有し、グループの方向性を決めて、試作を始める
 lecture_gallery_week: 7
+feedback_loop: lecture.html?week=8&slide=double-diamond
 schedule: 10:40–11:05|XAVIZ|;11:05–11:50|Group project|Show, discuss, and prototype;11:50–12:20|Feedback and closing|Exchange with another group, then homework
 schedule_ja: 10:40–11:05|XAVIZ|;11:05–11:50|グループ制作|見せ合う・話し合う・試作する;11:50–12:20|意見交換・まとめ|隣のグループと共有し、宿題を確認
 in_class: Rejoin last week's group. Share your ideas, agree on one direction, and make a first prototype together.
@@ -24,12 +25,12 @@ challenge: Develop the group prototype
 challenge_ja: グループの試作を進める
 tools: Paper, slides, Tableau, Python, or your preferred tool
 tools_ja: 紙・スライド・Tableau・Pythonなど、使いやすいもの
-image: assets/images/lecture/week08.png
+image: assets/images/lecture/week08-framework.jpg
 ---
 
 ## Materials
 
-- [Lecture slides](lectures/w08.pdf) {slides}
+- [Lecture slides](lecture.html?week=8) {slides}
 
 ## Activity 1 Materials
 

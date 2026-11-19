@@ -5,10 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex">
   <script>
-    // Keep existing Week 7 bookmarks pointed at the current HTML lecture.
+    // Preserve old lecture bookmarks while opening the current native HTML decks.
     { const q = new URLSearchParams(location.search);
-      if (q.get('file') === 'lectures/w07.pdf') {
-        q.delete('file'); q.delete('title'); q.set('week', '7');
+      if (['lectures/w07.pdf','lectures/w08.pdf'].includes(q.get('file'))) {
+        const week = q.get('file').includes('w08') ? '8' : '7';
+        if (week === '8') {
+          const legacy = ['framework','xaviz','schon','history','double-diamond','make-critique-revise','group-project','last-week','combine','combine','next'];
+          q.set('slide', legacy[(Number(q.get('page')) || 1) - 1] || 'framework');
+        }
+        q.delete('file'); q.delete('title'); q.set('week', week);
         location.replace(`lecture.html?${q}`);
       }
     }

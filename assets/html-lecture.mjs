@@ -1,5 +1,7 @@
-import {clampSlide,scatterMarks,lineSegments,safeDeckReturn} from './html-lecture-model.mjs?v=week7-20261112';
+import {clampSlide,scatterMarks,lineSegments,safeDeckReturn} from './html-lecture-model.mjs?v=week8-native-20261119';
+import {renderWeek8,bindWeek8} from './week08-visuals.mjs?v=week8-native-20261119';
 const $=s=>document.querySelector(s),params=new URLSearchParams(location.search),stage=$('[data-stage]'),surface=$('[data-surface]'),slide=$('[data-slide]'),viewer=$('.html-deck');
+const week=params.get('week')==='8'?8:7,deckReturn=()=>safeDeckReturn(params.get('return'),week);
 let lang='ja';try{lang=localStorage.getItem('dv-language')==='en'?'en':'ja';}catch{}
 let deck,data,page=1,zoom=1,layoutFrame;
 const tr=v=>typeof v==='string'?v:v?.[lang]||'',ja=()=>lang==='ja',esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),number=v=>new Intl.NumberFormat(lang).format(v);
@@ -31,6 +33,7 @@ function bars(){const rows=data.scatter.filter(r=>names[r.country]&&Number.isFin
 function table(headers,rows,classes=''){return `<table class="slide-table ${classes}"><thead><tr>${headers.map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(row=>`<tr>${row.map(v=>`<td${v===''?' class="missing-cell"':''}>${v===''?(ja()?'空欄':'blank'):esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;}
 const layout=html=>`<div class="slide-layout">${html}</div>`;
 function renderVisual(s){
+ if(week===8)return renderWeek8(s,{ja:ja(),data,returnTo:deckReturn()});
  if(s.kind==='scatter')return scatter();if(s.kind==='line')return lineChart();if(s.kind==='bars')return bars();
  if(s.kind==='row'){const r=data.row;return layout(`<h1>${esc(tr(s.title))}</h1>${table(['Country','Year','Population','Region','Life<br>Expectancy'],[[r.Country,r.Year,number(Number(r.Population)),r.Region,r['Life Expectancy']]])}<p class="row-answer">${ja()?'日本 × 2018年':'Japan × 2018'}</p>`);}
  if(s.kind==='question')return layout(`<p class="topic">${ja()?'健康':'Health'}</p><h1>${esc(tr(s.title))}</h1><p class="question-fields">${ja()?'対象　　　 指標　　　 時間':'Population　　　 Measure　　　 Time'}</p>`);
@@ -42,33 +45,41 @@ function renderVisual(s){
  if(s.kind==='timeline'){const titles=ja()?['データを選ぶ','案を持ち寄る','試して、改善','中間発表']:['Choose data','Combine ideas','Test & improve','Midterm'];return layout(`<h1>${esc(tr(s.title))}</h1><div class="project-path">${['11.13','11.20','11.27','12.04'].map((date,i)=>`<div><time>${date}</time><strong>${titles[i]}</strong><small>WEEK ${7+i}</small></div>`).join('')}</div>`);}
  if(s.kind==='brief'){const labels=ja()?['グループ・全員の名前','データ・出典リンク','1行の意味','最初の問い']:['Group & all members','Dataset & source link','Meaning of one row','A starting question'];return layout(`<h1>${esc(tr(s.title))}</h1><dl class="group-brief">${labels.map(v=>`<dt>${v}</dt><dd>　　　　　　　　　　　　　　　　　</dd>`).join('')}</dl>`);}
  if(s.kind.startsWith('activity'))return layout(`<h1>${esc(tr(s.title))}</h1><div class="activity-body"><div class="activity-clock">${s.duration}<small>min</small></div><ol>${tr(s.steps).map(v=>`<li>${esc(v)}</li>`).join('')}</ol></div>`);
- if(s.kind==='homework')return layout(`<div class="homework-number">2–3</div><h1>${esc(tr(s.title))}</h1><div class="homework-bottom"><ul>${tr(s.steps).map(v=>`<li>${esc(v)}</li>`).join('')}</ul><div class="homework-submit"><a href="homework-submit.html?week=7">${ja()?'宿題を提出する':'Submit homework'} ↗</a><br><a href="${esc(safeDeckReturn(params.get('return')))}">${ja()?'課題の説明':'Assignment details'} ↗</a><time datetime="2026-11-19T23:59:00+09:00">11.19 Thu · 23:59 JST</time></div></div>`);
+ if(s.kind==='homework')return layout(`<div class="homework-number">2–3</div><h1>${esc(tr(s.title))}</h1><div class="homework-bottom"><ul>${tr(s.steps).map(v=>`<li>${esc(v)}</li>`).join('')}</ul><div class="homework-submit"><a href="homework-submit.html?week=7">${ja()?'宿題を提出する':'Submit homework'} ↗</a><br><a href="${esc(deckReturn())}">${ja()?'課題の説明':'Assignment details'} ↗</a><time datetime="2026-11-19T23:59:00+09:00">11.19 Thu · 23:59 JST</time></div></div>`);
  return '';
 }
 let viewportControl,ink;
 function resize(reset=false){if(!deck)return;const fit=Math.min(stage.clientWidth/1600,stage.clientHeight/900);surface.style.width=`${1600*fit}px`;surface.style.height=`${900*fit}px`;slide.style.transform=`scale(${fit})`;viewportControl.layout(1600*fit,900*fit,{reset});ink.rendered(page);}
 function render(value=page,{url=true}={}){
- if(!deck)return;const next=clampSlide(value,deck.slides.length),changed=next!==page;page=next;const s=deck.slides[page-1];ink.loading();slide.className=`html-slide slide-${s.kind}`;slide.dataset.slideId=s.id;slide.innerHTML=renderVisual(s);slide.setAttribute('aria-label',`${page}. ${tr(s.title)}`);surface.hidden=false;$('[data-loading]').hidden=true;resize(changed);
+ if(!deck)return;const next=clampSlide(value,deck.slides.length),changed=next!==page;page=next;const s=deck.slides[page-1];ink.loading();slide.className=`html-slide slide-${s.kind}`;slide.dataset.slideId=s.id;slide.innerHTML=renderVisual(s);slide.setAttribute('aria-label',`${page}. ${tr(s.title)}`);if(week===8)bindWeek8(slide,{s,data,ja:ja()});surface.hidden=false;$('[data-loading]').hidden=true;resize(changed);
  $('[data-page-input]').value=page;$('[data-page-input]').max=deck.slides.length;$('[data-page-total]').textContent=`/ ${deck.slides.length}`;$('[data-previous]').disabled=page===1;$('[data-next]').disabled=page===deck.slides.length;
- document.documentElement.lang=lang;document.title=`Week 7 · ${tr(deck.title)}`;$('[data-deck-title]').textContent=tr(deck.title);$('[data-back]').textContent=ja()?'← 第7週':'← Week 7';$('[data-back]').href=safeDeckReturn(params.get('return'));$('.wordmark').innerHTML=`<span>DV / 26–2</span> ${ja()?'データを見る':'Seeing Data'}`;$('[data-language-toggle]').textContent=ja()?'EN':'JP';$('[data-language-toggle]').setAttribute('aria-label',ja()?'Switch to English':'日本語に切り替える');
+ document.documentElement.lang=lang;document.title=`Week ${week} · ${tr(deck.title)}`;$('[data-deck-title]').textContent=tr(deck.title);$('[data-back]').textContent=ja()?`← 第${week}週`:`← Week ${week}`;$('[data-back]').href=deckReturn();$('.wordmark').innerHTML=`<span>DV / 26–2</span> ${ja()?'データを見る':'Seeing Data'}`;$('[data-language-toggle]').textContent=ja()?'EN':'JP';$('[data-language-toggle]').setAttribute('aria-label',ja()?'Switch to English':'日本語に切り替える');
  $('[data-notes]').hidden=false;$('[data-notes-heading]').textContent=ja()?`スライドノート · ${page}`:`Slide notes · ${page}`;$('[data-notes-text]').textContent=tr(s.notes);$('[data-sources]').innerHTML=(s.sources||[]).map(source=>{const u=new URL(source.href,location.href),external=u.origin!==location.origin;return `<a href="${esc(u.href)}"${external?' target="_blank" rel="noopener"':''}>${esc(tr(source.label))} ↗</a>`;}).join('');
- $('[data-chapters]').innerHTML=[{p:1,ja:'講義 · 20分',en:'Lecture · 20 min'},{p:13,ja:'活動1',en:'Activity 1'},{p:14,ja:'活動2',en:'Activity 2'},{p:15,ja:'活動3',en:'Activity 3'},{p:16,ja:'宿題',en:'Homework'}].map(c=>`<a href="?week=7&page=${c.p}&return=${encodeURIComponent(safeDeckReturn(params.get('return')))}" data-go="${c.p}" aria-current="${page===c.p}">${ja()?c.ja:c.en}</a>`).join('');
- if(url){params.set('week','7');params.set('page',page);history.replaceState(null,'',`${location.pathname}?${params}`);}
+ const chapters=deck.chapters?.map(c=>({p:deck.slides.findIndex(s=>s.id===c.id)+1,label:tr(c.label)}))||[{p:1,label:ja()?'講義 · 20分':'Lecture · 20 min'},{p:13,label:ja()?'活動1':'Activity 1'},{p:14,label:ja()?'活動2':'Activity 2'},{p:15,label:ja()?'活動3':'Activity 3'},{p:16,label:ja()?'宿題':'Homework'}];
+ $('[data-chapters]').innerHTML=chapters.map(c=>`<a href="?week=${week}&page=${c.p}&return=${encodeURIComponent(deckReturn())}" data-go="${c.p}" aria-current="${page===c.p}">${esc(c.label)}</a>`).join('');
+ $('[data-toc-title]').textContent=ja()?'スライド一覧':'Slides';
+ $('[data-toc-list]').innerHTML=deck.slides.map((s,i)=>`<a href="?week=${week}&slide=${s.id}" data-go="${i+1}" aria-current="${page===i+1}"><span>${String(i+1).padStart(2,'0')}</span>${esc(tr(s.title))}</a>`).join('');
+ if(url){params.set('week',String(week));params.set('page',page);params.set('slide',s.id);history.replaceState(null,'',`${location.pathname}?${params}`);}
 }
 function fullscreen(active){viewer.classList.toggle('is-fullscreen',active);$('[data-fullscreen]').setAttribute('aria-pressed',String(active));requestAnimationFrame(()=>resize(true));}
 async function toggleFullscreen(){const active=!viewer.classList.contains('is-fullscreen');fullscreen(active);try{if(active&&viewer.requestFullscreen)await viewer.requestFullscreen();else if(document.fullscreenElement)await document.exitFullscreen();}catch{/* CSS presentation mode remains available. */}}
 async function start(){
  try{
-  const [a,b]=await Promise.all([fetch('content/slides/week07.json?v=optional-data-20261113',{cache:'no-cache'}),fetch('data/week07-examples.json?v=20261112',{cache:'no-cache'})]);if(!a.ok||!b.ok)throw new Error('Unavailable');[deck,data]=await Promise.all([a.json(),b.json()]);
+  const [a,b]=await Promise.all([fetch(`content/slides/week${String(week).padStart(2,'0')}.json?v=week8-native-20261119`,{cache:'no-cache'}),fetch('data/week07-examples.json?v=20261112',{cache:'no-cache'})]);if(!a.ok||!b.ok)throw new Error('Unavailable');[deck,data]=await Promise.all([a.json(),b.json()]);
   viewportControl=window.createSlideViewport({viewport:stage,surface,onChange:value=>{zoom=value;$('[data-zoom-level]').textContent=`${Math.round(value*100)}%`;}});
-  ink=window.bindSlideAnnotations({surface,viewport:stage,toolbar:$('.pdf-toolbar'),file:'lectures/week07-html-v1'});
-  render(params.get('page'));new ResizeObserver(()=>{cancelAnimationFrame(layoutFrame);layoutFrame=requestAnimationFrame(()=>resize());}).observe(stage);
+  ink=window.bindSlideAnnotations({surface,viewport:stage,toolbar:$('.pdf-toolbar'),file:`lectures/week${String(week).padStart(2,'0')}-html-v1`});
+  viewer.classList.toggle('week8-deck',week===8);viewer.setAttribute('aria-label',`Week ${week} lecture`);
+  const requested=deck.slides.findIndex(s=>s.id===params.get('slide'));render(requested>=0?requested+1:params.get('page'));new ResizeObserver(()=>{cancelAnimationFrame(layoutFrame);layoutFrame=requestAnimationFrame(()=>resize());}).observe(stage);
   window.installSlideSwipes(stage,{canSwipe:()=>stage.dataset.slideDrawing!=='true'&&zoom<=1.01&&stage.dataset.pinching!=='true'&&(window.visualViewport?.scale||1)<=1.01,next:()=>render(page+1),previous:()=>render(page-1)});
  }catch(error){console.error(error);$('[data-loading]').className='lecture-load-error';$('[data-loading]').textContent=ja()?'スライドを読み込めませんでした。再読み込みしてください。':'Could not load the slides. Please reload.';}
 }
 $('[data-previous]').onclick=()=>render(page-1);$('[data-next]').onclick=()=>render(page+1);$('[data-page-input]').onchange=e=>render(e.target.value);$('[data-page-input]').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();render(e.target.value);e.target.blur();}};$('[data-language-toggle]').onclick=()=>{lang=ja()?'en':'ja';try{localStorage.setItem('dv-language',lang);}catch{}render();};
 $('[data-fullscreen]').onclick=toggleFullscreen;$('[data-zoom-in]').onclick=()=>viewportControl?.zoomTo(zoom*1.2);$('[data-zoom-out]').onclick=()=>viewportControl?.zoomTo(zoom/1.2);$('[data-zoom-reset]').onclick=()=>viewportControl?.fit();
+$('[data-toc]').onclick=()=>{if($('[data-toc-dialog]').open)$('[data-toc-dialog]').close();else $('[data-toc-dialog]').showModal();};
+$('[data-toc-close]').onclick=()=>$('[data-toc-dialog]').close();
+$('[data-toc-list]').onclick=e=>{const a=e.target.closest('[data-go]');if(!a)return;e.preventDefault();$('[data-toc-dialog]').close();render(a.dataset.go);};
 $('[data-chapters]').onclick=e=>{const a=e.target.closest('[data-go]');if(!a)return;e.preventDefault();render(a.dataset.go);};
 document.addEventListener('fullscreenchange',()=>{fullscreen(Boolean(document.fullscreenElement));});
-document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea,select,[contenteditable="true"]')||e.isComposing||stage.dataset.slideDrawing==='true'||e.ctrlKey||e.metaKey||e.altKey)return;if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();render(page+1);}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();render(page-1);}if(e.key==='Home'){e.preventDefault();render(1);}if(e.key==='End'){e.preventDefault();render(deck?.slides.length||1);}if(e.key==='Escape')fullscreen(false);if(e.key.toLowerCase()==='f')toggleFullscreen();});
+document.addEventListener('keydown',e=>{if($('[data-toc-dialog]').open)return;if(e.target.closest('input,textarea,select,[contenteditable="true"]')||e.isComposing||stage.dataset.slideDrawing==='true'||e.ctrlKey||e.metaKey||e.altKey||(e.target.closest('a,button,summary')&&[' ','Enter'].includes(e.key)))return;if(e.key.toLowerCase()==='c'){$('[data-toc-dialog]').showModal();return;}if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();render(page+1);}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();render(page-1);}if(e.key==='Home'){e.preventDefault();render(1);}if(e.key==='End'){e.preventDefault();render(deck?.slides.length||1);}if(e.key==='Escape')fullscreen(false);if(e.key.toLowerCase()==='f')toggleFullscreen();});
+window.addEventListener('popstate',()=>{const p=new URLSearchParams(location.search),i=deck?.slides.findIndex(s=>s.id===p.get('slide'));render(i>=0?i+1:p.get('page'),{url:false});});
 start();

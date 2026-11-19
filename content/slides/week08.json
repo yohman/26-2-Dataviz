@@ -1,0 +1,460 @@
+{
+  "week": 8,
+  "title": {
+    "ja": "共有、議論、合意、制作",
+    "en": "Share, discuss, agree, build"
+  },
+  "chapters": [
+    {
+      "id": "framework",
+      "label": {
+        "ja": "講義",
+        "en": "Lecture"
+      }
+    },
+    {
+      "id": "double-diamond",
+      "label": {
+        "ja": "Double Diamond",
+        "en": "Double Diamond"
+      }
+    },
+    {
+      "id": "xaviz",
+      "label": {
+        "ja": "XAVIZ",
+        "en": "XAVIZ"
+      }
+    },
+    {
+      "id": "show",
+      "label": {
+        "ja": "活動1",
+        "en": "Activity 1"
+      }
+    },
+    {
+      "id": "make",
+      "label": {
+        "ja": "活動2",
+        "en": "Activity 2"
+      }
+    },
+    {
+      "id": "critique",
+      "label": {
+        "ja": "活動3",
+        "en": "Activity 3"
+      }
+    },
+    {
+      "id": "homework",
+      "label": {
+        "ja": "宿題",
+        "en": "Homework"
+      }
+    }
+  ],
+  "slides": [
+    {
+      "id": "framework",
+      "kind": "framework-cover",
+      "title": {
+        "ja": "Framework for Innovation",
+        "en": "Framework for Innovation"
+      },
+      "notes": {
+        "ja": "Design Councilの「Framework for Innovation」。写真は公式サイト掲載の額装ポスター。枠組みの中心にDouble Diamondがあり、さらに人を中心に置くこと、協働、視覚的な共有、反復などを含む。写真は原資料、見出しはHTML。",
+        "en": "Design Council’s Framework for Innovation, shown in the framed poster photographed for its website. The Double Diamond sits within a wider framework of people, collaboration, visual communication and iteration. The photograph is source material; the title is live HTML."
+      },
+      "sources": [
+        {
+          "label": "Design Council · Framework for Innovation",
+          "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
+        }
+      ],
+      "image": "assets/images/lecture/week08-framework.jpg",
+      "page": 1
+    },
+    {
+      "id": "history",
+      "kind": "history-question",
+      "title": {
+        "ja": "デザインの過程を、どう表す？",
+        "en": "How do we describe design process?"
+      },
+      "notes": {
+        "ja": "英国Design Councilの公式回顧によると、2003年にRichard Eisermannがチームへ「デザインの過程をどう表すか」と問いかけた。さまざまな専門のメンバーが使う方法を整理し、共有できる枠組みにする仕事からDouble Diamondが生まれた。デザインの実践を、専門外の人にも伝わる形に可視化すること自体が課題だった。",
+        "en": "Design Council’s own history traces the project to a question Richard Eisermann posed to his team in 2003. Different specialists needed a shared account of their design practices. The framework emerged from organizing methods already in use. Making a complex process visible to non-designers was itself a communication problem."
+      },
+      "year": 2003,
+      "sources": [
+        {
+          "label": "Design Council · History",
+          "href": "https://www.designcouncil.org.uk/resources/the-double-diamond/history-of-the-double-diamond/"
+        }
+      ],
+      "page": 2
+    },
+    {
+      "id": "two-diamonds",
+      "kind": "diamond",
+      "title": {
+        "ja": "Double Diamond",
+        "en": "Double Diamond"
+      },
+      "notes": {
+        "ja": "2004年、Design CouncilはDouble Diamondを公に紹介し始めた。二つのダイヤは、広く可能性を探ることと、焦点を絞ることを二度表す。これは授業用のHTML/SVG再描画で、2004年の原図の複製ではない。",
+        "en": "Design Council began sharing the Double Diamond publicly in 2004. Each diamond pairs exploration with focus. This is a native SVG course adaptation, not a facsimile of the 2004 original."
+      },
+      "phase": 0,
+      "sources": [
+        {
+          "label": "Design Council · History",
+          "href": "https://www.designcouncil.org.uk/resources/the-double-diamond/history-of-the-double-diamond/"
+        }
+      ],
+      "page": 3
+    },
+    {
+      "id": "discover",
+      "kind": "diamond",
+      "title": {
+        "ja": "探る",
+        "en": "Discover"
+      },
+      "notes": {
+        "ja": "Discoverは、思い込みで問題を決める前に、当事者や現場から理解を広げる段階。授業では、元データを読み、複数の見方や問いを探ることに対応する。点は可能性を表す模式図で、観測データではない。",
+        "en": "Discover expands understanding before assuming the problem. In this course, inspecting data and considering different questions serve this exploratory role. The dots are a schematic of possibilities, not observations."
+      },
+      "phase": 1,
+      "question": {
+        "ja": "何が起きている？",
+        "en": "What is happening?"
+      },
+      "sources": [
+        {
+          "label": "Design Council · Framework",
+          "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
+        }
+      ],
+      "page": 4
+    },
+    {
+      "id": "define",
+      "kind": "diamond",
+      "title": {
+        "ja": "問いを絞る",
+        "en": "Define"
+      },
+      "notes": {
+        "ja": "Defineでは、探って得た知見から、取り組む課題を定める。データ可視化なら、誰に何を伝えたいか、どの比較が必要かを具体化する。探索をやめる約束ではなく、必要なら問いを見直す。",
+        "en": "Define turns insights into a focused challenge. In visualization, this includes the audience, question and comparison. The question can still change when new evidence appears."
+      },
+      "phase": 2,
+      "question": {
+        "ja": "何を明らかにしたい？",
+        "en": "What is the question?"
+      },
+      "sources": [
+        {
+          "label": "Design Council · Framework",
+          "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
+        }
+      ],
+      "page": 5
+    },
+    {
+      "id": "develop",
+      "kind": "diamond",
+      "title": {
+        "ja": "試す",
+        "en": "Develop"
+      },
+      "notes": {
+        "ja": "Developでは、定めた課題に対して複数の案をつくる。一つのツールや最初のグラフに固定せず、スケッチや別の表現を並べて試す。共同制作や異なる人の視点も含まれる。",
+        "en": "Develop generates alternatives to the defined challenge. Sketches and different visual forms allow comparison before committing to one solution. Collaboration brings other perspectives into that exploration."
+      },
+      "phase": 3,
+      "question": {
+        "ja": "どんな見せ方がある？",
+        "en": "What could we try?"
+      },
+      "sources": [
+        {
+          "label": "Design Council · Framework",
+          "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
+        }
+      ],
+      "page": 6
+    },
+    {
+      "id": "double-diamond",
+      "kind": "diamond",
+      "title": {
+        "ja": "確かめて届ける",
+        "en": "Deliver"
+      },
+      "notes": {
+        "ja": "Deliverでは小さく試し、うまくいかない案を見直し、改善する。4つのDはDiscover・Define・Develop・Deliver。EngagementやLeadershipは周囲の条件であり、追加のDではない。完成まで一方向に進む図ではない。",
+        "en": "Deliver tests responses at a small scale and improves them. The four Ds are Discover, Define, Develop and Deliver. Engagement and leadership are surrounding conditions, not additional Ds. Progress is not strictly one-way."
+      },
+      "phase": 4,
+      "question": {
+        "ja": "伝わる？ 何を変える？",
+        "en": "Does it communicate? What changes?"
+      },
+      "sources": [
+        {
+          "label": "Design Council · Framework",
+          "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
+        }
+      ],
+      "page": 7
+    },
+    {
+      "id": "iterate",
+      "kind": "diamond",
+      "title": {
+        "ja": "戻って、試す",
+        "en": "Return and try again"
+      },
+      "notes": {
+        "ja": "フィードバックによって、案だけでなく問いそのものを見直すこともある。戻る矢印はその非直線性を表す。ボタンで戻る動きを再生できる。授業用の再描画。",
+        "en": "Feedback can change the response or the question itself. The return arrow makes that nonlinearity explicit. Its animation can be replayed. Course adaptation."
+      },
+      "phase": 4,
+      "iterate": true,
+      "sources": [
+        {
+          "label": "Design Council · Framework",
+          "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
+        }
+      ],
+      "page": 8
+    },
+    {
+      "id": "schon",
+      "kind": "schon",
+      "title": {
+        "ja": "行為の中の省察",
+        "en": "Reflection-in-action"
+      },
+      "notes": {
+        "ja": "Donald SchönはMITで専門家の実践を研究し、1983年にThe Reflective Practitionerを刊行した。建築設計などを通じ、制作中の驚きや違和感から考え直す「行為の中の省察」を論じた。制作後に立ち止まって振り返ることとは区別される。スタジオの実践を理論化したのであり、講評を発明したわけではない。表紙は出版社が掲載する後年の版。Double Diamondとの直接の系譜を示すものではなく、反復的な設計を考える先行する視点である。",
+        "en": "Donald Schön studied professional practice at MIT and published The Reflective Practitioner in 1983. Architectural design helped him describe reflection-in-action: reconsidering a move when making produces a surprise. He distinguished this from stopping to reflect afterward. He theorized an existing practice rather than inventing studio critique. The publisher-supplied cover shows a later edition. This is a conceptual precursor, not a claim of direct influence on the Double Diamond."
+      },
+      "image": "assets/images/lecture/week08-schon-cover.jpg",
+      "sources": [
+        {
+          "label": "Donald Schön · interview",
+          "href": "https://hci.stanford.edu/publications/bds/9-schon"
+        },
+        {
+          "label": "The Reflective Practitioner · publisher",
+          "href": "https://www.routledge.com/The-Reflective-Practitioner-How-Professionals-Think-in-Action/Schon/p/book/9781857423198"
+        }
+      ],
+      "page": 9
+    },
+    {
+      "id": "make-critique-revise",
+      "kind": "feedback",
+      "title": {
+        "ja": "つくる → 見せる → つくり直す",
+        "en": "Make → Critique → Revise"
+      },
+      "notes": {
+        "ja": "授業での応用：グループ内で制作し、別のグループの読み取りを受け、改善して再び見せる。IDEO.orgのDesign Kitも、集めた反応を整理し、次の試作へ反映する反復を重視する。別グループは「初めて見る読者」にはなるが、実際の対象者を必ず代表するわけではない。すべての感想に従うのではなく、問い・証拠・伝わり方に照らして変更を判断する。図は授業用Gapminder CSVの選んだ5か国の2018年の平均寿命を使った説明用の試作。測定したユーザーテスト結果ではない。 3つのボタンで、同じ値を使った説明用の試作を切り替えられる。",
+        "en": "The classroom adaptation alternates group work, responses from another group, and revision. IDEO.org’s Design Kit likewise connects feedback synthesis to the next prototype. Another group offers fresh eyes but does not necessarily represent the intended audience. Feedback informs a decision rather than requiring every suggestion to be followed. The chart sequence is illustrative, using 2018 life expectancy for five selected countries from the course Gapminder CSV; it is not a measured user-test result. Three buttons switch between representations of the same values."
+      },
+      "sources": [
+        {
+          "label": "IDEO.org · Get feedback",
+          "href": "https://www.designkit.org/methods/get-feedback.html"
+        },
+        {
+          "label": "IDEO.org · Iterate",
+          "href": "https://www.designkit.org/methods/integrate-feedback-and-iterate.html"
+        },
+        {
+          "label": "Course Gapminder data",
+          "href": "data/gapminder.csv"
+        }
+      ],
+      "page": 10
+    },
+    {
+      "id": "xaviz",
+      "kind": "xaviz",
+      "title": {
+        "ja": "XAVIZ",
+        "en": "XAVIZ"
+      },
+      "notes": {
+        "ja": "",
+        "en": ""
+      },
+      "image": "assets/images/lecture/xaviz-hero.jpg",
+      "href": "https://docs.google.com/presentation/d/1nzo8jO-YejXe_3wUdZwXTMdqLpY96ang8nzZu2FokTU/edit?usp=sharing",
+      "page": 11
+    },
+    {
+      "id": "group-project",
+      "kind": "group-title",
+      "title": {
+        "ja": "グループ制作",
+        "en": "Group project"
+      },
+      "notes": {
+        "ja": "各自の探索から、共有する問いと一つの試作へ進む。",
+        "en": "Individual explorations come together as a shared question and a prototype."
+      },
+      "page": 12
+    },
+    {
+      "id": "last-week",
+      "kind": "ideas-native",
+      "title": {
+        "ja": "先週のアイデア",
+        "en": "Last week’s ideas"
+      },
+      "notes": {
+        "ja": "先週は、グループでデータを選び、各自が2〜3案を用意した。3つの小図は同じ授業用Gapminderデータによる表現例。実際の案は先週のギャラリーで確認できる。",
+        "en": "Last week each group chose data and each member prepared 2–3 ideas. These three native charts use the course Gapminder data to illustrate different views. The gallery links to the actual submissions."
+      },
+      "href": "gallery.html?week=7",
+      "page": 13
+    },
+    {
+      "id": "combine",
+      "kind": "combine",
+      "title": {
+        "ja": "共有、議論、合意、制作",
+        "en": "Share, discuss, agree, build"
+      },
+      "notes": {
+        "ja": "グループの案を並べ、共通点や強い方向性を考え、一つの問いにまとめて試作する。誰の案かより、何を明らかにするかが中心になる。",
+        "en": "The group compares ideas, discusses shared interests, agrees on a direction and builds a prototype. The shared question organizes the work."
+      },
+      "page": 14
+    },
+    {
+      "id": "show",
+      "kind": "studio-activity",
+      "title": {
+        "ja": "グループで見せ合う",
+        "en": "Group show-and-tell"
+      },
+      "notes": {
+        "ja": "全員が先週の2〜3案を紹介する。一人あたり紹介5分・反応1分が目安。何を調べたか、何を発見したか、どの案を育てたいかを共有する。",
+        "en": "Everyone shows last week’s 2–3 ideas. About five minutes to present and one minute for responses per person. The focus is the question, a discovery and a direction worth developing."
+      },
+      "duration": 25,
+      "steps": {
+        "ja": [
+          "案を見せる",
+          "発見を一つ",
+          "育てたい案と、その理由"
+        ],
+        "en": [
+          "Show your ideas",
+          "Share one discovery",
+          "Which idea, and why?"
+        ]
+      },
+      "href": "gallery.html?week=7",
+      "page": 15
+    },
+    {
+      "id": "make",
+      "kind": "studio-activity",
+      "title": {
+        "ja": "決めて、つくる",
+        "en": "Choose and make"
+      },
+      "notes": {
+        "ja": "最初の5分で方向性を決め、次の15分で一緒に試作する。共有ドキュメントに問い、試作、データのリンク、足りないデータを残す。",
+        "en": "Use five minutes to choose a direction and fifteen to build. Save the question, prototype, data link and any missing-data needs in a shared document."
+      },
+      "duration": 20,
+      "steps": {
+        "ja": [
+          "問いを一つ",
+          "一緒に試作",
+          "データと一緒に共有"
+        ],
+        "en": [
+          "One shared question",
+          "Make a prototype",
+          "Save with the data"
+        ]
+      },
+      "page": 16
+    },
+    {
+      "id": "critique",
+      "kind": "studio-activity",
+      "title": {
+        "ja": "別のグループと意見交換",
+        "en": "Exchange with another group"
+      },
+      "notes": {
+        "ja": "各グループは紹介3分・感想や質問7分。交代し、最後の5分で次の改善を記録する。批評は人ではなく作品の問い・証拠・伝わり方に向ける。",
+        "en": "Each group has three minutes to show and seven minutes for responses. Switch, then spend five minutes recording a next change. Critique concerns the question, evidence and communication."
+      },
+      "duration": 25,
+      "steps": {
+        "ja": [
+          "問いと試作を見せる",
+          "面白い点・不明な点を一つずつ",
+          "次に変えることを一つ"
+        ],
+        "en": [
+          "Show question + prototype",
+          "One compelling point; one unclear point",
+          "Choose one change"
+        ]
+      },
+      "page": 17
+    },
+    {
+      "id": "next",
+      "kind": "studio-timeline",
+      "title": {
+        "ja": "この先の制作",
+        "en": "The project ahead"
+      },
+      "notes": {
+        "ja": "第9週は試作の改善、第10週は中間グループ発表。第11週は地図、第12週はネットワークと複数ビュー、第13週は最終制作、第14週は最終発表。",
+        "en": "Week 9: prototype refinement. Week 10: midterm group presentations. Week 11: maps. Week 12: networks and multiple views. Week 13: final studio. Week 14: final presentations."
+      },
+      "page": 18
+    },
+    {
+      "id": "homework",
+      "kind": "studio-homework",
+      "title": {
+        "ja": "試作を、もう一歩。",
+        "en": "Develop your prototype."
+      },
+      "notes": {
+        "ja": "フィードバックをもとにグループで問い一つと試作一つを育てる。各自で画像1〜2枚、共有の作品・データリンクを提出。短い説明はグループ名、自分の担当、次の一歩。締切は2026年11月26日23:59 JST。",
+        "en": "Develop one shared question and one prototype using feedback. Each person submits 1–2 images and the shared project/data link, with group name, contribution and next step. Due November 26, 2026 at 23:59 JST."
+      },
+      "steps": {
+        "ja": [
+          "問い一つ ＋ 試作一つ",
+          "各自：画像1〜2枚 ＋ 共有リンク",
+          "グループ名・担当・次の一歩"
+        ],
+        "en": [
+          "One question + one prototype",
+          "Each person: 1–2 images + shared link",
+          "Group name, contribution, next step"
+        ]
+      },
+      "page": 19
+    }
+  ]
+}
