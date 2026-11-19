@@ -11,8 +11,8 @@ look_ja: XAVIZ
 learn: share individual ideas, choose a group direction, and begin a prototype
 learn_ja: 各自の案を共有し、グループの方向性を決めて、試作を始める
 lecture_gallery_week: 7
-schedule: 10:40–11:05|XAVIZ|;11:05–12:05|Group project|Show, discuss, and prototype;12:05–12:20|Feedback and closing|Exchange with another group, then homework
-schedule_ja: 10:40–11:05|XAVIZ|;11:05–12:05|グループ制作|見せ合う・話し合う・試作する;12:05–12:20|意見交換・まとめ|隣のグループと共有し、宿題を確認
+schedule: 10:40–11:05|XAVIZ|;11:05–11:50|Group project|Show, discuss, and prototype;11:50–12:20|Feedback and closing|Exchange with another group, then homework
+schedule_ja: 10:40–11:05|XAVIZ|;11:05–11:50|グループ制作|見せ合う・話し合う・試作する;11:50–12:20|意見交換・まとめ|隣のグループと共有し、宿題を確認
 in_class: Rejoin last week's group. Share your ideas, agree on one direction, and make a first prototype together.
 in_class_ja: 先週のグループで集まり、各自の案を共有します。方向性を一つ決め、一緒に試作しましょう。
 homework: Develop your group's first prototype using today's feedback. A sketch or a working visualization is welcome.
@@ -37,10 +37,10 @@ image: assets/images/lecture/week08.png
 ## In Class Activities
 
 ### Activity 1
-title: Group show-and-tell · 30 min
-title_ja: グループで見せ合う · 30分
-text: Everyone shows the 2–3 ideas prepared last week. Allow about 5 minutes to present and 2 minutes for responses per person.
-text_ja: 先週つくった2〜3案を全員が見せます。一人あたり、紹介5分・感想や質問2分が目安です。
+title: Group show-and-tell · 25 min
+title_ja: グループで見せ合う · 25分
+text: Everyone shows the 2–3 ideas prepared last week. Allow about 5 minutes to present and 1 minute for responses per person.
+text_ja: 先週つくった2〜3案を全員が見せます。一人あたり、紹介5分・感想や質問1分が目安です。
 steps:
 - Show your ideas. What were you trying to find out?
 - Explain one discovery or surprise.
@@ -51,10 +51,10 @@ steps_ja:
 - どの案を、なぜ育てたいか話し合う。全員の意見を聞く。
 
 ### Activity 2
-title: Choose and make · 30 min
-title_ja: 決めて、つくる · 30分
-text: First 10 minutes to choose a direction, then 20 minutes to make something together. Ideas can be combined.
-text_ja: 最初の10分で方向性を決め、次の20分で一緒につくります。複数の人の案を組み合わせてもOKです。
+title: Choose and make · 20 min
+title_ja: 決めて、つくる · 20分
+text: First 5 minutes to choose a direction, then 15 minutes to make something together. Ideas can be combined.
+text_ja: 最初の5分で方向性を決め、次の15分で一緒につくります。複数の人の案を組み合わせてもOKです。
 steps:
 - Agree on one question and what you want the audience to understand.
 - Make a rough dashboard layout, annotated sketch, or working visualization.
@@ -65,10 +65,10 @@ steps_ja:
 - データのリンクと、追加で必要なデータを添えて、共有ドキュメントに残す。
 
 ### Activity 3
-title: Exchange with another group · 10 min
-title_ja: 隣のグループと意見交換 · 10分
-text: Pair with a neighboring group. Give each group 2 minutes to show its work and 3 minutes for feedback.
-text_ja: 隣のグループと組み、交代で紹介します。1グループにつき、紹介2分・感想や質問3分です。
+title: Exchange with another group · 25 min
+title_ja: 隣のグループと意見交換 · 25分
+text: Pair with a neighboring group. Give each group 3 minutes to show its work and 7 minutes for feedback. Use the final 5 minutes to record improvements.
+text_ja: 隣のグループと組み、交代で紹介します。1グループにつき、紹介3分・感想や質問7分。最後の5分で改善点をメモします。
 steps:
 - Show your question and prototype.
 - The other group shares one compelling point and one unclear point.
