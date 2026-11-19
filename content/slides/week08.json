@@ -34,10 +34,10 @@
       }
     },
     {
-      "id": "seam-first",
+      "id": "visual-thinking-with-ai",
       "label": {
-        "ja": "SEAMのデザイン",
-        "en": "Designing SEAM"
+        "ja": "Visual Thinking with AI",
+        "en": "Visual Thinking with AI"
       }
     },
     {
@@ -385,94 +385,133 @@
       "annotationPage": 11
     },
     {
-      "id": "seam-first",
-      "kind": "seam-preview",
+      "id": "visual-thinking-with-ai",
+      "kind": "visual-thinking",
       "title": {
-        "ja": "SEAM：最初の画面",
-        "en": "SEAM: the first screen"
+        "ja": "Visual Thinking",
+        "en": "Visual Thinking"
       },
-      "image": "assets/images/lecture/seam-first.png",
-      "alt": {
-        "ja": "見出しやタブ、凡例、設定欄に囲まれた3台の接続図",
-        "en": "Three connected phones surrounded by a title, tabs, legends and settings"
-      },
+      "subtitle": "with AI",
       "notes": {
-        "ja": "SEAMは、近くの端末同士がBluetoothでメッセージをやり取りするための試作アプリ。AIとつくった初期の画面には、見出し、タブ、凡例、設定欄が並ぶ。誰がつながっているかを見せたいのに、その図が他の要素に埋もれていた。",
-        "en": "SEAM is a prototype app for messaging between nearby phones over Bluetooth. This early AI-assisted version gives prominent space to titles, tabs, legends and settings. The main question, who is connected to whom, gets lost among them."
+        "ja": "SEAMの試作を振り返ると、AIと一緒につくるときにも「行為の中の省察」が起きる。画面を見て、何を伝えたいのかを考え直し、その判断を次の試作に反映していく。",
+        "en": "The SEAM prototypes show reflection-in-action with AI. Each screen gives the designer something to look at, question, and change. The designer still decides what the app should make visible."
       },
-      "annotationPage": 24,
+      "annotationPage": 29,
       "page": 15
     },
     {
-      "id": "seam-network",
+      "id": "seam-first",
       "kind": "seam-preview",
       "title": {
-        "ja": "SEAM：つながりを主役に",
-        "en": "SEAM: the network comes forward"
+        "ja": "SEAM：Bluetoothの動作テスト",
+        "en": "SEAM: Bluetooth field test"
       },
-      "image": "assets/images/lecture/seam-network.png",
+      "image": "assets/images/lecture/seam-field-test.png",
       "alt": {
-        "ja": "大きな自分のノードと二つの接続先を描いた画面",
-        "en": "An open screen with one large node for your phone and two connected peers"
+        "ja": "接続操作、応答時間、ログが並ぶ初期のテスト画面",
+        "en": "Early field-test screen with connection controls, latency readings and event logs"
       },
       "notes": {
-        "ja": "画面を見て、何を最初に伝えたいかを問い直した。タイトルや枠を外し、自分の端末とつながっている端末を点と線で表した。チャットと設定は隅に移った。最初の試作が次の設計判断を変える。これがショーンのいう「行為の中の省察」。",
-        "en": "Looking at the draft changed the design brief: the network should be the screen. Titles and borders came out. Nodes and lines show the phones and their connections. Chat and settings move into the corners. That is reflection-in-action: seeing the first prototype changed the next design move."
+        "ja": "最初の目的は、近くの端末同士がBluetoothで反応を返せるかを確かめること。応答時間やログはそのテストに役立ったが、会話に使う画面としては情報が多すぎる。",
+        "en": "The first screen was designed to check whether nearby phones could communicate over Bluetooth. Latency and event logs helped with testing. A screen for conversation called for a different hierarchy."
       },
-      "annotationPage": 25,
+      "annotationPage": 30,
       "page": 16
+    },
+    {
+      "id": "seam-chat",
+      "kind": "seam-preview",
+      "title": {
+        "ja": "SEAM：接続図とチャット",
+        "en": "SEAM: Connections and chat"
+      },
+      "image": "assets/images/lecture/seam-chat.png",
+      "alt": {
+        "ja": "端末を四角い箱で結んだ接続図がチャット欄の上にある",
+        "en": "A box-and-line diagram of phones above the chat composer"
+      },
+      "notes": {
+        "ja": "チャット画面にも接続図を載せ、誰に送るかを見えるようにした。大きなタブや端末の箱にも視線が向き、接続図とチャットのどちらが主役かはまだ定まっていない。",
+        "en": "The chat screen added a diagram of connected phones so the sender could see who was available. The tabs and large boxes still competed for attention with the diagram and the conversation."
+      },
+      "annotationPage": 31,
+      "page": 17
+    },
+    {
+      "id": "seam-log",
+      "kind": "seam-preview",
+      "title": {
+        "ja": "SEAM：切断とログ",
+        "en": "SEAM: Disconnects and the log"
+      },
+      "image": "assets/images/lecture/seam-log.png",
+      "alt": {
+        "ja": "接続中と切断済みの端末、テスト結果、イベント履歴を表示した画面",
+        "en": "A connection diagram, test summary and chronological event log"
+      },
+      "notes": {
+        "ja": "ログを見ると、応答が途切れた時点と、Androidが切断を報告した時点を区別できる。日常の画面には状態の変化がひと目で分かる表現が必要で、詳しい経緯はログで確認できる。",
+        "en": "The log separates a missed reply from a confirmed disconnect. It retains the evidence for diagnosing what happened. The main screen needs a quicker way to show that a connection has changed."
+      },
+      "annotationPage": 32,
+      "page": 18
+    },
+    {
+      "id": "seam-nodes",
+      "kind": "seam-preview",
+      "title": {
+        "ja": "SEAM：箱からノードへ",
+        "en": "SEAM: From boxes to nodes"
+      },
+      "image": "assets/images/lecture/seam-nodes.png",
+      "alt": {
+        "ja": "丸い端末ノードと赤い破線で接続終了を示すチャット画面",
+        "en": "Circular phone nodes and a red dashed link on the chat screen"
+      },
+      "notes": {
+        "ja": "端末の箱を丸いノードに変え、切れた接続を赤い破線で示した。図だけでも状態の違いが分かり始める一方、赤い通知欄やチャットの操作も同じ画面に残っている。",
+        "en": "Circular nodes replace the device boxes. A dashed red line makes the lost connection visible in the diagram itself. The alert and chat controls still take up substantial space around it."
+      },
+      "annotationPage": 33,
+      "page": 19
+    },
+    {
+      "id": "seam-relay",
+      "kind": "seam-preview",
+      "title": {
+        "ja": "SEAM：中継が見える",
+        "en": "SEAM: Making the relay visible"
+      },
+      "image": "assets/images/lecture/seam-relay.png",
+      "alt": {
+        "ja": "3台の端末を結び、中央の自分から別の端末を経由する経路を表示した画面",
+        "en": "Three phone nodes showing an indirect connection through a relay"
+      },
+      "notes": {
+        "ja": "ネットワークを独立した画面にして、中継する端末を通る経路が見えるようにした。接続関係は明確になったが、見出し、凡例、最近のメッセージと設定欄が残り、どこを最初に見るべきかはまだ曖昧だった。",
+        "en": "The network gets its own screen, and the relay makes an indirect connection visible. The heading, legend, recent messages and settings still compete with the graph."
+      },
+      "annotationPage": 34,
+      "page": 20
     },
     {
       "id": "seam-status",
       "kind": "seam-preview",
       "title": {
-        "ja": "SEAM：つながりの状態",
-        "en": "SEAM: showing connection status"
+        "ja": "SEAM：つながりを主役に",
+        "en": "SEAM: The network comes forward"
       },
-      "image": "assets/images/lecture/seam-status.png",
+      "image": "assets/images/lecture/seam-graph.png",
       "alt": {
-        "ja": "応答時間や未読件数を添え、端末の状態を色と線で示した模擬画面",
-        "en": "A simulated network with reply times, unread badges and different link states"
+        "ja": "点と線を主役にして、最終応答や未読件数を添えた模擬ネットワーク",
+        "en": "A sparse simulated network with nodes, link states, reply times and unread counts"
       },
       "notes": {
-        "ja": "つながりが見えたあとで、「その接続はいまも生きているか」という問いが出た。色、線、最終応答からの秒数で状態を表す案を試した。画面の距離や時間は模擬データ。情報を足すときも、何が先に目に入るべきかを考える。",
-        "en": "Once the connection was visible, a new question emerged: is it still active? The next mockup tried color, line style and time since the last reply. The distances and times are simulated. Adding detail gave us another chance to decide what the eye should see first."
+        "ja": "最後の試作では、点と線を中心に、必要な状態だけを添えた。距離や応答時間は模擬データ。AIは次の案を速く形にできる。何を見せたいか、何を残すかを決めるのはつくり手自身。",
+        "en": "The last mockup gives the nodes and links the screen and adds only the status details needed to read them. Distances and reply times are simulated. AI can make the next draft quickly. Deciding what should be seen, and what can go, is still the designer’s work."
       },
       "annotationPage": 26,
-      "page": 17
-    },
-    {
-      "id": "seam-link-lost",
-      "kind": "seam-preview",
-      "title": {
-        "ja": "SEAM：一本の接続が切れたら",
-        "en": "SEAM: when one link breaks"
-      },
-      "image": "assets/images/lecture/seam-link-lost.png",
-      "alt": {
-        "ja": "直接接続が切れても別経路が残るメッシュの模擬画面",
-        "en": "A simulated mesh where a direct link has broken but another route remains"
-      },
-      "notes": {
-        "ja": "人数を増やし、直通の接続が一本切れる場面をシミュレーションした。赤い破線は直通の接続の切断を示す。相手の点は緑のままで、別の経路が残っている。試すことで、「直接つながらない」と「相手に届かない」を区別して伝える必要が見えた。",
-        "en": "A larger simulated mesh exposed an edge case. The direct link turns red and dashed, while the person stays green because another route remains. Testing that scenario clarified a distinction the visual needed to convey: losing a link is different from losing access to a person."
-      },
-      "annotationPage": 27,
-      "page": 18
-    },
-    {
-      "id": "seam-one-dot",
-      "kind": "seam-dot",
-      "title": {
-        "ja": "点、一つ",
-        "en": "One dot"
-      },
-      "notes": {
-        "ja": "最小の状態を示す授業用の図。まだ誰も参加していないとき、画面に必要なのは自分の端末を表す一つの点だけかもしれない。いくつもの案をつくり、見て、試すことで、その点が何を伝えるかが見えてきた。AIは試作を速められる。何が大切で、何を残すかを決めるのはつくり手自身。",
-        "en": "This teaching illustration shows the simplest state: your own phone, before anyone joins. The earlier drafts and tests help explain what that one mark can do. AI can help you make the next draft quickly. Deciding what matters, what to keep and what to take away is still your creative work."
-      },
-      "annotationPage": 28,
-      "page": 19
+      "page": 21
     },
     {
       "id": "make-critique-revise",
@@ -499,7 +538,7 @@
           "href": "data/gapminder.csv"
         }
       ],
-      "page": 20,
+      "page": 22,
       "annotationPage": 12
     },
     {
@@ -513,7 +552,7 @@
         "ja": "各自の探索から、共有する問いと一つの試作へ進む。",
         "en": "Individual explorations come together as a shared question and a prototype."
       },
-      "page": 21,
+      "page": 23,
       "annotationPage": 13
     },
     {
@@ -528,7 +567,7 @@
         "en": "Last week each group chose data and each member prepared 2–3 ideas. These three native charts use the course Gapminder data to illustrate different views. The gallery links to the actual submissions."
       },
       "href": "gallery.html?week=7",
-      "page": 22,
+      "page": 24,
       "annotationPage": 14
     },
     {
@@ -542,7 +581,7 @@
         "ja": "グループの案を並べ、共通点や強い方向性を考え、一つの問いにまとめて試作する。誰の案かより、何を明らかにするかが中心になる。",
         "en": "The group compares ideas, discusses shared interests, agrees on a direction and builds a prototype. The shared question organizes the work."
       },
-      "page": 23,
+      "page": 25,
       "annotationPage": 15
     },
     {
@@ -570,7 +609,7 @@
         ]
       },
       "href": "gallery.html?week=7",
-      "page": 24,
+      "page": 26,
       "annotationPage": 16
     },
     {
@@ -597,7 +636,7 @@
           "Save with the data"
         ]
       },
-      "page": 25,
+      "page": 27,
       "annotationPage": 17
     },
     {
@@ -624,7 +663,7 @@
           "Choose one change"
         ]
       },
-      "page": 26,
+      "page": 28,
       "annotationPage": 18
     },
     {
@@ -638,7 +677,7 @@
         "ja": "第9週はA3の試作を壁に掲示し、講評を受けて改善、第10週は中間グループ発表。第11週は地図、第12週はネットワークと複数ビュー、第13週は最終制作、第14週は最終発表。",
         "en": "Week 9: A3 pin-up critique and prototype refinement. Week 10: midterm group presentations. Week 11: maps. Week 12: networks and multiple views. Week 13: final studio. Week 14: final presentations."
       },
-      "page": 27,
+      "page": 29,
       "annotationPage": 19
     },
     {
@@ -664,7 +703,7 @@
           "Group name, contribution, next step"
         ]
       },
-      "page": 28,
+      "page": 30,
       "annotationPage": 20
     }
   ]
