@@ -238,8 +238,8 @@
         "en": "Deliver"
       },
       "notes": {
-        "ja": "Deliverでは、小さな試作を人に見せ、読み取りや疑問を確かめ、改善する。今週のグループ間の意見交換や、来週のA3ポスター講評に対応する。点線の矢印は、見せ方だけでなく問いにも戻ってよいことを表す。試作が完成品である必要はない。これは原図の中心部分を授業用に単純化した再描画。",
-        "en": "Deliver tests responses with people and improves them. This week’s exchange and next week’s A3 pin-up critique are course examples. Dashed return arrows show that feedback can change the representation or the question. A prototype need not be finished. This native redraw simplifies the center of the original framework for the course."
+        "ja": "Deliverでは、小さな試作を人に見せ、どう読み取られるかを確かめて改善する。今週のグループ間の意見交換や、来週のA3ポスター講評がその機会になる。",
+        "en": "Deliver tests a prototype with people and improves it based on what they see. This week’s group exchange and next week’s A3 pin-up critique are opportunities to do that."
       },
       "phase": 4,
       "question": {
@@ -256,6 +256,52 @@
       "annotationPage": 8
     },
     {
+      "id": "feedback-revise",
+      "kind": "diamond",
+      "title": {
+        "ja": "見せ方を試し直す",
+        "en": "Test another design"
+      },
+      "notes": {
+        "ja": "試作の読み方が伝わらなければ、同じ問いのまま別の表現を試せる。たとえば、比較したい値が埋もれていたら、棒の並び順を変えてもう一度見せる。",
+        "en": "If readers miss a comparison, the question can stay the same while the design changes. For example, try sorting the bars and show the revised chart again."
+      },
+      "phase": 4,
+      "feedbackCount": 1,
+      "animateFeedback": true,
+      "sources": [
+        {
+          "label": "Design Council · Framework for Innovation · adapted (CC BY 4.0)",
+          "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
+        }
+      ],
+      "annotationPage": 22,
+      "page": 10
+    },
+    {
+      "id": "feedback-explore",
+      "kind": "diamond",
+      "title": {
+        "ja": "もう一度、調べる",
+        "en": "Explore again"
+      },
+      "notes": {
+        "ja": "問いを絞ると、足りないデータにも気づく。グループで「いつ変わったか」を調べることにしたなら、単年のデータだけでは足りず、過去のデータを探し直すことになる。",
+        "en": "A focused question can reveal missing evidence. If a group decides to ask when something changed, a single year of data sends them back to look for a longer record."
+      },
+      "phase": 4,
+      "feedbackCount": 2,
+      "animateFeedback": true,
+      "sources": [
+        {
+          "label": "Design Council · Framework for Innovation · adapted (CC BY 4.0)",
+          "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
+        }
+      ],
+      "annotationPage": 23,
+      "page": 11
+    },
+    {
       "id": "iterate",
       "kind": "diamond",
       "title": {
@@ -267,14 +313,15 @@
         "en": "Questions raised by critique can lead to revisions of the chart, another look at the data or a changed question. Red paths carry the process forward; dashed return paths represent iteration. The button replays that return."
       },
       "phase": 4,
-      "iterate": true,
+      "feedbackCount": 3,
+      "animateFeedback": true,
       "sources": [
         {
           "label": "Design Council · Framework for Innovation · adapted (CC BY 4.0)",
           "href": "https://www.designcouncil.org.uk/resources/framework-for-innovation/"
         }
       ],
-      "page": 10,
+      "page": 12,
       "annotationPage": 9
     },
     {
@@ -302,7 +349,7 @@
           "href": "https://creativecommons.org/licenses/by/4.0/"
         }
       ],
-      "page": 11,
+      "page": 13,
       "annotationPage": 10
     },
     {
@@ -327,7 +374,7 @@
           "href": "https://www.routledge.com/The-Reflective-Practitioner-How-Professionals-Think-in-Action/Schon/p/book/9781857423198"
         }
       ],
-      "page": 12,
+      "page": 14,
       "annotationPage": 11
     },
     {
@@ -355,7 +402,7 @@
           "href": "data/gapminder.csv"
         }
       ],
-      "page": 13,
+      "page": 15,
       "annotationPage": 12
     },
     {
@@ -369,7 +416,7 @@
         "ja": "各自の探索から、共有する問いと一つの試作へ進む。",
         "en": "Individual explorations come together as a shared question and a prototype."
       },
-      "page": 14,
+      "page": 16,
       "annotationPage": 13
     },
     {
@@ -384,7 +431,7 @@
         "en": "Last week each group chose data and each member prepared 2–3 ideas. These three native charts use the course Gapminder data to illustrate different views. The gallery links to the actual submissions."
       },
       "href": "gallery.html?week=7",
-      "page": 15,
+      "page": 17,
       "annotationPage": 14
     },
     {
@@ -398,7 +445,7 @@
         "ja": "グループの案を並べ、共通点や強い方向性を考え、一つの問いにまとめて試作する。誰の案かより、何を明らかにするかが中心になる。",
         "en": "The group compares ideas, discusses shared interests, agrees on a direction and builds a prototype. The shared question organizes the work."
       },
-      "page": 16,
+      "page": 18,
       "annotationPage": 15
     },
     {
@@ -426,7 +473,7 @@
         ]
       },
       "href": "gallery.html?week=7",
-      "page": 17,
+      "page": 19,
       "annotationPage": 16
     },
     {
@@ -453,7 +500,7 @@
           "Save with the data"
         ]
       },
-      "page": 18,
+      "page": 20,
       "annotationPage": 17
     },
     {
@@ -480,7 +527,7 @@
           "Choose one change"
         ]
       },
-      "page": 19,
+      "page": 21,
       "annotationPage": 18
     },
     {
@@ -494,7 +541,7 @@
         "ja": "第9週はA3の試作を壁に掲示し、講評を受けて改善、第10週は中間グループ発表。第11週は地図、第12週はネットワークと複数ビュー、第13週は最終制作、第14週は最終発表。",
         "en": "Week 9: A3 pin-up critique and prototype refinement. Week 10: midterm group presentations. Week 11: maps. Week 12: networks and multiple views. Week 13: final studio. Week 14: final presentations."
       },
-      "page": 20,
+      "page": 22,
       "annotationPage": 19
     },
     {
@@ -520,7 +567,7 @@
           "Group name, contribution, next step"
         ]
       },
-      "page": 21,
+      "page": 23,
       "annotationPage": 20
     }
   ]

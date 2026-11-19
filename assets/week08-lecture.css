@@ -9,11 +9,21 @@
 @media(max-width:600px){.html-lecture-page .pdf-toolbar{top:60px}.html-deck.is-fullscreen .pdf-toolbar{top:0}}
 
 /* Source-led Double Diamond: red process edges and blue paths back into the work. */
-.w8-source-diamond .w8-diagram-title{font-size:48px!important}.w8-source-diamond .w8-diagram-year{font-size:24px!important}.w8-endpoint{font-size:21px!important;font-weight:600}.w8-source-phase-name{font:600 33px var(--deck-sans)!important;fill:#282828!important}.w8-source-translation{font:500 25px var(--deck-sans)!important;fill:#665b4c!important}.w8-course-caption{position:absolute;left:100px;right:100px;bottom:14px;text-align:center;font:500 39px/1.4 var(--deck-serif);margin:0;color:#40392f}.w8-source-diamond .w8-replay{top:92px;right:80px;font-size:24px;padding:10px 20px}.w8-process-stage:last-of-type{animation:w8-stage-arrive .5s ease-out}.w8-source-traveller{opacity:0}.w8-playing .w8-source-traveller{offset-path:path('M1270 558C1200 818 305 818 220 564');offset-rotate:0deg;animation:w8-travel 2.7s ease-in-out 1}.w8-framework-source{position:absolute;inset:0;display:block;background:#fff}.w8-framework-source img{position:absolute;inset:25px;width:calc(100% - 50px);height:calc(100% - 50px);object-fit:contain}.w8-print-homework ul{max-width:1030px}.w8-print-homework li{font-size:32px}.w8-a3-sheet{position:absolute;right:95px;top:285px;width:275px;height:390px;border:2px solid #b8ac97;background:#fffdf7;padding:35px 20px;transform:rotate(3deg);display:flex;flex-direction:column;justify-content:space-between}.w8-a3-sheet b{font:500 65px var(--deck-serif)}.w8-a3-sheet svg{width:230px;height:175px}.w8-a3-sheet span{font:500 21px var(--deck-sans);color:#ac3d4d}.w8-print-homework footer{margin-top:95px}.w8-print-homework h1{font-size:94px}
-@keyframes w8-stage-arrive{from{opacity:.15}to{opacity:1}}@media(prefers-reduced-motion:reduce){.w8-process-stage:last-of-type,.w8-playing .w8-source-traveller{animation:none}.w8-source-traveller{display:none}}
+.w8-source-diamond .w8-diagram-title{font-size:48px!important}.w8-source-diamond .w8-diagram-year{font-size:24px!important}.w8-endpoint{font-size:21px!important;font-weight:600}.w8-source-phase-name{font:600 33px var(--deck-sans)!important;fill:#282828!important}.w8-source-translation{font:500 25px var(--deck-sans)!important;fill:#665b4c!important}.w8-course-caption{position:absolute;left:100px;right:100px;bottom:14px;text-align:center;font:500 39px/1.4 var(--deck-serif);margin:0;color:#40392f}.w8-source-diamond .w8-replay{top:92px;right:80px;font-size:24px;padding:10px 20px}.w8-process-stage.is-entering{animation:w8-stage-arrive .5s ease-out}.w8-framework-source{position:absolute;inset:0;display:block;background:#fff}.w8-framework-source img{position:absolute;inset:25px;width:calc(100% - 50px);height:calc(100% - 50px);object-fit:contain}.w8-print-homework ul{max-width:1030px}.w8-print-homework li{font-size:32px}.w8-a3-sheet{position:absolute;right:95px;top:285px;width:275px;height:390px;border:2px solid #b8ac97;background:#fffdf7;padding:35px 20px;transform:rotate(3deg);display:flex;flex-direction:column;justify-content:space-between}.w8-a3-sheet b{font:500 65px var(--deck-serif)}.w8-a3-sheet svg{width:230px;height:175px}.w8-a3-sheet span{font:500 21px var(--deck-sans);color:#ac3d4d}.w8-print-homework footer{margin-top:95px}.w8-print-homework h1{font-size:94px}
+@keyframes w8-stage-arrive{from{opacity:.15}to{opacity:1}}@media(prefers-reduced-motion:reduce){.w8-process-stage.is-entering{animation:none}}
 .w8-print-homework footer{position:absolute;left:115px;right:115px;bottom:75px;margin:0}
 
 .w8-diverge-label{font:500 36px var(--deck-serif)!important;fill:#857363!important}
+
+.w8-feedback-trace{stroke-dashoffset:0}
+.w8-feedback-trace.is-tracing{
+  animation:w8-trace-return var(--trace-duration) linear both;
+}
+@keyframes w8-trace-return{from{stroke-dashoffset:1.03}to{stroke-dashoffset:0}}
+@media(prefers-reduced-motion:reduce){
+  .w8-feedback-trace.is-tracing{animation:none}
+  .w8-source-diamond [data-replay]{display:none}
+}
 
 .week8-deck .html-slide.slide-visual-thinking{
   display:grid;
