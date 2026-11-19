@@ -60,6 +60,8 @@ function ideaCharts(data,ja){
 }
 export function renderWeek8(s,{ja,data,returnTo}){
  const tr=v=>typeof v==='string'?v:v?.[ja?'ja':'en']||'';
+ if(s.kind==='seam-preview')return `<img class="w8-seam-capture" src="${e(s.image)}" alt="${e(tr(s.alt))}" width="1080" height="2400">`;
+ if(s.kind==='seam-dot')return `<span class="w8-seam-node" role="img" aria-label="${ja?'ほかの参加者がいないときの自分の端末':'Your phone before anyone else joins'}"></span>`;
  if(s.kind==='visual-thinking')return `<h1 class="w8-visual-thinking-title" lang="en">${e(s.title.en)}</h1>`;
  if(s.kind==='framework-cover')return `<a class="w8-cover" href="https://www.designcouncil.org.uk/resources/framework-for-innovation/" target="_blank" rel="noopener"><img src="${e(s.image)}" alt="${ja?'赤い額縁に入ったDesign CouncilのDouble Diamondポスター':'Design Council’s Double Diamond poster in a red frame'}"><h1>Framework<br>for Innovation</h1><span class="w8-credit">Design Council ↗</span></a>`;
  if(s.kind==='history-question')return `<div class="w8-history"><time>2003</time><h1>${e(tr(s.title))}</h1><p>Richard Eisermann · Design Council</p></div>`;

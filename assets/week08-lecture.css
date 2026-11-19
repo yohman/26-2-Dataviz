@@ -16,6 +16,13 @@
 .w8-diverge-label{font:500 36px var(--deck-serif)!important;fill:#857363!important}
 
 .w8-feedback-trace{stroke-dashoffset:0}
+.week8-deck .html-slide:is(.slide-seam-preview,.slide-seam-dot){
+  display:grid;
+  place-items:center;
+  background:#f7f7f3;
+}
+.w8-seam-capture{display:block;width:auto;height:100%;max-height:900px;object-fit:contain}
+.w8-seam-node{display:block;width:40px;height:40px;border-radius:50%;background:#142e25}
 .w8-feedback-trace.is-tracing{
   animation:w8-trace-return var(--trace-duration) linear both;
 }
