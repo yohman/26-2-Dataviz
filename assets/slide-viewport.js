@@ -35,7 +35,8 @@
       apply(zoomAt(target,scale,anchor));
     }
     viewport.addEventListener('wheel',e=>{
-      if((!e.ctrlKey&&!e.metaKey)||viewport.dataset.slideDrawing==='true')return;
+      if(viewport.dataset.slideDrawing==='true'||!e.deltaY||Math.abs(e.deltaY)<=Math.abs(e.deltaX))return;
+      if(!e.ctrlKey&&!e.metaKey&&e.deltaY>0&&target.scale<=1)return;
       e.preventDefault();zoomTo(target.scale*wheelFactor(e.deltaY,e.deltaMode),local(e));
     },{passive:false});
     viewport.addEventListener('pointerdown',e=>{
