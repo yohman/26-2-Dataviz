@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Slide editor · Week 8</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;500;600&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/html-lecture.css?v=week8-pinup-20261119">
+<link rel="stylesheet" href="assets/week08-lecture.css?v=dubois-plate-20261120">
+<link rel="stylesheet" href="assets/lecture-editor.css?v=1">
+<script type="module" src="assets/lecture-editor.mjs?v=1"></script>
+</head>
+<body class="html-lecture-page lecture-editor-page">
+<header class="editor-header">
+  <div><p>DV / 26–2 · Week 8</p><h1>Slide editor</h1></div>
+  <div class="editor-session"><span data-edit-status role="status" aria-live="polite">Loading deck…</span>
+    <button type="button" class="editor-save" data-edit-action="save" disabled hidden>Save deck</button>
+  </div>
+</header>
+<main class="editor-workspace" hidden>
+  <aside class="editor-filmstrip">
+    <div class="editor-section-title"><h2>Slides</h2><span data-edit-count></span></div>
+    <ol data-edit-list aria-label="Slide order"></ol>
+    <p class="editor-hint">Drag to reorder, or use Move up and Move down.</p>
+  </aside>
+  <section class="editor-stage">
+    <div class="editor-stage-heading">
+      <span data-edit-current></span>
+      <div class="editor-stage-controls">
+        <button type="button" data-edit-action="ja" aria-pressed="true" aria-label="Preview in Japanese">JP</button>
+        <button type="button" data-edit-action="en" aria-pressed="false" aria-label="Preview in English">EN</button>
+        <a data-edit-present href="http://127.0.0.1:8767/lecture.html?week=8" target="_blank" rel="noopener">Present saved ↗</a>
+      </div>
+    </div>
+    <div class="editor-artboard week8-deck" data-edit-preview aria-hidden="true" inert></div>
+    <div class="editor-tools" aria-label="Slide actions">
+      <button type="button" data-edit-action="up">↑ Move up</button>
+      <button type="button" data-edit-action="down">↓ Move down</button>
+      <button type="button" data-edit-action="duplicate">Duplicate</button>
+      <button type="button" data-edit-action="remove">Delete</button>
+      <button type="button" data-edit-action="undo">Undo</button>
+    </div>
+  </section>
+  <aside class="editor-inspector">
+    <h2>Slide details</h2>
+    <label>Title · 日本語 <input data-edit-field="title.ja" maxlength="250"></label>
+    <label>Title · English <input data-edit-field="title.en" maxlength="250"></label>
+    <label>Notes · 日本語 <textarea data-edit-field="notes.ja" maxlength="8000" rows="5"></textarea></label>
+    <label>Notes · English <textarea data-edit-field="notes.en" maxlength="8000" rows="5"></textarea></label>
+    <p class="editor-hint">Save writes to the local deck. It does not publish to the course site.</p>
+  </aside>
+</main>
+</body>
+</html>

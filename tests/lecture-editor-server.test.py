@@ -1,0 +1,63 @@
+import json
+from pathlib import Path
+import runpy
+import tempfile
+import threading
+import unittest
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
+
+
+class LocalEditorTest(unittest.TestCase):
+    def test_save_reorders_and_duplicates_without_overwriting_existing_ink_slots(self):
+        root = Path(__file__).resolve().parents[1]
+        module = runpy.run_path(root / "scripts/lecture_editor_server.py")
+        handler = module["EditorHandler"]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "week08.json"
+            path.write_bytes((root / "content/slides/week08.json").read_bytes())
+            handler.do_GET.__globals__["DECK_FILE"] = path
+            with module["ThreadingHTTPServer"](("127.0.0.1", 0), handler) as server:
+                server.token = "fixture-token"
+                thread = threading.Thread(target=server.serve_forever, daemon=True)
+                thread.start()
+                try:
+                    origin = f"http://127.0.0.1:{server.server_port}"
+                    with urlopen(origin + "/api/deck") as response:
+                        draft = json.load(response)
+                    deck = draft["deck"]
+                    first, second = deck["slides"][:2]
+                    notes = {"ja": "改訂したノート", "en": "Revised notes"}
+                    def row(slide, ident):
+                        return {"id": ident, "sourceId": slide["id"], "title": slide["title"], "notes": notes}
+                    body = json.dumps({
+                        "revision": draft["revision"],
+                        "slides": [row(second, second["id"]), row(first, "test-copy")],
+                    }).encode()
+                    def save(caller):
+                        return urlopen(Request(origin + "/api/deck", data=body, headers={
+                            "Content-Type": "application/json", "X-Lecture-Editor": draft["token"], "Origin": caller,
+                        }))
+                    with self.assertRaises(HTTPError) as foreign:
+                        save("https://example.org")
+                    self.assertEqual(foreign.exception.code, 403)
+                    with save(origin) as response:
+                        result = json.load(response)["deck"]
+                    self.assertEqual(result, json.loads(path.read_text()))
+                    self.assertEqual([s["id"] for s in result["slides"]], [second["id"], "test-copy"])
+                    self.assertEqual([s["page"] for s in result["slides"]], [1, 2])
+                    self.assertEqual(result["slides"][0]["annotationPage"], second["annotationPage"])
+                    self.assertGreater(result["slides"][1]["annotationPage"], max(s.get("annotationPage", s["page"]) for s in deck["slides"]))
+                    self.assertEqual(result["slides"][1]["href"], first["href"])
+                    self.assertEqual(result["slides"][1]["notes"], notes)
+                    self.assertEqual([c["id"] for c in result["chapters"]], [second["id"]])
+                    with self.assertRaises(HTTPError) as stale:
+                        save(origin)
+                    self.assertEqual(stale.exception.code, 409)
+                finally:
+                    server.shutdown()
+                    thread.join()
+
+
+if __name__ == "__main__":
+    unittest.main()

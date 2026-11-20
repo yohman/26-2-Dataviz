@@ -3,6 +3,17 @@
 Editable bilingual content lives in `content/weeks/*.md`. Serve the local clone
 on port 8767. GitHub Pages hosts the frontend.
 
+## Week 8 slide editor
+
+Run `python3 scripts/lecture_editor_server.py` in the local checkout and open
+[the local editor](http://127.0.0.1:8768/lecture-edit.html), or use **Edit slides**
+from the local Week 8 lecture. Drag thumbnails to reorder. You can also use Move
+up/down, duplicate or delete a slide, undo draft edits, and edit titles and notes
+in either language. **Save deck** updates `content/slides/week08.json`. Refresh the
+lecture to see the saved version. Keep the editor server running while editing.
+Publishing still requires a separate commit and push. The public site has no
+editing controls or write endpoint.
+
 ## Cloudflare backend
 
 Worker: `https://dataviz-gallery-likes.ykawano.workers.dev`
