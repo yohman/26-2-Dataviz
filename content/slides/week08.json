@@ -34,17 +34,17 @@
       }
     },
     {
+      "id": "make-critique-revise",
+      "label": {
+        "ja": "デュボイス：試作と講評",
+        "en": "Du Bois: Prototype critique"
+      }
+    },
+    {
       "id": "visual-thinking-with-ai",
       "label": {
         "ja": "Visual Thinking with AI",
         "en": "Visual Thinking with AI"
-      }
-    },
-    {
-      "id": "make-critique-revise",
-      "label": {
-        "ja": "試作と講評",
-        "en": "Prototype critique"
       }
     },
     {
@@ -392,6 +392,121 @@
       "annotationPage": 11
     },
     {
+      "id": "make-critique-revise",
+      "kind": "reflection",
+      "stage": "data",
+      "title": {
+        "ja": "ジョージア州の黒人人口",
+        "en": "Black population of Georgia"
+      },
+      "notes": {
+        "ja": "デュボイスの図に記載された1890年の4区分を表にした。区分は居住地の規模、数値はそこに住む黒人の人数。表は元の値を並べたもので、割合はまだ示していない。",
+        "en": "The four 1890 counts transcribed from Du Bois’s plate. The settlement categories describe the size of the places; the values count their Black residents."
+      },
+      "sources": [
+        {
+          "label": "City and rural population, 1890 · Library of Congress",
+          "href": "https://www.loc.gov/item/2013650430/"
+        }
+      ],
+      "page": 15,
+      "annotationPage": 39
+    },
+    {
+      "id": "dubois-city-draft",
+      "kind": "reflection",
+      "stage": "draft",
+      "title": {
+        "ja": "都市に暮らす黒人住民",
+        "en": "Black Georgians in cities"
+      },
+      "notes": {
+        "ja": "第6週に見たデュボイスの図から、1890年のジョージア州の都市3区分だけを取り出した授業用の試作。各区分は都市の総人口で分け、棒はそこに住む黒人の人数を表す。デュボイス自身の下書きではない。",
+        "en": "A classroom draft using only the three city categories from the Du Bois plate we saw in Week 6. The categories describe city size; the bars count Black residents in those cities. This is not a historical draft by Du Bois."
+      },
+      "sources": [
+        {
+          "label": "City and rural population, 1890 · Library of Congress",
+          "href": "https://www.loc.gov/item/2013650430/"
+        }
+      ],
+      "page": 16,
+      "annotationPage": 35
+    },
+    {
+      "id": "who-is-missing",
+      "kind": "reflection",
+      "stage": "inspect",
+      "title": {
+        "ja": "原図：都市と農村の人口",
+        "en": "Original plate: City and rural population"
+      },
+      "notes": {
+        "ja": "都市だけを示した棒グラフに、誰が入っていなかったか。原図には、都市の3区分に加えて農村・村落も描かれている。赤い渦巻きは、前の図にない区分。原図には当時の人種呼称が残っている。",
+        "en": "Who was missing from the city-only bar chart? The plate includes the country and villages in addition to the three city categories. The red spiral represents the group left out of the draft. The original retains its period racial terminology."
+      },
+      "image": "assets/images/week06/city-rural.jpg",
+      "alt": {
+        "ja": "デュボイスの原図。都市は緑・青・黄の線、農村・村落は赤い渦で表す。",
+        "en": "Du Bois’s original plate, with green, blue and yellow segments for cities and a red spiral for the country and villages."
+      },
+      "sources": [
+        {
+          "label": "City and rural population, 1890 · Library of Congress",
+          "href": "https://www.loc.gov/item/2013650430/"
+        }
+      ],
+      "page": 17,
+      "annotationPage": 40
+    },
+    {
+      "id": "dubois-revision",
+      "kind": "reflection",
+      "stage": "reveal",
+      "title": {
+        "ja": "多くは農村・村落に",
+        "en": "Most lived in the country and villages"
+      },
+      "notes": {
+        "ja": "都市3区分をまとめると123,863人、農村・村落は734,952人。4区分の合計858,815人を分母にすると、農村・村落は約85.6％。比較のために、都市の緑と農村・村落の赤を原図から採った。これは割合を示す授業用の図。",
+        "en": "The three city groups total 123,863. The country and villages account for 734,952 of the 858,815 people across the four categories, or 85.6%. For this classroom redraw, the green for cities and the red for the country and villages are sampled from the original plate."
+      },
+      "sources": [
+        {
+          "label": "City and rural population, 1890 · Library of Congress",
+          "href": "https://www.loc.gov/item/2013650430/"
+        }
+      ],
+      "page": 18,
+      "annotationPage": 37
+    },
+    {
+      "id": "reflection-pinup",
+      "kind": "reflection",
+      "stage": "deliver",
+      "title": {
+        "ja": "都市と農村の人口（1890年）",
+        "en": "City and rural population, 1890"
+      },
+      "notes": {
+        "ja": "1900年のパリ万博に出品された原図。農村・村落の長い赤線は、渦巻きにして紙面に収めている。ここまでの表、棒グラフ、割合の図は授業用の比較で、デュボイスの実際の制作順ではない。",
+        "en": "The finished plate for the 1900 Paris Exposition. Du Bois’s team coiled the long red line to fit it on the page. The table, city chart and share are classroom comparisons, not a reconstruction of the team’s design process."
+      },
+      "image": "assets/images/week06/city-rural.jpg",
+      "alt": {
+        "ja": "デュボイスの「都市と農村の人口（1890年）」の全図。",
+        "en": "Full original of City and rural population, 1890, by W. E. B. Du Bois and his team."
+      },
+      "sources": [
+        {
+          "label": "City and rural population, 1890 · Library of Congress",
+          "href": "https://www.loc.gov/item/2013650430/"
+        }
+      ],
+      "page": 19,
+      "annotationPage": 41
+    },
+    {
       "id": "visual-thinking-with-ai",
       "kind": "visual-thinking",
       "title": {
@@ -404,7 +519,7 @@
         "en": "The SEAM prototypes show reflection-in-action with AI. Each screen gives the designer something to look at, question, and change. The designer still decides what the app should make visible."
       },
       "annotationPage": 29,
-      "page": 15
+      "page": 20
     },
     {
       "id": "seam-first",
@@ -423,7 +538,7 @@
         "en": "The first screen was designed to check whether nearby phones could communicate over Bluetooth. Latency and event logs helped with testing. A screen for conversation called for a different hierarchy."
       },
       "annotationPage": 30,
-      "page": 16
+      "page": 21
     },
     {
       "id": "seam-chat",
@@ -442,7 +557,7 @@
         "en": "The chat screen added a diagram of connected phones so the sender could see who was available. The tabs and large boxes still competed for attention with the diagram and the conversation."
       },
       "annotationPage": 31,
-      "page": 17
+      "page": 22
     },
     {
       "id": "seam-log",
@@ -461,7 +576,7 @@
         "en": "The log separates a missed reply from a confirmed disconnect. It retains the evidence for diagnosing what happened. The main screen needs a quicker way to show that a connection has changed."
       },
       "annotationPage": 32,
-      "page": 18
+      "page": 23
     },
     {
       "id": "seam-nodes",
@@ -480,7 +595,7 @@
         "en": "Circular nodes replace the device boxes. A dashed red line makes the lost connection visible in the diagram itself. The alert and chat controls still take up substantial space around it."
       },
       "annotationPage": 33,
-      "page": 19
+      "page": 24
     },
     {
       "id": "seam-relay",
@@ -499,7 +614,7 @@
         "en": "The network gets its own screen, and the relay makes an indirect connection visible. The heading, legend, recent messages and settings still compete with the graph."
       },
       "annotationPage": 34,
-      "page": 20
+      "page": 25
     },
     {
       "id": "seam-status",
@@ -518,84 +633,7 @@
         "en": "The last mockup gives the nodes and links the screen and adds only the status details needed to read them. Distances and reply times are simulated. AI can make the next draft quickly. Deciding what should be seen, and what can go, is still the designer’s work."
       },
       "annotationPage": 26,
-      "page": 21
-    },
-    {
-      "id": "make-critique-revise",
-      "kind": "reflection",
-      "stage": "draft",
-      "title": {
-        "ja": "都市に暮らす黒人住民",
-        "en": "Black Georgians in cities"
-      },
-      "notes": {
-        "ja": "第6週に見たデュボイスの図から、1890年のジョージア州の都市3区分だけを取り出した授業用の試作。各区分は都市の総人口で分け、棒はそこに住む黒人の人数を表す。デュボイス自身の下書きではない。",
-        "en": "A classroom draft using only the three city categories from the Du Bois plate we saw in Week 6. The categories describe city size; the bars count Black residents in those cities. This is not a historical draft by Du Bois."
-      },
-      "sources": [
-        {
-          "label": "City and rural population, 1890 · Library of Congress",
-          "href": "https://www.loc.gov/item/2013650430/"
-        }
-      ],
-      "page": 22,
-      "annotationPage": 35
-    },
-    {
-      "id": "who-is-missing",
-      "kind": "reflection",
-      "stage": "challenge",
-      "title": {
-        "ja": "誰が抜けている？",
-        "en": "Who is missing?"
-      },
-      "notes": {
-        "ja": "仮の講評で「都市には住んでいなかった人は？」と聞かれたとする。都市だけの図では「州全体でどこに住んでいたか」はわからない。問いの範囲を広げ、農村・村落の区分も含める。",
-        "en": "An imagined reader asks about people who did not live in cities. A chart of cities alone cannot answer where people lived across the state. The critique changes the scope of the question: include the country and villages."
-      },
-      "page": 23,
-      "annotationPage": 36
-    },
-    {
-      "id": "dubois-revision",
-      "kind": "reflection",
-      "stage": "reveal",
-      "title": {
-        "ja": "多くは農村・村落に",
-        "en": "Most lived in the country and villages"
-      },
-      "notes": {
-        "ja": "原図の赤い渦は、農村・村落の734,952人を表す。都市3区分の合計は123,863人。図の4区分の合計858,815人を分母にすると、農村・村落は約85.6％。左はその割合を示す授業用の図、右は1900年のパリ万博に出品された原図。原図には当時の人種呼称が残っている。",
-        "en": "In the archival plate, the long red spiral represents 734,952 Black residents in the country and villages. The three city groups total 123,863. Of the 858,815 people in the four categories shown, 85.6% lived in the country and villages. The left is a classroom redraw. The right is Du Bois’s original for the 1900 Paris Exposition; it retains its period racial terminology."
-      },
-      "image": "assets/images/week06/city-rural.jpg",
-      "alt": {
-        "ja": "デュボイスの原図。農村・村落の人口を大きな赤い渦で表す。",
-        "en": "Du Bois’s original plate. A large red spiral shows the population in the country and villages."
-      },
-      "sources": [
-        {
-          "label": "City and rural population, 1890 · Library of Congress",
-          "href": "https://www.loc.gov/item/2013650430/"
-        }
-      ],
-      "page": 24,
-      "annotationPage": 37
-    },
-    {
-      "id": "reflection-pinup",
-      "kind": "reflection",
-      "stage": "test",
-      "title": {
-        "ja": "説明する前に、何が読み取れましたか？",
-        "en": "What did you see before we explained it?"
-      },
-      "notes": {
-        "ja": "改訂した図を説明なしで見たとき、農村・村落に住む人の多さが伝わるか。今日の見せ合いでも、相手が読み取ったことと、自分が伝えたかったことを比べる。違いがあれば、問いか図を変えて、もう一度見てもらう。",
-        "en": "Without an explanation, does the revised chart show how many people the first draft left out? The same test works in today’s show-and-tell. Compare what someone read with what you meant to show, then revise and test again."
-      },
-      "page": 25,
-      "annotationPage": 38
+      "page": 26
     },
     {
       "id": "group-project",
@@ -608,7 +646,7 @@
         "ja": "各自の探索から、共有する問いと一つの試作へ進む。",
         "en": "Individual explorations come together as a shared question and a prototype."
       },
-      "page": 26,
+      "page": 27,
       "annotationPage": 13
     },
     {
@@ -623,7 +661,7 @@
         "en": "Last week each group chose data and each member prepared 2–3 ideas. These three native charts use the course Gapminder data to illustrate different views. The gallery links to the actual submissions."
       },
       "href": "gallery.html?week=7",
-      "page": 27,
+      "page": 28,
       "annotationPage": 14
     },
     {
@@ -637,7 +675,7 @@
         "ja": "グループの案を並べ、共通点や強い方向性を考え、一つの問いにまとめて試作する。誰の案かより、何を明らかにするかが中心になる。",
         "en": "The group compares ideas, discusses shared interests, agrees on a direction and builds a prototype. The shared question organizes the work."
       },
-      "page": 28,
+      "page": 29,
       "annotationPage": 15
     },
     {
@@ -665,7 +703,7 @@
         ]
       },
       "href": "gallery.html?week=7",
-      "page": 29,
+      "page": 30,
       "annotationPage": 16
     },
     {
@@ -692,7 +730,7 @@
           "Save with the data"
         ]
       },
-      "page": 30,
+      "page": 31,
       "annotationPage": 17
     },
     {
@@ -719,7 +757,7 @@
           "Choose one change"
         ]
       },
-      "page": 31,
+      "page": 32,
       "annotationPage": 18
     },
     {
@@ -733,7 +771,7 @@
         "ja": "第9週はスタジオ講評と試作の改善、第10週は中間グループ発表。第11週は地図、第12週はネットワークと複数ビュー、第13週は最終制作、第14週は最終発表。",
         "en": "Week 9: studio critique and prototype refinement. Week 10: midterm group presentations. Week 11: maps. Week 12: networks and multiple views. Week 13: final studio. Week 14: final presentations."
       },
-      "page": 32,
+      "page": 33,
       "annotationPage": 19
     },
     {
@@ -759,7 +797,7 @@
           "Include your group name, what changed, and why"
         ]
       },
-      "page": 33,
+      "page": 34,
       "annotationPage": 20
     }
   ]

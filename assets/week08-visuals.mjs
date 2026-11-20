@@ -41,17 +41,18 @@ function diamond(s,ja){
  const caption=active?active[ja?'ja':'en']:(p?courseActions[p-1]:(ja?'広げる。絞る。もう一度。':'Open up. Focus. Again.'));
  return `<div class="w8-diamond w8-source-diamond">${svg(c,`Double Diamond · ${phaseLabels.slice(0,p).join(', ')}`)}<p class="w8-course-caption">${e(caption)}</p>${active?`<button class="w8-replay" data-replay>${ja?'もう一度 ↶':'Replay ↶'}</button>`:''}</div>`;
 }
-// Transcribed from the Week 6 archival plate (LOC ppmsca.33873).
+// Values transcribed from LOC ppmsca.33873. Ink colors sampled from the course scan.
+const plateInk={green:'#536c5c',blue:'#5b70a9',gold:'#e4b126',red:'#be3a4c'};
 const settlementCounts=[
- {en:'Cities over 10,000',ja:'1万人超の都市',count:78139,ink:'#3b5e50'},
- {en:'Cities of 5,000–10,000',ja:'5千〜1万人の都市',count:8025,ink:'#456387'},
- {en:'Cities of 2,500–5,000',ja:'2,500〜5千人の都市',count:37699,ink:'#cb922a'},
+ {en:'Cities over 10,000',ja:'1万人超の都市',count:78139,ink:plateInk.green},
+ {en:'Cities of 5,000–10,000',ja:'5千〜1万人の都市',count:8025,ink:plateInk.blue},
+ {en:'Cities of 2,500–5,000',ja:'2,500〜5千人の都市',count:37699,ink:plateInk.gold},
 ];
-const countryAndVillages=734952;
+const countryAndVillages={en:'Country and villages',ja:'農村・村落',count:734952};
 function reflectionMap(stage,ja){
  const phases=['Discover','Define','Develop','Deliver'];
  const translations=['探る','問いを決める','案をつくる','試して改善'];
- const active=['draft','challenge','reveal','test'].indexOf(stage);
+ const active={data:0,draft:1,inspect:1,reveal:2,deliver:3}[stage];
  const points=['12,31 64,4 64,58','64,4 116,31 64,58','130,31 182,4 182,58','182,4 234,31 182,58'];
  const paths=points.map((p,i)=>`<polygon points="${p}"${i===active?' class="is-current"':''}/>`).join('');
  const labels=phases.map((phase,i)=>`<span${i===active?' aria-current="step"':''}>${phase}</span>`).join('');
@@ -60,6 +61,10 @@ function reflectionMap(stage,ja){
 function reflection(s,ja,tr){
  const title=e(tr(s.title)),n=value=>new Intl.NumberFormat(ja?'ja-JP':'en-US').format(value);
  const place=ja?'ジョージア州 · 1890年':'Georgia · 1890';
+ if(s.stage==='data'){
+  const rows=[...settlementCounts,countryAndVillages].map(row=>`<tr><th scope="row">${e(tr(row))}</th><td data-count="${row.count}">${n(row.count)}</td></tr>`).join('');
+  return `<div class="w8-dubois-data"><p>${place}</p><h1>${title}</h1><table><thead><tr><th scope="col">${ja?'居住区分':'Settlement'}</th><th scope="col">${ja?'人数':'People'}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+ }
  if(s.stage==='draft'){
   const bars=settlementCounts.map((row,i)=>{
    const y=312+i*119,w=row.count/100000*800;
@@ -67,13 +72,13 @@ function reflection(s,ja,tr){
   }).join('');
   return `<div class="w8-dubois-draft"><p>${place}</p><h1>${title}</h1>${svg('<path d="M482 290V622" stroke="#9d907a" stroke-width="2"/>'+bars,ja?'ジョージア州の黒人人口、都市のみ。1890年。':'Black population of Georgia, cities only, 1890.')}</div>`;
  }
- if(s.stage==='challenge'||s.stage==='test'){
-  return `<div class="w8-reflection-question is-${s.stage}"><h1>${title}</h1></div>`;
+ if(s.stage==='inspect'||s.stage==='deliver'){
+  return `<figure class="w8-dubois-plate"><img src="${e(s.image)}" width="1751" height="2200" alt="${e(tr(s.alt))}" draggable="false"></figure>`;
  }
  const cityCount=settlementCounts.reduce((sum,row)=>sum+row.count,0);
- const share=countryAndVillages/(cityCount+countryAndVillages)*100;
- const rural=ja?'農村・村落':'Country and villages',cities=ja?'都市':'Cities';
- return `<div class="w8-dubois-reveal"><div><p class="w8-dubois-place">${place}</p><h1>${title}</h1><strong class="w8-dubois-share">${share.toFixed(1)}%</strong><div class="w8-dubois-split" style="--rural-share:${share}%" aria-hidden="true"></div><dl><div><dt>${cities}</dt><dd data-count="${cityCount}">${n(cityCount)}</dd></div><div><dt>${rural}</dt><dd data-count="${countryAndVillages}">${n(countryAndVillages)}</dd></div></dl></div><figure><img src="${e(s.image)}" width="1751" height="2200" alt="${e(tr(s.alt))}"><figcaption>W. E. B. Du Bois · 1900</figcaption></figure></div>`;
+ const ruralCount=countryAndVillages.count,share=ruralCount/(cityCount+ruralCount)*100;
+ const rural=e(tr(countryAndVillages)),cities=ja?'都市':'Cities';
+ return `<div class="w8-dubois-reveal" style="--rural-share:${share}%;--plate-green:${plateInk.green};--plate-red:${plateInk.red}"><p class="w8-dubois-place">${place}</p><h1>${title}</h1><strong class="w8-dubois-share">${share.toFixed(1)}%</strong><div class="w8-dubois-split" aria-hidden="true"></div><dl><div><dt>${cities}</dt><dd data-count="${cityCount}">${n(cityCount)}</dd></div><div><dt>${rural}</dt><dd data-count="${ruralCount}">${n(ruralCount)}</dd></div></dl></div>`;
 }
 function ideaCharts(data,ja){
  const rows=data.scatter.filter(r=>['Japan','India','China','Sweden','United States'].includes(r.country));
