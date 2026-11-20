@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DECK_FILE = ROOT / "content/slides/week08.json"
 MAX_REQUEST = 16 * 1024 * 1024
 ID = re.compile(r"[a-z0-9][a-z0-9-]{0,79}")
+IMAGE = re.compile(r"assets/images/[a-z0-9_./-]+\.(?:png|jpe?g|webp|gif|svg|avif)", re.I)
 WRITE_LOCK = threading.Lock()
 
 
@@ -26,8 +27,36 @@ def localized(value, *, required, limit):
     if not isinstance(value, dict) or set(value) != {"ja", "en"}:
         raise ValueError("Both languages are required.")
     if any(not isinstance(s, str) or len(s) > limit or (required and not s.strip()) for s in value.values()):
-        raise ValueError("Check the title and notes lengths for both languages.")
+        raise ValueError("Check the text lengths for both languages.")
     return value
+
+
+def slide_image(value, *, required=False):
+    if value == "" and not required:
+        return value
+    if not isinstance(value, str) or len(value) > 2000 or re.search(r"[\s\\<>\"']", value):
+        raise ValueError("Use a course image path or an HTTPS image URL.")
+    if IMAGE.fullmatch(value) and all(p not in {"", ".", ".."} for p in value.split("/")):
+        image = (ROOT / value).resolve()
+        if image.is_relative_to(ROOT / "assets/images") and image.is_file():
+            return value
+        raise ValueError("That course image was not found.")
+    parsed = urlsplit(value)
+    if parsed.scheme == "https" and parsed.hostname and not parsed.username and not parsed.password:
+        return value
+    raise ValueError("Use a course image path or an HTTPS image URL.")
+
+
+def slide_content(value):
+    if not isinstance(value, dict) or value.get("layout") not in ("type", "split", "figure"):
+        raise ValueError("Choose a valid slide layout.")
+    layout = value["layout"]
+    return {
+        "layout": layout,
+        "body": localized(value.get("body"), required=False, limit=480),
+        "image": slide_image(value.get("image", ""), required=layout != "type"),
+        "alt": localized(value.get("alt"), required=False, limit=250),
+    }
 
 
 def apply_edits(deck, rows):
@@ -43,12 +72,33 @@ def apply_edits(deck, rows):
         ident, source = row.get("id"), row.get("sourceId")
         if not isinstance(ident, str) or not ID.fullmatch(ident) or ident in seen:
             raise ValueError("Invalid or duplicate slide ID.")
-        if not isinstance(source, str) or source not in originals or (ident in originals and source != ident):
+        is_blank = source is None and ident not in originals
+        if not is_blank and (not isinstance(source, str) or source not in originals or (ident in originals and source != ident)):
             raise ValueError("Invalid slide source. Reload the editor.")
-        slide = {**originals[source], "id": ident, "page": page}
+        slide = {**({"kind": "editable"} if is_blank else originals[source]), "id": ident, "page": page}
         title = localized(row.get("title"), required=True, limit=250)
         notes = localized(row.get("notes"), required=False, limit=8000)
         slide.update(title=title, notes=notes)
+        if "content" in row:
+            if row["content"] is None:
+                slide.pop("content", None)
+            else:
+                slide["content"] = slide_content(row["content"])
+        if slide["kind"] == "editable" and not slide.get("content"):
+            raise ValueError("A new slide needs an editable layout.")
+        if "image" in row and row["image"] != slide.get("image"):
+            if "image" not in slide:
+                raise ValueError("Use an image layout to add an image.")
+            slide["image"] = slide_image(row["image"], required=True)
+        if "steps" in row and row["steps"] != slide.get("steps"):
+            if "steps" not in slide:
+                raise ValueError("This layout has no editable steps.")
+            steps = localized(row["steps"], required=False, limit=480)
+            slide["steps"] = {lang: [line.strip() for line in text.splitlines() if line.strip()] for lang, text in steps.items()}
+        if "caption" in row and row["caption"] != slide.get("caption"):
+            if "caption" not in slide:
+                raise ValueError("This layout has no editable caption.")
+            slide["caption"] = localized(row["caption"], required=False, limit=480)
         if ident not in originals:
             slide["annotationPage"] = next_slot
             next_slot += 1
@@ -115,7 +165,12 @@ class EditorHandler(SimpleHTTPRequestHandler):
             self.send_error(403)
         elif urlsplit(self.path).path == "/api/deck":
             raw = DECK_FILE.read_bytes()
-            self.send_json(200, {"deck": json.loads(raw), "revision": revision(raw), "token": self.server.token})
+            self.send_json(200, {"deck": json.loads(raw), "revision": revision(raw), "token": self.server.token, "editorVersion": 2})
+        elif urlsplit(self.path).path == "/api/images":
+            folder = ROOT / "assets/images"
+            images = sorted(p.relative_to(ROOT).as_posix() for p in folder.rglob("*")
+                            if p.is_file() and p.resolve().is_relative_to(folder) and IMAGE.fullmatch(p.relative_to(ROOT).as_posix()))
+            self.send_json(200, {"images": images})
         elif self.allowed_static(self.path):
             super().do_GET()
         else:

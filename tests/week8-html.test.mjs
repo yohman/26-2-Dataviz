@@ -60,6 +60,14 @@ test('activities link to the complete Double Diamond while timing and opening ga
  assert.equal(safeDeckReturn('agenda.html#week-7',8),'agenda.html#week-8');
 });
 
+test('the group-project sequence uses the sampled Du Bois ink colors without tinting them',()=>{
+ for(const id of ['group-project','last-week','combine']){
+  const slide=deck.slides.find(s=>s.id===id),html=renderWeek8(slide,{ja:true,data,returnTo:''});
+  for(const ink of ['#536c5c','#5b70a9','#e4b126','#be3a4c'])assert.ok(html.includes(ink),`${id} is missing ${ink}`);
+  assert.doesNotMatch(html,/opacity=/);
+ }
+});
+
 test('Week 8 is an individual revision and the A3 poster belongs to the Week 9 group critique',()=>{
  assert.doesNotMatch(source,/A3/);assert.doesNotMatch(JSON.stringify(deck),/\bA3\b/);
  assert.match(week.homework,/show-and-tell.*own visualizations.*Each student/);

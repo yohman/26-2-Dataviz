@@ -1,6 +1,13 @@
 /* Week 8: native type, paths, marks and classroom interactions. Photos are source art. */
 const e=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const phaseColors=['#ac3d4d','#b87b26','#52716c','#77618a'];
+// Ink sampled from the archival plate used in the Du Bois sequence.
+const plateInk={green:'#536c5c',blue:'#5b70a9',gold:'#e4b126',red:'#be3a4c'};
+const phaseColors=[plateInk.green,plateInk.blue,plateInk.gold,plateInk.red];
+export function safeSlideImage(value){
+ if(typeof value!=='string'||value.length>2000||/[\s\\<>"']/.test(value))return '';
+ if(/^assets\/images\/[a-z0-9_.\/-]+\.(?:png|jpe?g|webp|gif|svg|avif)$/i.test(value)&&!value.split('/').some(part=>!part||part==='.'||part==='..'))return value;
+ try{const u=new URL(value);return u.protocol==='https:'&&!u.username&&!u.password?value:'';}catch{return '';}
+}
 const tag=(x,y,t,cls='',more='')=>`<text x="${x}" y="${y}" class="${cls}" ${more}>${e(t)}</text>`;
 const svg=(s,label)=>`<svg viewBox="0 0 1600 900" role="img" aria-label="${e(label)}"><title>${e(label)}</title>${s}</svg>`;
 const returnArrows=[
@@ -9,7 +16,7 @@ const returnArrows=[
  {path:'M1270 558C1200 818 305 818 220 564',seconds:1.65,ja:'講評を受けて、問いに立ち返る。',en:'Feedback can send you back to the question.'}
 ];
 function diamond(s,ja){
- const p=s.phase,red='#ac3d4d',gold='#b78631';
+ const p=s.phase,{red,gold}=plateInk;
  const feedback=p===4?returnArrows.slice(0,s.feedbackCount??0):[];
  const active=s.animateFeedback?feedback.at(-1):null;
  const phaseLabels=['Discover','Define','Develop','Deliver'];
@@ -42,7 +49,6 @@ function diamond(s,ja){
  return `<div class="w8-diamond w8-source-diamond">${svg(c,`Double Diamond · ${phaseLabels.slice(0,p).join(', ')}`)}<p class="w8-course-caption">${e(caption)}</p>${active?`<button class="w8-replay" data-replay>${ja?'もう一度 ↶':'Replay ↶'}</button>`:''}</div>`;
 }
 // Values transcribed from LOC ppmsca.33873. Ink colors sampled from the course scan.
-const plateInk={green:'#536c5c',blue:'#5b70a9',gold:'#e4b126',red:'#be3a4c'};
 const settlementCounts=[
  {en:'Cities over 10,000',ja:'1万人超の都市',count:78139,ink:plateInk.green},
  {en:'Cities of 5,000–10,000',ja:'5千〜1万人の都市',count:8025,ink:plateInk.blue},
@@ -82,16 +88,23 @@ function reflection(s,ja,tr){
 }
 function ideaCharts(data,ja){
  const rows=data.scatter.filter(r=>['Japan','India','China','Sweden','United States'].includes(r.country));
- const dots=rows.map((r,i)=>`<circle cx="${100+Math.log10(r.income/1000)*160}" cy="${400-(r.life-60)*10}" r="${12+i*3}" fill="${phaseColors[i%4]}" opacity=".7"/>`).join('');
- const bars=rows.map((r,i)=>`<rect x="80" y="${85+i*58}" width="${r.life*3.7}" height="28" fill="${phaseColors[i%4]}" opacity=".8"/>`).join('');
+ const dots=rows.map((r,i)=>`<circle cx="${100+Math.log10(r.income/1000)*160}" cy="${400-(r.life-60)*10}" r="${12+i*3}" fill="${phaseColors[i%4]}"/>`).join('');
+ const bars=rows.map((r,i)=>`<rect x="80" y="${85+i*58}" width="${r.life*3.7}" height="28" fill="${phaseColors[i%4]}"/>`).join('');
  const paths=data.series.slice(0,3).map((r,i)=>`<path d="${r.points.filter(p=>Number.isFinite(p[1])).map(([year,v],j)=>`${j?'L':'M'}${60+(year-1950)*5.6} ${440-v*4.2}`).join(' ')}" fill="none" stroke="${phaseColors[i]}" stroke-width="4"/>`).join('');
  return `<div class="w8-idea-charts">${[dots,paths,bars].map((marks,i)=>`<div><svg viewBox="0 0 500 500" role="img" aria-label="${['Scatterplot','Line chart','Bar chart'][i]}"><path d="M60 60V450H450" fill="none" stroke="#cfc5b4"/>${marks}</svg></div>`).join('')}</div>`;
 }
 export function renderWeek8(s,{ja,data,returnTo}){
  const tr=v=>typeof v==='string'?v:v?.[ja?'ja':'en']||'';
+ if(s.content){
+  const {layout,body,alt,image}=s.content;
+  const url=safeSlideImage(image),media=url?`<img src="${e(url)}" alt="${e(tr(alt))}" draggable="false">`:'';
+  if(layout==='figure')return `<figure class="w8-authored is-figure">${media}</figure>`;
+  const heading=tr(s.title),copy=tr(body),compact=heading.length>(ja?18:36)||copy.length>(ja?126:285);
+  return `<div class="w8-authored ${layout==='split'?'is-split':'is-type'}${compact?' is-compact':''}"><div class="w8-authored-copy"><h1>${e(heading)}</h1>${copy?`<p>${e(copy)}</p>`:''}</div>${layout==='split'?media:''}</div>`;
+ }
  if(s.kind==='seam-preview')return `<div class="w8-seam-phone"><img class="w8-seam-capture" src="${e(s.image)}" alt="${e(tr(s.alt))}" width="1080" height="2400"></div>`;
  if(s.kind==='visual-thinking'){
-  const title=`<h1 class="w8-visual-thinking-title" lang="en">${e(s.title.en)}</h1>`;
+  const title=`<h1 class="w8-visual-thinking-title" lang="en">${e(tr(s.title))}</h1>`;
   if(!s.subtitle)return title;
   const [lead,accent]=s.subtitle.split(/ (?=\S+$)/);
   return `<div class="w8-visual-thinking-lockup" lang="en">${title}<p class="w8-visual-thinking-subtitle">${e(lead)}${accent?` <strong>${e(accent)}</strong>`:''}</p></div>`;
@@ -102,17 +115,20 @@ export function renderWeek8(s,{ja,data,returnTo}){
  if(s.kind==='framework-context')return `<div class="w8-framework-context"><h1>Framework for Innovation</h1><div class="w8-context-engagement"><strong>Engagement</strong><span>${ja?'人と関わり、共につくる':'Connect with people. Co-create.'}</span></div><div class="w8-context-core">${diamond({phase:4,feedbackCount:returnArrows.length},ja)}</div><div class="w8-context-principles"><h2>${ja?'デザインの原則':'Design principles'}</h2><p>${ja?'人を中心に · 視覚で共有 · 協働 · 反復':'People first · Visual communication · Collaboration · Iteration'}</p></div><div class="w8-context-methods"><h2>${ja?'使える方法':'Methods bank'}</h2><p>${ja?'探る · 形にする · つくる':'Explore · Shape · Build'}</p></div><div class="w8-context-leadership"><strong>Leadership</strong><span>${ja?'試せる環境をつくる':'Create the conditions to experiment.'}</span></div></div>`;
  if(s.kind==='schon')return `<div class="w8-schon"><div><time>1983</time><h1>${e(tr(s.title))}</h1>${ja?'<p class="w8-english">Reflection-in-action</p>':''}<p>Donald Schön</p></div><a href="${e(s.sources[1].href)}" target="_blank" rel="noopener"><img src="${e(s.image)}" alt="The Reflective Practitioner · Donald Schön"></a></div>`;
  if(s.kind==='reflection')return reflection(s,ja,tr)+reflectionMap(s.stage,ja);
- if(s.kind==='xaviz')return `<a class="w8-xaviz" href="${e(s.href)}" target="_blank" rel="noopener" aria-label="XAVIZ"><h1>XAVIZ<span aria-hidden="true">↗</span></h1><img src="${e(s.image)}" alt="XAVIZ"></a>`;
- if(s.kind==='group-title')return `<div class="w8-group-title"><div class="w8-group-marks" aria-hidden="true">${[0,1,2,3].map((v)=>`<i style="--n:${v};--c:${phaseColors[v]}"></i>`).join('')}</div><h1>${e(tr(s.title))}</h1></div>`;
+ if(s.kind==='xaviz')return `<a class="w8-xaviz" href="${e(s.href)}" target="_blank" rel="noopener" aria-label="XAVIZ"><h1>${e(tr(s.title))}<span aria-hidden="true">↗</span></h1><img src="${e(s.image)}" alt="XAVIZ"></a>`;
+ if(s.kind==='group-title'){
+  const mark=`<svg viewBox="0 0 900 256" aria-hidden="true"><path d="M14 26H308L430 128" fill="none" stroke="${plateInk.green}" stroke-width="29"/><path d="M14 128H430" fill="none" stroke="${plateInk.blue}" stroke-width="29"/><path d="M14 230H308L430 128" fill="none" stroke="${plateInk.gold}" stroke-width="29"/><path d="M430 128H886" stroke="${plateInk.red}" stroke-width="29"/></svg>`;
+  return `<div class="w8-group-title">${mark}<h1>${e(tr(s.title))}</h1></div>`;
+ }
  if(s.kind==='ideas-native')return `<div class="w8-ideas"><h1>${e(tr(s.title))}</h1><span class="w8-ideas-number">2–3</span>${ideaCharts(data,ja)}<a href="${e(s.href)}">${ja?'先週の作品を見る':'Last week’s gallery'} ↗</a></div>`;
- if(s.kind==='combine')return `<div class="w8-combine"><h1>${e(tr(s.title))}</h1><svg viewBox="0 0 1400 520" aria-hidden="true">${[0,1,2].map(i=>`<path d="M100 ${100+i*150}C600 ${100+i*150} 500 250 900 250" fill="none" stroke="${phaseColors[i]}" stroke-width="8"/><circle cx="100" cy="${100+i*150}" r="22" fill="${phaseColors[i]}"/>`).join('')}<circle cx="950" cy="250" r="75" fill="#40392f"/><path d="m925 250 18 18 35-42" fill="none" stroke="#faf8f0" stroke-width="7"/></svg><p>${ja?'問い一つ。試作一つ。':'One question. One prototype.'}</p></div>`;
+ if(s.kind==='combine')return `<div class="w8-combine"><h1>${e(tr(s.title))}</h1><svg viewBox="0 0 1400 520" aria-hidden="true">${[0,1,2].map(i=>`<path d="M100 ${100+i*150}C600 ${100+i*150} 500 250 900 250" fill="none" stroke="${phaseColors[i]}" stroke-width="8"/><circle cx="100" cy="${100+i*150}" r="22" fill="${phaseColors[i]}"/>`).join('')}<circle cx="950" cy="250" r="75" fill="${plateInk.red}"/><path d="m925 250 18 18 35-42" fill="none" stroke="#faf8f0" stroke-width="7"/></svg><p>${e(tr(s.caption??{ja:'問い一つ。試作一つ。',en:'One question. One prototype.'}))}</p></div>`;
  if(s.kind==='studio-activity')return `<div class="w8-activity"><div class="w8-time">${s.duration}<small>min</small></div><div><h1>${e(tr(s.title))}</h1><ol>${tr(s.steps).map(t=>`<li>${e(t)}</li>`).join('')}</ol>${s.href?`<a href="${e(s.href)}">${ja?'先週の作品を見る':'Last week’s gallery'} ↗</a>`:''}</div></div>`;
  if(s.kind==='studio-timeline')return `<div class="w8-timeline"><h1>${e(tr(s.title))}</h1><div>${(ja?['スタジオ講評','中間発表','地図','ネットワーク','最終制作','最終発表']:['Studio critique','Midterm','Maps','Networks','Final studio','Final presentations']).map((t,i)=>`<p><span>W${i+9}</span><strong>${t}</strong></p>`).join('')}</div></div>`;
  if(s.kind==='studio-homework')return `<div class="w8-homework"><h1>${e(tr(s.title))}</h1><ul>${tr(s.steps).map(t=>`<li>${e(t)}</li>`).join('')}</ul><footer><a href="homework-submit.html?week=8">${ja?'宿題を提出':'Submit homework'} ↗</a><a href="${e(returnTo)}">${ja?'課題の説明':'Assignment details'} ↗</a><time datetime="2026-11-26T23:59:00+09:00">11.26 Thu · 23:59 JST</time></footer></div>`;
  return '';
 }
 export function bindWeek8(root,{s}){
- if(s.animateFeedback){
+ if(s.animateFeedback&&!s.content){
   const trace=root.querySelector('.w8-feedback-trace');
   root.querySelector('[data-replay]').onclick=()=>{
    trace.classList.remove('is-tracing');

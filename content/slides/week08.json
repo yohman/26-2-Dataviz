@@ -645,6 +645,10 @@
         "ja": "共有、議論、合意、制作",
         "en": "Share, discuss, agree, build"
       },
+      "caption": {
+        "ja": "問い一つ。試作一つ。",
+        "en": "One question. One prototype."
+      },
       "notes": {
         "ja": "グループの案を並べ、共通点や強い方向性を考え、一つの問いにまとめて試作する。誰の案かより、何を明らかにするかが中心になる。",
         "en": "The group compares ideas, discusses shared interests, agrees on a direction and builds a prototype. The shared question organizes the work."

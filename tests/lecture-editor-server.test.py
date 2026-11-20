@@ -32,7 +32,13 @@ class LocalEditorTest(unittest.TestCase):
                         return {"id": ident, "sourceId": slide["id"], "title": slide["title"], "notes": notes}
                     body = json.dumps({
                         "revision": draft["revision"],
-                        "slides": [row(second, second["id"]), row(first, "test-copy")],
+                        "slides": [
+                            row(second, second["id"]), row(first, "test-copy"),
+                            {"id": "new-graphic", "sourceId": None,
+                             "title": {"ja": "図を読む", "en": "Reading a chart"}, "notes": notes,
+                             "content": {"layout": "split", "body": notes, "alt": notes,
+                                         "image": "assets/images/week06/city-rural.jpg"}},
+                        ],
                     }).encode()
                     def save(caller):
                         return urlopen(Request(origin + "/api/deck", data=body, headers={
@@ -44,16 +50,22 @@ class LocalEditorTest(unittest.TestCase):
                     with save(origin) as response:
                         result = json.load(response)["deck"]
                     self.assertEqual(result, json.loads(path.read_text()))
-                    self.assertEqual([s["id"] for s in result["slides"]], [second["id"], "test-copy"])
-                    self.assertEqual([s["page"] for s in result["slides"]], [1, 2])
+                    self.assertEqual([s["id"] for s in result["slides"]], [second["id"], "test-copy", "new-graphic"])
+                    self.assertEqual([s["page"] for s in result["slides"]], [1, 2, 3])
                     self.assertEqual(result["slides"][0]["annotationPage"], second["annotationPage"])
                     self.assertGreater(result["slides"][1]["annotationPage"], max(s.get("annotationPage", s["page"]) for s in deck["slides"]))
                     self.assertEqual(result["slides"][1]["href"], first["href"])
                     self.assertEqual(result["slides"][1]["notes"], notes)
+                    self.assertEqual(result["slides"][2]["kind"], "editable")
+                    self.assertEqual(result["slides"][2]["content"]["body"], notes)
+                    self.assertEqual(result["slides"][2]["content"]["image"], "assets/images/week06/city-rural.jpg")
                     self.assertEqual([c["id"] for c in result["chapters"]], [second["id"]])
                     with self.assertRaises(HTTPError) as stale:
                         save(origin)
                     self.assertEqual(stale.exception.code, 409)
+                    for bad in ("javascript:alert(1)", "assets/images/../../secrets.png", "https://name:secret@example.org/a.png"):
+                        with self.assertRaises(ValueError):
+                            module["slide_image"](bad, required=True)
                 finally:
                     server.shutdown()
                     thread.join()

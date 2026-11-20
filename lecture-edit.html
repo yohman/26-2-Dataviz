@@ -8,20 +8,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;500;600&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/styles.css">
 <link rel="stylesheet" href="assets/html-lecture.css?v=week8-pinup-20261119">
-<link rel="stylesheet" href="assets/week08-lecture.css?v=dubois-plate-20261120">
-<link rel="stylesheet" href="assets/lecture-editor.css?v=1">
-<script type="module" src="assets/lecture-editor.mjs?v=1"></script>
+<link rel="stylesheet" href="assets/week08-lecture.css?v=authored-20261120">
+<link rel="stylesheet" href="assets/lecture-editor.css?v=2">
+<script type="module" src="assets/lecture-editor.mjs?v=2"></script>
 </head>
 <body class="html-lecture-page lecture-editor-page">
 <header class="editor-header">
   <div><p>DV / 26–2 · Week 8</p><h1>Slide editor</h1></div>
   <div class="editor-session"><span data-edit-status role="status" aria-live="polite">Loading deck…</span>
-    <button type="button" class="editor-save" data-edit-action="save" disabled hidden>Save deck</button>
+    <button type="button" class="editor-save" data-edit-action="save" disabled hidden><span aria-hidden="true">✓</span> Save deck</button>
   </div>
 </header>
 <main class="editor-workspace" hidden>
   <aside class="editor-filmstrip">
-    <div class="editor-section-title"><h2>Slides</h2><span data-edit-count></span></div>
+    <div class="editor-section-title"><h2>Slides</h2><span data-edit-count></span><button type="button" data-edit-action="add" class="editor-icon" aria-label="Add slide" title="New slide after the selected slide"><span aria-hidden="true">＋</span></button></div>
     <ol data-edit-list aria-label="Slide order"></ol>
     <p class="editor-hint">Drag to reorder, or use Move up and Move down.</p>
   </aside>
@@ -36,19 +36,29 @@
     </div>
     <div class="editor-artboard week8-deck" data-edit-preview aria-hidden="true" inert></div>
     <div class="editor-tools" aria-label="Slide actions">
-      <button type="button" data-edit-action="up">↑ Move up</button>
-      <button type="button" data-edit-action="down">↓ Move down</button>
-      <button type="button" data-edit-action="duplicate">Duplicate</button>
-      <button type="button" data-edit-action="remove">Delete</button>
-      <button type="button" data-edit-action="undo">Undo</button>
+      <button type="button" class="editor-icon" data-edit-action="up" aria-label="Move up" title="Move up"><span aria-hidden="true">↑</span></button>
+      <button type="button" class="editor-icon" data-edit-action="down" aria-label="Move down" title="Move down"><span aria-hidden="true">↓</span></button>
+      <button type="button" class="editor-icon" data-edit-action="duplicate" aria-label="Duplicate slide" title="Duplicate slide"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="1"/><path d="M16 8V4H4v12h4"/></svg></button>
+      <button type="button" class="editor-icon" data-edit-action="remove" aria-label="Delete slide" title="Delete slide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v5m4-5v5"/></svg></button>
+      <button type="button" class="editor-icon" data-edit-action="undo" aria-label="Undo" title="Undo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5 4 10l5 5m-5-5h10a5 5 0 0 1 0 10"/></svg></button>
     </div>
   </section>
   <aside class="editor-inspector">
-    <h2>Slide details</h2>
-    <label>Title · 日本語 <input data-edit-field="title.ja" maxlength="250"></label>
-    <label>Title · English <input data-edit-field="title.en" maxlength="250"></label>
-    <label>Notes · 日本語 <textarea data-edit-field="notes.ja" maxlength="8000" rows="5"></textarea></label>
-    <label>Notes · English <textarea data-edit-field="notes.en" maxlength="8000" rows="5"></textarea></label>
+    <div class="editor-inspector-tabs" aria-label="Editor panels"><button type="button" data-edit-action="content-tab" aria-pressed="true">Content</button><button type="button" data-edit-action="notes-tab" aria-pressed="false">Notes</button></div>
+    <section data-edit-panel="content" aria-label="Slide content">
+      <label>Layout <select data-edit-layout><option value="original">Original layout</option><option value="type">Text</option><option value="split">Text + image</option><option value="figure">Full image</option></select></label>
+      <label>Title · 日本語 <input data-edit-field="title.ja" maxlength="250"></label>
+      <label>Title · English <input data-edit-field="title.en" maxlength="250"></label>
+      <label data-for-body hidden><span data-edit-body-label>On-slide text · 日本語</span><textarea data-edit-body maxlength="480" rows="5"></textarea></label>
+      <label data-for-image hidden>Image <input data-edit-image type="text" maxlength="2000" list="editor-image-library" placeholder="Choose a course image or paste an HTTPS URL"></label>
+      <datalist id="editor-image-library"></datalist>
+      <label data-for-alt hidden><span data-edit-alt-label>Image description · 日本語</span><input data-edit-alt maxlength="250"></label>
+      <p class="editor-hint" data-original-hint>Keep the original layout or choose Text or Image to build your own version.</p>
+    </section>
+    <section data-edit-panel="notes" aria-label="Presenter notes" hidden>
+      <label>Notes · 日本語 <textarea data-edit-field="notes.ja" maxlength="8000" rows="7"></textarea></label>
+      <label>Notes · English <textarea data-edit-field="notes.en" maxlength="8000" rows="7"></textarea></label>
+    </section>
     <p class="editor-hint">Save writes to the local deck. It does not publish to the course site.</p>
   </aside>
 </main>
