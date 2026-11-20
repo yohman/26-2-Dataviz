@@ -22,32 +22,33 @@ test('Week 8 is entirely native with original source photos, original XAVIZ dest
  const x=deck.slides.find(s=>s.id==='xaviz');assert.equal(x.href,'https://docs.google.com/presentation/d/1nzo8jO-YejXe_3wUdZwXTMdqLpY96ang8nzZu2FokTU/edit?usp=sharing');assert.equal(x.notes.ja,'');assert.equal(x.notes.en,'');
  assert.equal(deck.slides.find(s=>s.id==='double-diamond').phase,4);
 });
-test('Du Bois reflection moves from data to a city draft, the original plate, the share, and the finished plate',()=>{
- const stages=deck.slides.slice(14,19);
+test('Du Bois reflection moves from data to a city draft, the share, and the finished plate',()=>{
+ const stages=deck.slides.slice(14,18);
  assert.equal(deck.slides[13].id,'schon');
- assert.equal(deck.slides[19].id,'visual-thinking-with-ai');
- assert.equal(deck.slides.slice(20,26).filter(s=>s.kind==='seam-preview').length,6);
+ assert.equal(deck.slides[18].id,'visual-thinking-with-ai');
+ assert.equal(deck.slides.slice(19,25).filter(s=>s.kind==='seam-preview').length,6);
+ assert.ok(!deck.slides.some(s=>s.id==='who-is-missing'));
  const chapters=deck.chapters.map(c=>c.id);
  assert.ok(chapters.indexOf('make-critique-revise')<chapters.indexOf('visual-thinking-with-ai'));
- assert.deepEqual(stages.map(s=>s.stage),['data','draft','inspect','reveal','deliver']);
+ assert.deepEqual(stages.map(s=>s.stage),['data','draft','reveal','deliver']);
  for(const [i,s] of stages.entries())for(const ja of [false,true]){
-  const html=renderWeek8(s,{ja,data,returnTo:''}),phase=['Discover','Define','Define','Develop','Deliver'][i];
+  const html=renderWeek8(s,{ja,data,returnTo:''}),phase=['Discover','Define','Develop','Deliver'][i];
   assert.ok(html.includes(`data-phase="${phase}"`));
   assert.ok(html.includes(`aria-current="step">${phase}</span>`));
   assert.equal((html.match(/class="is-current"/g)||[]).length,1);
   assert.doesNotMatch(html,/<button|<a |↶/);
   const values=[...html.matchAll(/data-count="(\d+)"/g)].map(m=>Number(m[1]));
-  assert.deepEqual(values,[[78139,8025,37699,734952],[78139,8025,37699],[],[123863,734952],[]][i]);
+  assert.deepEqual(values,[[78139,8025,37699,734952],[78139,8025,37699],[123863,734952],[]][i]);
   assert.ok(s.sources.some(link=>link.href==='https://www.loc.gov/item/2013650430/'));
   if(i===0)assert.match(html,/<table>/);
   if(i===1)for(const color of ['#536c5c','#5b70a9','#e4b126'])assert.ok(html.includes(`fill="${color}"`));
-  if(i===3){
+  if(i===2){
    assert.ok(html.includes(`${(734952/858815*100).toFixed(1)}%`));
    assert.match(html,/--plate-green:#536c5c;--plate-red:#be3a4c/);
    assert.doesNotMatch(html,/<img/);
   }
-  if(i!==3)assert.doesNotMatch(html,/85\.6%/);
-  if(i===2||i===4)assert.match(html,/<figure class="w8-dubois-plate"><img src="assets\/images\/week06\/city-rural.jpg" width="1751" height="2200"[^>]*draggable="false"/);
+  if(i!==2)assert.doesNotMatch(html,/85\.6%/);
+  if(i===3)assert.match(html,/<figure class="w8-dubois-plate"><img src="assets\/images\/week06\/city-rural.jpg" width="1751" height="2200"[^>]*draggable="false"/);
  }
  assert.equal(new Set(deck.slides.map(s=>s.annotationPage??s.page)).size,deck.slides.length);
 });

@@ -434,32 +434,6 @@
       "annotationPage": 35
     },
     {
-      "id": "who-is-missing",
-      "kind": "reflection",
-      "stage": "inspect",
-      "title": {
-        "ja": "原図：都市と農村の人口",
-        "en": "Original plate: City and rural population"
-      },
-      "notes": {
-        "ja": "都市だけを示した棒グラフに、誰が入っていなかったか。原図には、都市の3区分に加えて農村・村落も描かれている。赤い渦巻きは、前の図にない区分。原図には当時の人種呼称が残っている。",
-        "en": "Who was missing from the city-only bar chart? The plate includes the country and villages in addition to the three city categories. The red spiral represents the group left out of the draft. The original retains its period racial terminology."
-      },
-      "image": "assets/images/week06/city-rural.jpg",
-      "alt": {
-        "ja": "デュボイスの原図。都市は緑・青・黄の線、農村・村落は赤い渦で表す。",
-        "en": "Du Bois’s original plate, with green, blue and yellow segments for cities and a red spiral for the country and villages."
-      },
-      "sources": [
-        {
-          "label": "City and rural population, 1890 · Library of Congress",
-          "href": "https://www.loc.gov/item/2013650430/"
-        }
-      ],
-      "page": 17,
-      "annotationPage": 40
-    },
-    {
       "id": "dubois-revision",
       "kind": "reflection",
       "stage": "reveal",
@@ -477,7 +451,7 @@
           "href": "https://www.loc.gov/item/2013650430/"
         }
       ],
-      "page": 18,
+      "page": 17,
       "annotationPage": 37
     },
     {
@@ -503,7 +477,7 @@
           "href": "https://www.loc.gov/item/2013650430/"
         }
       ],
-      "page": 19,
+      "page": 18,
       "annotationPage": 41
     },
     {
@@ -519,7 +493,7 @@
         "en": "The SEAM prototypes show reflection-in-action with AI. Each screen gives the designer something to look at, question, and change. The designer still decides what the app should make visible."
       },
       "annotationPage": 29,
-      "page": 20
+      "page": 19
     },
     {
       "id": "seam-first",
@@ -538,7 +512,7 @@
         "en": "The first screen was designed to check whether nearby phones could communicate over Bluetooth. Latency and event logs helped with testing. A screen for conversation called for a different hierarchy."
       },
       "annotationPage": 30,
-      "page": 21
+      "page": 20
     },
     {
       "id": "seam-chat",
@@ -557,7 +531,7 @@
         "en": "The chat screen added a diagram of connected phones so the sender could see who was available. The tabs and large boxes still competed for attention with the diagram and the conversation."
       },
       "annotationPage": 31,
-      "page": 22
+      "page": 21
     },
     {
       "id": "seam-log",
@@ -576,7 +550,7 @@
         "en": "The log separates a missed reply from a confirmed disconnect. It retains the evidence for diagnosing what happened. The main screen needs a quicker way to show that a connection has changed."
       },
       "annotationPage": 32,
-      "page": 23
+      "page": 22
     },
     {
       "id": "seam-nodes",
@@ -595,7 +569,7 @@
         "en": "Circular nodes replace the device boxes. A dashed red line makes the lost connection visible in the diagram itself. The alert and chat controls still take up substantial space around it."
       },
       "annotationPage": 33,
-      "page": 24
+      "page": 23
     },
     {
       "id": "seam-relay",
@@ -614,7 +588,7 @@
         "en": "The network gets its own screen, and the relay makes an indirect connection visible. The heading, legend, recent messages and settings still compete with the graph."
       },
       "annotationPage": 34,
-      "page": 25
+      "page": 24
     },
     {
       "id": "seam-status",
@@ -633,7 +607,7 @@
         "en": "The last mockup gives the nodes and links the screen and adds only the status details needed to read them. Distances and reply times are simulated. AI can make the next draft quickly. Deciding what should be seen, and what can go, is still the designer’s work."
       },
       "annotationPage": 26,
-      "page": 26
+      "page": 25
     },
     {
       "id": "group-project",
@@ -646,7 +620,7 @@
         "ja": "各自の探索から、共有する問いと一つの試作へ進む。",
         "en": "Individual explorations come together as a shared question and a prototype."
       },
-      "page": 27,
+      "page": 26,
       "annotationPage": 13
     },
     {
@@ -661,7 +635,7 @@
         "en": "Last week each group chose data and each member prepared 2–3 ideas. These three native charts use the course Gapminder data to illustrate different views. The gallery links to the actual submissions."
       },
       "href": "gallery.html?week=7",
-      "page": 28,
+      "page": 27,
       "annotationPage": 14
     },
     {
@@ -675,7 +649,7 @@
         "ja": "グループの案を並べ、共通点や強い方向性を考え、一つの問いにまとめて試作する。誰の案かより、何を明らかにするかが中心になる。",
         "en": "The group compares ideas, discusses shared interests, agrees on a direction and builds a prototype. The shared question organizes the work."
       },
-      "page": 29,
+      "page": 28,
       "annotationPage": 15
     },
     {
@@ -703,7 +677,7 @@
         ]
       },
       "href": "gallery.html?week=7",
-      "page": 30,
+      "page": 29,
       "annotationPage": 16
     },
     {
@@ -730,7 +704,7 @@
           "Save with the data"
         ]
       },
-      "page": 31,
+      "page": 30,
       "annotationPage": 17
     },
     {
@@ -757,7 +731,7 @@
           "Choose one change"
         ]
       },
-      "page": 32,
+      "page": 31,
       "annotationPage": 18
     },
     {
@@ -771,7 +745,7 @@
         "ja": "第9週はスタジオ講評と試作の改善、第10週は中間グループ発表。第11週は地図、第12週はネットワークと複数ビュー、第13週は最終制作、第14週は最終発表。",
         "en": "Week 9: studio critique and prototype refinement. Week 10: midterm group presentations. Week 11: maps. Week 12: networks and multiple views. Week 13: final studio. Week 14: final presentations."
       },
-      "page": 33,
+      "page": 32,
       "annotationPage": 19
     },
     {
@@ -797,7 +771,7 @@
           "Include your group name, what changed, and why"
         ]
       },
-      "page": 34,
+      "page": 33,
       "annotationPage": 20
     }
   ]

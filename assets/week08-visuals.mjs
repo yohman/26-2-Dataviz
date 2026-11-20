@@ -52,7 +52,7 @@ const countryAndVillages={en:'Country and villages',ja:'農村・村落',count:7
 function reflectionMap(stage,ja){
  const phases=['Discover','Define','Develop','Deliver'];
  const translations=['探る','問いを決める','案をつくる','試して改善'];
- const active={data:0,draft:1,inspect:1,reveal:2,deliver:3}[stage];
+ const active={data:0,draft:1,reveal:2,deliver:3}[stage];
  const points=['12,31 64,4 64,58','64,4 116,31 64,58','130,31 182,4 182,58','182,4 234,31 182,58'];
  const paths=points.map((p,i)=>`<polygon points="${p}"${i===active?' class="is-current"':''}/>`).join('');
  const labels=phases.map((phase,i)=>`<span${i===active?' aria-current="step"':''}>${phase}</span>`).join('');
@@ -72,7 +72,7 @@ function reflection(s,ja,tr){
   }).join('');
   return `<div class="w8-dubois-draft"><p>${place}</p><h1>${title}</h1>${svg('<path d="M482 290V622" stroke="#9d907a" stroke-width="2"/>'+bars,ja?'ジョージア州の黒人人口、都市のみ。1890年。':'Black population of Georgia, cities only, 1890.')}</div>`;
  }
- if(s.stage==='inspect'||s.stage==='deliver'){
+ if(s.stage==='deliver'){
   return `<figure class="w8-dubois-plate"><img src="${e(s.image)}" width="1751" height="2200" alt="${e(tr(s.alt))}" draggable="false"></figure>`;
  }
  const cityCount=settlementCounts.reduce((sum,row)=>sum+row.count,0);
