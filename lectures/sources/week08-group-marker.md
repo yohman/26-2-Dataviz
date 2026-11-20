@@ -1,0 +1,7 @@
+# Week 8 group-project marker artwork
+
+Slide 26 uses `assets/images/lecture/week08-group-marker.png`, made with built-in image generation using the four ink colors sampled from the course scan of Du Bois’s *City and rural population, 1890*. It is newly made classroom artwork, not archival.
+
+## Image brief
+
+Use case: productivity-visual. Asset: one transparent marker sketch for a data visualization lecture slide; no lettering. Draw a broad, low diagram (roughly 3.5:1 marks, centered with small clear edge margins): three equidistant chisel-tip marker bands run from left to right, top in smoky green #536c5c, middle in archival blue #5b70a9, bottom in mustard yellow #e4b126. The green and mustard turn once on gentle diagonals to meet the blue in the middle. A single muted carmine red band #be3a4c continues horizontally to the right from that meeting. W.E.B. Du Bois’s 1900 handmade charts as a visual reference: flat colored strips, restrained asymmetric composition. This should look unmistakably hand drawn with a real broad marker: slightly wavy, scuffed grainy edges, the occasional stroke overlap, uneven ink laydown and squared-off ends sketched by hand. Give it the honest looseness of a quick paper draft, but keep the three-into-one geometry legible. Genuinely transparent background with no scanned paper rectangle, no checkerboard baked in, no shadow, no gradients, no white halo, no lettering, no numbers, no arrows, no extra marks. Render as a landscape asset.

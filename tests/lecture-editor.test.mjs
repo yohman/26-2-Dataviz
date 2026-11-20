@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {moveSlide} from '../assets/lecture-editor.mjs';
+import {imageFormat,moveSlide} from '../assets/lecture-editor.mjs';
 import {renderWeek8,safeSlideImage} from '../assets/week08-visuals.mjs';
 
 test('thumbnail reorder inserts before or after without changing slide IDs or mutating the draft',()=>{
@@ -11,6 +11,14 @@ test('thumbnail reorder inserts before or after without changing slide IDs or mu
  assert.strictEqual(moveSlide(slides,'a','b','before'),slides);
  assert.strictEqual(moveSlide(slides,'a','a','after'),slides);
  assert.strictEqual(moveSlide(slides,'a','missing','after'),slides);
+});
+
+test('image import sniffs local and clipboard files without relying on MIME metadata',()=>{
+ assert.deepEqual(imageFormat(Buffer.from('89504e470d0a1a0a0000000d49484452','hex')),['png','image/png']);
+ assert.deepEqual(imageFormat(Buffer.from('ffd8ff','hex')),['jpg','image/jpeg']);
+ assert.deepEqual(imageFormat(Buffer.from('GIF89a')),['gif','image/gif']);
+ assert.deepEqual(imageFormat(Buffer.from('RIFF0000WEBP')),['webp','image/webp']);
+ assert.equal(imageFormat(Buffer.from('<svg onload="alert(1)">')),null);
 });
 
 test('authored content renders in the chosen language using the text and image layout',()=>{

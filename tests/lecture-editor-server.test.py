@@ -1,3 +1,5 @@
+import base64
+import hashlib
 import json
 from pathlib import Path
 import runpy
@@ -17,6 +19,7 @@ class LocalEditorTest(unittest.TestCase):
             path = Path(directory) / "week08.json"
             path.write_bytes((root / "content/slides/week08.json").read_bytes())
             handler.do_GET.__globals__["DECK_FILE"] = path
+            handler.do_GET.__globals__["ROOT"] = Path(directory).resolve()
             with module["ThreadingHTTPServer"](("127.0.0.1", 0), handler) as server:
                 server.token = "fixture-token"
                 thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -28,16 +31,20 @@ class LocalEditorTest(unittest.TestCase):
                     deck = draft["deck"]
                     first, second = deck["slides"][:2]
                     notes = {"ja": "改訂したノート", "en": "Revised notes"}
+                    png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO/aFioAAAAASUVORK5CYII="
+                    pixels = base64.b64decode(png)
+                    image_path = f"{module['IMPORT_ROOT']}/{hashlib.sha256(pixels).hexdigest()}.png"
                     def row(slide, ident):
                         return {"id": ident, "sourceId": slide["id"], "title": slide["title"], "notes": notes}
                     body = json.dumps({
                         "revision": draft["revision"],
+                        "images": {image_path: png},
                         "slides": [
                             row(second, second["id"]), row(first, "test-copy"),
                             {"id": "new-graphic", "sourceId": None,
                              "title": {"ja": "図を読む", "en": "Reading a chart"}, "notes": notes,
                              "content": {"layout": "split", "body": notes, "alt": notes,
-                                         "image": "assets/images/week06/city-rural.jpg"}},
+                                         "image": image_path}},
                         ],
                     }).encode()
                     def save(caller):
@@ -58,11 +65,15 @@ class LocalEditorTest(unittest.TestCase):
                     self.assertEqual(result["slides"][1]["notes"], notes)
                     self.assertEqual(result["slides"][2]["kind"], "editable")
                     self.assertEqual(result["slides"][2]["content"]["body"], notes)
-                    self.assertEqual(result["slides"][2]["content"]["image"], "assets/images/week06/city-rural.jpg")
+                    self.assertEqual(result["slides"][2]["content"]["image"], image_path)
+                    with urlopen(origin + "/" + image_path) as asset:
+                        self.assertEqual(asset.read(), pixels)
                     self.assertEqual([c["id"] for c in result["chapters"]], [second["id"]])
                     with self.assertRaises(HTTPError) as stale:
                         save(origin)
                     self.assertEqual(stale.exception.code, 409)
+                    with self.assertRaises(ValueError):
+                        module["decode_images"]({image_path: base64.b64encode(b"<svg></svg>").decode()})
                     for bad in ("javascript:alert(1)", "assets/images/../../secrets.png", "https://name:secret@example.org/a.png"):
                         with self.assertRaises(ValueError):
                             module["slide_image"](bad, required=True)

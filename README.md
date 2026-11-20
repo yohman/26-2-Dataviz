@@ -10,10 +10,13 @@ Run `python3 scripts/lecture_editor_server.py` in the local checkout and open
 from the local Week 8 lecture. Drag thumbnails to reorder or use the arrow
 buttons. The plus adds a slide after the selection. The Content panel edits
 slide titles, text, and images; JP/EN sets the language for the on-slide text.
+Drop an image file on the preview, paste an image from the clipboard, or use
+**Add image**. Accepted formats: PNG, JPEG, WebP and GIF (10 MB per image).
 Choose Text, Text + image, or Full image, or keep a slide’s original layout.
 In original layouts with editable steps or an image, those fields stay available.
 The Notes tab edits the bilingual presenter notes. **Save deck** updates
-`content/slides/week08.json`. Refresh the lecture to see the saved version.
+`content/slides/week08.json` and writes new image files into
+`assets/images/lecture/editor-imports/`. Refresh the lecture to see the saved version.
 Keep the editor server running while editing.
 Publishing still requires a separate commit and push. The public site has no
 editing controls or write endpoint.

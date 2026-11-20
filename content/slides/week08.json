@@ -612,6 +612,7 @@
     {
       "id": "group-project",
       "kind": "group-title",
+      "image": "assets/images/lecture/week08-group-marker.png",
       "title": {
         "ja": "グループ制作",
         "en": "Group project"

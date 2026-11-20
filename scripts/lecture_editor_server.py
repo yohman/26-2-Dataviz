@@ -1,5 +1,7 @@
 """Loopback-only Week 8 slide editor. Run from the course checkout."""
 import argparse
+import base64
+import binascii
 import hashlib
 import json
 import os
@@ -13,7 +15,10 @@ from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 DECK_FILE = ROOT / "content/slides/week08.json"
-MAX_REQUEST = 16 * 1024 * 1024
+MAX_REQUEST = 48 * 1024 * 1024
+MAX_IMAGE = 10 * 1024 * 1024
+MAX_IMAGE_BATCH = 30 * 1024 * 1024
+IMPORT_ROOT = "assets/images/lecture/editor-imports"
 ID = re.compile(r"[a-z0-9][a-z0-9-]{0,79}")
 IMAGE = re.compile(r"assets/images/[a-z0-9_./-]+\.(?:png|jpe?g|webp|gif|svg|avif)", re.I)
 WRITE_LOCK = threading.Lock()
@@ -31,12 +36,14 @@ def localized(value, *, required, limit):
     return value
 
 
-def slide_image(value, *, required=False):
+def slide_image(value, *, required=False, staged=()):
     if value == "" and not required:
         return value
     if not isinstance(value, str) or len(value) > 2000 or re.search(r"[\s\\<>\"']", value):
         raise ValueError("Use a course image path or an HTTPS image URL.")
     if IMAGE.fullmatch(value) and all(p not in {"", ".", ".."} for p in value.split("/")):
+        if value in staged:
+            return value
         image = (ROOT / value).resolve()
         if image.is_relative_to(ROOT / "assets/images") and image.is_file():
             return value
@@ -47,19 +54,19 @@ def slide_image(value, *, required=False):
     raise ValueError("Use a course image path or an HTTPS image URL.")
 
 
-def slide_content(value):
+def slide_content(value, staged=()):
     if not isinstance(value, dict) or value.get("layout") not in ("type", "split", "figure"):
         raise ValueError("Choose a valid slide layout.")
     layout = value["layout"]
     return {
         "layout": layout,
         "body": localized(value.get("body"), required=False, limit=480),
-        "image": slide_image(value.get("image", ""), required=layout != "type"),
+        "image": slide_image(value.get("image", ""), required=layout != "type", staged=staged),
         "alt": localized(value.get("alt"), required=False, limit=250),
     }
 
 
-def apply_edits(deck, rows):
+def apply_edits(deck, rows, staged=()):
     if not isinstance(rows, list) or not 1 <= len(rows) <= 200:
         raise ValueError("A deck must contain between 1 and 200 slides.")
     originals = {slide["id"]: slide for slide in deck["slides"]}
@@ -83,13 +90,13 @@ def apply_edits(deck, rows):
             if row["content"] is None:
                 slide.pop("content", None)
             else:
-                slide["content"] = slide_content(row["content"])
+                slide["content"] = slide_content(row["content"], staged)
         if slide["kind"] == "editable" and not slide.get("content"):
             raise ValueError("A new slide needs an editable layout.")
         if "image" in row and row["image"] != slide.get("image"):
             if "image" not in slide:
                 raise ValueError("Use an image layout to add an image.")
-            slide["image"] = slide_image(row["image"], required=True)
+            slide["image"] = slide_image(row["image"], required=True, staged=staged)
         if "steps" in row and row["steps"] != slide.get("steps"):
             if "steps" not in slide:
                 raise ValueError("This layout has no editable steps.")
@@ -109,6 +116,74 @@ def apply_edits(deck, rows):
     order = {slide["id"]: i for i, slide in enumerate(new_slides)}
     chapters = sorted((c for c in deck.get("chapters", []) if c["id"] in seen), key=lambda c: order[c["id"]])
     return {**deck, "chapters": chapters, "slides": new_slides, "nextAnnotationPage": next_slot}
+
+
+def imported_image_type(raw):
+    if raw.startswith(b"\x89PNG\r\n\x1a\n") and raw[12:16] == b"IHDR":
+        return "png"
+    if raw.startswith(b"\xff\xd8\xff"):
+        return "jpg"
+    if raw.startswith((b"GIF87a", b"GIF89a")):
+        return "gif"
+    if raw[:4] == b"RIFF" and raw[8:12] == b"WEBP":
+        return "webp"
+    return None
+
+
+def decode_images(values):
+    if not isinstance(values, dict) or len(values) > 200:
+        raise ValueError("Invalid slide image upload.")
+    staged, total = {}, 0
+    for path, image in values.items():
+        if not isinstance(image, str) or len(image) > (MAX_IMAGE + 2) // 3 * 4:
+            raise ValueError("Each image must be 10 MB or smaller.")
+        try:
+            raw = base64.b64decode(image, validate=True)
+        except (binascii.Error, ValueError) as error:
+            raise ValueError("Could not read that image.") from error
+        total += len(raw)
+        if len(raw) > MAX_IMAGE or total > MAX_IMAGE_BATCH:
+            raise ValueError("Save no more than 30 MB of new images at once.")
+        extension = imported_image_type(raw)
+        if not extension or path != f"{IMPORT_ROOT}/{revision(raw)}.{extension}":
+            raise ValueError("Choose a PNG, JPEG, WebP, or GIF image.")
+        staged[path] = raw
+    return staged
+
+
+def save_with_images(deck, staged):
+    referenced = {path for slide in deck["slides"] for path in (slide.get("image"), slide.get("content", {}).get("image"))}
+    if set(staged) - referenced:
+        raise ValueError("A new image is no longer on a slide. Retry the save.")
+    folder = ROOT / IMPORT_ROOT
+    created = []
+    try:
+        if staged:
+            folder.mkdir(parents=True, exist_ok=True)
+            if folder.resolve() != folder:
+                raise OSError("Image folder points outside its expected location.")
+        for path, raw in staged.items():
+            file = ROOT / path
+            if file.is_symlink():
+                raise OSError("Unexpected link in the image folder.")
+            if file.exists():
+                if file.read_bytes() != raw:
+                    raise OSError("An imported image file has changed.")
+                continue
+            with tempfile.NamedTemporaryFile(dir=folder, delete=False) as stream:
+                temp = Path(stream.name)
+                try:
+                    stream.write(raw)
+                    stream.flush()
+                    os.replace(temp, file)
+                    created.append(file)
+                finally:
+                    temp.unlink(missing_ok=True)
+        return write_deck(deck)
+    except OSError:
+        for file in created:
+            file.unlink(missing_ok=True)
+        raise
 
 
 def write_deck(deck):
@@ -165,12 +240,7 @@ class EditorHandler(SimpleHTTPRequestHandler):
             self.send_error(403)
         elif urlsplit(self.path).path == "/api/deck":
             raw = DECK_FILE.read_bytes()
-            self.send_json(200, {"deck": json.loads(raw), "revision": revision(raw), "token": self.server.token, "editorVersion": 2})
-        elif urlsplit(self.path).path == "/api/images":
-            folder = ROOT / "assets/images"
-            images = sorted(p.relative_to(ROOT).as_posix() for p in folder.rglob("*")
-                            if p.is_file() and p.resolve().is_relative_to(folder) and IMAGE.fullmatch(p.relative_to(ROOT).as_posix()))
-            self.send_json(200, {"images": images})
+            self.send_json(200, {"deck": json.loads(raw), "revision": revision(raw), "token": self.server.token, "editorVersion": 3})
         elif self.allowed_static(self.path):
             super().do_GET()
         else:
@@ -203,8 +273,9 @@ class EditorHandler(SimpleHTTPRequestHandler):
                 if request.get("revision") != revision(raw):
                     self.send_json(409, {"error": "The source deck changed. Reload before saving."})
                     return
-                deck = apply_edits(json.loads(raw), request.get("slides"))
-                saved = write_deck(deck)
+                staged = decode_images(request.get("images", {}))
+                deck = apply_edits(json.loads(raw), request.get("slides"), staged)
+                saved = save_with_images(deck, staged)
             self.send_json(200, {"deck": deck, "revision": revision(saved)})
         except ValueError as error:
             self.send_json(400, {"error": str(error)})

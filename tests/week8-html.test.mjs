@@ -60,8 +60,11 @@ test('activities link to the complete Double Diamond while timing and opening ga
  assert.equal(safeDeckReturn('agenda.html#week-7',8),'agenda.html#week-8');
 });
 
-test('the group-project sequence uses the sampled Du Bois ink colors without tinting them',()=>{
- for(const id of ['group-project','last-week','combine']){
+test('the group-project transition uses marker artwork, and the following charts use exact sampled ink',()=>{
+ const group=deck.slides.find(s=>s.id==='group-project');
+ assert.match(renderWeek8(group,{ja:false,data,returnTo:''}),/<img src="assets\/images\/lecture\/week08-group-marker\.png"/);
+ assert.ok(fs.existsSync(group.image));
+ for(const id of ['last-week','combine']){
   const slide=deck.slides.find(s=>s.id===id),html=renderWeek8(slide,{ja:true,data,returnTo:''});
   for(const ink of ['#536c5c','#5b70a9','#e4b126','#be3a4c'])assert.ok(html.includes(ink),`${id} is missing ${ink}`);
   assert.doesNotMatch(html,/opacity=/);

@@ -106,8 +106,8 @@
 .w8-homework h1{font-size:87px}
 .w8-homework footer{position:absolute;inset:auto 115px 75px}
 
-.w8-group-title{gap:54px;background:#faf8f0;text-align:center}
-.w8-group-title svg{width:820px;height:234px}
+.w8-group-title{gap:30px;background:#faf8f0;text-align:center}
+.w8-group-title img{display:block;width:960px;height:312px;object-fit:contain}
 .week8-deck .html-slide .w8-group-title h1{font:700 88px/1.2 var(--deck-sans);letter-spacing:.07em;text-transform:uppercase;color:#332820}
 .w8-authored{position:absolute;inset:0;margin:0;display:grid;align-items:center;padding:100px 118px;overflow:hidden}
 .w8-authored h1{font-size:102px;overflow-wrap:anywhere;text-wrap:balance}
