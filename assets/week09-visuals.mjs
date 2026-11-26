@@ -13,7 +13,7 @@ export function renderWeek9(slide,{ja=true}={}) {
         <header><p>${ja?'地上にいるなら':'Already at street level?'}</p><h1>${ja?'歩こう。':'Walk.'}</h1></header>
         <dl>
           <div class="w9-walk-time"><dt>${ja?'地上を歩く':'Walk at street level'}</dt><dd><strong>${ja?'約5分':'~5 min'}</strong><small>${ja?'このルートは約380 m':'About 380 m on this route'}</small></dd></div>
-          <div class="w9-rail-time"><dt>${ja?'地下鉄で1駅':'One stop on the Tube'}</dt><dd><strong>${ja?'乗車 約1分':'~1 min aboard'}</strong><small>${ja?'＋ ホームまで・待ち時間・出口まで':'+ getting in, waiting and getting out'}</small></dd></div>
+          <div class="w9-rail-time"><dt>${ja?'地下鉄で1駅':'One stop on the Tube'}</dt><dd><strong>${ja?'乗車 約1分':'~1 min aboard'}</strong><small>${ja?'＋ 入場・待ち時間・退場':'+ entry, waiting and exit'}</small></dd></div>
         </dl>
       </div>
       <figure class="w9-geographic-map">
