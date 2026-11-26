@@ -1,5 +1,6 @@
 import {fifaSnapshot} from './week09-fifa-data.mjs?v=20261127';
 import {renderTubeSlide,bindTubeSlide} from './week09-tube.mjs?v=night-race-tokyo-20261127';
+import {renderTokyo,bindTokyo} from './week09-tokyo-race.mjs?v=commute-20261127';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const external=(href,body,attrs='')=>`<a href="${esc(href)}" target="_blank" rel="noopener noreferrer" ${attrs}>${body}</a>`;
@@ -15,106 +16,46 @@ export function fifaEvidence(rows=fifaSnapshot.rows) {
 
 function fifaPlot(ja) {
   const {rows}=fifaSnapshot,{cut,halves}=fifaEvidence(rows);
-  const start=145,end=1515;
+  const start=164,end=1479;
   const x=pop=>start+Math.log10(pop/30000)/Math.log10(1600000000/30000)*(end-start);
-  const y=rank=>354+(rank-1)/210*421;
+  const y=rank=>407+(rank-1)/210*349;
   const split=x(cut);
   const ticks=ja?['10万','100万','1,000万','1億','10億']:['100k','1m','10m','100m','1bn'];
-  const countries=ja?{ISL:'アイスランド',CPV:'カーボベルデ',IND:'インド'}:{ISL:'Iceland',CPV:'Cabo Verde',IND:'India'};
-  const labels={ISL:[-27,44],CPV:[31,40],IND:[-24,40]};
   const label=(x,y,text,cls='',anchor='start')=>`<text class="${cls}" x="${x}" y="${y}" text-anchor="${anchor}">${esc(text)}</text>`;
   const drawDot=([,rank,pop])=>`<circle class="${rank<=50?'w9-fifa-top '+(pop<cut?'w9-fifa-less':'w9-fifa-more'):'w9-fifa-dot'}" cx="${x(pop)}" cy="${y(rank)}" r="${rank<=50?7:4.2}"/>`;
   const marks=[...rows.filter(row=>row[1]>50),...rows.filter(row=>row[1]<=50)].map(drawDot).join('');
-  const highlights=rows.filter(([id])=>countries[id]).map(([id,rank,pop])=>{
-    const cx=x(pop),cy=y(rank),[dx,dy]=labels[id];
-    return `<path class="w9-fifa-leader" d="M${cx},${cy} l${dx*.78},${dy*.79}"/><circle class="w9-fifa-highlight" cx="${cx}" cy="${cy}" r="6"/>${label(cx+dx,cy+dy,`${countries[id]} ${ja?`${rank}位`:`#${rank}`}`,'w9-fifa-label',dx<0?'end':'start')}`;
-  }).join('');
   const totals=halves.map(({teams,top},i)=>{
     const left=i?split:start,right=i?end:split,mid=(left+right)/2;
     const name=ja?['人口の少ない方の半分','人口の多い方の半分'][i]:['Less populous half','More populous half'][i];
     return `<g class="${i?'w9-fifa-more':'w9-fifa-less'}">
       <rect x="${left}" y="${y(1)}" width="${right-left}" height="${y(50)-y(1)}" class="w9-fifa-top-band"/>
       <path d="M${left} ${y(1)}H${right}" class="w9-fifa-band-rule"/>
-      ${label(mid,174,name,'w9-fifa-half-label','middle')}
-      ${label(mid,263,Math.round(top/teams*100)+'%','w9-fifa-percent','middle')}
-      ${label(mid,314,ja?`${teams}チーム中${top}`:`${top} of ${teams} teams`,'w9-fifa-count','middle')}
-      <path d="M${mid} 330V${y(1)}" class="w9-fifa-band-rule"/>
+      ${label(mid,166,name,'w9-fifa-half-label','middle')}
+      ${label(mid,288,Math.round(top/teams*100)+'%','w9-fifa-percent','middle')}
+      ${label(mid,348,ja?`${teams}チーム中${top}`:`${top} of ${teams} teams`,'w9-fifa-count','middle')}
+      <path d="M${mid} 372V${y(1)}" class="w9-fifa-band-rule"/>
     </g>`;
   }).join('');
   const rates=halves.map(({teams,top})=>Math.round(top/teams*100));
   const alt=ja?`人口が少ない方の半分では${rates[0]}%、多い方の半分では${rates[1]}%が男子FIFA上位50位に入った。`:`Scatterplot: ${rates[0]}% of the less populous half and ${rates[1]}% of the more populous half rank in the FIFA men’s top 50.`;
   return `<svg class="w9-fifa-plot" viewBox="0 0 1600 900" role="img" aria-label="${alt}">
-    ${[50,100,150,200].map(rank=>`<path class="w9-fifa-grid" d="M${start} ${y(rank)}H${end}"/>`).join('')}
-    ${[1e5,1e6,1e7,1e8,1e9].map((pop,i)=>`<path class="w9-fifa-grid" d="M${x(pop)} ${y(1)}V${y(211)}"/>${label(x(pop),y(211)+30,ticks[i],'w9-fifa-axis','middle')}`).join('')}
+    ${[50,100,200].map(rank=>`<path class="w9-fifa-grid" d="M${start} ${y(rank)}H${end}"/>`).join('')}
+    ${[1e5,1e6,1e7,1e8,1e9].map((pop,i)=>label(x(pop),y(211)+31,ticks[i],'w9-fifa-axis','middle')).join('')}
     ${totals}
-    <path class="w9-fifa-cut" d="M${split} 153V${y(211)}"/>
-    ${[1,50,100,150,200].map(rank=>label(start-17,y(rank)+7,rank,'w9-fifa-axis','end')).join('')}
-    ${label(start,337,ja?'男子FIFA順位':'FIFA men’s rank','w9-fifa-axis-title')}
+    <path class="w9-fifa-cut" d="M${split} 157V${y(211)}"/>
+    ${[1,50,100,200].map(rank=>label(start-17,y(rank)+7,rank,'w9-fifa-axis','end')).join('')}
+    ${label(start,386,ja?'男子FIFA順位':'FIFA men’s rank','w9-fifa-axis-title')}
     ${label(start-16,(y(1)+y(50))/2+6,ja?'上位50位':'Top 50','w9-fifa-band-label','end')}
-    ${marks}${highlights}
-    ${label((start+end)/2,851,ja?'人口（対数軸）':'Population (log scale)','w9-fifa-axis-title','middle')}
+    ${marks}
+    ${label((start+end)/2,833,ja?'人口（対数軸）':'Population (log scale)','w9-fifa-axis-title','middle')}
     </svg>`;
 }
 
-function tokyoSlide(slide,ja,t){
-  const title=esc(t(slide.title));
-  const shinkansen=ja?'新幹線':'Shinkansen',keiyo=ja?'京葉線':'Keiyō Line';
-  const station=ja?'東京':'Tokyo',unit=ja?'分':'min';
-  switch(slide.kind){
-    case 'tokyo-aerial':
-      return `<figure class="w9-tokyo w9-tokyo-aerial">
-        <img src="${esc(slide.image)}" alt="${esc(t(slide.alt))}">
-        <h1>${title}</h1><span class="w9-tokyo-north" aria-hidden="true">↑ N</span>
-        <span class="w9-tokyo-pin w9-tokyo-pin--shinkansen">${shinkansen}</span>
-        <span class="w9-tokyo-pin w9-tokyo-pin--keiyo">${ja?'京葉線ホーム（地下）':'Keiyō platforms (underground)'}</span>
-        <figcaption>${external(slide.sources[0].href,ja?'出典：国土地理院（空中写真を合成・加筆）':'Aerial imagery: Geospatial Information Authority of Japan (assembled and labeled)')}</figcaption>
-      </figure>`;
-    case 'tokyo-schematic':
-      return `<section class="w9-tokyo w9-tokyo-schematic">
-        <h1>${title}</h1>
-        <svg viewBox="0 0 1600 900" role="img" aria-label="${ja?'新幹線と京葉線が東京駅の一点でつながる模式図':'Schematic showing the Shinkansen and Keiyō Line connected at one Tokyo Station node'}">
-          <path d="M800 277V670" class="w9-tokyo-service--shinkansen"/>
-          <path d="M800 481H1390" class="w9-tokyo-service--keiyo"/>
-          <circle class="w9-tokyo-node" cx="800" cy="481" r="36"/>
-          <text class="w9-tokyo-node-label" x="739" y="505" text-anchor="end">${station}</text>
-          <text class="w9-tokyo-service-label" x="768" y="307" text-anchor="end">${shinkansen}</text>
-          <text class="w9-tokyo-service-label" x="1325" y="438" text-anchor="end">${keiyo}</text>
-          <text class="w9-tokyo-direction" x="1390" y="554" text-anchor="end">${ja?'舞浜方面 →':'Toward Maihama →'}</text>
-        </svg>
-        <p>${ja?'二つの路線だけを示した模式図':'Schematic excerpt · two services'}</p>
-      </section>`;
-    case 'tokyo-question':
-      return `<section class="w9-tokyo w9-tokyo-question">
-        <p>${esc(t(slide.subtitle))}</p>
-        <strong>10 <small>${unit}</small></strong>
-        <h1>${title}</h1>
-      </section>`;
-    case 'tokyo-reveal':
-      return `<section class="w9-tokyo w9-tokyo-reveal" aria-label="${title}">
-        <figure><img src="${esc(slide.image)}" alt="${esc(t(slide.alt))}">
-          <figcaption>${external(slide.sources[2].href,'MaedaAkihiko')} · ${external(slide.sources[3].href,'CC BY-SA 4.0')} · ${ja?'トリミング':'cropped'}</figcaption>
-        </figure>
-        <div class="w9-tokyo-answer">
-          <h1>20 <small>${unit}</small></h1><p>${ja?'JR東日本の乗り換え目安':'JR East’s standard transfer time'}</p>
-          <ol aria-label="${ja?'乗り換えの経路':'Transfer sequence'}">
-            <li>${ja?'新幹線ホーム':'Shinkansen platform'}</li>
-            <li>${ja?'地下通路・動く歩道':'Passage and moving walkway'}</li>
-            <li>${ja?'京葉線ホーム · 地下4階':'Keiyō platform · B4'}</li>
-          </ol>
-          <div class="w9-tokyo-time" aria-label="${ja?'発車まで10分、乗り換えの目安は20分':'The train leaves in 10 minutes. The transfer allowance is 20.'}">
-            <div></div><span>${ja?'10分で発車':'Train leaves at 10 min'}</span>
-          </div>
-          ${external(slide.sources[0].href,ja?'JR東日本の構内図 ↗':'JR East station map ↗')}
-        </div>
-      </section>`;
-    default:return '';
-  }
-}
 
 export function renderWeek9(slide,{ja=true}={}) {
   const lang=ja?'ja':'en',t=value=>value?.[lang]??value??'';
   const title=esc(t(slide.title));
-  if(slide.kind.startsWith('tokyo-'))return tokyoSlide(slide,ja,t);
+  if(slide.kind.startsWith('tokyo-'))return renderTokyo(slide,ja);
   if(slide.kind==='fifa-missing'){
     return `<section class="w9-fifa-missing">
       <div class="w9-fifa-missing-copy"><h1>${title}</h1>
@@ -166,6 +107,7 @@ export function renderWeek9(slide,{ja=true}={}) {
 }
 
 export function bindWeek9(slide,{s,ja}={}) {
+  if(s.kind==='tokyo-reveal')bindTokyo(slide.querySelector('[data-tokyo-race]'),ja);
   if(s?.kind==='combined-route')bindTubeSlide(slide.querySelector('[data-tube-slide]'),s,ja);
   const img=slide.querySelector('.w9-archive img,.w9-match-photo img');
   if(!img)return;
