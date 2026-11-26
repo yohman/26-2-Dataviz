@@ -50,3 +50,15 @@ test('Week 8 stays closed until November 20 at 9 AM JST, with instructor preview
  assert.equal(vm.runInContext("weekIsLocked(week,false,Date.parse('2026-11-20T09:00:00+09:00'))",context),false);
  assert.equal(vm.runInContext("weekIsLocked(week,true,Date.parse('2026-11-19T12:00:00+09:00'))",context),false);
 });
+
+test('Week 9 stays closed until November 27 at 10 AM JST, with instructor preview access', () => {
+  const context = { document: { addEventListener() {} }, window: {} };
+  vm.createContext(context);
+  vm.runInContext(fs.readFileSync('assets/site.js', 'utf8'), context);
+  const file = '09-studio-test-improve.md';
+  context.source = fs.readFileSync(`content/weeks/${file}`, 'utf8');
+  vm.runInContext(`var week = parseWeek(source, '${file}')`, context);
+  assert.equal(vm.runInContext("weekIsLocked(week, false, Date.parse('2026-11-27T09:59:59+09:00'))", context), true);
+  assert.equal(vm.runInContext("weekIsLocked(week, false, Date.parse('2026-11-27T10:00:00+09:00'))", context), false);
+  assert.equal(vm.runInContext("weekIsLocked(week, true, Date.parse('2026-11-26T12:00:00+09:00'))", context), false);
+});

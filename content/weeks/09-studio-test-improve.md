@@ -2,6 +2,7 @@
 week: 9
 act: QUESTION
 course_date: 2026-11-27
+opens_at: 2026-11-27T10:00:00+09:00
 date: Fri 27 Nov 2026 · P2 · 10:40–12:20
 date_ja: 2026年11月27日（金） · 2限 · 10:40–12:20
 title: Studio Day: Test and Improve
