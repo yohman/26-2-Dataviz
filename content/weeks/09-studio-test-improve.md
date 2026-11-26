@@ -30,10 +30,6 @@ tools_ja: 第8週の改訂案・共有ドキュメントやスライド・プロ
 
 - [Lecture slides](lecture.html?week=9) {slides}
 
-## Lecture Resources
-
-- [MIT 6.894: Visualization Design / MITの可視化デザイン課題](https://vis.mit.edu/classes/6.894/A1.html) {reference}
-
 ## In Class Activities
 
 ### Activity 1

@@ -28,11 +28,19 @@ test('historical sources, bilingual slides, chapters and homework render in the 
     assert.ok(html.length>80,`Missing slide: ${slide.id}`);
     if(slide.kind==='archive') assert.match(html,/<img src="https:.*alt="[^"]+"/);
   }
-  assert.match(renderWeek9(deck.slides[4]),/320 m.*west-end-walking-map\.pdf/);
+  for(const ja of [true,false]){
+    const combined=renderWeek9(deck.slides[4],{ja});
+    assert.match(combined,/w9-combined-rail/);
+    assert.match(combined,/w9-combined-walk/);
+    assert.match(combined,/320 m/);
+    assert.match(combined,/west-end-walking-map\.pdf/);
+  }
   assert.deepEqual(deck.slides.filter(slide=>slide.kind==='activity').map(slide=>slide.duration),[20,20,40]);
-  assert.deepEqual(deck.slides.slice(5,9).map(slide=>slide.id),['design-task','title-example','viewer-test','one-change']);
-  const example=renderWeek9(deck.slides[6],{ja:false});
+  assert.deepEqual(deck.slides.slice(5,9).map(slide=>slide.id),['title-example','design-task','viewer-test','one-change']);
+  const example=renderWeek9(deck.slides[5],{ja:false});
   assert.match(example,/FIFA rankings<\/p><h1>Do countries with more people rank higher in football\?/);
+  assert.match(deck.slides[5].notes.en,/1\. Question[\s\S]+2\. Visual choices and data[\s\S]+3\. Titles and labels[\s\S]+4\. Reason for the design[\s\S]+5\. Original insight/);
+  assert.doesNotMatch(source+JSON.stringify(deck),/MIT 6\.894|vis\.mit\.edu/i);
   for (const chapter of deck.chapters) assert.ok(deck.slides.some(slide=>slide.id===chapter.id));
   assert.match(renderWeek9(deck.slides.at(-1),{ja:false}),/homework-submit\.html\?week=9/);
   assert.match(source,/One person submits for the group/);

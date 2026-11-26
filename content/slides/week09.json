@@ -2,6 +2,8 @@
   "title": {"en":"Train or walk?","ja":"電車に乗る？ 歩く？"},
   "chapters": [
     {"id":"pocket-map","label":{"en":"Lecture · 20 min","ja":"講義 · 20分"}},
+    {"id":"walking-map","label":{"en":"Train or walk?","ja":"電車か、徒歩か？"}},
+    {"id":"title-example","label":{"en":"Group 6 example","ja":"第6班の例"}},
     {"id":"design-task","label":{"en":"Activity 1","ja":"活動1"}},
     {"id":"viewer-test","label":{"en":"Activity 2","ja":"活動2"}},
     {"id":"one-change","label":{"en":"Activity 3","ja":"活動3"}},
@@ -42,30 +44,33 @@
       "sources":[{"label":"Transport for London · Covent Garden","href":"https://art.tfl.gov.uk/labyrinth/artwork/covent-garden/"}]
     },
     {
-      "id":"walking-map", "kind":"walk",
-      "title":{"en":"About 4 min on foot","ja":"徒歩 約4分"},
-      "notes":{"en":"TfL’s West End walking map marks this route as a four-minute walk of 320 metres. The estimate depends on pace. A view for making transfers preserves connections. A view for deciding whether to walk needs distance and street routes. This is the same place seen through two different tasks.","ja":"TfLのウェストエンド徒歩地図では、この区間は320メートル、徒歩4分が目安。所要時間は歩く速さによって変わる。乗換案内に必要なのは駅のつながり。歩くかどうかを決めるには、地上の道順や距離が必要になる。場所が同じでも、目的によって必要な図は変わる。"},
+      "id":"walking-map", "kind":"combined-route",
+      "title":{"en":"Could you walk this Tube stop?","ja":"地下鉄で一駅。歩いて行ける？"},
+      "rail":{"en":"1 stop by Tube","ja":"地下鉄で1駅"},
+      "walk":{"en":"320 m on foot · about 4 min","ja":"徒歩320 m・約4分"},
+      "description":{"en":"Leicester Square and Covent Garden are connected by one Tube stop, shown as a solid line, and by a 320-metre walk of about four minutes, shown as a dotted line. Not to scale.","ja":"レスター・スクエアとコヴェント・ガーデンを結ぶ実線は地下鉄1駅、点線は約4分で歩ける320メートルを表す。縮尺なし。"},
+      "notes":{"en":"This classroom diagram combines one useful idea from each map. From Beck: keep the stations and their connection. From TfL’s walking map: add walking distance and time to the same two endpoints. The full street map stays in the source link. The combined view makes a new question possible: could I walk this stop? Four minutes is a walking estimate, not a comparison of door-to-door journey times.","ja":"この授業用の模式図は、二つの地図から役に立つ要素を一つずつ取り入れた。ベックの図からは駅と駅のつながり、TfLの徒歩地図からは同じ二駅の徒歩距離と所要時間。詳しい街路図は出典リンクで見られる。二つを一枚にすると「この一駅は歩ける？」という問いに答えられる。4分は徒歩の目安で、乗車にかかる時間との比較ではない。"},
       "sources":[{"label":"Transport for London · West End walking map (May 2025)","href":"https://content.tfl.gov.uk/west-end-walking-map.pdf"}]
     },
     {
-      "id":"design-task", "kind":"activity", "duration":20,
-      "title":{"en":"One group graphic","ja":"グループで一つの図"},
-      "steps":{"en":["In your usual team, show your Week 8 revisions.","Combine their strongest ideas in one graphic. Build on a draft if useful.","Save a screenshot of this first group draft."],"ja":["いつもの班で、第8週の改訂案を見せ合う。","それぞれのよいところを一つの図に取り入れる。既存の案を土台にしてもよい。","班の最初の試作を画像で保存する。"]},
-      "notes":{"en":"11:00–11:20. Keep the existing project teams. For example, Group 6’s scatterplot compared population and FIFA rank, while its map made individual countries easy to find. One graphic could retain the comparison and directly label a few important countries. Combining ideas does not mean pasting whole charts together. The first group draft becomes the “before” image.","ja":"11:00〜11:20。いつものプロジェクト班で作業する。たとえば第6班の散布図は人口とFIFAの順位を比較し、地図は個々の国を見つけやすくしていた。散布図の比較を残しつつ、注目する国に直接ラベルを付ければ、一つの図に両方のよさを取り入れられる。図をそのまま貼り合わせる必要はない。班の最初の試作が「改訂前」の画像になる。"},
+      "id":"title-example", "kind":"title-comparison", "annotationPage":7,
+      "title":{"en":"Do countries with more people rank higher in football?","ja":"人口が多い国ほど、\nサッカーの世界順位は高い？"},
+      "before":{"en":"FIFA rankings","ja":"FIFAランキング"},
+      "summary":{"en":"Keep the scatterplot. Borrow the map’s way of finding countries.","ja":"散布図で比較し、地図のよさを借りて国を見つけやすくする。"},
+      "notes":{"en":"Group 6 brought two Week 8 drafts: a scatterplot for comparing population and FIFA rank, and a map for finding individual countries. A possible group redesign is one scatterplot that labels a few countries directly. Retain all the relevant dots so those examples have context. Borrow the map’s ability to find a country, not the entire map. Then name the question this combined graphic actually answers. This is a proposed redesign, not something Group 6 already submitted.\n\nDESIGN CHECK\n\n1. Question. Does the title ask something specific and worth finding out? The plot can show whether larger populations tend to go with better ranks. It can’t tell us what causes a team to succeed.\n2. Visual choices and data. Can a reader tell what the dots and axes mean? Here, one dot is one country, x is population and y is rank. Use one ranking date and say if the population axis is logarithmic.\n3. Titles and labels. Can the graphic stand on its own? State that 1 is best, identify the ranking date and label meaningful examples directly.\n4. Reason for the design. Explain what each draft contributed and what you left out. Here, the scatterplot makes comparison possible and the direct labels make examples easy to locate. Geography is secondary for this question.\n5. Original insight. What does this combination help people notice? Label a real exception or a telling pair if the data supports it. Extra decoration is not the goal.","ja":"第6班の第8週の案は二つ。人口とFIFA順位を比較しやすい散布図と、個々の国を探しやすい地図。班の改訂案として、散布図を土台に、いくつかの国に直接ラベルを付ける方法がある。全体と比べられるよう、比較に必要な点は残す。地図そのものを貼り合わせるのではなく、国を探しやすいという長所を借りる。そのうえで、一枚にまとめた図から答えが読み取れる問いをタイトルにする。これは第6班の提出済み作品ではなく、改訂案の例。\n\nデザインの確認\n\n1. 問い：具体的で、答えを知りたくなるか。人口と順位の傾向は見えるが、強さの原因までは分からない。\n2. 表現とデータ：点や軸の意味は明確か。1点は1か国、横軸は人口、縦軸は順位。ランキングの時点をそろえ、対数軸なら明記する。\n3. タイトルとラベル：図だけで読めるか。1位が最上位であることとランキングの時点を示し、注目する国に直接ラベルを付ける。\n4. 選んだ理由：どの案から何を取り入れ、何を省いたか。散布図は比較に、直接ラベルは国を見つけるのに役立つ。この問いでは地理的な位置は主役ではない。\n5. 独自の気づき：組み合わせたことで何が見えたか。データに裏づけがあれば、意外な例外や対照的な二つの国を示す。飾りを増やす必要はない。"},
       "sources":[{"label":"Week 8 gallery · scatterplot","href":"gallery-work.html?id=8-442&week=8"},{"label":"Week 8 gallery · map","href":"gallery-work.html?id=8-422&week=8"}]
     },
     {
-      "id":"title-example", "kind":"title-comparison",
-      "title":{"en":"Do countries with more people rank higher in football?","ja":"人口が多い国ほど、\nサッカーの世界順位は高い？"},
-      "before":{"en":"FIFA rankings","ja":"FIFAランキング"},
-      "notes":{"en":"“FIFA rankings” names the topic. The question sets up a comparison between population and rank, drawing on Group 6’s actual project theme. A scatterplot can show whether there is a pattern and where exceptions appear. It cannot by itself tell us why a country performs well.","ja":"「FIFAランキング」はテーマの名前。第6班のプロジェクトをもとに問いに言い換えると、人口と順位の比較に目が向く。散布図から傾向や例外は読み取れるが、なぜその国が強いのかまでは分からない。"}
+      "id":"design-task", "kind":"activity", "duration":20, "annotationPage":6,
+      "title":{"en":"One group graphic","ja":"グループで一つの図"},
+      "steps":{"en":["In your usual team, show your Week 8 revisions.","Combine their strongest ideas in one graphic. Build on a draft if useful.","Save a screenshot of this first group draft."],"ja":["いつもの班で、第8週の改訂案を見せ合う。","それぞれのよいところを一つの図に取り入れる。既存の案を土台にしてもよい。","班の最初の試作を画像で保存する。"]},
+      "notes":{"en":"11:00–11:20. Keep the existing project teams. As in the Tube example, name something each draft makes easy to see, keep the strongest choices and combine them in one rough graphic. The first group draft becomes the “before” image. The question title comes next.","ja":"11:00〜11:20。いつものプロジェクト班で作業する。地下鉄の例と同じように、各案で見やすいものを挙げ、よいところを一つの試作に取り入れる。この試作が「改訂前」の画像になる。問いのタイトルは次の活動で考える。"}
     },
     {
       "id":"viewer-test", "kind":"activity", "duration":20,
       "title":{"en":"The question in the title","ja":"問いをタイトルに"},
       "steps":{"en":["What’s the most interesting question your graphic can answer?","Write two or three titles as questions. Read them aloud.","Choose the one that makes someone outside the team want to look."],"ja":["いまの図から答えが読み取れる、一番面白い問いは何か。","問いの形でタイトル案を二つか三つ書き、声に出して読む。","班の外の人も答えを知りたくなる問いを一つ選ぶ。"]},
-      "notes":{"en":"11:20–11:40. MIT 6.894 uses the question as the title of a self-contained graphic. Here the teams work from the prototype they already built. The question can reveal a surprising comparison, change, or exception. It should be specific and should not promise more than the data can show.","ja":"11:20〜11:40。MIT 6.894では、一枚で読める図に問いをタイトルとして付ける。この授業では、班でつくった試作を見ながら、意外な比較や変化、例外を見つけて問いにする。問いは具体的にし、データから分からないことまで約束しない。"},
-      "sources":[{"label":"MIT 6.894 · Visualization Design","href":"https://vis.mit.edu/classes/6.894/A1.html"}]
+      "notes":{"en":"11:20–11:40. Start from the prototype your team just built. The question title can reveal a surprising comparison, change, or exception. Make it specific and match it to what the data can show. The graphic should make sense to someone who has not heard the presentation.","ja":"11:20〜11:40。班でつくった試作を見ながら、意外な比較や変化、例外を問いにする。問いは具体的にし、データから分かることに絞る。発表を聞いていない人にも、図だけで伝わるようにする。"}
     },
     {
       "id":"one-change", "kind":"activity", "duration":40,
@@ -77,8 +82,7 @@
       "id":"homework", "kind":"homework",
       "title":{"en":"One group graphic, one question","ja":"グループで一つの図、一つの問い"},
       "steps":{"en":["One person submits for the group.","Upload the final graphic with its question title, your first group draft, and the data link.","In 3–5 sentences: what did you combine, why this question, and where is the answer?"],"ja":["代表者がグループで1回提出する。","問いをタイトルにした完成版、班の最初の試作、データのリンクを提出する。","組み合わせた案、問いを選んだ理由、図のどこから答えが読めるかを3〜5文で書く。"]},
-      "notes":{"en":"Put the group name at the start of the explanation. The final graphic goes in image 1 so it appears first in the gallery. Image 2 is the first group draft, before the title and final changes. The title on the final graphic is the question that opens next week’s midterm presentation.","ja":"説明の冒頭にグループ名を書く。ギャラリーの最初に表示されるよう、画像1に完成版を入れる。画像2はタイトルや仕上げの変更を加える前の、班でつくった最初の試作。完成版に付けた問いが、次回の中間発表の導入になる。"},
-      "sources":[{"label":"MIT 6.894 · Visualization Design rationale","href":"https://vis.mit.edu/classes/6.894/A1.html"}]
+      "notes":{"en":"Put the group name at the start of the explanation. The final graphic goes in image 1 so it appears first in the gallery. Image 2 is the first group draft, before the title and final changes. The title on the final graphic is the question that opens next week’s midterm presentation.","ja":"説明の冒頭にグループ名を書く。ギャラリーの最初に表示されるよう、画像1に完成版を入れる。画像2はタイトルや仕上げの変更を加える前の、班でつくった最初の試作。完成版に付けた問いが、次回の中間発表の導入になる。"}
     }
   ]
 }

@@ -13,12 +13,21 @@
 .w9-route span::after{content:"";position:absolute;bottom:-23px;width:32px;height:32px;background:#f8f4ea;border:7px solid #255071;border-radius:50%;left:0}
 .w9-route span:last-child::after{left:auto;right:0}
 .w9-route-slide h1{font:650 156px/1.04 var(--serif);letter-spacing:-.055em;margin:0}
-.w9-route-slide p,.w9-walk-detail{margin:0;font-size:48px;font-weight:650}
-.w9-route-slide--walk{background:#242e2d;color:#f8f4ea}
-.w9-route-slide--walk .w9-route{border-color:#d5ac58}
-.w9-route-slide--walk .w9-route span::after{border-color:#d5ac58;background:#242e2d}
-.w9-walk-detail{display:flex;flex-wrap:wrap;gap:14px 45px;align-items:baseline;justify-content:center}
-.w9-walk-detail a{color:#fcda91;font-size:30px;text-underline-offset:.16em}
+.w9-route-slide p{margin:0;font-size:48px;font-weight:650}
+.w9-combined-route{height:100%;display:grid;align-content:center;gap:74px;padding:70px 140px;background:#f8f4ea;color:#29251d;text-align:center}
+.w9-combined-route h1{font:650 91px/1.1 var(--serif);letter-spacing:-.035em;margin:0;text-wrap:balance}
+html[lang=ja] .w9-combined-route h1{font-size:78px}
+.w9-combined-route figure{margin:0}
+.w9-combined-route svg{width:100%;height:auto;display:block;overflow:visible;font-family:var(--sans)}
+.w9-combined-route path{fill:none;stroke-width:10;stroke-linecap:round}
+.w9-combined-route circle{fill:#f8f4ea;stroke:#255071;stroke-width:7}
+.w9-combined-rail{stroke:#255071}
+.w9-combined-walk{stroke:#977039;stroke-dasharray:1 22}
+.w9-combined-station{fill:#29251d;font-size:37px;font-weight:750}
+.w9-combined-rail-label{fill:#255071;font-size:38px;font-weight:750}
+.w9-combined-walk-label{fill:#785425;font-size:49px;font-weight:750}
+.w9-combined-route figcaption{margin-top:25px;font-size:25px;color:#695f51}
+.w9-combined-route figcaption a{color:inherit;text-underline-offset:.16em}
 .w9-task{padding-inline:150px}
 .w9-task-head{display:flex;align-items:baseline;justify-content:space-between;gap:36px;border-bottom:3px solid #c7bba7;padding-bottom:31px}
 .w9-task-head h1{font:650 83px/1.14 var(--serif);letter-spacing:-.035em;margin:0;overflow-wrap:break-word}
@@ -34,3 +43,4 @@
 .w9-title-comparison p{font:600 39px/1.2 var(--sans);color:#695f51;margin:0}
 .w9-title-comparison h1{font:650 103px/1.16 var(--serif);letter-spacing:-.043em;margin:0;text-wrap:balance;color:#912f43}
 html[lang=ja] .w9-title-comparison h1{font-size:86px;white-space:pre-line;text-wrap:wrap}
+.w9-title-comparison .w9-title-summary{max-width:32em;font-size:34px;line-height:1.45;color:#29251d}
