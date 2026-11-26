@@ -1,4 +1,5 @@
 import {fifaSnapshot} from './week09-fifa-data.mjs?v=20261127';
+import {renderTubeSlide,bindTubeSlide} from './week09-tube.mjs?v=20261127';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const external=(href,body,attrs='')=>`<a href="${esc(href)}" target="_blank" rel="noopener noreferrer" ${attrs}>${body}</a>`;
@@ -66,27 +67,7 @@ export function renderWeek9(slide,{ja=true}={}) {
   if(slide.kind==='fifa-evidence') {
     return `<section class="w9-fifa-evidence"><h1>${title}</h1>${fifaPlot(ja)}<p class="w9-fifa-source">${ja?'第6班の公開データ：FIFA順位 2026年10月7日・人口 2025年':'Group 6 data · FIFA ranking 7 Oct 2026 · 2025 population'}</p></section>`;
   }
-  if(slide.kind==='combined-route') {
-    return `<section class="w9-combined-route">
-      <div class="w9-route-answer">
-        <header><h1>${ja?'約3分':'~3 min'}</h1><p>${ja?'ホームへの移動・待ち時間・出口までで、これより短ければ地下鉄が速い。':'The Tube wins if entry, waiting and exit take less than this.'}</p></header>
-        <dl>
-          <div class="w9-walk-time"><dt>${ja?'徒歩（TfLの目安）':'Walking (TfL estimate)'}</dt><dd><strong>${ja?'約4分':'~4 min'}</strong></dd></div>
-          <div class="w9-rail-time"><dt>${ja?'地下鉄で1駅':'One stop on the Tube'}</dt><dd><strong>${ja?'乗車 約1分':'~1 min aboard'}</strong><small>${ja?'＋ 入場・待ち時間・退場':'+ entry, waiting and exit'}</small></dd></div>
-        </dl>
-      </div>
-      <figure class="w9-geographic-map">
-        <img src="${esc(slide.image)}" alt="${esc(t(slide.description))}" width="1040" height="900">
-        <svg viewBox="0 0 1040 900" aria-hidden="true">
-          <text class="w9-map-station" x="268" y="726">Leicester Square</text>
-          <text class="w9-map-station" x="1020" y="224" text-anchor="end">Covent Garden</text>
-          <text class="w9-map-road" x="340" y="584" transform="rotate(-30 340 584)">Cranbourn St</text>
-          <text class="w9-map-road" x="615" y="400" transform="rotate(-35 615 400)">Long Acre</text>
-        </svg>
-        <figcaption>${ja?'赤線：徒歩ルート例':'Red line: example walking route'}  /  ${external('https://www.openstreetmap.org/copyright','© OpenStreetMap contributors')}  /  ${external(slide.sources[0].href,'TfL')}</figcaption>
-      </figure>
-    </section>`;
-  }
+  if(slide.kind==='combined-route')return renderTubeSlide(slide,ja);
   if(slide.kind==='archive') {
     const opening=slide.id==='pocket-map'||slide.id==='beck-map';
     return `<figure class="w9-archive w9-archive--${esc(slide.id)}${opening?' w9-archive--opening':''}">${external(slide.sources[0].href,
@@ -104,7 +85,8 @@ export function renderWeek9(slide,{ja=true}={}) {
   return '';
 }
 
-export function bindWeek9(slide) {
+export function bindWeek9(slide,{s,ja}={}) {
+  if(s?.kind==='combined-route')bindTubeSlide(slide.querySelector('[data-tube-slide]'),s,ja);
   const img=slide.querySelector('.w9-archive img,.w9-match-photo img');
   if(!img)return;
   const fallback=()=>{img.hidden=true;slide.querySelector('.w9-image-fallback').hidden=false;};

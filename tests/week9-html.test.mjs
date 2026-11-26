@@ -5,6 +5,8 @@ import vm from 'node:vm';
 import {safeDeckReturn,studioDeckOpening} from '../assets/html-lecture-model.mjs';
 import {fifaEvidence,renderWeek9} from '../assets/week09-visuals.mjs';
 import {fifaSnapshot} from '../assets/week09-fifa-data.mjs';
+import {tubeBreakEven,tubeJourney,tubeTimeline,tubeUrls} from '../assets/week09-tube.mjs';
+import {tubeStations} from '../assets/week09-tube-data.mjs';
 
 const path='content/weeks/09-studio-test-improve.md';
 const source=fs.readFileSync(path,'utf8');
@@ -37,7 +39,10 @@ test('historical sources, bilingual slides, chapters and homework render in the 
     assert.match(combined,/w9-geographic-map/);
     assert.match(combined,/w9-rail-time/);
     assert.match(combined,/w9-walk-time/);
-    assert.match(combined,ja?/約3分/:/~3 min/);
+    assert.match(combined,ja?/私たちの改訂案/:/Our proposed redesign/);
+    assert.match(combined,ja?/≈ 3分/:/≈ 3 min/);
+    assert.match(combined,/w9-tube-rail-bar" style="--length:25%"/);
+    assert.match(combined,/w9-tube-budget" style="--length:75%"/);
     assert.match(combined,/www\.openstreetmap\.org\/copyright/);
   }
   const streetMap=fs.readFileSync(deck.slides[4].image,'utf8');
@@ -59,6 +64,26 @@ test('historical sources, bilingual slides, chapters and homework render in the 
   const submission=fs.readFileSync('assets/homework-submissions.js','utf8');
   assert.match(submission,/Your question title/);
   assert.match(submission,/First group draft/);
+});
+
+test('Tube comparison keeps the time allowance separate from measured time',()=>{
+  assert.equal(tubeBreakEven(4,1),3);
+  assert.equal(tubeBreakEven(4,4),0);
+  assert.equal(tubeBreakEven(4,5),-1);
+  assert.equal(tubeBreakEven(undefined,5),null);
+  assert.match(tubeTimeline({walk:{minutes:4},rail:{minutes:7}},false),/Walking has the edge/);
+  assert.match(tubeTimeline({walk:null,rail:{minutes:7}},false),/No comparison yet/);
+  assert.ok(tubeStations.length>250);
+  assert.equal(tubeUrls('x','940GZZLUCGN'),null);
+  assert.equal(tubeUrls('940GZZLUCGN','940GZZLUCGN'),null);
+  const [walk,rail]=tubeUrls('940GZZLULSQ','940GZZLUCGN');
+  assert.match(walk,/51\.511386.*mode=walking/);
+  assert.match(rail,/940GZZLULSQ\/to\/940GZZLUCGN\?mode=tube/);
+  const geometry={lineString:'[[51.5113,-0.12],[51.512,-0.13]]'};
+  const payload={journeys:[{duration:6,legs:[{mode:{id:'walking'},path:geometry}]},{duration:1,legs:[{mode:{id:'tube'},path:geometry}]}]};
+  assert.equal(tubeJourney(payload,'walking').minutes,6);
+  assert.equal(tubeJourney(payload,'tube').minutes,1);
+  assert.equal(tubeJourney({journeys:[payload.journeys[0]]},'tube'),null);
 });
 
 test('FIFA evidence uses the dated Group 6 data and appears after the question',()=>{

@@ -1,6 +1,6 @@
 import {clampSlide,scatterMarks,lineSegments,safeDeckReturn,studioDeckOpening} from './html-lecture-model.mjs?v=week9-beck-20261126';
 import {renderWeek8,bindWeek8} from './week08-visuals.mjs?v=marker-20261120';
-import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=fifa-evidence-20261127';
+import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=tube-redesign-20261127';
 const $=s=>document.querySelector(s),params=new URLSearchParams(location.search),stage=$('[data-stage]'),surface=$('[data-surface]'),slide=$('[data-slide]'),viewer=$('.html-deck');
 const requestedWeek=Number(params.get('week')),week=[8,9].includes(requestedWeek)?requestedWeek:7;
 const allowedReturn=safeDeckReturn(params.get('return'),week);
@@ -57,7 +57,7 @@ function renderVisual(s){
 let viewportControl,ink;
 function resize(reset=false){if(!deck)return;const fit=Math.min(stage.clientWidth/1600,stage.clientHeight/900);surface.style.width=`${1600*fit}px`;surface.style.height=`${900*fit}px`;slide.style.transform=`scale(${fit})`;viewportControl.layout(1600*fit,900*fit,{reset});ink.rendered(deck.slides[page-1].annotationPage??page);}
 function render(value=page,{url=true}={}){
- if(!deck)return;const next=clampSlide(value,deck.slides.length),changed=next!==page;page=next;const s=deck.slides[page-1];ink.loading();slide.className=`html-slide slide-${s.kind}`;slide.dataset.slideId=s.id;slide.innerHTML=renderVisual(s);slide.setAttribute('aria-label',`${page}. ${tr(s.title)}`);if(week===8)bindWeek8(slide,{s,data,ja:ja()});if(week===9)bindWeek9(slide);surface.hidden=false;$('[data-loading]').hidden=true;resize(changed);
+ if(!deck)return;const next=clampSlide(value,deck.slides.length),changed=next!==page;page=next;const s=deck.slides[page-1];ink.loading();slide.className=`html-slide slide-${s.kind}`;slide.dataset.slideId=s.id;slide.innerHTML=renderVisual(s);slide.setAttribute('aria-label',`${page}. ${tr(s.title)}`);if(week===8)bindWeek8(slide,{s,data,ja:ja()});if(week===9)bindWeek9(slide,{s,ja:ja()});surface.hidden=false;$('[data-loading]').hidden=true;resize(changed);
  $('[data-page-input]').value=page;$('[data-page-input]').max=deck.slides.length;$('[data-page-total]').textContent=`/ ${deck.slides.length}`;$('[data-previous]').disabled=page===1;$('[data-next]').disabled=page===deck.slides.length;
  document.documentElement.lang=lang;document.title=`Week ${week} · ${tr(deck.title)}`;$('[data-deck-title]').textContent=tr(deck.title);$('[data-back]').textContent=ja()?`← 第${week}週`:`← Week ${week}`;$('[data-back]').href=deckReturn();$('.wordmark').innerHTML=`<span>DV / 26–2</span> ${ja()?'データを見る':'Seeing Data'}`;$('[data-language-toggle]').textContent=ja()?'EN':'JP';$('[data-language-toggle]').setAttribute('aria-label',ja()?'Switch to English':'日本語に切り替える');
  const edit=$('[data-deck-edit]');
