@@ -15,31 +15,45 @@ export function fifaEvidence(rows=fifaSnapshot.rows) {
 
 function fifaPlot(ja) {
   const {rows}=fifaSnapshot,{cut,halves}=fifaEvidence(rows);
-  const x=pop=>120+Math.log10(pop/30000)/Math.log10(1600000000/30000)*994;
-  const y=rank=>176+(rank-1)/210*566;
+  const start=145,end=1515;
+  const x=pop=>start+Math.log10(pop/30000)/Math.log10(1600000000/30000)*(end-start);
+  const y=rank=>354+(rank-1)/210*421;
+  const split=x(cut);
   const ticks=ja?['10万','100万','1,000万','1億','10億']:['100k','1m','10m','100m','1bn'];
-  const countries=ja?{ISL:'アイスランド',CPV:'カーボベルデ',HRV:'クロアチア',IND:'インド'}:{ISL:'Iceland',CPV:'Cabo Verde',HRV:'Croatia',IND:'India'};
-  const labels={ISL:[-22,51],CPV:[31,58],HRV:[14,-21],IND:[-22,39]};
+  const countries=ja?{ISL:'アイスランド',CPV:'カーボベルデ',IND:'インド'}:{ISL:'Iceland',CPV:'Cabo Verde',IND:'India'};
+  const labels={ISL:[-27,44],CPV:[31,40],IND:[-24,40]};
   const label=(x,y,text,cls='',anchor='start')=>`<text class="${cls}" x="${x}" y="${y}" text-anchor="${anchor}">${esc(text)}</text>`;
-  const marks=rows.map(([id,rank,pop])=>`<circle class="${rank<=50?'w9-fifa-top':'w9-fifa-dot'}" cx="${x(pop)}" cy="${y(rank)}" r="${rank<=50?5.7:4.7}" />`).join('');
+  const drawDot=([,rank,pop])=>`<circle class="${rank<=50?'w9-fifa-top '+(pop<cut?'w9-fifa-less':'w9-fifa-more'):'w9-fifa-dot'}" cx="${x(pop)}" cy="${y(rank)}" r="${rank<=50?7:4.2}"/>`;
+  const marks=[...rows.filter(row=>row[1]>50),...rows.filter(row=>row[1]<=50)].map(drawDot).join('');
   const highlights=rows.filter(([id])=>countries[id]).map(([id,rank,pop])=>{
     const cx=x(pop),cy=y(rank),[dx,dy]=labels[id];
-    return `<path class="w9-fifa-leader" d="M${cx},${cy} l${dx*.77},${dy*.79}"/><circle class="w9-fifa-highlight" cx="${cx}" cy="${cy}" r="8"/>${label(cx+dx,cy+dy,`${countries[id]} ${ja?`${rank}位`:`#${rank}`}`,'w9-fifa-label',dx<0?'end':'start')}`;
+    return `<path class="w9-fifa-leader" d="M${cx},${cy} l${dx*.78},${dy*.79}"/><circle class="w9-fifa-highlight" cx="${cx}" cy="${cy}" r="6"/>${label(cx+dx,cy+dy,`${countries[id]} ${ja?`${rank}位`:`#${rank}`}`,'w9-fifa-label',dx<0?'end':'start')}`;
   }).join('');
-  const totals=halves.map(({teams,top},i)=>`<div class="w9-fifa-ratio"><dt>${ja?['人口の少ない方の半分','人口の多い方の半分'][i]:['Less populous half','More populous half'][i]}</dt><dd><strong>${Math.round(top/teams*100)}%</strong> <small>${ja?`${teams}チーム中${top}`:`${top} of ${teams} teams`}</small></dd></div>`).join('');
-  const alt=ja?'人口が少ない方の半分では101チーム中8、多い方の半分では102チーム中39が、男子FIFA上位50位に入った。':'Scatterplot: 8 of 101 teams in the less populous half and 39 of 102 in the more populous half rank in the top 50.';
-  return `<svg viewBox="0 0 1154 854" role="img" aria-label="${alt}">
-    <rect x="120" y="${y(1)}" width="994" height="${y(50)-y(1)}" class="w9-fifa-top-band"/>
-    ${[1,50,100,150,200].map(rank=>`<path class="w9-fifa-grid" d="M120 ${y(rank)}H1114"/>${label(100,y(rank)+8,rank,'w9-fifa-axis','end')}`).join('')}
-    ${[1e5,1e6,1e7,1e8,1e9].map((pop,i)=>`<path class="w9-fifa-grid" d="M${x(pop)} ${y(1)}V${y(211)}"/>${label(x(pop),y(211)+34,ticks[i],'w9-fifa-axis','middle')}`).join('')}
-    <path class="w9-fifa-cut" d="M${x(cut)} ${y(1)-4}V${y(211)}"/>
-    ${label(120,140,ja?'男子FIFA世界ランキング（1位が最上位）':'FIFA men’s world rank (1 is best)','w9-fifa-axis-title')}
-    ${label(x(cut)-11,163,ja?'人口で二分':'Population midpoint','w9-fifa-axis','end')}
-    ${label(128,221,ja?'上位50位':'Top 50','w9-fifa-band-label')}
+  const totals=halves.map(({teams,top},i)=>{
+    const left=i?split:start,right=i?end:split,mid=(left+right)/2;
+    const name=ja?['人口の少ない方の半分','人口の多い方の半分'][i]:['Less populous half','More populous half'][i];
+    return `<g class="${i?'w9-fifa-more':'w9-fifa-less'}">
+      <rect x="${left}" y="${y(1)}" width="${right-left}" height="${y(50)-y(1)}" class="w9-fifa-top-band"/>
+      <path d="M${left} ${y(1)}H${right}" class="w9-fifa-band-rule"/>
+      ${label(mid,174,name,'w9-fifa-half-label','middle')}
+      ${label(mid,263,Math.round(top/teams*100)+'%','w9-fifa-percent','middle')}
+      ${label(mid,314,ja?`${teams}チーム中${top}`:`${top} of ${teams} teams`,'w9-fifa-count','middle')}
+      <path d="M${mid} 330V${y(1)}" class="w9-fifa-band-rule"/>
+    </g>`;
+  }).join('');
+  const rates=halves.map(({teams,top})=>Math.round(top/teams*100));
+  const alt=ja?`人口が少ない方の半分では${rates[0]}%、多い方の半分では${rates[1]}%が男子FIFA上位50位に入った。`:`Scatterplot: ${rates[0]}% of the less populous half and ${rates[1]}% of the more populous half rank in the FIFA men’s top 50.`;
+  return `<svg class="w9-fifa-plot" viewBox="0 0 1600 900" role="img" aria-label="${alt}">
+    ${[50,100,150,200].map(rank=>`<path class="w9-fifa-grid" d="M${start} ${y(rank)}H${end}"/>`).join('')}
+    ${[1e5,1e6,1e7,1e8,1e9].map((pop,i)=>`<path class="w9-fifa-grid" d="M${x(pop)} ${y(1)}V${y(211)}"/>${label(x(pop),y(211)+30,ticks[i],'w9-fifa-axis','middle')}`).join('')}
+    ${totals}
+    <path class="w9-fifa-cut" d="M${split} 153V${y(211)}"/>
+    ${[1,50,100,150,200].map(rank=>label(start-17,y(rank)+7,rank,'w9-fifa-axis','end')).join('')}
+    ${label(start,337,ja?'男子FIFA順位':'FIFA men’s rank','w9-fifa-axis-title')}
+    ${label(start-16,(y(1)+y(50))/2+6,ja?'上位50位':'Top 50','w9-fifa-band-label','end')}
     ${marks}${highlights}
-    ${label(617,826,ja?'人口（対数軸）':'Population (log scale)','w9-fifa-axis-title','middle')}
-    </svg>
-    <aside class="w9-fifa-result"><p>${ja?'上位50位に入った割合':'Share in the top 50'}</p><dl>${totals}</dl></aside>`;
+    ${label((start+end)/2,851,ja?'人口（対数軸）':'Population (log scale)','w9-fifa-axis-title','middle')}
+    </svg>`;
 }
 
 function tokyoSlide(slide,ja,t){

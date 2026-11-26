@@ -129,7 +129,11 @@ test('Tube comparison keeps the time allowance separate from measured time',()=>
 test('FIFA evidence uses the dated Group 6 data and appears after the question',()=>{
   assert.equal(fifaSnapshot.rankingDate,'2026-10-07');
   assert.deepEqual(fifaEvidence().halves,[{teams:101,top:8},{teams:102,top:39}]);
-  assert.match(renderWeek9(deck.slides.find(s=>s.id==='fifa-evidence'),{ja:false}),/8 of 101 teams[\s\S]+39 of 102 teams/);
+  const chart=renderWeek9(deck.slides.find(s=>s.id==='fifa-evidence'),{ja:false});
+  assert.match(chart,/w9-fifa-plot[\s\S]+8 of 101 teams[\s\S]+39 of 102 teams[\s\S]+<\/svg>/);
+  assert.equal([...chart.matchAll(/<circle class="w9-fifa-top w9-fifa-less"/g)].length,8);
+  assert.equal([...chart.matchAll(/<circle class="w9-fifa-top w9-fifa-more"/g)].length,39);
+  assert.equal([...chart.matchAll(/<circle class="w9-fifa-dot"/g)].length,156);
   for(const s of deck.slides){
     for(const path of [s.image,...(s.images||[]).map(i=>i.src)].filter(path=>path?.startsWith('assets/'))){
       assert.ok(fs.statSync(path).size>1000,path);
