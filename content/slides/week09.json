@@ -48,30 +48,36 @@
       "sources":[{"label":"Transport for London · West End walking map (May 2025)","href":"https://content.tfl.gov.uk/west-end-walking-map.pdf"}]
     },
     {
-      "id":"design-task", "kind":"activity", "duration":25,
-      "title":{"en":"One question, one graphic","ja":"一つの問い、一つの図"},
-      "steps":{"en":["Show your Week 8 revisions. Agree on a viewer and one question.","Give the viewer one task: find, compare, or trace something.","Make one draft with that question as its title."],"ja":["第8週の改訂案を見せ合い、誰に向けた図か、どんな問いに答えるかを決める。","見つける、比べる、たどるなど、見る人に試してほしいことを一つ決める。","問いをタイトルにした図を一つ試作する。"]},
-      "notes":{"en":"11:00–11:25. MIT’s visualization design assignment starts with a specific question, uses it as the graphic’s title, and asks for one self-contained image. The in-class prototype can be a shared slide, a sketch shown on screen, or an existing draft adapted from Week 8. One small, answerable question is enough.","ja":"11:00〜11:25。MITの可視化デザイン課題は、具体的な問いを決め、それを図のタイトルにし、単独で読める画像を一枚つくる。授業内の試作は、共有スライドや画面で見せるスケッチ、第8週の改訂案を活用したものでもよい。小さくても、答えられる問いが一つあればよい。"},
-      "sources":[{"label":"MIT 6.894 · Visualization Design","href":"https://vis.mit.edu/classes/6.894/A1.html"}]
+      "id":"design-task", "kind":"activity", "duration":20,
+      "title":{"en":"One group graphic","ja":"グループで一つの図"},
+      "steps":{"en":["In your usual team, show your Week 8 revisions.","Combine their strongest ideas in one graphic. Build on a draft if useful.","Save a screenshot of this first group draft."],"ja":["いつもの班で、第8週の改訂案を見せ合う。","それぞれのよいところを一つの図に取り入れる。既存の案を土台にしてもよい。","班の最初の試作を画像で保存する。"]},
+      "notes":{"en":"11:00–11:20. Keep the existing project teams. For example, Group 6’s scatterplot compared population and FIFA rank, while its map made individual countries easy to find. One graphic could retain the comparison and directly label a few important countries. Combining ideas does not mean pasting whole charts together. The first group draft becomes the “before” image.","ja":"11:00〜11:20。いつものプロジェクト班で作業する。たとえば第6班の散布図は人口とFIFAの順位を比較し、地図は個々の国を見つけやすくしていた。散布図の比較を残しつつ、注目する国に直接ラベルを付ければ、一つの図に両方のよさを取り入れられる。図をそのまま貼り合わせる必要はない。班の最初の試作が「改訂前」の画像になる。"},
+      "sources":[{"label":"Week 8 gallery · scatterplot","href":"gallery-work.html?id=8-442&week=8"},{"label":"Week 8 gallery · map","href":"gallery-work.html?id=8-422&week=8"}]
+    },
+    {
+      "id":"title-example", "kind":"title-comparison",
+      "title":{"en":"Do countries with more people rank higher in football?","ja":"人口が多い国ほど、\nサッカーの世界順位は高い？"},
+      "before":{"en":"FIFA rankings","ja":"FIFAランキング"},
+      "notes":{"en":"“FIFA rankings” names the topic. The question sets up a comparison between population and rank, drawing on Group 6’s actual project theme. A scatterplot can show whether there is a pattern and where exceptions appear. It cannot by itself tell us why a country performs well.","ja":"「FIFAランキング」はテーマの名前。第6班のプロジェクトをもとに問いに言い換えると、人口と順位の比較に目が向く。散布図から傾向や例外は読み取れるが、なぜその国が強いのかまでは分からない。"}
     },
     {
       "id":"viewer-test", "kind":"activity", "duration":20,
-      "title":{"en":"The viewer’s task","ja":"見る人に試してもらう"},
-      "steps":{"en":["Show the draft and give the other group the task, without a walkthrough.","Where did they look? What did they miss or read differently?","Record one observation. Switch after 10 minutes."],"ja":["試作を見せ、課題だけを伝える。図の読み方は先に説明しない。","相手はどこを見たか。何を見落としたか、どう読み取ったか。","気づきを一つ記録し、10分で交代する。"]},
-      "notes":{"en":"11:25–11:45. Ten minutes per group. A test gives peers something specific to do, such as finding the highest rate or tracing a link, rather than asking whether they like the design. Hesitations, wrong turns, or correct readings all give useful evidence. MIT’s project milestone pairs working but rough prototypes with peer design critiques.","ja":"11:25〜11:45。1グループ10分。好きかどうかを聞くのではなく、最も高い割合を探す、関係をたどるなど、具体的な課題を試してもらう。迷った箇所も、誤読も、正しく読めた箇所も手がかりになる。MITのプロジェクト中間段階でも、完成前の試作を同級生同士で講評する。"},
-      "sources":[{"label":"MIT 6.859 · Milestone review and peer design critique","href":"https://vis.csail.mit.edu/classes/6.859/FinalProject/#milestone-review-week-12"}]
+      "title":{"en":"The question in the title","ja":"問いをタイトルに"},
+      "steps":{"en":["What’s the most interesting question your graphic can answer?","Write two or three titles as questions. Read them aloud.","Choose the one that makes someone outside the team want to look."],"ja":["いまの図から答えが読み取れる、一番面白い問いは何か。","問いの形でタイトル案を二つか三つ書き、声に出して読む。","班の外の人も答えを知りたくなる問いを一つ選ぶ。"]},
+      "notes":{"en":"11:20–11:40. MIT 6.894 uses the question as the title of a self-contained graphic. Here the teams work from the prototype they already built. The question can reveal a surprising comparison, change, or exception. It should be specific and should not promise more than the data can show.","ja":"11:20〜11:40。MIT 6.894では、一枚で読める図に問いをタイトルとして付ける。この授業では、班でつくった試作を見ながら、意外な比較や変化、例外を見つけて問いにする。問いは具体的にし、データから分からないことまで約束しない。"},
+      "sources":[{"label":"MIT 6.894 · Visualization Design","href":"https://vis.mit.edu/classes/6.894/A1.html"}]
     },
     {
-      "id":"one-change", "kind":"activity", "duration":35,
-      "title":{"en":"One design change","ja":"デザインを一つ変える"},
-      "steps":{"en":["Save the version you tested.","Change one choice: a label, the order, a mark, or what gets attention.","Try the same task again. Keep both versions for the midterm."],"ja":["試した版を保存する。","ラベル、順番、図形、強調する箇所など、変更を一つ試す。","同じ課題でもう一度確かめ、前後の図を中間発表用に残す。"]},
-      "notes":{"en":"11:45–12:20. A useful change can add a needed label or move a secondary series out of the main view. Removing detail should not conceal relevant context or change the meaning of the evidence. Both versions and the test observation make a concrete example for the Dec. 4 group midterm. Dec. 11 turns to maps and spatial thinking, and Dec. 18 to networks and multiple views.","ja":"11:45〜12:20。必要なラベルを加えたり、副次的な系列を主図から移したりするだけでも改善になる。情報を減らすときは、必要な背景やデータの意味を損なわない。前後の図と観察メモは12月4日の中間グループ発表に使える。12月11日は地図と空間的思考、12月18日はネットワークと複数ビュー。"}
+      "id":"one-change", "kind":"activity", "duration":40,
+      "title":{"en":"The answer in the graphic","ja":"答えが伝わる図"},
+      "steps":{"en":["Put the question on the graphic. Point to the evidence that answers it.","If the answer is hard to see, change the emphasis or narrow the question.","Save one titled prototype for the midterm."],"ja":["問いをタイトルにする。答えの根拠が図のどこにあるか確かめる。","答えが見えにくければ、強調する箇所を変えるか、問いを絞る。","中間発表に向け、タイトル付きの試作を一つ保存する。"]},
+      "notes":{"en":"11:40–12:20. The final 10 minutes are available for a few volunteers to read their old and new titles from their seats. No team pairing or room movement is needed. One group graphic and its question form the opening of the Dec. 4 midterm presentation. Dec. 11 turns to maps, and Dec. 18 to networks and multiple views.","ja":"11:40〜12:20。最後の10分は、希望する数班が席から変更前と変更後のタイトルを紹介できる。班同士のペアや教室内の移動は不要。班でまとめた一つの図と問いが、12月4日の中間発表の出発点になる。12月11日は地図、12月18日はネットワークと複数ビュー。"}
     },
     {
       "id":"homework", "kind":"homework",
-      "title":{"en":"Before and after","ja":"改訂の前と後"},
-      "steps":{"en":["One person submits for the group.","Upload the tested and revised graphics. Include the data link.","Write 3–5 sentences: the viewer’s task, what you changed, and what became easier or harder to see."],"ja":["代表者がグループで1回提出する。","試した版と改訂版の画像、データのリンクを添える。","見る人の課題、変更した点、見やすくなった点や見えにくくなった点を3〜5文で書く。"]},
-      "notes":{"en":"Put the group name at the start of the explanation. The revised image should be understandable without the rationale. In the write-up, connect the change to what peers actually did or noticed, and name any detail that the new view de-emphasizes. The revised version goes in image 1 so it appears first in the gallery.","ja":"説明の冒頭にグループ名を書く。改訂版は、説明文と切り離しても読めるものにする。変更理由は、相手が実際に見たこと・したことと結びつけ、新しい図で強調しなくなった情報があれば書く。ギャラリーの最初に表示されるよう、画像1には改訂版を入れる。"},
+      "title":{"en":"One group graphic, one question","ja":"グループで一つの図、一つの問い"},
+      "steps":{"en":["One person submits for the group.","Upload the final graphic with its question title, your first group draft, and the data link.","In 3–5 sentences: what did you combine, why this question, and where is the answer?"],"ja":["代表者がグループで1回提出する。","問いをタイトルにした完成版、班の最初の試作、データのリンクを提出する。","組み合わせた案、問いを選んだ理由、図のどこから答えが読めるかを3〜5文で書く。"]},
+      "notes":{"en":"Put the group name at the start of the explanation. The final graphic goes in image 1 so it appears first in the gallery. Image 2 is the first group draft, before the title and final changes. The title on the final graphic is the question that opens next week’s midterm presentation.","ja":"説明の冒頭にグループ名を書く。ギャラリーの最初に表示されるよう、画像1に完成版を入れる。画像2はタイトルや仕上げの変更を加える前の、班でつくった最初の試作。完成版に付けた問いが、次回の中間発表の導入になる。"},
       "sources":[{"label":"MIT 6.894 · Visualization Design rationale","href":"https://vis.mit.edu/classes/6.894/A1.html"}]
     }
   ]

@@ -9,19 +9,19 @@ title: Studio Day: Test and Improve
 title_ja: スタジオデー：試して改善する
 look: Train or walk?
 look_ja: 電車に乗る？ 歩く？
-learn: design one graphic for one question, test it with peers, and revise one choice
-learn_ja: 一つの問いに答える図をつくり、別のグループに試してもらい、デザインを一つ見直す
+learn: combine your team’s ideas into one graphic, then give it a question title worth reading
+learn_ja: チームの案を一つの図にまとめ、続きを見たくなる問いをタイトルにする
 lecture_gallery_week: 8
-schedule: 10:40–11:00|Harry Beck’s Tube map|Train or walk?;11:00–11:25|Group prototype|One question, one graphic;11:25–12:20|Test and revise|Give peers a task, then make one change
-schedule_ja: 10:40–11:00|ベックの地下鉄路線図|電車に乗る？ 歩く？;11:00–11:25|グループ試作|一つの問い、一つの図;11:25–12:20|試して改善|別のグループに試してもらい、一つ変更する
-in_class: Open your own Week 8 revision on your device. You’ll use it to build and test a group prototype in class.
-in_class_ja: 第8週に各自が改訂した図を端末で開きます。それをもとに、授業中にグループで試作し、伝わるかを確かめます。
-homework: Finish the redesign you tested in class. One person submits for the group.
-homework_ja: 授業で試した図を仕上げます。グループの代表者が1回提出します。
-requirements: Upload the revised graphic and the version you tested, and link to your data.;Start with your group name. In 3–5 sentences, explain the viewer’s task, what changed after testing, and what the change made easier or harder to see.
-requirements_ja: 改訂版と試した版の画像、データへのリンクを提出する。;グループ名を冒頭に書く。見る人に試してもらったこと、変更した点、見やすくなった点や見えにくくなった点を3〜5文で説明する。
-challenge: Before & after
-challenge_ja: 改訂の前と後
+schedule: 10:40–11:00|Harry Beck’s Tube map|Train or walk?;11:00–11:20|One group graphic|Combine ideas from your Week 8 drafts;11:20–12:20|Question title|Find the question, then make the answer visible
+schedule_ja: 10:40–11:00|ベックの地下鉄路線図|電車に乗る？ 歩く？;11:00–11:20|グループで一つの図|第8週の案を組み合わせる;11:20–12:20|問いをタイトルに|問いを見つけ、答えが伝わる図にする
+in_class: Stay with your project team. Use your Week 8 revisions to make one better graphic together. Give it a question title the graphic can answer.
+in_class_ja: いつものプロジェクト班で、第8週の改訂案をもとに一つの図をつくる。その図から答えが読み取れる問いをタイトルにする。
+homework: Finish your group graphic and its question title. One person submits for the group.
+homework_ja: グループの図と、問いを使ったタイトルを仕上げる。代表者が1回提出する。
+requirements: Upload your final graphic with its question title and your first group draft from today. Include the data link.;Start with your group name. In 3–5 sentences, explain which ideas you combined, why you chose the question, and where the graphic shows the answer.
+requirements_ja: 問いをタイトルにした完成版と、今日最初にグループでつくった試作の画像を提出する。データのリンクも添える。;グループ名を冒頭に書く。どんな案を組み合わせたか、なぜその問いにしたか、図のどこから答えが読み取れるかを3〜5文で説明する。
+challenge: One group graphic, one question
+challenge_ja: グループで一つの図、一つの問い
 tools: Your Week 8 revision, a shared document or slide, and your project tool
 tools_ja: 第8週の改訂案・共有ドキュメントやスライド・プロジェクトのツール
 ---
@@ -37,46 +37,40 @@ tools_ja: 第8週の改訂案・共有ドキュメントやスライド・プロ
 ## In Class Activities
 
 ### Activity 1
-title: One question, one graphic · 25 min
-title_ja: 一つの問い、一つの図 · 25分
-text: Open your Week 8 individual revision. Show the graphic and say what you changed and why.
-text_ja: 第8週に各自が改訂した図を開きます。図を見せながら、何をなぜ変えたかを伝えます。
+title: One group graphic · 20 min
+title_ja: グループで一つの図 · 20分
+text: Stay with your project team. Show your Week 8 individual revisions and say what each draft does well.
+text_ja: いつものプロジェクト班で、第8週の改訂案を見せ合い、それぞれのよいところを話す。
 steps:
-- Agree on who the viewer is and one question your graphic should answer.
-- Give the viewer one task: find, compare, or trace something.
-- Put one prototype on screen. Use your question as its title.
+- Combine the strongest ideas into one graphic. You can build on one member’s draft, but change it together.
+- Save a screenshot of this first group draft before working on the title.
 steps_ja:
-- 誰に向けた図か、どんな問いに答えるかを一つ決める。
-- 見つける、比べる、たどるなど、見る人に試してほしいことを一つ決める。
-- 問いをタイトルにした図を一つつくり、画面で見せられるようにする。
+- よいところを一つの図に取り入れる。一人の案を出発点にしてもよいが、班で話し合って手を加える。
+- タイトルに取りかかる前に、班の最初の試作を画像で保存する。
 
 ### Activity 2
-title: Test it with another group · 20 min
-title_ja: 別のグループに見てもらう · 20分
-text: Pair with another group. Take 10 minutes each. Give them the task and show the graphic without a walkthrough.
-text_ja: 別のグループと組み、10分ずつ交代します。課題と図を示し、読み方は先に説明しません。
+title: The question in the title · 20 min
+title_ja: 問いをタイトルに · 20分
+text: “FIFA rankings” names a topic. “Do countries with more people rank higher in football?” gives the audience a reason to look.
+text_ja: 「FIFAランキング」はテーマの名前。「人口が多い国ほど、サッカーの世界順位は高い？」なら、答えを知りたくなる。
 steps:
-- Watch where they look and where they hesitate.
-- Ask what they found and which part of the graphic showed it.
-- Record one observation before switching.
+- Look at your shared draft. What’s the most interesting question it can actually answer?
+- Write two or three possible titles. Read them aloud and choose one that makes someone outside the team curious.
 steps_ja:
-- 相手がどこを見て、どこで迷うか観察する。
-- 何が分かったか、図のどこを見て分かったかを聞く。
-- 観察したことを一つメモし、交代する。
+- 班でまとめた図を見て、実際に答えが読み取れる問いの中で、いちばん面白いものを探す。
+- タイトル案を二つか三つ声に出して読み、班の外の人も答えが気になる問いを選ぶ。
 
 ### Activity 3
-title: Revise and compare · 35 min
-title_ja: 改善して、比べる · 35分
-text: Change one design choice based on what you observed.
-text_ja: 相手が図をどう読んだかをもとに、デザインを一つ変更します。
+title: The answer in the graphic · 40 min
+title_ja: 答えが伝わる図 · 40分
+text: Put the question on the graphic. Can you point to the evidence that answers it?
+text_ja: 問いを図のタイトルにする。答えの根拠は、図のどこにある？
 steps:
-- Save the tested version before editing.
-- Try the same task on the revised version. What is easier to see? Which detail receives less attention?
-- Keep both versions and your observation for the December 4 midterm.
+- If the answer is hard to see, change what the graphic emphasizes or narrow the question.
+- Save one titled prototype for the December 4 midterm. In the final 10 minutes, a few volunteers can read their old and new titles from their seats.
 steps_ja:
-- 変更を加える前に、試した版を保存する。
-- 改訂版で同じ課題を試す。何が見やすくなり、何が目立たなくなったかを確かめる。
-- 12月4日の中間発表に向け、前後の図と気づきを残す。
+- 答えが伝わりにくければ、強調する箇所を変えるか、問いを絞る。
+- 12月4日の中間発表に向け、タイトル付きの試作を一つ保存する。最後の10分で、希望する数班が席から変更前と変更後のタイトルを紹介する。
 
 ## Mori's Corner
 

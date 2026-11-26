@@ -21,10 +21,11 @@
     label(hint,'グループの代表者が1回提出します。学籍番号と氏名は代表者のものを入力してください。','One person submits for the group. Use the submitting student’s own ID and name.');
     hint.hidden=false;
     label(form.elements.description.labels[0],
-      'グループ名を冒頭に書く。見る人に試してもらったこと、変更した点、見やすくなった点や見えにくくなった点を3〜5文で説明する。',
-      'Start with your group name. In 3–5 sentences, explain the viewer’s task, what you changed after testing, and what became easier or harder to see.');
-    label(form.elements.image1.labels[0],'改訂版（ギャラリーに最初に表示）','Revised graphic (shown first in the gallery)');
-    label(form.elements.image2.labels[0],'試した版（改訂前）','Tested graphic (before the change)');
+      'グループ名を冒頭に書く。どんな案を組み合わせたか、なぜその問いにしたか、図のどこから答えが読み取れるかを3〜5文で説明する。',
+      'Start with your group name. In 3–5 sentences, explain which ideas you combined, why you chose the question, and where the graphic shows the answer.');
+    label(form.elements.title.labels[0],'作品タイトル（問いの形で）','Your question title');
+    label(form.elements.image1.labels[0],'問いをタイトルにした完成版','Final graphic with its question title');
+    label(form.elements.image2.labels[0],'班でつくった最初の試作','First group draft');
     form.elements.image2.required=true;
   }
   let schedule, deadlineTimer, pending;
@@ -37,7 +38,7 @@
   }
   function updateDeadline() {
     if(isIndividualRevision) document.querySelector('#homework-week').textContent=text('第8週 · 個人で改訂','Week 8 · Individual revision');
-    else if(isStudioRevision) document.querySelector('#homework-week').textContent=text('第9週 · 改訂の前と後','Week 9 · Before & after');
+    else if(isStudioRevision) document.querySelector('#homework-week').textContent=text('第9週 · グループで一つの図、一つの問い','Week 9 · One group graphic, one question');
     else if(schedule) document.querySelector('#homework-week').textContent=schedule.challenge;
     if(!schedule) return;
     const open=Date.now()>=schedule.opensAt && Date.now()<schedule.deadline;
@@ -63,7 +64,7 @@
       localStorage.setItem(savedKey,body.revisionToken);
       const imageInputs=isIndividualRevision?['image1']:['image1','image2'];
       const images=imageInputs.map(name=>form.elements[name].files[0]).filter(Boolean);
-      if(isStudioRevision&&images.length!==2) throw new Error(text('改訂版と試した版の画像を両方選んでください。','Choose both the revised and tested graphics.'));
+      if(isStudioRevision&&images.length!==2) throw new Error(text('完成版と最初の試作の画像を両方選んでください。','Choose both the final graphic and the first group draft.'));
       body.images=await Promise.all(images.map(compress));
       const signature=JSON.stringify(body);
       if(!pending || pending.signature!==signature)pending={signature,id:crypto.randomUUID()};

@@ -4,6 +4,9 @@ const external=(href,body,attrs='')=>`<a href="${esc(href)}" target="_blank" rel
 export function renderWeek9(slide,{ja=true}={}) {
   const lang=ja?'ja':'en',t=value=>value?.[lang]??value??'';
   const title=esc(t(slide.title));
+  if(slide.kind==='title-comparison') {
+    return `<section class="w9-title-comparison"><p>${esc(t(slide.before))}</p><h1>${title}</h1></section>`;
+  }
   if(slide.kind==='archive') {
     return `<figure class="w9-archive w9-archive--${esc(slide.id)}">${external(slide.sources[0].href,
       `<img src="${esc(slide.image)}" alt="${esc(t(slide.alt))}" referrerpolicy="no-referrer" ${slide.id==='pocket-map'?'fetchpriority="high"':''}><span class="w9-image-fallback" hidden>${ja?'原図を開く':'Open the original'} ↗</span>`)}

@@ -30,3 +30,7 @@
 .w9-task--homework ol{gap:20px;font-size:38px}
 .w9-submit{display:flex;flex-wrap:wrap;gap:24px;align-items:baseline;margin:40px 0 0 85px;font-size:27px;color:#584d40}
 .w9-submit a{font-weight:800;color:#9c3044;text-underline-offset:.18em}
+.w9-title-comparison{height:100%;display:grid;align-content:center;gap:55px;padding:100px 170px;background:#f8f4ea;color:#29251d}
+.w9-title-comparison p{font:600 39px/1.2 var(--sans);color:#695f51;margin:0}
+.w9-title-comparison h1{font:650 103px/1.16 var(--serif);letter-spacing:-.043em;margin:0;text-wrap:balance;color:#912f43}
+html[lang=ja] .w9-title-comparison h1{font-size:86px;white-space:pre-line;text-wrap:wrap}

@@ -29,9 +29,16 @@ test('historical sources, bilingual slides, chapters and homework render in the 
     if(slide.kind==='archive') assert.match(html,/<img src="https:.*alt="[^"]+"/);
   }
   assert.match(renderWeek9(deck.slides[4]),/320 m.*west-end-walking-map\.pdf/);
-  assert.deepEqual(deck.slides.filter(slide=>slide.kind==='activity').map(slide=>slide.duration),[25,20,35]);
+  assert.deepEqual(deck.slides.filter(slide=>slide.kind==='activity').map(slide=>slide.duration),[20,20,40]);
+  assert.deepEqual(deck.slides.slice(5,9).map(slide=>slide.id),['design-task','title-example','viewer-test','one-change']);
+  const example=renderWeek9(deck.slides[6],{ja:false});
+  assert.match(example,/FIFA rankings<\/p><h1>Do countries with more people rank higher in football\?/);
   for (const chapter of deck.chapters) assert.ok(deck.slides.some(slide=>slide.id===chapter.id));
   assert.match(renderWeek9(deck.slides.at(-1),{ja:false}),/homework-submit\.html\?week=9/);
   assert.match(source,/One person submits for the group/);
   assert.match(source,/3–5 sentences/);
+  assert.match(source,/first group draft/);
+  const submission=fs.readFileSync('assets/homework-submissions.js','utf8');
+  assert.match(submission,/Your question title/);
+  assert.match(submission,/First group draft/);
 });
