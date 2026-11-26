@@ -1,9 +1,10 @@
 {
-  "title": {"en":"Train or walk?","ja":"電車に乗る？ 歩く？"},
+  "title": {"en":"From a question to evidence","ja":"問いから根拠へ"},
   "chapters": [
     {"id":"pocket-map","label":{"en":"Lecture · 20 min","ja":"講義 · 20分"}},
-    {"id":"walking-map","label":{"en":"Train or walk?","ja":"電車か、徒歩か？"}},
-    {"id":"title-example","label":{"en":"Group 6 example","ja":"第6班の例"}},
+    {"id":"tfl-walking-map","label":{"en":"TfL walking map","ja":"TfLの徒歩地図"}},
+    {"id":"iceland-2018","label":{"en":"World Cup and Group 6","ja":"ワールドカップと第6班"}},
+    {"id":"fifa-evidence","label":{"en":"FIFA evidence","ja":"FIFAランキングの根拠"}},
     {"id":"design-task","label":{"en":"Activity 1","ja":"活動1"}},
     {"id":"viewer-test","label":{"en":"Activity 2","ja":"活動2"}},
     {"id":"one-change","label":{"en":"Activity 3","ja":"活動3"}},
@@ -30,26 +31,94 @@
       "sources":[{"label":"David Rumsey Map Collection · first 1933 edition","href":"https://www.davidrumsey.com/luna/servlet/detail/RUMSEY~8~1~274012~90047744:Map-of-London-s-Underground-Railway"},{"label":"London Transport Museum · first pocket edition","href":"https://artsandculture.google.com/asset/pocket-underground-map-henry-c-beck/AQGrQloi9u07rQ?hl=en"}]
     },
     {
-      "id":"train-or-walk", "kind":"one-stop", "annotationPage":4,
-      "title":{"en":"Train or walk?","ja":"地下鉄に乗る？ 歩く？"},
-      "notes":{"en":"Imagine you’re outside Leicester Square station, heading to Covent Garden station. The diagram answers the train question: take the Piccadilly line one stop. It doesn’t answer whether to go downstairs in the first place. For that choice we need a street route and comparable information about the two trips.","ja":"レスター・スクエア駅の地上の入口から、コヴェント・ガーデン駅へ向かう場面を考える。路線図からは、ピカデリー線で一駅と分かる。でも、そもそも地下に降りるべきかは分からない。その判断には、地上の道順と、二つの移動手段を比べる情報が必要になる。"},
-      "sources":[{"label":"Transport for London · Covent Garden","href":"https://art.tfl.gov.uk/labyrinth/artwork/covent-garden/"}]
+      "id":"train-or-walk",
+      "kind":"inquiry",
+      "annotationPage":4,
+      "title":{"en":"Which is faster from street to street?","ja":"地上の入口から入口まで、どちらが速い？"},
+      "notes":{"en":"Start outside Leicester Square station and finish outside Covent Garden station. Beck tells us which train to take and that it is one stop. To compare the two choices, we need the walking time and the whole train trip, not just the time aboard. This is a question about time, not a vote on which map looks better.","ja":"出発も到着も駅の外、地上の入口を基準にする。ベックの路線図からは、どの電車に乗るか、一駅で着くことが分かる。二つの移動手段の速さを比べるには、徒歩の時間と、乗車時間だけでなく地下鉄にかかる全体の時間を知る必要がある。"},
+      "sources":[{"label":"Transport for London · Covent Garden","href":"https://art.tfl.gov.uk/labyrinth/artwork/covent-garden/"}],
+      "kicker":{"en":"Leicester Square to Covent Garden","ja":"レスター・スクエア駅からコヴェント・ガーデン駅へ"},
+      "subtitle":{"en":"The Tube map says one stop. What doesn’t it tell us?","ja":"地下鉄では一駅。路線図だけでは何が分からない？"}
     },
     {
-      "id":"walking-map", "kind":"combined-route", "annotationPage":5,
-      "title":{"en":"Already outside? Walk.","ja":"地上にいるなら、歩こう。"},
+      "id":"tfl-walking-map",
+      "kind":"tfl-detail",
+      "annotationPage":14,
+      "title":{"en":"4 minutes on foot","ja":"徒歩4分"},
+      "image":"assets/images/lecture/week09-tfl-west-end.webp",
+      "alt":{"en":"Detail of TfL’s West End walking map. The black and yellow route between Leicester Square and Covent Garden is labelled 4 min walk, 320 m.","ja":"TfLのウエストエンド徒歩地図の抜粋。レスター・スクエア駅とコヴェント・ガーデン駅を結ぶ黒と黄色の線に「徒歩4分、320m」とある。"},
+      "notes":{"en":"This is the official Transport for London map on screen. The yellow and black route gives the missing piece: 320 metres and about four minutes on foot. It shows why one stop can be worth walking. It doesn’t tell us how long the whole Tube trip takes from street level. The next slide adds that comparison.","ja":"画面にあるのはロンドン交通局（TfL）の地図。黒と黄色の線に、路線図では分からなかった徒歩距離320mと、所要時間の目安4分が示されている。徒歩の目安は分かるが、地上から地下鉄で移動した場合にかかる全体の時間は分からない。次の図で二つを比べる。"},
+      "sources":[{"label":"TfL · full West End walking map","href":"https://content.tfl.gov.uk/west-end-walking-map.pdf"}]
+    },
+    {
+      "id":"walking-map",
+      "kind":"combined-route",
+      "annotationPage":5,
+      "title":{"en":"When does the Tube save time?","ja":"地下鉄なら、いつ速い？"},
       "image":"assets/images/lecture/week09-covent-garden.svg",
       "description":{"en":"Street map of Leicester Square and Covent Garden. The solid red walking route follows Cranbourn Street and Long Acre between station entrances. The dashed blue line follows the Piccadilly line underground for one stop between the two stations.","ja":"レスター・スクエアとコヴェント・ガーデンの街路図。赤い実線は、二つの駅の入口を結ぶ徒歩ルート。クランボーン通りからロング・エーカーを通る。青い破線は、地下のピカデリー線の一駅区間。"},
-      "notes":{"en":"One map lets you compare a surface route and an underground trip. It keeps the street geography that was lost in Beck’s diagram, and borrows his clear line, station markers and emphasis on one connection. The one-minute timetable example is time aboard. From street level, add the time to get to the platform, wait and get back to the street. With these estimates, the train only wins if those extras take less than about four minutes. Start on the platform, face bad weather, or have different mobility needs, and the decision can change. The red route is one example: about 380 metres measured along mapped streets from the Cranbourn Street entrance to Covent Garden’s James Street entrance, or about five minutes at 4.5 km/h, before crossing delays. TfL estimates four minutes for the station pair in its walking guide. Next: use the same idea on a group project. Decide what someone needs to see and keep the strongest design choice from each draft.","ja":"街路と地下鉄を一枚で比べる地図。ベックの図で省かれた街路の位置関係を戻しつつ、路線を追いやすい線と駅のマークを借り、この一駅に絞った。時刻表の約1分は乗車時間。地上からなら、ホームまで降りる時間、待ち時間、出口まで上がる時間が加わる。この目安では、それらが計約4分未満なら地下鉄の方が速い。すでにホームにいる場合や、天候・移動のしやすさによって判断は変わる。赤い線は一例。クランボーン通り側の入口からジェームズ通り側の入口まで街路に沿って約380m。時速4.5kmで約5分で、信号待ちなどは含まない。TfLの徒歩ガイドでは、この駅間の目安は4分。次は班の作品でも、見る人に必要な情報を考え、それぞれの案のよさを選んで一つにまとめる。"},
-      "sources":[{"label":"Transport for London · Piccadilly line timetable","href":"https://tfl.gov.uk/tube/timetable/piccadilly?FromId=940GZZLUPCC&ToId=940GZZLUKSX"},{"label":"Transport for London · Walking between stations","href":"https://tfl.gov.uk/cdn/static/cms/documents/walking-between-stations-map.pdf"},{"label":"Westminster · Covent Garden walking corridors","href":"https://www.westminster.gov.uk/media/document/covent-garden-public-realm-framework"},{"label":"© OpenStreetMap contributors · ODbL","href":"https://www.openstreetmap.org/copyright"}]
+      "notes":{"en":"Compare the same start and end points. TfL estimates four minutes walking between these stations. One scheduled Piccadilly train takes about one minute between platforms. The Tube is faster only if getting to the platform, waiting and getting back to the street take less than about three minutes altogether. The map does not measure that time. The red trace shows one way through the actual streets, and is illustrative; the four-minute benchmark is from TfL’s station pair, not a timed walk of this trace. This redraw keeps Beck’s clear rail connection, adds TfL’s walking evidence, and makes the missing time visible.","ja":"同じ出発地点と到着地点で比べる。TfLの目安は徒歩約4分。時刻表では、ピカデリー線の乗車は約1分。ホームまで降りる時間、待つ時間、出口まで上がる時間の合計が約3分未満なら、地下鉄の方が速い。この図はその時間を実測したものではない。赤い線は実際の街路に沿ったルート例で、4分はTfLが示す駅間の目安。この描き直しでは、ベックの分かりやすい路線のつながりを残し、TfLの徒歩の情報と、比較に必要な残りの時間を加えた。"},
+      "sources":[{"label":"TfL · Piccadilly line timetable","href":"https://tfl.gov.uk/tube/timetable/piccadilly?FromId=940GZZLUPCC&ToId=940GZZLUKSX&departureHour=04&departureMins=26&fromText=Piccadilly+Circus+Underground+Station&selectedDate=sunday&toText=King%27s+Cross+St.+Pancras+Underground+Station"},{"label":"TfL · West End walking map","href":"https://content.tfl.gov.uk/west-end-walking-map.pdf"},{"label":"Westminster · Covent Garden walking corridors","href":"https://www.westminster.gov.uk/media/document/covent-garden-public-realm-framework"},{"label":"© OpenStreetMap contributors · ODbL","href":"https://www.openstreetmap.org/copyright"}]
     },
     {
-      "id":"title-example", "kind":"title-comparison", "annotationPage":7,
-      "title":{"en":"Do countries with more people rank higher in football?","ja":"人口が多い国ほど、\nサッカーの世界順位は高い？"},
-      "before":{"en":"FIFA rankings","ja":"FIFAランキング"},
-      "summary":{"en":"Keep the scatterplot. Borrow the map’s way of finding countries.","ja":"散布図で比較し、地図のよさを借りて国を見つけやすくする。"},
-      "notes":{"en":"Group 6 brought two Week 8 drafts: a scatterplot for comparing population and FIFA rank, and a map for finding individual countries. A possible group redesign is one scatterplot that labels a few countries directly. Retain all the relevant dots so those examples have context. Borrow the map’s ability to find a country, not the entire map. Then name the question this combined graphic actually answers. This is a proposed redesign, not something Group 6 already submitted.\n\nDESIGN CHECK\n\n1. Question. Does the title ask something specific and worth finding out? The plot can show whether larger populations tend to go with better ranks. It can’t tell us what causes a team to succeed.\n2. Visual choices and data. Can a reader tell what the dots and axes mean? Here, one dot is one country, x is population and y is rank. Use one ranking date and say if the population axis is logarithmic.\n3. Titles and labels. Can the graphic stand on its own? State that 1 is best, identify the ranking date and label meaningful examples directly.\n4. Reason for the design. Explain what each draft contributed and what you left out. Here, the scatterplot makes comparison possible and the direct labels make examples easy to locate. Geography is secondary for this question.\n5. Original insight. What does this combination help people notice? Label a real exception or a telling pair if the data supports it. Extra decoration is not the goal.","ja":"第6班の第8週の案は二つ。人口とFIFA順位を比較しやすい散布図と、個々の国を探しやすい地図。班の改訂案として、散布図を土台に、いくつかの国に直接ラベルを付ける方法がある。全体と比べられるよう、比較に必要な点は残す。地図そのものを貼り合わせるのではなく、国を探しやすいという長所を借りる。そのうえで、一枚にまとめた図から答えが読み取れる問いをタイトルにする。これは第6班の提出済み作品ではなく、改訂案の例。\n\nデザインの確認\n\n1. 問い：具体的で、答えを知りたくなるか。人口と順位の傾向は見えるが、強さの原因までは分からない。\n2. 表現とデータ：点や軸の意味は明確か。1点は1か国、横軸は人口、縦軸は順位。ランキングの時点をそろえ、対数軸なら明記する。\n3. タイトルとラベル：図だけで読めるか。1位が最上位であることとランキングの時点を示し、注目する国に直接ラベルを付ける。\n4. 選んだ理由：どの案から何を取り入れ、何を省いたか。散布図は比較に、直接ラベルは国を見つけるのに役立つ。この問いでは地理的な位置は主役ではない。\n5. 独自の気づき：組み合わせたことで何が見えたか。データに裏づけがあれば、意外な例外や対照的な二つの国を示す。飾りを増やす必要はない。"},
-      "sources":[{"label":"Week 8 gallery · scatterplot","href":"gallery-work.html?id=8-442&week=8"},{"label":"Week 8 gallery · map","href":"gallery-work.html?id=8-422&week=8"}]
+      "id":"iceland-2018",
+      "kind":"match-photo",
+      "annotationPage":15,
+      "title":{"en":"Iceland, 2018","ja":"アイスランド、2018年"},
+      "score":"1–1",
+      "opponent":{"en":"vs Argentina","ja":"対 アルゼンチン"},
+      "context":{"en":"353,000 people · FIFA No. 22 before the tournament","ja":"人口 約35万人・開幕前のFIFA順位 22位"},
+      "image":"assets/images/lecture/week09-iceland-penalty.webp",
+      "credit":"Oleg Bkhambri (Voltmetro) · CC BY-SA 4.0 · cropped to fit",
+      "alt":{"en":"Iceland goalkeeper Hannes Þór Halldórsson saves Lionel Messi’s penalty at the 2018 World Cup.","ja":"2018年ワールドカップで、アイスランドのハンネス・ハルドーソンがメッシのPKを止める場面。"},
+      "notes":{"en":"At Russia 2018, Iceland made its men’s World Cup debut as the smallest country by population ever to qualify. With about 353,000 residents in 2018 it entered ranked 22nd. Hannes Þór Halldórsson saved Lionel Messi’s penalty and Iceland drew 1–1 with Argentina, ranked fifth. Iceland lost to Nigeria and Croatia and went out in the group stage. This was 2018, not Qatar 2022, for which Iceland did not qualify. The photo is cropped in the presentation.","ja":"2018年ロシア大会で男子ワールドカップに初出場。当時の人口は約35万人で、出場国として史上最少。開幕前のFIFA順位は22位だった。ハンネス・ハルドーソンがメッシのPKを止め、FIFA5位のアルゼンチンと1対1で引き分けた。その後、ナイジェリアとクロアチアに敗れ、グループステージで敗退。2022年カタール大会には出場していない。写真はスライドに合わせてトリミング。"},
+      "sources":[{"label":"Oleg Bkhambri (Voltmetro) · original photograph","href":"https://commons.wikimedia.org/wiki/File:FWC_2018_-_Group_D_-_ARG_v_ISL_-_Messi_penalty_kick.jpg"},{"label":"Photo licence · CC BY-SA 4.0","href":"https://creativecommons.org/licenses/by-sa/4.0/"},{"label":"FIFA · Argentina match report","href":"https://inside.fifa.com/en/news/iceland-secure-historic-first-world-cup-point-2958355"},{"label":"FIFA · pre-tournament rankings","href":"https://inside.fifa.com/tournaments/mens/worldcup/2018russia/news/calculating-russia-2018-s-toughest-groups"},{"label":"FIFA · Iceland’s group-stage finish","href":"https://inside.fifa.com/tournaments/mens/worldcup/2018russia/news/hamren-takes-charge-at-iceland"},{"label":"World Bank · Iceland’s population, 2018","href":"https://databank.worldbank.org/reports.aspx?country=ISL%2CUMC&series=SP.POP.TOTL&source=2"}]
+    },
+    {
+      "id":"cabo-verde-2026",
+      "kind":"match-photo",
+      "annotationPage":16,
+      "title":{"en":"Cabo Verde, 2026","ja":"カーボベルデ、2026年"},
+      "score":"0–0",
+      "opponent":{"en":"vs Spain","ja":"対 スペイン"},
+      "context":{"en":"527,000 people · FIFA No. 67 before the tournament","ja":"人口 約53万人・開幕前のFIFA順位 67位"},
+      "image":"https://img.youtube.com/vi/FU2TC71liB0/maxresdefault.jpg",
+      "credit":"FIFA World Cup 2026™ highlight cover",
+      "alt":{"en":"Vozinha, in yellow, reaches for the ball in front of goal against Spain at the 2026 World Cup.","ja":"2026年ワールドカップのスペイン戦。黄色のユニフォームを着たヴォジーニャがゴール前でボールに手を伸ばす。"},
+      "notes":{"en":"Look at Vozinha. In Cabo Verde’s World Cup debut the goalkeeper helped a country of about 527,000 people, ranked 67th before the tournament, hold Spain to 0–0. Cabo Verde drew all three group matches, advanced and lost 3–2 after extra time to Argentina in the round of 32. Spain went on to win the tournament. World Cup results are individual matches and a tournament finish. A FIFA world ranking is a separate measure. These two matches suggest a question; they cannot answer it.","ja":"ヴォジーニャに注目。人口約53万人、開幕前FIFA67位のカーボベルデは、初出場の初戦でスペインを無得点に抑えた。グループの3試合をすべて引き分けて突破し、決勝トーナメント1回戦でアルゼンチンに延長の末2対3で敗れた。スペインは大会で優勝。ワールドカップでの試合結果や成績と、FIFA世界ランキングは別のもの。この二つの試合が問いのきっかけになるが、試合だけでは答えは出ない。"},
+      "sources":[{"label":"Vozinha · match highlight and cover","href":"https://www.youtube.com/watch?v=FU2TC71liB0"},{"label":"FIFA · pre-tournament rankings","href":"https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/david-v-goliath-biggest-ranking-mismatches-at-world-cup-2026"},{"label":"FIFA · Cabo Verde’s tournament finish","href":"https://www.fifa.com/en/tournaments/mens/worldcup/2026/articles/final-tournament-standings"},{"label":"FIFA · knockout scores","href":"https://www.fifa.com/en/tournaments/mens/worldcup/2026/articles/knockout-stage-match-schedule-bracket"},{"label":"World Bank · Cabo Verde population, 2025","href":"https://data.worldbank.org/country/cabo-verde"}]
+    },
+    {
+      "id":"fifa-drafts",
+      "kind":"fifa-drafts",
+      "annotationPage":17,
+      "title":{"en":"Group 6’s drafts","ja":"第6班の二つの案"},
+      "images":[{"src":"assets/images/lecture/week09-fifa-map.webp","alt":{"en":"Group 6's interactive FIFA map with Japan selected and separate charts for population and ranking over time.","ja":"第6班のFIFA地図。日本を選ぶと、人口とランキングの推移が左右のグラフに出る。"},"label":{"en":"Find a country","ja":"国を探す"}},{"src":"assets/images/lecture/week09-fifa-scatter.webp","alt":{"en":"Group 6's population and FIFA rank scatterplot. The hover label shows Japan.","ja":"第6班の人口とFIFA順位の散布図。カーソルを合わせた日本のデータが表示される。"},"label":{"en":"Compare countries","ja":"国を比べる"}}],
+      "notes":{"en":"These are the actual Week 8 drafts, with the map on the left and the scatterplot on the right. The map lets a viewer find Japan and trace its history. The scatterplot compares size and rank, but its country name is visible through hover. A person in the audience cannot hover and doesn’t yet know what to look for. It does not matter that their draft snapshots display different values for Japan; the eventual redesign uses a single dated snapshot.","ja":"左は地図、右は散布図。どちらも第6班の第8週の提出作品。地図は日本を探し、推移を追いやすい。散布図は人口と順位を比べやすいが、国名はカーソルを合わせると表示される。教室のスクリーンでは操作できず、何に注目すべきかもまだ分からない。元の図では日本の順位が異なるため、改訂例では時点を一つにそろえる。"},
+      "sources":[{"label":"Week 8 gallery · map","href":"gallery-work.html?id=8-422&week=8"},{"label":"Week 8 gallery · scatterplot","href":"gallery-work.html?id=8-442&week=8"}]
+    },
+    {
+      "id":"fifa-missing",
+      "kind":"inquiry",
+      "annotationPage":18,
+      "title":{"en":"What can’t you see yet?","ja":"まだ何が見えない？"},
+      "subtitle":{"en":"Find both teams. Then look beyond the two matches.","ja":"二つのチームを探そう。次に、二つの試合だけでは分からないことを考えよう。"},
+      "notes":{"en":"The two World Cup stories make small teams memorable, but neither anecdote tells us how common it is for a smaller nation to rank highly. In the drafts, a viewer can search for a team or see dots, but there is no obvious comparison between smaller and larger countries. What should be labeled? What would count as highly ranked? The next slide makes one possible choice. Other questions are possible.","ja":"二つの試合は、小国のチームを印象づける。ただし、小国が上位に入ることがどのくらいあるのかは、二つの試合だけでは分からない。元の図では国を検索したり点を見たりできるが、人口の少ない国と多い国の差を比べる手がかりが弱い。何にラベルを付けるか。「上位」はどこで区切るか。次のスライドは、問いの一例。"}
+    },
+    {
+      "id":"title-example",
+      "kind":"inquiry",
+      "annotationPage":7,
+      "title":{"en":"Are more populous countries more likely to make FIFA’s top 50?","ja":"人口の多い国ほど、FIFAランキングの上位50位に入りやすい？"},
+      "notes":{"en":"Two fans might remember Iceland and Cabo Verde and wonder whether small nations regularly reach the top ranks. This version picks a measurable test: compare the share of teams in the top 50 in the smaller-population half and the larger-population half. Top 50 is an explicit design choice, not a FIFA rule. The numbers here cannot answer why teams win particular games.","ja":"アイスランドとカーボベルデを見た観客なら、人口の少ない国が上位に入ることはどのくらいあるのか、と思うかもしれない。ここでは、国・地域を人口順でほぼ半分に分け、上位50位に入る割合を比べる。50位はこの例での区切りで、FIFAの公式な区分ではない。特定の試合の勝敗の理由を説明する問いでもない。"}
+    },
+    {
+      "id":"fifa-evidence",
+      "kind":"fifa-evidence",
+      "annotationPage":19,
+      "title":{"en":"Who makes the top 50?","ja":"上位50位に入るのは？"},
+      "notes":{"en":"In Group 6’s published snapshot, 8 of 101 teams from the less populous half reached the men’s top 50 (8%), versus 39 of 102 from the more populous half (38%). The tinted band is the top 50; the vertical line splits the 203 eligible entries in population order. Recall Cabo Verde and Iceland: both sit to the left and out-rank India in this snapshot, even though neither is in the top 50. These are October 2026 world rankings, not either country’s pre-tournament ranking or World Cup finish. Use 2025 population for every mark, and skip entries without that value or where a single population covers several teams (for example, the UK). Because of those omissions, only 47 of the top 50 appear. A classroom redraw from Group 6’s published data, not a new submission by Group 6.\n\nDESIGN CHECK\n1. Question: Is the comparison specific?\n2. Marks and measures: One dot per team. Population uses a log scale. Rank 1 is best.\n3. Labels: Direct labels let us find the teams without hovering.\n4. Rationale: The scatterplot compares. Labels borrow the map’s ease of finding a country.\n5. Insight: The larger half places more teams in the top 50, but population does not determine rank or cause wins.","ja":"第6班が公開したデータでは、人口が少ない方の半分では101チーム中8（8%）、多い方の半分では102チーム中39（38%）が男子FIFA上位50位に入った。色が付いた帯は上位50位、縦の線は203件を人口順でほぼ半分に分けた境界。カーボベルデとアイスランドは左側にあり、上位50位には入らないが、この時点ではインドより順位が高い。ここでの順位は2026年10月の世界ランキングで、各大会の開幕前順位や大会成績ではない。人口はすべて2025年。人口が不明、または一つの人口に複数の代表が対応するデータ（英国など）は除外。そのため上位50位のうち図にあるのは47チーム。第6班の公開データを使った授業用の改訂例で、班の新たな提出作ではない。\n\nデザインの確認\n1. 問い：何を比べるか明確か。\n2. 表現とデータ：1点は1チーム。人口は対数軸。1位が最上位。\n3. ラベル：操作なしでチームを探せるか。\n4. 選んだ理由：散布図で比べ、地図の探しやすさを直接ラベルで取り入れた。\n5. 気づき：人口の多い方の半分に上位が多いが、人口で順位や勝敗が決まるわけではない。"},
+      "sources":[{"label":"Group 6 · project and data","href":"https://a250829s-code.github.io/fifa-and-population/"},{"label":"Group 6 · exact data snapshot source","href":"https://a250829s-code.github.io/fifa-and-population/data.js"},{"label":"World Bank · population indicator","href":"https://data.worldbank.org/indicator/SP.POP.TOTL"}]
     },
     {
       "id":"design-task", "kind":"activity", "duration":20, "annotationPage":6,

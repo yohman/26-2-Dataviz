@@ -13,19 +13,25 @@
 .w9-archive--team-tukey-2025{background:#000}
 .w9-archive--team-minard-2025{background:#f5f1e8}
 .w9-image-fallback{font-size:36px;background:#fff9ed;padding:17px 29px;color:#29251d}
-.w9-route-slide,.w9-task{height:100%;display:grid;align-content:center;padding:80px 140px;background:#f8f4ea;color:#29251d}
-.w9-route-slide{text-align:center;gap:25px}
-.w9-route{position:relative;display:flex;justify-content:space-between;align-items:flex-end;margin:0 auto 26px;padding-bottom:40px;width:880px;font-size:39px;font-weight:700;border-bottom:10px solid #273e80}
-.w9-route span::after{content:"";position:absolute;bottom:-23px;width:32px;height:32px;background:#f8f4ea;border:7px solid #273e80;border-radius:50%;left:0}
-.w9-route span:last-child::after{left:auto;right:0}
-.w9-route-slide h1{font:650 138px/1.04 var(--serif);letter-spacing:-.055em;margin:40px 0 0}
-html[lang=ja] .w9-route-slide h1{font-size:104px}
-.w9-route-slide p{margin:0;color:#273e80;font-size:31px;font-weight:650}
+.w9-task,.w9-inquiry{height:100%;display:grid;align-content:center;padding:80px 140px;background:#f8f4ea;color:#29251d}
+.w9-inquiry{gap:42px}
+.w9-inquiry h1{max-width:1290px;margin:0;color:#8c3541;font:650 105px/1.07 var(--serif);letter-spacing:-.046em;text-wrap:balance}
+html[lang=ja] .w9-inquiry h1{font-size:88px;line-height:1.19}
+.w9-inquiry p{max-width:1150px;margin:0;font:650 35px/1.4 var(--sans)}
+.w9-inquiry--train-or-walk h1{color:#273e80}
+.w9-tfl{height:100%;display:grid;grid-template-columns:1040px 560px;align-items:center;background:#042538;color:#fff5c3}
+.w9-tfl>a{align-self:stretch;display:grid;place-items:center;min-height:0}
+.w9-tfl img{width:100%;height:100%;object-fit:cover}
+.w9-tfl>div{padding:60px}
+.w9-tfl h1{margin:0;font:650 82px/1.04 var(--serif);letter-spacing:-.045em;text-wrap:balance}
+html[lang=ja] .w9-tfl h1{font-size:78px}
+.w9-tfl p{margin:24px 0 43px;color:#ffd635;font:700 51px/1 var(--sans)}
+.w9-tfl div>a{color:inherit;text-underline-offset:.18em;font:650 22px/1.3 var(--sans)}
 .w9-combined-route{height:100%;display:grid;grid-template-columns:560px 1040px;background:#f8f4ea;color:#29251d}
 .w9-route-answer{display:grid;align-content:center;gap:54px;padding:64px}
-.w9-route-answer header p{margin:0 0 6px;font:750 30px/1.2 var(--sans)}
-.w9-route-answer h1{font:650 138px/1.02 var(--serif);letter-spacing:-.066em;margin:0}
-html[lang=ja] .w9-route-answer h1{font-size:105px;line-height:1.17;letter-spacing:-.035em}
+.w9-route-answer header p{margin:16px 0 0;font:750 29px/1.33 var(--sans);text-wrap:pretty}
+.w9-route-answer h1{font:650 126px/1.02 var(--serif);letter-spacing:-.066em;margin:0;white-space:nowrap}
+html[lang=ja] .w9-route-answer h1{font-size:105px;line-height:1.15;letter-spacing:-.035em}
 .w9-route-answer dl,.w9-route-answer dd{margin:0}
 .w9-route-answer dl{display:grid;gap:34px}
 .w9-route-answer dt{display:flex;align-items:center;gap:14px;font:800 29px/1.2 var(--sans)}
@@ -56,8 +62,44 @@ html[lang=ja] .w9-route-answer h1{font-size:105px;line-height:1.17;letter-spacin
 .w9-task--homework ol{gap:20px;font-size:38px}
 .w9-submit{display:flex;flex-wrap:wrap;gap:24px;align-items:baseline;margin:40px 0 0 85px;font-size:27px;color:#584d40}
 .w9-submit a{font-weight:800;color:#9c3044;text-underline-offset:.18em}
-.w9-title-comparison{height:100%;display:grid;align-content:center;gap:55px;padding:100px 170px;background:#f8f4ea;color:#29251d}
-.w9-title-comparison p{font:600 39px/1.2 var(--sans);color:#695f51;margin:0}
-.w9-title-comparison h1{font:650 103px/1.16 var(--serif);letter-spacing:-.043em;margin:0;text-wrap:balance;color:#912f43}
-html[lang=ja] .w9-title-comparison h1{font-size:86px;white-space:pre-line;text-wrap:wrap}
-.w9-title-comparison .w9-title-summary{max-width:32em;font-size:34px;line-height:1.45;color:#29251d}
+.w9-match-photo{margin:0;position:relative;height:100%;background:#161d26;color:#fff}
+.w9-match-photo>a{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden}
+.w9-match-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 90%;display:block}
+.w9-match-photo--cabo-verde-2026 img{transform:scale(1.034)}
+.w9-match-photo>a::after{content:"";position:absolute;inset:0;background:linear-gradient(20deg,#080d17ed,transparent 54%);pointer-events:none}
+.w9-match-photo [hidden]{display:none}
+.w9-match-photo figcaption{position:absolute;bottom:67px;left:72px;pointer-events:none;text-shadow:0 2px 12px #111b}
+.w9-match-photo h1{margin:0 0 9px;font:750 35px/1.2 var(--sans)}
+.w9-match-photo p{margin:0 0 10px;display:flex;gap:30px;align-items:baseline}
+.w9-match-photo strong{font:650 118px/1 var(--serif);letter-spacing:-.056em}
+.w9-match-photo span,.w9-match-photo small{font:750 32px/1.2 var(--sans)}
+.w9-match-photo small{font-size:25px}
+.w9-photo-credit{position:absolute;right:29px;bottom:24px;color:#fff;font:650 16px/1.2 var(--sans);pointer-events:none}
+.w9-fifa-drafts{height:100%;display:grid;grid-template-rows:auto 1fr;padding:63px 63px 57px;gap:40px;background:#f8f4ea;color:#29251d}
+.w9-fifa-drafts h1{font:650 72px/1.05 var(--serif);margin:0;letter-spacing:-.035em}
+.w9-fifa-drafts>div{display:grid;grid-template-columns:1fr 1fr;gap:28px;min-height:0;align-items:center}
+.w9-fifa-drafts figure{margin:0;min-width:0}
+.w9-fifa-drafts img{width:100%;height:435px;object-fit:contain;display:block;background:#fff}
+.w9-fifa-drafts figcaption{margin-top:21px;color:#312821;font:750 33px/1.18 var(--sans)}
+.w9-fifa-evidence{height:100%;position:relative;background:#f8f4ea;color:#29251d}
+.w9-fifa-evidence h1{position:absolute;left:70px;top:46px;margin:0;font:650 68px/1.08 var(--serif);letter-spacing:-.036em}
+.w9-fifa-evidence svg{width:1154px;height:854px;position:absolute;left:0;top:36px;font-family:var(--sans)}
+.w9-fifa-top-band{fill:#e4e8d5}
+.w9-fifa-grid{fill:none;stroke:#b4ab9b;stroke-opacity:.62;stroke-width:1}
+.w9-fifa-cut{stroke:#5f5b52;stroke-width:2;stroke-dasharray:7 6}
+.w9-fifa-axis{fill:#4f4b43;font-size:22px;font-weight:650}
+.w9-fifa-axis-title,.w9-fifa-band-label{fill:#29251d;font-size:24px;font-weight:750}
+.w9-fifa-band-label{fill:#48563d}
+.w9-fifa-dot{fill:#908879;fill-opacity:.62}
+.w9-fifa-top{fill:#515f40}
+.w9-fifa-highlight{fill:#9a3946;stroke:#fff9eb;stroke-width:2}
+.w9-fifa-leader{fill:none;stroke:#9a3946;stroke-width:2}
+.w9-fifa-label{fill:#85313d;stroke:#f8f4ea;stroke-width:6;paint-order:stroke fill;stroke-linejoin:round;font-weight:800;font-size:24px}
+.w9-fifa-result{position:absolute;left:1175px;right:50px;top:237px;border-left:1px solid #c2b9a7;padding-left:38px}
+.w9-fifa-result p{margin:0 0 36px;font:800 30px/1.2 var(--sans);color:#48563d}
+.w9-fifa-result dl,.w9-fifa-result dd{margin:0}
+.w9-fifa-result dl{display:grid;gap:34px}
+.w9-fifa-result dt{font:750 25px/1.2 var(--sans)}
+.w9-fifa-result strong{display:block;font:650 100px/1.05 var(--serif);letter-spacing:-.045em;color:#4b5c3e}
+.w9-fifa-result small{font:650 22px/1.15 var(--sans)}
+.w9-fifa-source{position:absolute;right:48px;bottom:27px;margin:0;font:650 17px/1.2 var(--sans);color:#605749}

@@ -7,13 +7,13 @@ date: Fri 27 Nov 2026 · P2 · 10:40–12:20
 date_ja: 2026年11月27日（金） · 2限 · 10:40–12:20
 title: Studio Day: Test and Improve
 title_ja: スタジオデー：試して改善する
-look: Train or walk?
-look_ja: 電車に乗る？ 歩く？
+look: From a question to evidence
+look_ja: 問いから根拠へ
 learn: combine your team’s ideas into one graphic, then give it a question title worth reading
 learn_ja: チームの案を一つの図にまとめ、続きを見たくなる問いをタイトルにする
 lecture_gallery_week: 8
-schedule: 10:40–11:00|Harry Beck’s Tube map|Train or walk?;11:00–11:20|One group graphic|Combine ideas from your Week 8 drafts;11:20–12:20|Question title|Find the question, then make the answer visible
-schedule_ja: 10:40–11:00|ベックの地下鉄路線図|電車に乗る？ 歩く？;11:00–11:20|グループで一つの図|第8週の案を組み合わせる;11:20–12:20|問いをタイトルに|問いを見つけ、答えが伝わる図にする
+schedule: 10:40–11:00|From a question to evidence|Beck’s Tube map and the FIFA group;11:00–11:20|One group graphic|Combine ideas from your Week 8 drafts;11:20–12:20|Question title|Find the question, then make the answer visible
+schedule_ja: 10:40–11:00|問いから根拠へ|ベックの地下鉄路線図とFIFAの班;11:00–11:20|グループで一つの図|第8週の案を組み合わせる;11:20–12:20|問いをタイトルに|問いを見つけ、答えが伝わる図にする
 in_class: Stay with your project team. Use your Week 8 revisions to make one better graphic together. Give it a question title the graphic can answer.
 in_class_ja: いつものプロジェクト班で、第8週の改訂案をもとに一つの図をつくる。その図から答えが読み取れる問いをタイトルにする。
 homework: Finish your group graphic and its question title. One person submits for the group.
@@ -47,8 +47,8 @@ steps_ja:
 ### Activity 2
 title: The question in the title · 20 min
 title_ja: 問いをタイトルに · 20分
-text: “FIFA rankings” names a topic. “Do countries with more people rank higher in football?” gives the audience a reason to look.
-text_ja: 「FIFAランキング」はテーマの名前。「人口が多い国ほど、サッカーの世界順位は高い？」なら、答えを知りたくなる。
+text: “FIFA rankings” names a topic. A question title tells the audience what the graphic will help them find out.
+text_ja: 「FIFAランキング」はテーマの名前。問いをタイトルにすると、この図で何が分かるのか伝わる。
 steps:
 - Look at your shared draft. What’s the most interesting question it can actually answer?
 - Write two or three possible titles. Read them aloud and choose one that makes someone outside the team curious.

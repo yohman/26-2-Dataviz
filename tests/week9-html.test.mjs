@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import {safeDeckReturn,studioDeckOpening} from '../assets/html-lecture-model.mjs';
-import {renderWeek9} from '../assets/week09-visuals.mjs';
+import {fifaEvidence,renderWeek9} from '../assets/week09-visuals.mjs';
+import {fifaSnapshot} from '../assets/week09-fifa-data.mjs';
 
 const path='content/weeks/09-studio-test-improve.md';
 const source=fs.readFileSync(path,'utf8');
@@ -21,7 +22,7 @@ test('Week 9 shares the agenda opening time and preserves the preview return',()
 });
 
 test('historical sources, bilingual slides, chapters and homework render in the agreed order',()=>{
-  assert.deepEqual(deck.slides.slice(0,4).map(slide=>slide.id),['pocket-map','beck-map','train-or-walk','walking-map']);
+  assert.deepEqual(deck.slides.slice(0,11).map(slide=>slide.id),['pocket-map','beck-map','train-or-walk','tfl-walking-map','walking-map','iceland-2018','cabo-verde-2026','fifa-drafts','fifa-missing','title-example','fifa-evidence']);
   for (const slide of deck.slides) for (const ja of [true,false]) {
     assert.ok(slide.notes[ja?'ja':'en']);
     const html=renderWeek9(slide,{ja});
@@ -29,22 +30,26 @@ test('historical sources, bilingual slides, chapters and homework render in the 
     if(slide.kind==='archive') assert.match(html,/<img src="(?:https:|assets\/images\/lecture\/week09-2025\/).*alt="[^"]+"/);
   }
   for(const ja of [true,false]){
-    const combined=renderWeek9(deck.slides[3],{ja});
+    const tfl=renderWeek9(deck.slides[3],{ja});
+    assert.match(tfl,/week09-tfl-west-end\.webp/);
+    assert.match(tfl,/320 m/);
+    const combined=renderWeek9(deck.slides[4],{ja});
     assert.match(combined,/w9-geographic-map/);
     assert.match(combined,/w9-rail-time/);
     assert.match(combined,/w9-walk-time/);
-    assert.match(combined,/380 m/);
+    assert.match(combined,ja?/約3分/:/~3 min/);
     assert.match(combined,/www\.openstreetmap\.org\/copyright/);
   }
-  const streetMap=fs.readFileSync(deck.slides[3].image,'utf8');
+  const streetMap=fs.readFileSync(deck.slides[4].image,'utf8');
   assert.match(streetMap,/#273e80.*stroke-dasharray="12 12"/);
   assert.match(streetMap,/#9b343f.*stroke-width="10"/);
-  assert.deepEqual(deck.slides.map((slide,i)=>slide.annotationPage??i+1).sort((a,b)=>a-b),[1,2,4,5,6,7,8,9,10,11,12,13]);
+  assert.deepEqual(deck.slides.map((slide,i)=>slide.annotationPage??i+1).sort((a,b)=>a-b),[1,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19]);
   assert.deepEqual(deck.slides.filter(slide=>slide.kind==='activity').map(slide=>slide.duration),[20,20,40]);
-  assert.deepEqual(deck.slides.slice(4,8).map(slide=>slide.id),['title-example','design-task','viewer-test','one-change']);
-  const example=renderWeek9(deck.slides[4],{ja:false});
-  assert.match(example,/FIFA rankings<\/p><h1>Do countries with more people rank higher in football\?/);
-  assert.match(deck.slides[4].notes.en,/1\. Question[\s\S]+2\. Visual choices and data[\s\S]+3\. Titles and labels[\s\S]+4\. Reason for the design[\s\S]+5\. Original insight/);
+  assert.deepEqual(deck.slides.slice(11,14).map(slide=>slide.id),['design-task','viewer-test','one-change']);
+  const example=renderWeek9(deck.slides[9],{ja:false});
+  assert.match(example,/more likely to make FIFA’s top 50\?/);
+  assert.doesNotMatch(example,/8 of 101|39 of 102/);
+  assert.match(deck.slides[10].notes.en,/1\. Question[\s\S]+2\. Marks and measures[\s\S]+3\. Labels[\s\S]+4\. Rationale[\s\S]+5\. Insight/);
   assert.doesNotMatch(source+JSON.stringify(deck),/MIT 6\.894|vis\.mit\.edu/i);
   for (const chapter of deck.chapters) assert.ok(deck.slides.some(slide=>slide.id===chapter.id));
   assert.match(renderWeek9(deck.slides.find(s=>s.id==='homework'),{ja:false}),/homework-submit\.html\?week=9/);
@@ -54,6 +59,17 @@ test('historical sources, bilingual slides, chapters and homework render in the 
   const submission=fs.readFileSync('assets/homework-submissions.js','utf8');
   assert.match(submission,/Your question title/);
   assert.match(submission,/First group draft/);
+});
+
+test('FIFA evidence uses the dated Group 6 data and appears after the question',()=>{
+  assert.equal(fifaSnapshot.rankingDate,'2026-10-07');
+  assert.deepEqual(fifaEvidence().halves,[{teams:101,top:8},{teams:102,top:39}]);
+  assert.match(renderWeek9(deck.slides[10],{ja:false}),/8 of 101 teams[\s\S]+39 of 102 teams/);
+  for(const s of deck.slides){
+    for(const path of [s.image,...(s.images||[]).map(i=>i.src)].filter(path=>path?.startsWith('assets/'))){
+      assert.ok(fs.statSync(path).size>1000,path);
+    }
+  }
 });
 
 test('the 2025 showcases follow homework and link to the original archive pages',()=>{

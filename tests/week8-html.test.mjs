@@ -85,7 +85,7 @@ test('Week 8 individual revisions feed a single Week 9 group graphic',()=>{
  assert.deepEqual(Array.from(next.activities,a=>Number(a.title.match(/(\d+) min$/)?.[1])),[20,20,40]);
  assert.match(next.activities[0].text,/Week 8 individual revision/);
  assert.match(next.activities[0].steps[0],/Combine.*into one graphic/);
- assert.match(next.activities[1].text,/FIFA rankings.*Do countries/);
+ assert.match(next.activities[1].text,/FIFA rankings.*question title/i);
  assert.match(next.activities[2].steps.at(-1),/one titled prototype.*midterm/);
  assert.doesNotMatch(src,/pair with another group/i);
  assert.equal(next.materials[0].href,'lecture.html?week=9');

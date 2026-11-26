@@ -1,6 +1,6 @@
 import {clampSlide,scatterMarks,lineSegments,safeDeckReturn,studioDeckOpening} from './html-lecture-model.mjs?v=week9-beck-20261126';
 import {renderWeek8,bindWeek8} from './week08-visuals.mjs?v=marker-20261120';
-import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=street-reveal-20261127';
+import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=fifa-evidence-20261127';
 const $=s=>document.querySelector(s),params=new URLSearchParams(location.search),stage=$('[data-stage]'),surface=$('[data-surface]'),slide=$('[data-slide]'),viewer=$('.html-deck');
 const requestedWeek=Number(params.get('week')),week=[8,9].includes(requestedWeek)?requestedWeek:7;
 const allowedReturn=safeDeckReturn(params.get('return'),week);
@@ -92,7 +92,7 @@ async function start(){
   const path=`content/slides/week${String(week).padStart(2,'0')}.json`;
   const load=async url=>{const response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('Unavailable');return response.json();};
   [deck,data]=await Promise.all([load(path),week===9?null:load('data/week07-examples.json?v=20261112')]);
-  if(week===9)for(const item of deck.slides.slice(1,4).filter(item=>item.image)){
+  if(week===9)for(const item of deck.slides.slice(1,7).filter(item=>item.image)){
    const img=new Image();img.referrerPolicy='no-referrer';img.src=item.image;
   }
   viewportControl=window.createSlideViewport({viewport:stage,surface,onChange:value=>{zoom=value;$('[data-zoom-level]').textContent=`${Math.round(value*100)}%`;}});
