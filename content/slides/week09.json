@@ -1,0 +1,78 @@
+{
+  "title": {"en":"Train or walk?","ja":"電車に乗る？ 歩く？"},
+  "chapters": [
+    {"id":"pocket-map","label":{"en":"Lecture · 20 min","ja":"講義 · 20分"}},
+    {"id":"design-task","label":{"en":"Activity 1","ja":"活動1"}},
+    {"id":"viewer-test","label":{"en":"Activity 2","ja":"活動2"}},
+    {"id":"one-change","label":{"en":"Activity 3","ja":"活動3"}},
+    {"id":"homework","label":{"en":"Homework","ja":"宿題"}}
+  ],
+  "slides": [
+    {
+      "id":"pocket-map", "kind":"archive", "year":"1931",
+      "title":{"en":"F. H. Stingemore’s pocket map","ja":"スティンモアの携帯用路線図"},
+      "credit":{"en":"F. H. Stingemore · TfL Corporate Archives","ja":"F. H. スティンモア · TfL資料室"},
+      "image":"https://lh3.googleusercontent.com/ci/AL18g_QebhWQQUbyZlGyK7peQERU3JYL1sOGb539CfXkBNnv52Fpwp8573aI1homxRlpT_ab13Y3ZA=w2600",
+      "alt":{"en":"Stingemore’s 1931 Underground pocket map. Curved lines and irregular station spacing fill the page.","ja":"1931年のスティンモアの携帯用路線図。曲がった路線と間隔の異なる駅が紙面に広がっている。"},
+      "notes":{"en":"1931, London. Fred Stingemore’s pocket map already simplifies the city, uses line colors, and marks interchanges with open circles. It still gives a more geographic impression than Beck’s diagram. A route to compare across the two views: Earl’s Court to Oxford Circus, changing at Piccadilly Circus.","ja":"1931年、ロンドン。フレッド・スティンモアの携帯用路線図は、すでに街の形を簡略化し、路線を色で分け、乗換駅を白抜きの丸で示している。ベックの図より地理的な位置関係を残す。比較できる経路の例：アールズ・コートからオックスフォード・サーカスまで、ピカデリー・サーカスで乗り換える。"},
+      "sources":[{"label":"TfL Corporate Archives · Stingemore and Beck","href":"https://artsandculture.google.com/story/IQXRldY73iB1oA"}]
+    },
+    {
+      "id":"beck-map", "kind":"archive", "year":"1933",
+      "title":{"en":"Harry Beck’s first pocket edition","ja":"ハリー・ベックの携帯用路線図 初版"},
+      "credit":{"en":"Harry Beck · David Rumsey Map Collection","ja":"ハリー・ベック · デイヴィッド・ラムゼイ地図コレクション"},
+      "image":"https://media.davidrumsey.com/MediaManager/srvr?mediafile=/Size4/RUMSEY~8~1/162/8691003.jpg",
+      "alt":{"en":"Beck’s first pocket edition. Lines follow straight segments, and hollow diamonds mark interchanges.","ja":"ベックの携帯用路線図の初版。直線で構成された路線に、乗換駅が白抜きのひし形で示されている。"},
+      "notes":{"en":"January 1933. Straight segments, a limited set of angles, and more even spacing gave station names and interchanges room. The Thames remained a landmark. The route from Earl’s Court has the same transfer at Piccadilly Circus in both maps. On Beck’s diagram, the distance between marks should not be read as distance above ground.","ja":"1933年1月。直線、限られた角度、より均等な駅間隔によって、駅名や乗換駅が読み取りやすくなった。テムズ川は目印として残っている。アールズ・コートからの乗換駅は両方の図でピカデリー・サーカス。ベックの図の駅間隔は、地上の距離を示さない。"},
+      "sources":[{"label":"David Rumsey Map Collection · first 1933 edition","href":"https://www.davidrumsey.com/luna/servlet/detail/RUMSEY~8~1~274012~90047744:Map-of-London-s-Underground-Railway"},{"label":"London Transport Museum · first pocket edition","href":"https://artsandculture.google.com/asset/pocket-underground-map-henry-c-beck/AQGrQloi9u07rQ?hl=en"}]
+    },
+    {
+      "id":"beck-sketch", "kind":"archive", "year":"1931",
+      "title":{"en":"Beck’s working sketch","ja":"ベックのスケッチ"},
+      "credit":{"en":"Harry Beck · TfL Corporate Archives","ja":"ハリー・ベック · TfL資料室"},
+      "image":"https://lh3.googleusercontent.com/ci/AL18g_SDAZ7gjaIhO0wcs2VndOx_BIg1qFsFeZY00yHdVyTR4ABbU80PI9pg2z3Mw1_d6iBYWZU_Euk=w2300",
+      "alt":{"en":"Archive reproduction of Beck’s hand-drawn 1931 sketch for the London Underground diagram.","ja":"ベックが1931年に描いたロンドン地下鉄路線図のスケッチの複製。"},
+      "notes":{"en":"Beck worked as a technical draughtsman and drew the first sketch independently in 1931. The Underground’s publicity office initially rejected the design, then agreed to try it. The first printed pocket edition appeared in 1933 and included an invitation to send comments. An unusual representation went from a sketch to something riders could try.","ja":"製図工だったベックは1931年、自主的に最初のスケッチを描いた。地下鉄の広報部は当初採用を見送ったが、後に試験導入を決めた。1933年の携帯用初版には、利用者からの意見を募る案内もあった。珍しい表現が、スケッチから乗客が使って試せるものになった。"},
+      "sources":[{"label":"TfL Corporate Archives · 1931 sketch (reproduction)","href":"https://artsandculture.google.com/asset/harry-beck-s-sketch-for-the-underground-map/EQG96SzbZyTSVA"},{"label":"TfL Corporate Archives · Harry Beck research guide","href":"https://tfl.gov.uk/cdn/static/cms/documents/research-guide-no-24-harry-beck.pdf"}]
+    },
+    {
+      "id":"train-or-walk", "kind":"one-stop",
+      "title":{"en":"One stop","ja":"一駅"},
+      "notes":{"en":"Leicester Square and Covent Garden are consecutive stations on the Piccadilly line. The diagram preserves that connection. It does not tell a rider how far the stations are apart on foot or where the street entrances are.","ja":"レスター・スクエアとコヴェント・ガーデンはピカデリー線の隣り合う駅。路線図からは隣接関係が分かるが、地上での徒歩距離や駅の出入口の位置は分からない。"},
+      "sources":[{"label":"Transport for London · Covent Garden","href":"https://art.tfl.gov.uk/labyrinth/artwork/covent-garden/"}]
+    },
+    {
+      "id":"walking-map", "kind":"walk",
+      "title":{"en":"About 4 min on foot","ja":"徒歩 約4分"},
+      "notes":{"en":"TfL’s West End walking map marks this route as a four-minute walk of 320 metres. The estimate depends on pace. A view for making transfers preserves connections. A view for deciding whether to walk needs distance and street routes. This is the same place seen through two different tasks.","ja":"TfLのウェストエンド徒歩地図では、この区間は320メートル、徒歩4分が目安。所要時間は歩く速さによって変わる。乗換案内に必要なのは駅のつながり。歩くかどうかを決めるには、地上の道順や距離が必要になる。場所が同じでも、目的によって必要な図は変わる。"},
+      "sources":[{"label":"Transport for London · West End walking map (May 2025)","href":"https://content.tfl.gov.uk/west-end-walking-map.pdf"}]
+    },
+    {
+      "id":"design-task", "kind":"activity", "duration":25,
+      "title":{"en":"One question, one graphic","ja":"一つの問い、一つの図"},
+      "steps":{"en":["Show your Week 8 revisions. Agree on a viewer and one question.","Give the viewer one task: find, compare, or trace something.","Make one draft with that question as its title."],"ja":["第8週の改訂案を見せ合い、誰に向けた図か、どんな問いに答えるかを決める。","見つける、比べる、たどるなど、見る人に試してほしいことを一つ決める。","問いをタイトルにした図を一つ試作する。"]},
+      "notes":{"en":"11:00–11:25. MIT’s visualization design assignment starts with a specific question, uses it as the graphic’s title, and asks for one self-contained image. The in-class prototype can be a shared slide, a sketch shown on screen, or an existing draft adapted from Week 8. One small, answerable question is enough.","ja":"11:00〜11:25。MITの可視化デザイン課題は、具体的な問いを決め、それを図のタイトルにし、単独で読める画像を一枚つくる。授業内の試作は、共有スライドや画面で見せるスケッチ、第8週の改訂案を活用したものでもよい。小さくても、答えられる問いが一つあればよい。"},
+      "sources":[{"label":"MIT 6.894 · Visualization Design","href":"https://vis.mit.edu/classes/6.894/A1.html"}]
+    },
+    {
+      "id":"viewer-test", "kind":"activity", "duration":20,
+      "title":{"en":"The viewer’s task","ja":"見る人に試してもらう"},
+      "steps":{"en":["Show the draft and give the other group the task, without a walkthrough.","Where did they look? What did they miss or read differently?","Record one observation. Switch after 10 minutes."],"ja":["試作を見せ、課題だけを伝える。図の読み方は先に説明しない。","相手はどこを見たか。何を見落としたか、どう読み取ったか。","気づきを一つ記録し、10分で交代する。"]},
+      "notes":{"en":"11:25–11:45. Ten minutes per group. A test gives peers something specific to do, such as finding the highest rate or tracing a link, rather than asking whether they like the design. Hesitations, wrong turns, or correct readings all give useful evidence. MIT’s project milestone pairs working but rough prototypes with peer design critiques.","ja":"11:25〜11:45。1グループ10分。好きかどうかを聞くのではなく、最も高い割合を探す、関係をたどるなど、具体的な課題を試してもらう。迷った箇所も、誤読も、正しく読めた箇所も手がかりになる。MITのプロジェクト中間段階でも、完成前の試作を同級生同士で講評する。"},
+      "sources":[{"label":"MIT 6.859 · Milestone review and peer design critique","href":"https://vis.csail.mit.edu/classes/6.859/FinalProject/#milestone-review-week-12"}]
+    },
+    {
+      "id":"one-change", "kind":"activity", "duration":35,
+      "title":{"en":"One design change","ja":"デザインを一つ変える"},
+      "steps":{"en":["Save the version you tested.","Change one choice: a label, the order, a mark, or what gets attention.","Try the same task again. Keep both versions for the midterm."],"ja":["試した版を保存する。","ラベル、順番、図形、強調する箇所など、変更を一つ試す。","同じ課題でもう一度確かめ、前後の図を中間発表用に残す。"]},
+      "notes":{"en":"11:45–12:20. A useful change can add a needed label or move a secondary series out of the main view. Removing detail should not conceal relevant context or change the meaning of the evidence. Both versions and the test observation make a concrete example for the Dec. 4 group midterm. Dec. 11 turns to maps and spatial thinking, and Dec. 18 to networks and multiple views.","ja":"11:45〜12:20。必要なラベルを加えたり、副次的な系列を主図から移したりするだけでも改善になる。情報を減らすときは、必要な背景やデータの意味を損なわない。前後の図と観察メモは12月4日の中間グループ発表に使える。12月11日は地図と空間的思考、12月18日はネットワークと複数ビュー。"}
+    },
+    {
+      "id":"homework", "kind":"homework",
+      "title":{"en":"Before and after","ja":"改訂の前と後"},
+      "steps":{"en":["One person submits for the group.","Upload the tested and revised graphics. Include the data link.","Write 3–5 sentences: the viewer’s task, what you changed, and what became easier or harder to see."],"ja":["代表者がグループで1回提出する。","試した版と改訂版の画像、データのリンクを添える。","見る人の課題、変更した点、見やすくなった点や見えにくくなった点を3〜5文で書く。"]},
+      "notes":{"en":"Put the group name at the start of the explanation. The revised image should be understandable without the rationale. In the write-up, connect the change to what peers actually did or noticed, and name any detail that the new view de-emphasizes. The revised version goes in image 1 so it appears first in the gallery.","ja":"説明の冒頭にグループ名を書く。改訂版は、説明文と切り離しても読めるものにする。変更理由は、相手が実際に見たこと・したことと結びつけ、新しい図で強調しなくなった情報があれば書く。ギャラリーの最初に表示されるよう、画像1には改訂版を入れる。"},
+      "sources":[{"label":"MIT 6.894 · Visualization Design rationale","href":"https://vis.mit.edu/classes/6.894/A1.html"}]
+    }
+  ]
+}

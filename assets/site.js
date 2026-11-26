@@ -132,7 +132,8 @@ function materialLinks(materials, context = {}) {
     params.set('return', context.returnTo || (context.week ? `agenda.html#week-${context.week}` : 'agenda.html'));
     if (context.week) params.set('week', `Week ${context.week}`);
     const previewPage = extension === 'csv' ? 'csv-preview.html' : extension === 'ipynb' ? 'notebook-preview.html' : extension === 'pdf' ? 'viewer.html' : '';
-    const previewHref = !external && previewPage ? `${previewPage}?${params}` : href;
+    const htmlLecture = /^lecture\.html\?week=\d+$/.test(href) && material.type === 'slides';
+    const previewHref = htmlLecture ? `${href}&return=${encodeURIComponent(params.get('return'))}` : !external && previewPage ? `${previewPage}?${params}` : href;
     const label = copy(material.label, window.COURSE_TRANSLATIONS?.ja?.[material.label] || material.label);
     const openLabel = external || !previewPage ? copy('Open', '開く') : copy('Preview', 'プレビュー');
     return `<div class="course-resource" title="${escapeHtml(label)}"><strong class="course-resource-name">${escapeHtml(label)}</strong><span class="course-resource-type">${escapeHtml(fileType)}</span><div class="course-resource-actions"><a class="course-resource-preview" href="${escapeHtml(previewHref)}" aria-label="${escapeHtml(`${label} · ${openLabel}`)}"${external ? ' target="_blank" rel="noopener"' : ''}>${openLabel}${external ? ' ↗' : ''}</a>${webpage || lecture ? '' : `<a class="course-resource-download" href="${escapeHtml(href)}" download aria-label="${escapeHtml(label)} · ${copy('Download', 'ダウンロード')}">${copy('Download', 'ダウンロード')}</a>`}</div></div>`;

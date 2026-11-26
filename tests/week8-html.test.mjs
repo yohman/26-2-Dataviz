@@ -84,9 +84,9 @@ test('Week 8 is an individual revision that feeds the Week 9 on-screen group cri
  assert.match(next.schedule_ja,/^10:40–11:00.*;11:00–11:25.*;11:25–12:20/);
  assert.deepEqual(Array.from(next.activities,a=>Number(a.title.match(/(\d+) min$/)?.[1])),[25,20,35]);
  assert.match(next.activities[0].text,/Week 8 individual revision/);
- assert.match(next.activities[1].text,/on screen before explaining/);
- assert.match(next.activities[2].steps.at(-1),/both versions.*next week’s midterm/);
- for(const resource of next.lectureResources) assert.ok(deck.slides.some(slide=>slide.id===new URL(resource.href,'https://example.test').searchParams.get('slide')));
+ assert.match(next.activities[1].text,/show the graphic without a walkthrough/);
+ assert.match(next.activities[2].steps.at(-1),/both versions.*midterm/);
+ assert.equal(next.materials[0].href,'lecture.html?week=9');
  const final=renderWeek8(deck.slides.find(s=>s.id==='double-diamond'),{ja:true,data,returnTo:''});assert.doesNotMatch(final,/w8-source-feedback/);assert.doesNotMatch(final,/w8-phase.*polygon/);assert.equal((final.match(/w8-source-phase-name/g)||[]).length,4);
  assert.ok(deck.slides.find(s=>s.kind==='framework-context').sources.some(s=>s.label.includes('CC BY 4.0')));
 });
