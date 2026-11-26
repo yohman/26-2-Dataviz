@@ -140,11 +140,26 @@ html[lang=en] .w9-commute-planner h1{font-size:58px;text-wrap:normal}
 .commute-map-street,.commute-map-exit,.commute-time-walk,.commute-time-exit{stroke-dasharray:2 13}
 .w9-commute-map text{font-size:27px;font-weight:850;stroke:#181f2a;stroke-width:6;paint-order:stroke fill;stroke-linejoin:round}
 .w9-commute-map .commute-mode{color:#c6c2ba;font-size:18px;font-weight:700}
+.commute-basemap{opacity:.57;filter:grayscale(1) invert(1) contrast(1.1) brightness(1.55)}
+.commute-map-outlines path{fill:none;stroke:#101620;stroke-width:11;stroke-linecap:round;stroke-linejoin:round}
+.w9-commute-geographic>[data-path]{stroke-width:5}
+.w9-commute-geographic>.commute-map-shared{stroke:#d7e1e0}
+.w9-commute-geographic>.commute-map-street,.w9-commute-geographic>.commute-map-exit{stroke-width:4;stroke-dasharray:1 5}
+.w9-commute-geographic .commute-map-compass,.w9-commute-geographic .commute-map-credit{color:#bfc1c1;font-size:15px;font-weight:750;stroke-width:4}
+.commute-wait-ring,.commute-wait-leader,.commute-wait-caption{visibility:hidden}
+.has-transfer-hold :is(.commute-wait-ring,.commute-wait-leader,.commute-wait-caption){visibility:visible}
+.commute-wait-ring circle{fill:none;stroke:var(--commute-gold);stroke-width:2.5}
+.commute-wait-ring circle+circle{stroke-width:1;stroke-opacity:.65}
+.commute-wait-leader{fill:none;stroke:var(--commute-gold);stroke-width:1.7}
+.w9-commute-geographic .commute-wait-caption{color:var(--commute-gold);font-size:21px;stroke-width:7}
+.commute-phase{position:absolute;left:46%;right:0;bottom:4px;display:grid;gap:6px;font:800 22px/1.16 var(--sans);min-height:52px;pointer-events:none}
+.has-transfer-hold [data-commute-b]{color:var(--commute-gold)}
+.has-transfer-hold [data-clock-racer=b]{fill:var(--commute-gold)}
 .commute-node,.commute-clock-node{fill:#181f2a;stroke:#e5dece;stroke-width:3}
 .commute-racer-a{fill:var(--commute-a);stroke:#181f2a;stroke-width:3}
 .commute-racer-b{fill:var(--commute-b);stroke:#181f2a;stroke-width:3}
 .commute-racer-a:not(.commute-a),.commute-racer-b:not(.commute-b){filter:drop-shadow(0 0 6px #fff8)}
-.w9-commute-map .is-transferring{fill:var(--commute-gold);stroke:var(--commute-gold);stroke-width:8}
+.w9-commute-map .is-transferring{fill:var(--commute-gold);stroke:#181f2a;stroke-width:2}
 .w9-commute-timeline{overflow:visible}
 .w9-commute-timeline [class^="commute-time-"]{fill:none;stroke-width:9;stroke-linecap:round}
 .commute-time-change{stroke:var(--commute-gold);stroke-dasharray:3 11}

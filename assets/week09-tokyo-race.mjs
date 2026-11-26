@@ -1,3 +1,5 @@
+import {geographicPaths,geographicStops,tokyoBasemap,tokyoMapSource} from './week09-tokyo-geography.mjs';
+
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const tokyoTimes=Object.freeze({departure:9*60+3,nishi:35,ote:47,board:42,tokyoPlatform:55,platformWalk:3,defaultWalk:8});
 const T=tokyoTimes;
@@ -19,7 +21,7 @@ const stamp=t=>hhmm(T.departure+Math.floor(t));
 const x=t=>45+t*9.7;
 const routeNames=ja=>ja?['大手町で降りて歩く','西日暮里で山手線に乗り換え']:['Stay on to Ōtemachi, then walk','Change to the Yamanote at Nishi-Nippori'];
 const mapPaths={shared:'M155 86 H245 Q305 86 305 145 V250',stay:'M305 250 V438',street:'M305 438 H505',yamanote:'M305 250 H426 Q505 250 505 329 V398',exit:'M505 398 V438'};
-function routeMap(ja,moving=false){
+function routeMap(ja){
   const name=ja?['南柏','西日暮里','大手町','東京駅']:['Minami-Kashiwa','Nishi-Nippori','Ōtemachi','Tokyo Station'];
   const labels=[[155,86,0,-26],[305,250,-20,-24],[305,438,-19,38],[505,438,14,38]];
   return `<svg class="w9-commute-map" viewBox="0 0 625 535" role="img" aria-label="${ja?'南柏から東京駅までの二つの経路図':'Schematic of the two routes from Minami-Kashiwa to Tokyo Station'}">
@@ -29,7 +31,27 @@ function routeMap(ja,moving=false){
      <text class="commute-mode" x="280" y="349" text-anchor="end">${ja?'千代田線':'Chiyoda Line'}</text>
      <text class="commute-mode" x="402" y="219">${ja?'山手線 外回り':'Yamanote outer loop'}</text>
      <text class="commute-mode" x="400" y="414" text-anchor="middle">${ja?'徒歩':'Walk'}</text>
-     ${moving?'<g data-racer="a" class="commute-racer-a" transform="translate(150 86)"><circle r="11"/></g><g data-racer="b" class="commute-racer-b" transform="translate(160 86)"><path d="M0 -10 L10 0 0 10 -10 0Z"/></g>':''}
+   </svg>`;
+}
+function geographicMap(ja){
+  const [origin,nishi,ote,gate]=geographicStops;
+  const names=ja?['南柏','西日暮里','大手町','東京駅']:['Minami-Kashiwa','Nishi-Nippori','Ōtemachi','Tokyo Station'];
+  const coordinates=[{p:origin,dx:0,dy:-17,anchor:'middle'},{p:nishi,dx:18,dy:-17,anchor:'start'},
+    {p:ote,dx:-12,dy:-13,anchor:'end'},{p:gate,dx:20,dy:26,anchor:'start'}];
+  return `<svg class="w9-commute-map w9-commute-geographic" viewBox="0 0 625 535" role="img" aria-label="${ja?'南柏から東京駅までの実際の地理に沿った地図':'Geographic map of the rail routes from Minami-Kashiwa to Tokyo Station'}">
+    <image class="commute-basemap" href="${tokyoBasemap}" width="625" height="535" preserveAspectRatio="none"/>
+    <g class="commute-map-outlines" aria-hidden="true">${Object.values(geographicPaths).map(d=>`<path d="${d}"/>`).join('')}</g>
+    ${Object.entries(geographicPaths).map(([id,d])=>`<path class="commute-map-${id}" data-path="${id}" d="${d}"/>`).join('')}
+    ${coordinates.map(({p:[x,y],dx,dy,anchor},i)=>`<circle class="commute-node" cx="${x}" cy="${y}" r="${i===0||i===3?7:5}"/><text x="${x+dx}" y="${y+dy}" text-anchor="${anchor}">${names[i]}</text>`).join('')}
+    <text class="commute-map-compass" x="37" y="47">↑ N</text>
+    <text class="commute-mode" x="489" y="150">${ja?'常磐線各駅停車':'Jōban Local'}</text>
+    <text class="commute-mode" x="170" y="426">${ja?'山手線':'Yamanote'}</text>
+    <g class="commute-wait-ring" aria-hidden="true" transform="translate(${nishi.join(' ')})"><circle r="12"/><circle r="22"/></g>
+    <path class="commute-wait-leader" aria-hidden="true" d="M${nishi.join(' ')}l24 15h34"/>
+    <text class="commute-wait-caption" x="${nishi[0]+64}" y="${nishi[1]+21}" aria-hidden="true" data-map-wait></text>
+    <g data-racer="a" class="commute-racer-a" transform="translate(${origin[0]-7} ${origin[1]})"><circle r="9"/></g>
+    <g data-racer="b" class="commute-racer-b" transform="translate(${origin[0]+7} ${origin[1]})"><path d="M0 -9 L9 0 0 9 -9 0Z"/></g>
+    <a href="${tokyoMapSource}" target="_blank" rel="noopener noreferrer"><text class="commute-map-credit" x="608" y="517" text-anchor="end">${ja?'地理院タイル（加工）・国土数値情報 鉄道':'GSI basemap · MLIT railway data'}</text></a>
    </svg>`;
 }
 function chart(ja,walk){
@@ -57,7 +79,7 @@ export function renderTokyo(slide,ja){
   if(slide.kind==='tokyo-schematic')return `<section class="w9-commute-schematic"><div><h1>${title}</h1>${routeNames(ja).map((s,i)=>`<p class="commute-${i?'b':'a'}">${i?'◆':'●'} ${s}</p>`).join('')}</div>${routeMap(ja)}</section>`;
   if(slide.kind==='tokyo-question')return `<section class="w9-commute-question"><strong>${stamp(0)}</strong><p>${ja?'二人とも南柏から同じ電車に乗る。':'Same train out of Minami-Kashiwa.'}</p><h1>${title}</h1></section>`;
   return `<section class="w9-commute" data-tokyo-race><header><div><h1>${title}</h1><p>${ja?'ゴール：東京駅 丸の内北口付近':'Finish: the Marunouchi North Gate area'}</p></div><time data-tokyo-clock aria-hidden="true">${stamp(0)}</time></header>
-    <div class="w9-commute-graphic">${routeMap(ja,true)}<div data-tokyo-chart>${chart(ja,T.defaultWalk)}</div></div>
+    <div class="w9-commute-graphic">${geographicMap(ja)}<div data-tokyo-chart>${chart(ja,T.defaultWalk)}</div><div class="commute-phase" aria-hidden="true"><span class="commute-a" data-commute-a></span><span class="commute-b" data-commute-b></span></div></div>
     <div class="w9-commute-control"><button type="button" data-tokyo-play>${ja?'▶ 再生':'▶ Play race'}</button><label>${ja?'大手町からの徒歩':'Walk from Ōtemachi'} <output data-tokyo-walk>${T.defaultWalk} ${ja?'分':'min'}</output><input type="range" min="4" max="16" value="${T.defaultWalk}"></label><p data-tokyo-result aria-live="polite"></p></div>
     <footer>${ja?'2026年12月の平日時刻表。徒歩は試算。':'Dec. 2026 weekday timetable. Walking times are estimates.'}</footer>
   </section>`;
@@ -66,7 +88,8 @@ export function bindTokyo(root,ja){
   if(!root)return;
   const get=q=>root.querySelector(q),control=get('input'),play=get('[data-tokyo-play]'),walkLabel=get('[data-tokyo-walk]');
   const clock=get('[data-tokyo-clock]'),result=get('[data-tokyo-result]'),timeline=get('[data-tokyo-chart]');
-  const routes=Object.fromEntries(Object.keys(mapPaths).map(id=>{const path=get('[data-path="'+id+'"]');return [id,[path,path.getTotalLength()]];}));
+  const waitText=get('[data-map-wait]'),phaseA=get('[data-commute-a]'),phaseB=get('[data-commute-b]');
+  const routes=Object.fromEntries(Object.keys(geographicPaths).map(id=>{const path=get('[data-path="'+id+'"]');return [id,[path,path.getTotalLength()]];}));
   const riders=['a','b'].map(id=>get('[data-racer="'+id+'"]'));
   let elapsed=0,frame=0,last=null,paused=false;
   function draw(){
@@ -84,6 +107,18 @@ export function bindTokyo(root,ja){
     get('[data-lane-arrival=a]').setAttribute('visibility',model.landedA?'visible':'hidden');
     get('[data-lane-arrival=b]').setAttribute('visibility',model.landedB?'visible':'hidden');
     clock.textContent=stamp(elapsed);
+    const waiting=model.b.phase==='transfer',remain=Math.ceil(T.board-elapsed);
+    root.classList.toggle('has-transfer-hold',waiting);
+    const write=(el,value)=>{if(el.textContent!==value)el.textContent=value;};
+    write(waitText,waiting?(ja?`乗換・待ち あと${remain}分`:`Transfer + wait · ${remain} min left`):'');
+    write(phaseA,model.landedA?(ja?'● 丸の内北口に到着':'● At Marunouchi North Gate'):
+      model.a.phase==='street'?(ja?'● 大手町から徒歩':'● Walking from Ōtemachi'):
+      waiting?(ja?'● 千代田線に乗車中':'● Still on the Chiyoda Line'):
+      model.a.phase==='stay'?(ja?'● 千代田線で大手町へ':'● On the train to Ōtemachi'):'');
+    write(phaseB,model.landedB?(ja?'◆ 丸の内北口に到着':'◆ At Marunouchi North Gate'):
+      waiting?(ja?'◆ 西日暮里で乗換・待ち':'◆ Waiting to board at Nishi-Nippori'):
+      model.b.phase==='yamanote'?(ja?'◆ 山手線に乗車中':'◆ On the Yamanote Line'):
+      model.b.phase==='exit'?(ja?'◆ ホームから北口へ徒歩':'◆ Walking from the platform'):'');
     root.dataset.stage=model.landedA&&model.landedB?'finished':model.b.phase;
     if(model.landedA&&model.landedB){
       const name=out.winner==='a'?(ja?'大手町経由':'Via Ōtemachi'):(ja?'西日暮里経由':'Via Nishi-Nippori');
@@ -101,7 +136,7 @@ export function bindTokyo(root,ja){
   function tick(t){
     if(!root.isConnected)return;
     const total=tokyoRace(Number(control.value)).duration;
-    elapsed=Math.min(total,elapsed+(last===null?0:(t-last)*total/10500));last=t;
+    elapsed=Math.min(total,elapsed+(last===null?0:(t-last)*total/17000));last=t;
     draw();
     if(finished()){frame=0;play.textContent=ja?'↻ もう一度':'↻ Replay';}
     else frame=requestAnimationFrame(tick);

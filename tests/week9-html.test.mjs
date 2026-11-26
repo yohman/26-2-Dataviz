@@ -8,6 +8,7 @@ import {fifaSnapshot} from '../assets/week09-fifa-data.mjs';
 import {tubeBreakEven,tubeJourney,tubeRaceFrame,tubeTimeline,tubeUrls} from '../assets/week09-tube.mjs';
 import {tubeStations} from '../assets/week09-tube-data.mjs';
 import {tokyoTimes,tokyoRace,tokyoFrame} from '../assets/week09-tokyo-race.mjs';
+import {geographicPaths,geographicStops,tokyoBasemap} from '../assets/week09-tokyo-geography.mjs';
 
 const path='content/weeks/09-studio-test-improve.md';
 const source=fs.readFileSync(path,'utf8');
@@ -82,7 +83,11 @@ test('Tokyo opens with the real planner summary and stages the same-train race i
     assert.match(renderWeek9(deck.slides.find(s=>s.id==='tokyo-connection'),{ja}),/09:03/);
     const model=renderWeek9(deck.slides.find(s=>s.id==='tokyo-reveal'),{ja});
     assert.match(model,/data-tokyo-play/);
-    assert.match(model,/data-racer="a".*data-racer="b"/);
+    assert.match(model,/week09-tokyo-commute-map\.webp/);
+    assert.match(model,/data-map-wait/);
+    assert.match(model,/data-commute-a/);
+    assert.match(model,/data-commute-b/);
+    assert.match(model,/data-racer="a"[\s\S]*data-racer="b"/);
     assert.match(model,/09:58[\s\S]*10:01/);
   }
   assert.deepEqual(tokyoFrame(0).a,tokyoFrame(0).b);
@@ -93,6 +98,10 @@ test('Tokyo opens with the real planner summary and stages the same-train race i
   assert.deepEqual(tokyoRace(),{a:55,b:58,duration:58,winner:'a',margin:3});
   assert.equal(tokyoRace(11).winner,'tie');
   assert.equal(tokyoRace(12).winner,'b');
+  assert.ok(fs.statSync(tokyoBasemap).size>10000);
+  assert.equal(geographicStops.length,4);
+  assert.match(geographicPaths.shared,/^M515\.53 48\.61L.*L126\.41 336\.27$/);
+  assert.ok(geographicPaths.yamanote.split('L').length>10);
 });
 
 test('the replay puts station holds before and after the train movement on the shared clock',()=>{
