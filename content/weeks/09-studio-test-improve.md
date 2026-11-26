@@ -7,70 +7,72 @@ date: Fri 27 Nov 2026 · P2 · 10:40–12:20
 date_ja: 2026年11月27日（金） · 2限 · 10:40–12:20
 title: Studio Day: Test and Improve
 title_ja: スタジオデー：試して改善する
-look: a prototype is a question you can test
-look_ja: プロトタイプは、試すことのできる問い
-learn: create, test, get feedback, and refine in class
-learn_ja: 授業内でつくり、試し、フィードバックを受け、改訂する
-schedule: 10:40–10:50|Pin up|One A3 printout per group;10:50–11:30|Wall critique|View, respond, discuss;11:30–12:20|Revise|Choose a change and test it
-schedule_ja: 10:40–10:50|壁に掲示|A3をグループで1枚;10:50–11:30|講評|見る・伝える・話す;11:30–12:20|改善|変更を一つ選んで試す
-in_class: Bring one printed A3 prototype poster per group on November 27. Pin it up for critique, then revise.
-in_class_ja: 11月27日に、各グループで試作ポスターをA3で1枚持参します。壁に掲示し、講評をもとに改善します。
+look: What does the chart say before you explain it?
+look_ja: 説明する前に、図から何が伝わるか？
+learn: build one group prototype from last week’s individual revisions, then test and improve it
+learn_ja: 先週の個人の改訂案をもとにグループで一つ試作し、伝わるかを確かめて改善する
+lecture_gallery_week: 8
+schedule: 10:40–11:00|Short lecture|Reading without explanation;11:00–11:25|Group prototype|Choose and combine individual revisions;11:25–12:20|Test and revise|Get another group’s reading, then make one change
+schedule_ja: 10:40–11:00|ミニ講義|説明なしで図を読む;11:00–11:25|グループ試作|各自の改訂案を選び、組み合わせる;11:25–12:20|試して改善|別のグループに見てもらい、一つ変更する
+in_class: Open your own Week 8 revision on your device. You’ll use it to build and test a group prototype in class.
+in_class_ja: 第8週に各自が改訂した図を端末で開きます。それをもとに、授業中にグループで試作し、伝わるかを確かめます。
 homework: Revision log and prototype update
 homework_ja: 改訂記録とプロトタイプの更新
 challenge: Prototype refinement
 challenge_ja: プロトタイプ改訂
-tools: A3 prototype printout, sticky notes or paper, and your project tool
-tools_ja: A3の試作・付箋やメモ・プロジェクトのツール
-image: assets/images/lecture/week09.png
+tools: Your Week 8 revision, a shared document or slide, and your project tool
+tools_ja: 第8週の改訂案・共有ドキュメントやスライド・プロジェクトのツール
 ---
 
-## Materials
+## Lecture Resources
 
-- [Lecture slides](lectures/w09.pdf) {slides}
+- [Du Bois: the city-only draft / デュボイス：都市部だけの試作](lecture.html?week=8&slide=dubois-city-draft) {reference}
+- [Schön: Reflection-in-action / ショーン：行為の中の省察](lecture.html?week=8&slide=schon) {reference}
+- [Double Diamond: return and try again / ダブルダイヤモンド：戻って、試す](lecture.html?week=8&slide=iterate) {reference}
 
 ## In Class Activities
 
 ### Activity 1
-title: Pin up · 10 min
-title_ja: 壁に掲示 · 10分
-text: Week 9 group deliverable: bring one printed A3 poster (297 × 420 mm) on November 27. Build it from your Week 8 individual revisions.
-text_ja: 第9週のグループ提出物は、A3（297×420mm）のポスター1枚。第8週の個人作品の改訂版をもとにまとめ、11月27日に持参します。
+title: Build one group prototype · 25 min
+title_ja: グループで一つ試作する · 25分
+text: Open your Week 8 individual revision. Show the graphic and say what you changed and why.
+text_ja: 第8週に各自が改訂した図を開きます。図を見せながら、何をなぜ変えたかを伝えます。
 steps:
-- Put your group name, question, and main visualization on the poster.
-- Pin up the group’s one printout where everyone can read it.
-- Put sticky notes or paper nearby for comments.
+- Agree on one question your group wants to answer.
+- Choose or combine ideas that help answer it.
+- Put one rough prototype on a shared slide or screen.
 steps_ja:
-- グループ名、問い、主な可視化をポスターに載せる。
-- グループで1枚、みんなが読める場所に掲示する。
-- 感想を書ける付箋やメモをそばに置く。
+- グループで答えたい問いを一つ決める。
+- その問いに答えるための案を選ぶか、組み合わせる。
+- 共有スライドや画面に試作を一つまとめる。
 
 ### Activity 2
-title: Wall critique · 40 min
-title_ja: 壁の作品を講評 · 40分
-text: Visit at least two other groups’ posters. Leave specific comments, then return to your own poster and discuss the feedback together.
-text_ja: 他のグループの作品を少なくとも二つ見て、具体的なコメントを残します。その後、自分たちの作品に戻り、もらった意見を読みます。
+title: Test it with another group · 20 min
+title_ja: 別のグループに見てもらう · 20分
+text: Pair with another group. Take 10 minutes each. Show the prototype on screen before explaining it.
+text_ja: 別のグループと組み、10分ずつ交代します。先に画面で試作を見せ、説明は後にします。
 steps:
-- What comes through clearly? Note one point.
-- What is unclear? Leave one question or suggestion.
-- Return as a group and choose one change to try.
+- Ask: “What do you see first? What do you think this chart is saying?”
+- Explain your intended message only after hearing their reading.
+- Note one difference between what you meant and what they saw. Then switch.
 steps_ja:
-- 伝わったことを一つ書く。
-- 不明な点や改善案を一つ残す。
-- グループで戻り、次に試す変更を一つ選ぶ。
+- 「最初に何が目に入った？ この図は何を伝えていると思う？」と聞く。
+- 相手の読み取りを聞いてから、自分たちが伝えたかったことを話す。
+- 伝えたかったことと相手の読み取りの違いを一つメモし、交代する。
 
 ### Activity 3
-title: Revise and compare · 50 min
-title_ja: 改善して、比べる · 50分
-text: Use the critique to improve your prototype. Keep the A3 as a record of the version you tested.
-text_ja: 講評をもとに試作を改善します。掲示したA3は、試した版の記録として残します。
+title: Revise and compare · 35 min
+title_ja: 改善して、比べる · 35分
+text: Use the feedback to make one change that helps the audience read the chart as intended.
+text_ja: 相手の読み取りをもとに、伝えたいことが伝わるように一つ変更します。
 steps:
-- Make the change you chose.
-- Compare it with the printed version. Is the question clearer?
-- Save the new version and one sentence on what changed and why.
+- Save a screenshot of the prototype you tested. Then make the change.
+- Compare the two versions. If possible, ask someone to read the new version without explanation.
+- Save both versions and one sentence on what changed and why, for next week’s midterm.
 steps_ja:
-- 選んだ変更を試す。
-- 印刷した版と比べ、問いが伝わりやすくなったか確認する。
-- 新しい版と、何をなぜ変えたかを一文で残す。
+- 見てもらった版のスクリーンショットを保存してから、変更を加える。
+- 前後を比べる。できれば、新しい版も説明なしで読んでもらう。
+- 来週の中間発表に向け、前後の図と、何をなぜ変えたかを一文で残す。
 
 ## Mori's Corner
 

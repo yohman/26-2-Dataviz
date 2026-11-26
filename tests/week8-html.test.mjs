@@ -71,14 +71,22 @@ test('the group-project transition uses marker artwork, and the following charts
  }
 });
 
-test('Week 8 is an individual revision and the A3 poster belongs to the Week 9 group critique',()=>{
+test('Week 8 is an individual revision that feeds the Week 9 on-screen group critique',()=>{
  assert.doesNotMatch(source,/A3/);assert.doesNotMatch(JSON.stringify(deck),/\bA3\b/);
  assert.match(week.homework,/show-and-tell.*own visualizations.*Each student/);
  assert.match(week.requirements,/one image of your revised graphic/);assert.match(week.requirements_ja,/改訂した可視化の画像1枚/);
  const hw=deck.slides.find(s=>s.id==='homework');assert.match(hw.steps.en[0],/your own graphic.*show-and-tell/);assert.match(hw.notes.en,/November 26, 2026 at 23:59 JST/);
  assert.match(renderWeek8(hw,{ja:false,data,returnTo:''}),/homework-submit\.html\?week=8/);
  const src=fs.readFileSync('content/weeks/09-studio-test-improve.md','utf8');context.source=src;const next=vm.runInContext("parseWeek(source,'09-studio-test-improve.md')",context);
- assert.equal(next.activities.length,3);assert.match(next.activities[0].text,/Week 9 group deliverable.*one printed A3.*November 27/);assert.match(next.activities[0].text_ja,/第9週のグループ提出物.*A3.*1枚/);assert.match(next.activities[1].text,/at least two/);assert.match(next.activities[2].text,/improve your prototype/);assert.doesNotMatch(src,/Padlet/);
+ assert.doesNotMatch(src,/\bA3\b|pin up|wall critique|Padlet|w09\.pdf/i);
+ assert.equal(next.lecture_gallery_week,'8');
+ assert.match(next.schedule,/^10:40–11:00.*;11:00–11:25.*;11:25–12:20/);
+ assert.match(next.schedule_ja,/^10:40–11:00.*;11:00–11:25.*;11:25–12:20/);
+ assert.deepEqual(Array.from(next.activities,a=>Number(a.title.match(/(\d+) min$/)?.[1])),[25,20,35]);
+ assert.match(next.activities[0].text,/Week 8 individual revision/);
+ assert.match(next.activities[1].text,/on screen before explaining/);
+ assert.match(next.activities[2].steps.at(-1),/both versions.*next week’s midterm/);
+ for(const resource of next.lectureResources) assert.ok(deck.slides.some(slide=>slide.id===new URL(resource.href,'https://example.test').searchParams.get('slide')));
  const final=renderWeek8(deck.slides.find(s=>s.id==='double-diamond'),{ja:true,data,returnTo:''});assert.doesNotMatch(final,/w8-source-feedback/);assert.doesNotMatch(final,/w8-phase.*polygon/);assert.equal((final.match(/w8-source-phase-name/g)||[]).length,4);
  assert.ok(deck.slides.find(s=>s.kind==='framework-context').sources.some(s=>s.label.includes('CC BY 4.0')));
 });
