@@ -58,7 +58,7 @@ export function renderWeek9(slide,{ja=true}={}) {
     return `<figure class="w9-match-photo w9-match-photo--${esc(slide.id)}">
       ${external(slide.sources[0].href,`<img src="${esc(slide.image)}" alt="${esc(t(slide.alt))}" referrerpolicy="no-referrer"><span class="w9-image-fallback" hidden>${ja?'出典を開く':'Open the source'} ↗</span>`)}
       <figcaption><h1>${title}</h1><p><strong>${esc(slide.score)}</strong> <span>${esc(t(slide.opponent))}</span></p><small>${esc(t(slide.context))}</small></figcaption>
-      <div class="w9-photo-credit">${esc(slide.credit)}</div>
+      <div class="w9-photo-credit">${esc(t(slide.credit))}</div>
     </figure>`;
   }
   if(slide.kind==='fifa-drafts') {
