@@ -6,6 +6,9 @@
 .w9-archive figcaption b{font-variant-numeric:tabular-nums;margin-right:12px}
 .w9-archive--pocket-map{background:#17656a}
 .w9-archive--beck-map{background:#777775}
+.w9-archive--team-snow-2025{background:#0d101a}
+.w9-archive--team-tukey-2025{background:#000}
+.w9-archive--team-minard-2025{background:#f5f1e8}
 .w9-image-fallback{font-size:36px;background:#fff9ed;padding:17px 29px;color:#29251d}
 .w9-route-slide,.w9-task{height:100%;display:grid;align-content:center;padding:80px 140px;background:#f8f4ea;color:#29251d}
 .w9-route-slide{text-align:center;gap:25px}

@@ -26,7 +26,7 @@ test('historical sources, bilingual slides, chapters and homework render in the 
     assert.ok(slide.notes[ja?'ja':'en']);
     const html=renderWeek9(slide,{ja});
     assert.ok(html.length>80,`Missing slide: ${slide.id}`);
-    if(slide.kind==='archive') assert.match(html,/<img src="https:.*alt="[^"]+"/);
+    if(slide.kind==='archive') assert.match(html,/<img src="(?:https:|assets\/images\/lecture\/week09-2025\/).*alt="[^"]+"/);
   }
   for(const ja of [true,false]){
     const combined=renderWeek9(deck.slides[4],{ja});
@@ -42,11 +42,19 @@ test('historical sources, bilingual slides, chapters and homework render in the 
   assert.match(deck.slides[5].notes.en,/1\. Question[\s\S]+2\. Visual choices and data[\s\S]+3\. Titles and labels[\s\S]+4\. Reason for the design[\s\S]+5\. Original insight/);
   assert.doesNotMatch(source+JSON.stringify(deck),/MIT 6\.894|vis\.mit\.edu/i);
   for (const chapter of deck.chapters) assert.ok(deck.slides.some(slide=>slide.id===chapter.id));
-  assert.match(renderWeek9(deck.slides.at(-1),{ja:false}),/homework-submit\.html\?week=9/);
+  assert.match(renderWeek9(deck.slides.find(s=>s.id==='homework'),{ja:false}),/homework-submit\.html\?week=9/);
   assert.match(source,/One person submits for the group/);
   assert.match(source,/3–5 sentences/);
   assert.match(source,/first group draft/);
   const submission=fs.readFileSync('assets/homework-submissions.js','utf8');
   assert.match(submission,/Your question title/);
   assert.match(submission,/First group draft/);
+});
+
+test('the 2025 showcases follow homework and link to the original archive pages',()=>{
+  const slides=deck.slides.slice(-3);
+  assert.equal(deck.slides.at(-4).id,'homework');
+  assert.deepEqual(slides.map(s=>s.credit.en),['Team Snow','Team Tukey','Team Minard']);
+  assert.deepEqual(slides.map(s=>new URL(s.sources[0].href,'https://example.test').searchParams.get('page')),['3','4','7']);
+  for(const s of slides) assert.ok(fs.statSync(s.image).size>50_000);
 });

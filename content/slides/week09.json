@@ -7,7 +7,8 @@
     {"id":"design-task","label":{"en":"Activity 1","ja":"活動1"}},
     {"id":"viewer-test","label":{"en":"Activity 2","ja":"活動2"}},
     {"id":"one-change","label":{"en":"Activity 3","ja":"活動3"}},
-    {"id":"homework","label":{"en":"Homework","ja":"宿題"}}
+    {"id":"homework","label":{"en":"Homework","ja":"宿題"}},
+    {"id":"team-snow-2025","label":{"en":"2025 student projects","ja":"2025年度の学生作品"}}
   ],
   "slides": [
     {
@@ -83,6 +84,33 @@
       "title":{"en":"One group graphic, one question","ja":"グループで一つの図、一つの問い"},
       "steps":{"en":["One person submits for the group.","Upload the final graphic with its question title, your first group draft, and the data link.","In 3–5 sentences: what did you combine, why this question, and where is the answer?"],"ja":["代表者がグループで1回提出する。","問いをタイトルにした完成版、班の最初の試作、データのリンクを提出する。","組み合わせた案、問いを選んだ理由、図のどこから答えが読めるかを3〜5文で書く。"]},
       "notes":{"en":"Put the group name at the start of the explanation. The final graphic goes in image 1 so it appears first in the gallery. Image 2 is the first group draft, before the title and final changes. The title on the final graphic is the question that opens next week’s midterm presentation.","ja":"説明の冒頭にグループ名を書く。ギャラリーの最初に表示されるよう、画像1に完成版を入れる。画像2はタイトルや仕上げの変更を加える前の、班でつくった最初の試作。完成版に付けた問いが、次回の中間発表の導入になる。"}
+    },
+    {
+      "id":"team-snow-2025", "kind":"archive", "year":"2025",
+      "title":{"en":"World GDP growth rates","ja":"世界のGDP成長率"},
+      "credit":{"en":"Team Snow","ja":"Team Snow"},
+      "image":"assets/images/lecture/week09-2025/team-snow.webp",
+      "alt":{"en":"Team Snow’s interactive globe, shown in 2009, uses a blue-to-red scale for GDP growth. A year slider is on the left.","ja":"2009年のGDP成長率を青から赤で表したTeam Snowの地球儀。左側に年を選ぶスライダーがある。"},
+      "notes":{"en":"From the 2025 Week 9 gallery walk, slide 3. This view makes geography the organizing principle: country positions stay in place while the year and colors change. A question title that might fit: “Where did economies grow in 2009?” The screenshot is an archive of the prototype, not a live globe.","ja":"2025年度第9週のギャラリーウォーク、スライド3。国の位置を保ち、年を変えると色が変わる。場所を軸に比較できる図。問いの例：「2009年、どこの経済が成長した？」。画像は当時の試作の記録で、地球儀の操作はできない。"},
+      "sources":[{"label":"2025 Week 9 gallery walk · original slide 3","href":"viewer.html?file=lectures%2Fw09.pdf&page=3"}]
+    },
+    {
+      "id":"team-tukey-2025", "kind":"archive", "year":"2025",
+      "title":{"en":"Featuring Network","ja":"Featuring Network"},
+      "credit":{"en":"Team Tukey","ja":"Team Tukey"},
+      "image":"assets/images/lecture/week09-2025/team-tukey.webp",
+      "alt":{"en":"Team Tukey’s music collaboration network. Wiz Khalifa and nearby collaborators are highlighted against a subdued field of connections.","ja":"Team Tukeyによる音楽の共演ネットワーク。Wiz Khalifaと共演者が、他のつながりより明るく強調されている。"},
+      "notes":{"en":"From the 2025 Week 9 gallery walk, slide 4. Team Tukey keeps the larger collaboration network visible but dims it to make one artist’s connections easy to trace. A question title that might fit: “Who has collaborated with Wiz Khalifa?” This choice is about relationships, not geographic distance.","ja":"2025年度第9週のギャラリーウォーク、スライド4。共演ネットワーク全体を残しながら、選んだアーティスト以外のつながりを抑え、関係を追いやすくした。問いの例：「Wiz Khalifaは誰と共演した？」。地理的な距離ではなく、関係を見せる図。"},
+      "sources":[{"label":"2025 Week 9 gallery walk · original slide 4","href":"viewer.html?file=lectures%2Fw09.pdf&page=4"}]
+    },
+    {
+      "id":"team-minard-2025", "kind":"archive", "year":"2025",
+      "title":{"en":"Household spending in Japan, 2022","ja":"2022年 日本の消費構造フロー"},
+      "credit":{"en":"Team Minard","ja":"Team Minard"},
+      "image":"assets/images/lecture/week09-2025/team-minard.webp",
+      "alt":{"en":"Team Minard’s four-stage diagram connects Japanese regions and prefectures to spending categories and spending levels in 2022.","ja":"Team Minardによる、2022年の日本の地方ブロックと都道府県を支出項目、支出水準へつなぐ図。"},
+      "notes":{"en":"From the 2025 Week 9 gallery walk, slide 7. Team Minard links region, prefecture, spending category and spending level in a single diagram. The connections show how categories relate, not people or money moving through time. For a question about one category or place, a selective highlight could make the right path easier to trace.","ja":"2025年度第9週のギャラリーウォーク、スライド7。地方ブロック、都道府県、支出項目、支出水準を一枚で結んでいる。線は分類のつながりで、人やお金が時間とともに移動する様子ではない。項目や地域を一つ選んで問うなら、該当する線を強調すると追いやすい。"},
+      "sources":[{"label":"2025 Week 9 gallery walk · original slide 7","href":"viewer.html?file=lectures%2Fw09.pdf&page=7"}]
     }
   ]
 }
