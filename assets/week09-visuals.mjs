@@ -8,34 +8,38 @@ export function renderWeek9(slide,{ja=true}={}) {
     return `<section class="w9-title-comparison"><p>${esc(t(slide.before))}</p><h1>${title}</h1>${slide.summary?`<p class="w9-title-summary">${esc(t(slide.summary))}</p>`:''}</section>`;
   }
   if(slide.kind==='combined-route') {
-    const rail=esc(t(slide.rail)),walk=esc(t(slide.walk)),description=esc(t(slide.description));
     return `<section class="w9-combined-route">
-      <h1>${title}</h1>
-      <figure>
-        <svg viewBox="0 0 1260 390" role="img" aria-label="${description}">
-          <path class="w9-combined-rail" d="M205 142 H1055"/>
-          <path class="w9-combined-walk" d="M205 142 C345 142 355 275 490 275 H770 C905 275 915 142 1055 142"/>
-          <circle cx="205" cy="142" r="15"/><circle cx="1055" cy="142" r="15"/>
-          <g text-anchor="middle">
-            <text class="w9-combined-station" x="205" y="78">Leicester Square</text>
-            <text class="w9-combined-station" x="1055" y="78">Covent Garden</text>
-            <text class="w9-combined-rail-label" x="630" y="105">${rail}</text>
-            <text class="w9-combined-walk-label" x="630" y="351">${walk}</text>
-          </g>
+      <div class="w9-route-answer">
+        <header><p>${ja?'地上にいるなら':'Already at street level?'}</p><h1>${ja?'歩こう。':'Walk.'}</h1></header>
+        <dl>
+          <div class="w9-walk-time"><dt>${ja?'地上を歩く':'Walk at street level'}</dt><dd><strong>${ja?'約5分':'~5 min'}</strong><small>${ja?'このルートは約380 m':'About 380 m on this route'}</small></dd></div>
+          <div class="w9-rail-time"><dt>${ja?'地下鉄で1駅':'One stop on the Tube'}</dt><dd><strong>${ja?'乗車 約1分':'~1 min aboard'}</strong><small>${ja?'＋ ホームまで・待ち時間・出口まで':'+ getting in, waiting and getting out'}</small></dd></div>
+        </dl>
+      </div>
+      <figure class="w9-geographic-map">
+        <img src="${esc(slide.image)}" alt="${esc(t(slide.description))}" width="1040" height="900">
+        <svg viewBox="0 0 1040 900" aria-hidden="true">
+          <text class="w9-map-station" x="268" y="726">Leicester Square</text>
+          <text class="w9-map-station" x="1020" y="224" text-anchor="end">Covent Garden</text>
+          <text class="w9-map-road" x="340" y="584" transform="rotate(-30 340 584)">Cranbourn St</text>
+          <text class="w9-map-road" x="615" y="400" transform="rotate(-35 615 400)">Long Acre</text>
         </svg>
-        <figcaption>${ja?'模式図（縮尺なし）':'Schematic, not to scale'}<span> · </span>${external(slide.sources[0].href,ja?'TfLの徒歩地図 ↗':'TfL walking map ↗')}</figcaption>
+        <figcaption>${external('https://www.openstreetmap.org/copyright','© OpenStreetMap contributors')}  /  ${external(slide.sources[0].href,'TfL')}</figcaption>
       </figure>
     </section>`;
   }
   if(slide.kind==='archive') {
-    return `<figure class="w9-archive w9-archive--${esc(slide.id)}">${external(slide.sources[0].href,
+    const opening=slide.id==='pocket-map'||slide.id==='beck-map';
+    return `<figure class="w9-archive w9-archive--${esc(slide.id)}${opening?' w9-archive--opening':''}">${external(slide.sources[0].href,
       `<img src="${esc(slide.image)}" alt="${esc(t(slide.alt))}" referrerpolicy="no-referrer" ${slide.id==='pocket-map'?'fetchpriority="high"':''}><span class="w9-image-fallback" hidden>${ja?'原図を開く':'Open the original'} ↗</span>`)}
+      ${opening?`<h1>${title}</h1>`:''}
       <figcaption><b>${esc(slide.year)}</b> ${esc(t(slide.credit))}</figcaption></figure>`;
   }
   if(slide.kind==='one-stop') {
     return `<div class="w9-route-slide">
       <div class="w9-route"><span>Leicester Square</span><span>Covent Garden</span></div>
-      <h1>${title}</h1><p>${ja?'電車に乗る？ 歩く？':'Train or walk?'}</p></div>`;
+      <p>${ja?'ピカデリー線で1駅':'One stop on the Piccadilly line'}</p>
+      <h1>${title}</h1></div>`;
   }
   if(slide.kind==='activity'||slide.kind==='homework') {
     return `<section class="w9-task${slide.kind==='homework'?' w9-task--homework':''}">

@@ -13,45 +13,35 @@
   "slides": [
     {
       "id":"pocket-map", "kind":"archive", "year":"1931",
-      "title":{"en":"F. H. Stingemore’s pocket map","ja":"スティンモアの携帯用路線図"},
+      "title":{"en":"Where are the stations?","ja":"駅はどこにある？"},
       "credit":{"en":"F. H. Stingemore · TfL Corporate Archives","ja":"F. H. スティンモア · TfL資料室"},
       "image":"https://lh3.googleusercontent.com/ci/AL18g_QebhWQQUbyZlGyK7peQERU3JYL1sOGb539CfXkBNnv52Fpwp8573aI1homxRlpT_ab13Y3ZA=w2600",
       "alt":{"en":"Stingemore’s 1931 Underground pocket map. Curved lines and irregular station spacing fill the page.","ja":"1931年のスティンモアの携帯用路線図。曲がった路線と間隔の異なる駅が紙面に広がっている。"},
-      "notes":{"en":"1931, London. Fred Stingemore’s pocket map already simplifies the city, uses line colors, and marks interchanges with open circles. It still gives a more geographic impression than Beck’s diagram. A route to compare across the two views: Earl’s Court to Oxford Circus, changing at Piccadilly Circus.","ja":"1931年、ロンドン。フレッド・スティンモアの携帯用路線図は、すでに街の形を簡略化し、路線を色で分け、乗換駅を白抜きの丸で示している。ベックの図より地理的な位置関係を残す。比較できる経路の例：アールズ・コートからオックスフォード・サーカスまで、ピカデリー・サーカスで乗り換える。"},
+      "notes":{"en":"Fred Stingemore’s 1931 pocket map keeps more of London’s geographic layout than Beck’s later diagram. Lines bend and stations bunch together in the centre. It is already a simplified network map, not a street map or a reliable scale for walking. The relative positions are useful, but tracing a line through the crowded centre takes work.","ja":"フレッド・スティンモアの1931年の携帯用地図は、後のベックの路線図よりロンドンの地理的な位置関係を残している。路線は曲がり、中心部では駅名が密集する。すでに簡略化された路線図なので、街路図でも、徒歩距離を正確に測れる地図でもない。駅のおおよその位置は分かるが、中心部で路線をたどるのは難しい。"},
       "sources":[{"label":"TfL Corporate Archives · Stingemore and Beck","href":"https://artsandculture.google.com/story/IQXRldY73iB1oA"}]
     },
     {
       "id":"beck-map", "kind":"archive", "year":"1933",
-      "title":{"en":"Harry Beck’s first pocket edition","ja":"ハリー・ベックの携帯用路線図 初版"},
+      "title":{"en":"Which line do I take?","ja":"どの路線に乗る？"},
       "credit":{"en":"Harry Beck · David Rumsey Map Collection","ja":"ハリー・ベック · デイヴィッド・ラムゼイ地図コレクション"},
       "image":"https://media.davidrumsey.com/MediaManager/srvr?mediafile=/Size4/RUMSEY~8~1/162/8691003.jpg",
       "alt":{"en":"Beck’s first pocket edition. Lines follow straight segments, and hollow diamonds mark interchanges.","ja":"ベックの携帯用路線図の初版。直線で構成された路線に、乗換駅が白抜きのひし形で示されている。"},
-      "notes":{"en":"January 1933. Straight segments, a limited set of angles, and more even spacing gave station names and interchanges room. The Thames remained a landmark. The route from Earl’s Court has the same transfer at Piccadilly Circus in both maps. On Beck’s diagram, the distance between marks should not be read as distance above ground.","ja":"1933年1月。直線、限られた角度、より均等な駅間隔によって、駅名や乗換駅が読み取りやすくなった。テムズ川は目印として残っている。アールズ・コートからの乗換駅は両方の図でピカデリー・サーカス。ベックの図の駅間隔は、地上の距離を示さない。"},
+      "notes":{"en":"January 1933. Beck gives up geographic distance to make a different task easier: following a line, counting stops and spotting where to change. Straight segments, fewer angles and more even spacing give each name room. Leicester Square and Covent Garden are consecutive on the Piccadilly line. The space between their marks tells a rider nothing about the length of the walk.","ja":"1933年1月。ベックは地理的な距離よりも、路線をたどり、駅を数え、乗り換えを見つけることを優先した。直線や限られた角度、より均等な駅間隔で、駅名が読みやすくなった。レスター・スクエアとコヴェント・ガーデンはピカデリー線で隣り合う。この図の駅間隔から、地上での徒歩距離は分からない。"},
       "sources":[{"label":"David Rumsey Map Collection · first 1933 edition","href":"https://www.davidrumsey.com/luna/servlet/detail/RUMSEY~8~1~274012~90047744:Map-of-London-s-Underground-Railway"},{"label":"London Transport Museum · first pocket edition","href":"https://artsandculture.google.com/asset/pocket-underground-map-henry-c-beck/AQGrQloi9u07rQ?hl=en"}]
     },
     {
-      "id":"beck-sketch", "kind":"archive", "year":"1931",
-      "title":{"en":"Beck’s working sketch","ja":"ベックのスケッチ"},
-      "credit":{"en":"Harry Beck · TfL Corporate Archives","ja":"ハリー・ベック · TfL資料室"},
-      "image":"https://lh3.googleusercontent.com/ci/AL18g_SDAZ7gjaIhO0wcs2VndOx_BIg1qFsFeZY00yHdVyTR4ABbU80PI9pg2z3Mw1_d6iBYWZU_Euk=w2300",
-      "alt":{"en":"Archive reproduction of Beck’s hand-drawn 1931 sketch for the London Underground diagram.","ja":"ベックが1931年に描いたロンドン地下鉄路線図のスケッチの複製。"},
-      "notes":{"en":"Beck worked as a technical draughtsman and drew the first sketch independently in 1931. The Underground’s publicity office initially rejected the design, then agreed to try it. The first printed pocket edition appeared in 1933 and included an invitation to send comments. An unusual representation went from a sketch to something riders could try.","ja":"製図工だったベックは1931年、自主的に最初のスケッチを描いた。地下鉄の広報部は当初採用を見送ったが、後に試験導入を決めた。1933年の携帯用初版には、利用者からの意見を募る案内もあった。珍しい表現が、スケッチから乗客が使って試せるものになった。"},
-      "sources":[{"label":"TfL Corporate Archives · 1931 sketch (reproduction)","href":"https://artsandculture.google.com/asset/harry-beck-s-sketch-for-the-underground-map/EQG96SzbZyTSVA"},{"label":"TfL Corporate Archives · Harry Beck research guide","href":"https://tfl.gov.uk/cdn/static/cms/documents/research-guide-no-24-harry-beck.pdf"}]
-    },
-    {
-      "id":"train-or-walk", "kind":"one-stop",
-      "title":{"en":"One stop","ja":"一駅"},
-      "notes":{"en":"Leicester Square and Covent Garden are consecutive stations on the Piccadilly line. The diagram preserves that connection. It does not tell a rider how far the stations are apart on foot or where the street entrances are.","ja":"レスター・スクエアとコヴェント・ガーデンはピカデリー線の隣り合う駅。路線図からは隣接関係が分かるが、地上での徒歩距離や駅の出入口の位置は分からない。"},
+      "id":"train-or-walk", "kind":"one-stop", "annotationPage":4,
+      "title":{"en":"Train or walk?","ja":"地下鉄に乗る？ 歩く？"},
+      "notes":{"en":"Imagine you’re outside Leicester Square station, heading to Covent Garden station. The diagram answers the train question: take the Piccadilly line one stop. It doesn’t answer whether to go downstairs in the first place. For that choice we need a street route and comparable information about the two trips.","ja":"レスター・スクエア駅の地上の入口から、コヴェント・ガーデン駅へ向かう場面を考える。路線図からは、ピカデリー線で一駅と分かる。でも、そもそも地下に降りるべきかは分からない。その判断には、地上の道順と、二つの移動手段を比べる情報が必要になる。"},
       "sources":[{"label":"Transport for London · Covent Garden","href":"https://art.tfl.gov.uk/labyrinth/artwork/covent-garden/"}]
     },
     {
-      "id":"walking-map", "kind":"combined-route",
-      "title":{"en":"Could you walk this Tube stop?","ja":"地下鉄で一駅。歩いて行ける？"},
-      "rail":{"en":"1 stop by Tube","ja":"地下鉄で1駅"},
-      "walk":{"en":"320 m on foot · about 4 min","ja":"徒歩320 m・約4分"},
-      "description":{"en":"Leicester Square and Covent Garden are connected by one Tube stop, shown as a solid line, and by a 320-metre walk of about four minutes, shown as a dotted line. Not to scale.","ja":"レスター・スクエアとコヴェント・ガーデンを結ぶ実線は地下鉄1駅、点線は約4分で歩ける320メートルを表す。縮尺なし。"},
-      "notes":{"en":"This classroom diagram combines one useful idea from each map. From Beck: keep the stations and their connection. From TfL’s walking map: add walking distance and time to the same two endpoints. The full street map stays in the source link. The combined view makes a new question possible: could I walk this stop? Four minutes is a walking estimate, not a comparison of door-to-door journey times.","ja":"この授業用の模式図は、二つの地図から役に立つ要素を一つずつ取り入れた。ベックの図からは駅と駅のつながり、TfLの徒歩地図からは同じ二駅の徒歩距離と所要時間。詳しい街路図は出典リンクで見られる。二つを一枚にすると「この一駅は歩ける？」という問いに答えられる。4分は徒歩の目安で、乗車にかかる時間との比較ではない。"},
-      "sources":[{"label":"Transport for London · West End walking map (May 2025)","href":"https://content.tfl.gov.uk/west-end-walking-map.pdf"}]
+      "id":"walking-map", "kind":"combined-route", "annotationPage":5,
+      "title":{"en":"Already outside? Walk.","ja":"地上にいるなら、歩こう。"},
+      "image":"assets/images/lecture/week09-covent-garden.svg",
+      "description":{"en":"Street map of Leicester Square and Covent Garden. The solid red walking route follows Cranbourn Street and Long Acre between station entrances. The dashed blue line follows the Piccadilly line underground for one stop between the two stations.","ja":"レスター・スクエアとコヴェント・ガーデンの街路図。赤い実線は、二つの駅の入口を結ぶ徒歩ルート。クランボーン通りからロング・エーカーを通る。青い破線は、地下のピカデリー線の一駅区間。"},
+      "notes":{"en":"One map lets you compare a surface route and an underground trip. It keeps the street geography that was lost in Beck’s diagram, and borrows his clear line, station markers and emphasis on one connection. The one-minute timetable example is time aboard. From street level, add the time to get to the platform, wait and get back to the street. With these estimates, the train only wins if those extras take less than about four minutes. Start on the platform, face bad weather, or have different mobility needs, and the decision can change. The red route is one example: about 380 metres measured along mapped streets from the Cranbourn Street entrance to Covent Garden’s James Street entrance, or about five minutes at 4.5 km/h, before crossing delays. TfL estimates four minutes for the station pair in its walking guide. Next: use the same idea on a group project. Decide what someone needs to see and keep the strongest design choice from each draft.","ja":"街路と地下鉄を一枚で比べる地図。ベックの図で省かれた街路の位置関係を戻しつつ、路線を追いやすい線と駅のマークを借り、この一駅に絞った。時刻表の約1分は乗車時間。地上からなら、ホームまで降りる時間、待ち時間、出口まで上がる時間が加わる。この目安では、それらが計約4分未満なら地下鉄の方が速い。すでにホームにいる場合や、天候・移動のしやすさによって判断は変わる。赤い線は一例。クランボーン通り側の入口からジェームズ通り側の入口まで街路に沿って約380m。時速4.5kmで約5分で、信号待ちなどは含まない。TfLの徒歩ガイドでは、この駅間の目安は4分。次は班の作品でも、見る人に必要な情報を考え、それぞれの案のよさを選んで一つにまとめる。"},
+      "sources":[{"label":"Transport for London · Piccadilly line timetable","href":"https://tfl.gov.uk/tube/timetable/piccadilly?FromId=940GZZLUPCC&ToId=940GZZLUKSX"},{"label":"Transport for London · Walking between stations","href":"https://tfl.gov.uk/cdn/static/cms/documents/walking-between-stations-map.pdf"},{"label":"Westminster · Covent Garden walking corridors","href":"https://www.westminster.gov.uk/media/document/covent-garden-public-realm-framework"},{"label":"© OpenStreetMap contributors · ODbL","href":"https://www.openstreetmap.org/copyright"}]
     },
     {
       "id":"title-example", "kind":"title-comparison", "annotationPage":7,
@@ -68,25 +58,25 @@
       "notes":{"en":"11:00–11:20. Keep the existing project teams. As in the Tube example, name something each draft makes easy to see, keep the strongest choices and combine them in one rough graphic. The first group draft becomes the “before” image. The question title comes next.","ja":"11:00〜11:20。いつものプロジェクト班で作業する。地下鉄の例と同じように、各案で見やすいものを挙げ、よいところを一つの試作に取り入れる。この試作が「改訂前」の画像になる。問いのタイトルは次の活動で考える。"}
     },
     {
-      "id":"viewer-test", "kind":"activity", "duration":20,
+      "id":"viewer-test", "kind":"activity", "duration":20, "annotationPage":8,
       "title":{"en":"The question in the title","ja":"問いをタイトルに"},
       "steps":{"en":["What’s the most interesting question your graphic can answer?","Write two or three titles as questions. Read them aloud.","Choose the one that makes someone outside the team want to look."],"ja":["いまの図から答えが読み取れる、一番面白い問いは何か。","問いの形でタイトル案を二つか三つ書き、声に出して読む。","班の外の人も答えを知りたくなる問いを一つ選ぶ。"]},
       "notes":{"en":"11:20–11:40. Start from the prototype your team just built. The question title can reveal a surprising comparison, change, or exception. Make it specific and match it to what the data can show. The graphic should make sense to someone who has not heard the presentation.","ja":"11:20〜11:40。班でつくった試作を見ながら、意外な比較や変化、例外を問いにする。問いは具体的にし、データから分かることに絞る。発表を聞いていない人にも、図だけで伝わるようにする。"}
     },
     {
-      "id":"one-change", "kind":"activity", "duration":40,
+      "id":"one-change", "kind":"activity", "duration":40, "annotationPage":9,
       "title":{"en":"The answer in the graphic","ja":"答えが伝わる図"},
       "steps":{"en":["Put the question on the graphic. Point to the evidence that answers it.","If the answer is hard to see, change the emphasis or narrow the question.","Save one titled prototype for the midterm."],"ja":["問いをタイトルにする。答えの根拠が図のどこにあるか確かめる。","答えが見えにくければ、強調する箇所を変えるか、問いを絞る。","中間発表に向け、タイトル付きの試作を一つ保存する。"]},
       "notes":{"en":"11:40–12:20. The final 10 minutes are available for a few volunteers to read their old and new titles from their seats. No team pairing or room movement is needed. One group graphic and its question form the opening of the Dec. 4 midterm presentation. Dec. 11 turns to maps, and Dec. 18 to networks and multiple views.","ja":"11:40〜12:20。最後の10分は、希望する数班が席から変更前と変更後のタイトルを紹介できる。班同士のペアや教室内の移動は不要。班でまとめた一つの図と問いが、12月4日の中間発表の出発点になる。12月11日は地図、12月18日はネットワークと複数ビュー。"}
     },
     {
-      "id":"homework", "kind":"homework",
+      "id":"homework", "kind":"homework", "annotationPage":10,
       "title":{"en":"One group graphic, one question","ja":"グループで一つの図、一つの問い"},
       "steps":{"en":["One person submits for the group.","Upload the final graphic with its question title, your first group draft, and the data link.","In 3–5 sentences: what did you combine, why this question, and where is the answer?"],"ja":["代表者がグループで1回提出する。","問いをタイトルにした完成版、班の最初の試作、データのリンクを提出する。","組み合わせた案、問いを選んだ理由、図のどこから答えが読めるかを3〜5文で書く。"]},
       "notes":{"en":"Put the group name at the start of the explanation. The final graphic goes in image 1 so it appears first in the gallery. Image 2 is the first group draft, before the title and final changes. The title on the final graphic is the question that opens next week’s midterm presentation.","ja":"説明の冒頭にグループ名を書く。ギャラリーの最初に表示されるよう、画像1に完成版を入れる。画像2はタイトルや仕上げの変更を加える前の、班でつくった最初の試作。完成版に付けた問いが、次回の中間発表の導入になる。"}
     },
     {
-      "id":"team-snow-2025", "kind":"archive", "year":"2025",
+      "id":"team-snow-2025", "kind":"archive", "year":"2025", "annotationPage":11,
       "title":{"en":"World GDP growth rates","ja":"世界のGDP成長率"},
       "credit":{"en":"Team Snow","ja":"Team Snow"},
       "image":"assets/images/lecture/week09-2025/team-snow.webp",
@@ -95,7 +85,7 @@
       "sources":[{"label":"2025 Week 9 gallery walk · original slide 3","href":"viewer.html?file=lectures%2Fw09.pdf&page=3"}]
     },
     {
-      "id":"team-tukey-2025", "kind":"archive", "year":"2025",
+      "id":"team-tukey-2025", "kind":"archive", "year":"2025", "annotationPage":12,
       "title":{"en":"Featuring Network","ja":"Featuring Network"},
       "credit":{"en":"Team Tukey","ja":"Team Tukey"},
       "image":"assets/images/lecture/week09-2025/team-tukey.webp",
@@ -104,7 +94,7 @@
       "sources":[{"label":"2025 Week 9 gallery walk · original slide 4","href":"viewer.html?file=lectures%2Fw09.pdf&page=4"}]
     },
     {
-      "id":"team-minard-2025", "kind":"archive", "year":"2025",
+      "id":"team-minard-2025", "kind":"archive", "year":"2025", "annotationPage":13,
       "title":{"en":"Household spending in Japan, 2022","ja":"2022年 日本の消費構造フロー"},
       "credit":{"en":"Team Minard","ja":"Team Minard"},
       "image":"assets/images/lecture/week09-2025/team-minard.webp",

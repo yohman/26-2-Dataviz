@@ -21,7 +21,7 @@ test('Week 9 shares the agenda opening time and preserves the preview return',()
 });
 
 test('historical sources, bilingual slides, chapters and homework render in the agreed order',()=>{
-  assert.deepEqual(deck.slides.slice(0,5).map(slide=>slide.id),['pocket-map','beck-map','beck-sketch','train-or-walk','walking-map']);
+  assert.deepEqual(deck.slides.slice(0,4).map(slide=>slide.id),['pocket-map','beck-map','train-or-walk','walking-map']);
   for (const slide of deck.slides) for (const ja of [true,false]) {
     assert.ok(slide.notes[ja?'ja':'en']);
     const html=renderWeek9(slide,{ja});
@@ -29,17 +29,22 @@ test('historical sources, bilingual slides, chapters and homework render in the 
     if(slide.kind==='archive') assert.match(html,/<img src="(?:https:|assets\/images\/lecture\/week09-2025\/).*alt="[^"]+"/);
   }
   for(const ja of [true,false]){
-    const combined=renderWeek9(deck.slides[4],{ja});
-    assert.match(combined,/w9-combined-rail/);
-    assert.match(combined,/w9-combined-walk/);
-    assert.match(combined,/320 m/);
-    assert.match(combined,/west-end-walking-map\.pdf/);
+    const combined=renderWeek9(deck.slides[3],{ja});
+    assert.match(combined,/w9-geographic-map/);
+    assert.match(combined,/w9-rail-time/);
+    assert.match(combined,/w9-walk-time/);
+    assert.match(combined,/380 m/);
+    assert.match(combined,/www\.openstreetmap\.org\/copyright/);
   }
+  const streetMap=fs.readFileSync(deck.slides[3].image,'utf8');
+  assert.match(streetMap,/#273e80.*stroke-dasharray="12 12"/);
+  assert.match(streetMap,/#9b343f.*stroke-width="10"/);
+  assert.deepEqual(deck.slides.map((slide,i)=>slide.annotationPage??i+1).sort((a,b)=>a-b),[1,2,4,5,6,7,8,9,10,11,12,13]);
   assert.deepEqual(deck.slides.filter(slide=>slide.kind==='activity').map(slide=>slide.duration),[20,20,40]);
-  assert.deepEqual(deck.slides.slice(5,9).map(slide=>slide.id),['title-example','design-task','viewer-test','one-change']);
-  const example=renderWeek9(deck.slides[5],{ja:false});
+  assert.deepEqual(deck.slides.slice(4,8).map(slide=>slide.id),['title-example','design-task','viewer-test','one-change']);
+  const example=renderWeek9(deck.slides[4],{ja:false});
   assert.match(example,/FIFA rankings<\/p><h1>Do countries with more people rank higher in football\?/);
-  assert.match(deck.slides[5].notes.en,/1\. Question[\s\S]+2\. Visual choices and data[\s\S]+3\. Titles and labels[\s\S]+4\. Reason for the design[\s\S]+5\. Original insight/);
+  assert.match(deck.slides[4].notes.en,/1\. Question[\s\S]+2\. Visual choices and data[\s\S]+3\. Titles and labels[\s\S]+4\. Reason for the design[\s\S]+5\. Original insight/);
   assert.doesNotMatch(source+JSON.stringify(deck),/MIT 6\.894|vis\.mit\.edu/i);
   for (const chapter of deck.chapters) assert.ok(deck.slides.some(slide=>slide.id===chapter.id));
   assert.match(renderWeek9(deck.slides.find(s=>s.id==='homework'),{ja:false}),/homework-submit\.html\?week=9/);
