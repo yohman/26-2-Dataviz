@@ -37,12 +37,15 @@ test('historical sources, bilingual slides, chapters and homework render in the 
     assert.match(tfl,/320 m/);
     const combined=renderWeek9(deck.slides[4],{ja});
     assert.match(combined,/w9-geographic-map/);
-    assert.match(combined,/w9-rail-time/);
-    assert.match(combined,/w9-walk-time/);
+    assert.match(combined,/w9-tube-race-rail/);
+    assert.match(combined,/w9-tube-race-walk/);
     assert.match(combined,ja?/私たちの改訂案/:/Our proposed redesign/);
     assert.match(combined,ja?/≈ 3分/:/≈ 3 min/);
-    assert.match(combined,/w9-tube-rail-bar" style="--length:25%"/);
-    assert.match(combined,/w9-tube-budget" style="--length:75%"/);
+    assert.match(combined,/w9-tube-race-extra/);
+    assert.match(combined,/type="range" min="0" max="5" value="3"/);
+    const missing=renderWeek9(deck.slides[8],{ja});
+    assert.match(missing,/week09-fifa-axis-detail\.webp/);
+    assert.match(missing,ja?/100万人未満.*約300万人/:/under 1 million.*about 3 million/);
     assert.match(combined,/www\.openstreetmap\.org\/copyright/);
   }
   const streetMap=fs.readFileSync(deck.slides[4].image,'utf8');
@@ -72,6 +75,9 @@ test('Tube comparison keeps the time allowance separate from measured time',()=>
   assert.equal(tubeBreakEven(4,5),-1);
   assert.equal(tubeBreakEven(undefined,5),null);
   assert.match(tubeTimeline({walk:{minutes:4},rail:{minutes:7}},false),/Walking has the edge/);
+  const sample={walk:{minutes:4},rail:{minutes:1}};
+  assert.doesNotMatch(tubeTimeline(sample,false,0),/w9-tube-race-extra/);
+  assert.notEqual(tubeTimeline(sample,false,2),tubeTimeline(sample,false,4));
   assert.match(tubeTimeline({walk:null,rail:{minutes:7}},false),/No comparison yet/);
   assert.ok(tubeStations.length>250);
   assert.equal(tubeUrls('x','940GZZLUCGN'),null);

@@ -1,5 +1,5 @@
 import {fifaSnapshot} from './week09-fifa-data.mjs?v=20261127';
-import {renderTubeSlide,bindTubeSlide} from './week09-tube.mjs?v=20261127';
+import {renderTubeSlide,bindTubeSlide} from './week09-tube.mjs?v=rail-race-20261127';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const external=(href,body,attrs='')=>`<a href="${esc(href)}" target="_blank" rel="noopener noreferrer" ${attrs}>${body}</a>`;
@@ -45,6 +45,16 @@ function fifaPlot(ja) {
 export function renderWeek9(slide,{ja=true}={}) {
   const lang=ja?'ja':'en',t=value=>value?.[lang]??value??'';
   const title=esc(t(slide.title));
+  if(slide.kind==='fifa-missing'){
+    return `<section class="w9-fifa-missing">
+      <div class="w9-fifa-missing-copy"><h1>${title}</h1>
+      <p>${ja?'アイスランドもカーボベルデも人口は<strong>100万人未満</strong>。この図の横軸は<strong>約300万人</strong>から。':'Iceland and Cabo Verde each have <strong>under 1 million</strong> people. The chart starts at <strong>about 3 million</strong>.'}</p>
+      <p>${esc(t(slide.subtitle))}</p></div>
+      <figure>${external(slide.sources[0].href,`<img src="${esc(slide.image)}" alt="${esc(t(slide.alt))}">`)}
+      <svg viewBox="0 0 1130 1000" aria-hidden="true"><path d="M111 61 V819" fill="none" stroke="#983e46" stroke-width="5" stroke-dasharray="11 9"/><circle cx="111" cy="851" r="19" fill="none" stroke="#983e46" stroke-width="4"/></svg>
+      <figcaption>${ja?'第6班の散布図（左端の拡大）':'The left edge of Group 6’s scatterplot'}</figcaption></figure>
+    </section>`;
+  }
   if(slide.kind==='inquiry') {
     return `<section class="w9-inquiry w9-inquiry--${esc(slide.id)}">${slide.kicker?`<p>${esc(t(slide.kicker))}</p>`:''}<h1>${title}</h1>${slide.subtitle?`<p>${esc(t(slide.subtitle))}</p>`:''}</section>`;
   }

@@ -1,6 +1,6 @@
 import {clampSlide,scatterMarks,lineSegments,safeDeckReturn,studioDeckOpening} from './html-lecture-model.mjs?v=week9-beck-20261126';
 import {renderWeek8,bindWeek8} from './week08-visuals.mjs?v=marker-20261120';
-import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=fan-clap-20261127';
+import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=rail-race-20261127';
 const $=s=>document.querySelector(s),params=new URLSearchParams(location.search),stage=$('[data-stage]'),surface=$('[data-surface]'),slide=$('[data-slide]'),viewer=$('.html-deck');
 const requestedWeek=Number(params.get('week')),week=[8,9].includes(requestedWeek)?requestedWeek:7;
 const allowedReturn=safeDeckReturn(params.get('return'),week);

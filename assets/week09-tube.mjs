@@ -45,33 +45,56 @@ const routeMessage=(x,ja)=>({
 })[x]??'';
 const mins=(n,ja)=>n+(ja?'分':' min');
 
-export function tubeTimeline(route,ja){
+const raceSettings=route=>{
+  const gap=tubeBreakEven(route?.walk?.minutes,route?.rail?.minutes);
+  return {gap,initial:Math.max(0,gap??0),limit:Math.max(5,(gap??0)+2)};
+};
+
+export function tubeTimeline(route,ja,extra=raceSettings(route).initial){
   if(!route)return '';
-  const w=route.walk?.minutes,r=route.rail?.minutes;
-  const gap=tubeBreakEven(w,r),max=Math.max(w??0,r??0,1);
-  const pc=n=>Math.max(0,n??0)/max*100+'%';
-  const railTitle=route.rail?.transfers?(ja?'地下鉄（乗換込み）':'Tube incl. transfers'):(ja?'地下鉄に乗車':'Tube ride');
-  const missing=ja?'経路なし':'No route returned';
-  const tag=(n)=>Number.isFinite(n)?'<strong>≈ '+mins(n,ja)+'</strong>':'<span>'+missing+'</span>';
-  const budget=gap>0?'<span class="w9-tube-budget" style="--length:'+pc(gap)+'" aria-hidden="true">'+
-    (gap/max>.46?(ja?'入場・待ち・退場':'Entry + wait + exit'):'')+'</span>':'';
+  const w=route.walk?.minutes,r=route.rail?.minutes,{gap,limit}=raceSettings(route);
+  const max=Math.max(w??0,(r??0)+(gap===null?0:limit),1);
+  const x=n=>40+678*Math.max(0,n??0)/max;
+  const has=n=>Number.isFinite(n);
+  const minutes=n=>'≈ '+mins(n,ja);
+  const walk=ja?'徒歩':'Walk';
+  const rail=route.rail?.transfers?(ja?'地下鉄（乗換込み）':'Tube incl. transfers'):(ja?'地下鉄の乗車':'Tube ride');
+  const empty=ja?'経路なし':'No route';
+  const label=(text,px,py,cls,anchor='start')=>'<text x="'+px+'" y="'+py+'" text-anchor="'+anchor+'" class="'+cls+'">'+esc(text)+'</text>';
+  const line=(from,to,y,cls)=>'<path d="M'+x(from)+' '+y+' H'+x(to)+'" class="'+cls+'"/>';
+  const node=(at,y,cls)=>'<circle cx="'+x(at)+'" cy="'+y+'" r="10" class="'+cls+'"/>';
+  const yWalk=113,yTube=235,tubeEnd=(r??0)+extra;
+  const accessible=walk+': '+(has(w)?minutes(w):empty)+'. '+rail+': '+(has(r)?minutes(r):empty)+'. '+
+    (gap===null?'':(ja?'入場・待ち・退場の想定：':'Assumed entry, wait and exit: ')+mins(extra,ja));
+  const endMarker=has(w)?'<path d="M'+x(w)+' 43 V263" class="w9-tube-finish"/>'+
+    label(ja?'徒歩の到着':'Walk finish',x(w),28,'w9-tube-finish-label','middle'):'';
+  const split=gap!==null&&extra>0
+    ?line(r,tubeEnd,yTube,'w9-tube-race-extra')+node(tubeEnd,yTube,'w9-tube-race-end'):'';
+  const timeoutLabel=gap!==null&&x(tubeEnd)-x(r)>190
+    ?label(ja?'入場・待ち・退場':'Entry + wait + exit',(x(tubeEnd)+x(r))/2,271,'w9-tube-extra-label','middle'):'';
+  const graphic='<svg class="w9-tube-race" viewBox="0 0 760 290" role="img" aria-label="'+esc(accessible)+'">'+
+    '<path d="M40 113 V235" class="w9-tube-start"/>'+endMarker+
+    (has(w)?line(0,w,yWalk,'w9-tube-race-walk')+node(w,yWalk,'w9-tube-walk-node'):'')+
+    (has(r)?line(0,r,yTube,'w9-tube-race-rail')+split+node(r,yTube,'w9-tube-rail-node'):'')+
+    node(0,yWalk,'w9-tube-walk-node')+node(0,yTube,'w9-tube-rail-node')+
+    label(walk+'  '+(has(w)?minutes(w):empty),40,84,'w9-tube-race-label w9-tube-walk-label')+
+    label(rail+'  '+(has(r)?minutes(r):empty),40,205,'w9-tube-race-label w9-tube-rail-label')+
+    timeoutLabel+'</svg>';
   const takeaway=gap>0
-    ?'<div class="w9-tube-takeaway"><strong>≈ '+mins(gap,ja)+'</strong><span>'+(ja?'入場・最初の待ち時間・退場がこれより短ければ地下鉄が速い。':'The Tube is faster only if entry, the first wait and exit take less than this.')+'</span></div>'
+    ?'<div class="w9-tube-takeaway"><strong>≈ '+mins(gap,ja)+'</strong><span>'+(ja?'地下鉄が徒歩に並ぶまでの余裕':'to get in, wait and get out before walking wins')+'</span></div>'
     :gap!==null
-      ?'<div class="w9-tube-takeaway w9-tube-takeaway--text"><strong>'+(ja?'徒歩が有利':'Walking has the edge')+'</strong><span>'+(ja?'入場や待ち時間を足す前でも、地下鉄は徒歩より速くない。':'The Tube is no faster, even before adding entry, the first wait and exit.')+'</span></div>'
+      ?'<div class="w9-tube-takeaway w9-tube-takeaway--text"><strong>'+(ja?'徒歩が有利':'Walking has the edge')+'</strong><span>'+(ja?'入場や待ち時間を足す前でも、地下鉄は徒歩より速くない。':'The Tube is no faster even before adding time in the stations.')+'</span></div>'
       :'<div class="w9-tube-takeaway w9-tube-takeaway--text"><strong>'+(ja?'比較できません':'No comparison yet')+'</strong><span>'+routeMessage(w||r?'partial':'none',ja)+'</span></div>';
-  const step=max>60?30:max>24?10:max>12?5:max>6?2:1;
-  const ticks=[0];
-  for(let i=step;i<max;i+=step)if(max-i>=step*.6)ticks.push(i);
-  ticks.push(max);
-  return '<figure class="w9-tube-timeline">'+
-    '<div class="w9-tube-row w9-walk-time"><div class="w9-tube-label"><b>'+(ja?'徒歩':'Walk')+'</b>'+tag(w)+'</div>'+
-    '<div class="w9-tube-track"><span class="w9-tube-walk-bar" style="--length:'+pc(w)+'"></span></div></div>'+
-    '<div class="w9-tube-row w9-rail-time"><div class="w9-tube-label"><b>'+railTitle+'</b>'+tag(r)+'</div>'+
-    '<div class="w9-tube-track"><span class="w9-tube-rail-bar" style="--length:'+pc(r)+'"></span>'+budget+'</div></div>'+
-    '<div class="w9-tube-ticks" aria-hidden="true">'+ticks.map(n=>'<span style="--x:'+pc(n)+'">'+(n===max?mins(n,ja):n)+'</span>').join('')+'</div>'+
-    (gap>0?'<div class="w9-tube-key"><i></i>'+(ja?'徒歩と同じ時間までの余裕':'Time available before walking wins')+'</div>':'')+
-    takeaway+'</figure>';
+  return '<figure class="w9-tube-timeline">'+graphic+takeaway+'</figure>';
+}
+
+function raceOutcome(route,extra,ja){
+  const gap=raceSettings(route).gap;
+  if(gap===null)return '';
+  const difference=gap-extra;
+  return difference===0?(ja?'同時に到着':'Tie'):
+    difference>0?(ja?'地下鉄が'+mins(difference,ja)+'早い':'Tube wins by '+mins(difference,ja)):
+    (ja?'徒歩が'+mins(-difference,ja)+'早い':'Walk wins by '+mins(-difference,ja));
 }
 
 function tubeMap(route,from,to,ja,slide,tflLink){
@@ -111,7 +134,10 @@ export function renderTubeSlide(slide,ja){
     '<label><span>'+(ja?'到着':'To')+'</span><select name="to">'+option(defaultTubePair[1])+'</select></label>'+
     '<button type="submit">'+(ja?'比較':'Compare')+'</button></div></form></header>'+
     '<div class="w9-tube-body"><div data-tube-map>'+tubeMap(defaultRoute,...defaultTubePair,ja,slide)+'</div>'+
-    '<div class="w9-tube-chart" aria-live="polite"><div class="w9-tube-status" data-tube-status hidden></div><div data-tube-chart>'+tubeTimeline(defaultRoute,ja)+'</div>'+
+    '<div class="w9-tube-chart"><div class="w9-tube-status" data-tube-status role="status" hidden></div><div data-tube-chart>'+tubeTimeline(defaultRoute,ja)+'</div>'+
+    '<div class="w9-tube-adjust" data-tube-adjust><label><span>'+(ja?'入場・待ち・退場の想定':'Assume time for entry + wait + exit')+'</span>'+
+    '<input type="range" min="0" max="5" value="3" aria-valuetext="'+mins(3,ja)+'"></label>'+
+    '<div><output data-tube-extra>'+mins(3,ja)+'</output> <span data-tube-outcome aria-live="polite">'+raceOutcome(defaultRoute,3,ja)+'</span></div></div>'+
     '<div class="w9-tube-bottom"><button type="button" data-tube-example>'+(ja?'別の駅で試す':'Try another pair')+' <span aria-hidden="true">↻</span></button>'+
     '<a data-tube-source href="'+esc(slide.sources[1].href)+'" target="_blank" rel="noopener noreferrer">'+(ja?'TfLの目安':'TfL estimates')+'</a></div></div></div></section>';
 }
@@ -121,11 +147,27 @@ export function bindTubeSlide(root,slide,ja){
   const form=root.querySelector('form'),map=root.querySelector('[data-tube-map]'),chart=root.querySelector('[data-tube-chart]');
   const from=form.elements.namedItem('from'),to=form.elements.namedItem('to');
   const status=root.querySelector('[data-tube-status]'),source=root.querySelector('[data-tube-source]');
+  const adjust=root.querySelector('[data-tube-adjust]'),extra=adjust.querySelector('input');
+  const readout=adjust.querySelector('[data-tube-extra]'),outcome=adjust.querySelector('[data-tube-outcome]');
+  let current=defaultRoute;
   let request=0,controller,next=0;
   function message(text){status.textContent=text;status.hidden=!text;}
+  function updateRace(){
+    const value=Number(extra.value);
+    chart.innerHTML=tubeTimeline(current,ja,value);
+    extra.setAttribute('aria-valuetext',mins(value,ja));
+    readout.textContent=mins(value,ja);
+    outcome.textContent=raceOutcome(current,value,ja);
+  }
+  extra.addEventListener('input',updateRace);
+  for(const event of ['pointerdown','touchstart','dblclick'])extra.addEventListener(event,e=>e.stopPropagation());
   function show(route,a,b){
     const link='https://api-portal.tfl.gov.uk/';
-    chart.innerHTML=tubeTimeline(route,ja);
+    current=route;
+    const settings=raceSettings(route);
+    adjust.hidden=settings.gap===null;
+    extra.max=settings.limit;extra.value=settings.initial;
+    updateRace();
     map.innerHTML=tubeMap(route,a,b,ja,slide,link);
     source.href=route.source==='default'?slide.sources[1].href:link;
     source.textContent=route.source==='default'?(ja?'TfLの目安':'TfL estimates'):(ja?'TfLの経路検索・ロンドン時間 正午':'TfL Journey Planner · noon London time');
@@ -135,6 +177,7 @@ export function bindTubeSlide(root,slide,ja){
   async function compare(a,b){
     const serial=++request;
     controller?.abort();
+    adjust.hidden=true;
     const urls=tubeUrls(a,b);
     if(!urls){
       message(routeMessage('same',ja));chart.innerHTML='';source.hidden=true;
