@@ -7,7 +7,7 @@ import {fifaEvidence,renderWeek9} from '../assets/week09-visuals.mjs';
 import {fifaSnapshot} from '../assets/week09-fifa-data.mjs';
 import {tubeBreakEven,tubeJourney,tubeRaceFrame,tubeTimeline,tubeUrls} from '../assets/week09-tube.mjs';
 import {tubeStations} from '../assets/week09-tube-data.mjs';
-import {tokyoTimes,tokyoRace,tokyoFrame} from '../assets/week09-tokyo-race.mjs';
+import {tokyoTimes,tokyoRace,tokyoFrame,tokyoMapFrame} from '../assets/week09-tokyo-race.mjs';
 import {geographicPaths,geographicStops,tokyoBasemap} from '../assets/week09-tokyo-geography.mjs';
 
 const path='content/weeks/09-studio-test-improve.md';
@@ -80,10 +80,12 @@ test('Tokyo opens with the real planner summary and stages the same-train race i
   assert.ok(fs.statSync(lead.image).size>10000);
   for(const ja of [true,false]){
     assert.match(renderWeek9(lead,{ja}),/transit\.yahoo\.co\.jp/);
+    assert.match(renderWeek9(deck.slides.find(s=>s.id==='tokyo-schematic'),{ja}),/data-path="shared" d="M486 86 L353 159/);
     assert.match(renderWeek9(deck.slides.find(s=>s.id==='tokyo-connection'),{ja}),/09:03/);
     const model=renderWeek9(deck.slides.find(s=>s.id==='tokyo-reveal'),{ja});
     assert.match(model,/data-tokyo-play/);
     assert.match(model,/week09-tokyo-commute-map\.webp/);
+    assert.match(model,/data-tokyo-camera[^>]+viewBox="0 0 625 535"/);
     assert.match(model,/data-map-wait/);
     assert.match(model,/data-commute-a/);
     assert.match(model,/data-commute-b/);
@@ -102,6 +104,25 @@ test('Tokyo opens with the real planner summary and stages the same-train race i
   assert.equal(geographicStops.length,4);
   assert.match(geographicPaths.shared,/^M515\.53 48\.61L.*L126\.41 336\.27$/);
   assert.ok(geographicPaths.yamanote.split('L').length>10);
+});
+
+test('Tokyo map closes in at the transfer and holds both downtown routes through the finish',()=>{
+  const {nishi,board}=tokyoTimes,full=tokyoMapFrame(0),close=tokyoMapFrame(board);
+  assert.deepEqual(tokyoMapFrame(nishi-1),full);
+  assert.deepEqual(tokyoMapFrame(nishi),full);
+  assert.ok(tokyoMapFrame(nishi+1)[2]<full[2]);
+  assert.ok(tokyoMapFrame(nishi+1)[2]>close[2]);
+  assert.ok(close[2]<full[2]/2);
+  assert.deepEqual(tokyoMapFrame(tokyoRace().duration),close);
+  assert.deepEqual(tokyoMapFrame(nishi,{reducedMotion:true}),close);
+  const [left,top,width,height]=close;
+  const inside=(x,y)=>x>=left&&x<=left+width&&y>=top&&y<=top+height;
+  assert.equal(inside(...geographicStops[0]),false);
+  for(const path of ['stay','street','yamanote','exit']){
+    for(const match of geographicPaths[path].matchAll(/[ML]([\d.]+) ([\d.]+)/g)){
+      assert.ok(inside(+match[1],+match[2]),`${path} is visible in the close-up`);
+    }
+  }
 });
 
 test('the replay puts station holds before and after the train movement on the shared clock',()=>{

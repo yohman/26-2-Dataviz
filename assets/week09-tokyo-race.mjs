@@ -20,17 +20,26 @@ const hhmm=minute=>[Math.floor(minute/60),minute%60].map(n=>String(n).padStart(2
 const stamp=t=>hhmm(T.departure+Math.floor(t));
 const x=t=>45+t*9.7;
 const routeNames=ja=>ja?['大手町で降りて歩く','西日暮里で山手線に乗り換え']:['Stay on to Ōtemachi, then walk','Change to the Yamanote at Nishi-Nippori'];
-const mapPaths={shared:'M155 86 H245 Q305 86 305 145 V250',stay:'M305 250 V438',street:'M305 438 H505',yamanote:'M305 250 H426 Q505 250 505 329 V398',exit:'M505 398 V438'};
+const mapPaths={shared:'M486 86 L353 159 Q317 177 296 202 L228 250',stay:'M228 250 Q176 282 180 334 L183 427',street:'M183 427 L260 451',yamanote:'M228 250 Q292 284 291 337 L269 417',exit:'M269 417 L260 451'};
+const fullMap=[0,0,625,535];
+const cityWidth=287;
+const cityMap=[12,285,cityWidth,cityWidth*fullMap[3]/fullMap[2]];
+export function tokyoMapFrame(elapsed,{reducedMotion=false}={}){
+  const t=reducedMotion?Number(elapsed>=T.nishi):Math.max(0,Math.min(1,(elapsed-T.nishi)/3));
+  const eased=t*t*(3-2*t);
+  return fullMap.map((n,i)=>n+(cityMap[i]-n)*eased);
+}
 function routeMap(ja){
   const name=ja?['南柏','西日暮里','大手町','東京駅']:['Minami-Kashiwa','Nishi-Nippori','Ōtemachi','Tokyo Station'];
-  const labels=[[155,86,0,-26],[305,250,-20,-24],[305,438,-19,38],[505,438,14,38]];
+  const labels=[[486,86,0,-26,'middle'],[228,250,-20,-16,'end'],[183,427,-16,7,'end'],[260,451,17,33,'start']];
   return `<svg class="w9-commute-map" viewBox="0 0 625 535" role="img" aria-label="${ja?'南柏から東京駅までの二つの経路図':'Schematic of the two routes from Minami-Kashiwa to Tokyo Station'}">
      ${Object.entries(mapPaths).map(([id,d])=>`<path class="commute-map-${id}" data-path="${id}" d="${d}"/>`).join('')}
-     ${labels.map(([x,y,dx,dy],i)=>`<circle class="commute-node" cx="${x}" cy="${y}" r="${i===0||i===3?11:8}"/><text x="${x+dx}" y="${y+dy}" text-anchor="${i===0?'middle':i===3?'end':'end'}">${name[i]}</text>`).join('')}
-     <text class="commute-mode" x="76" y="148">${ja?'常磐線各駅停車':'Jōban Local'}</text>
-     <text class="commute-mode" x="280" y="349" text-anchor="end">${ja?'千代田線':'Chiyoda Line'}</text>
-     <text class="commute-mode" x="402" y="219">${ja?'山手線 外回り':'Yamanote outer loop'}</text>
-     <text class="commute-mode" x="400" y="414" text-anchor="middle">${ja?'徒歩':'Walk'}</text>
+     ${labels.map(([x,y,dx,dy,anchor],i)=>`<circle class="commute-node" cx="${x}" cy="${y}" r="${i===0||i===3?11:8}"/><text x="${x+dx}" y="${y+dy}" text-anchor="${anchor}">${name[i]}</text>`).join('')}
+     <text class="commute-map-compass" x="37" y="47">↑ N</text>
+     <text class="commute-mode" x="365" y="177">${ja?'常磐線各駅停車':'Jōban Local'}</text>
+     <text class="commute-mode" x="160" y="344" text-anchor="end">${ja?'千代田線':'Chiyoda Line'}</text>
+     <text class="commute-mode" x="312" y="331">${ja?'山手線 外回り':'Yamanote outer loop'}</text>
+     <text class="commute-mode" x="204" y="475" text-anchor="middle">${ja?'徒歩':'Walk'}</text>
    </svg>`;
 }
 function geographicMap(ja){
@@ -39,18 +48,20 @@ function geographicMap(ja){
   const coordinates=[{p:origin,dx:0,dy:-17,anchor:'middle'},{p:nishi,dx:18,dy:-17,anchor:'start'},
     {p:ote,dx:-12,dy:-13,anchor:'end'},{p:gate,dx:20,dy:26,anchor:'start'}];
   return `<svg class="w9-commute-map w9-commute-geographic" viewBox="0 0 625 535" role="img" aria-label="${ja?'南柏から東京駅までの実際の地理に沿った地図':'Geographic map of the rail routes from Minami-Kashiwa to Tokyo Station'}">
+    <svg class="commute-map-camera" data-tokyo-camera width="625" height="535" viewBox="${fullMap.join(' ')}">
     <image class="commute-basemap" href="${tokyoBasemap}" width="625" height="535" preserveAspectRatio="none"/>
     <g class="commute-map-outlines" aria-hidden="true">${Object.values(geographicPaths).map(d=>`<path d="${d}"/>`).join('')}</g>
     ${Object.entries(geographicPaths).map(([id,d])=>`<path class="commute-map-${id}" data-path="${id}" d="${d}"/>`).join('')}
     ${coordinates.map(({p:[x,y],dx,dy,anchor},i)=>`<circle class="commute-node" cx="${x}" cy="${y}" r="${i===0||i===3?7:5}"/><text x="${x+dx}" y="${y+dy}" text-anchor="${anchor}">${names[i]}</text>`).join('')}
-    <text class="commute-map-compass" x="37" y="47">↑ N</text>
     <text class="commute-mode" x="489" y="150">${ja?'常磐線各駅停車':'Jōban Local'}</text>
     <text class="commute-mode" x="170" y="426">${ja?'山手線':'Yamanote'}</text>
     <g class="commute-wait-ring" aria-hidden="true" transform="translate(${nishi.join(' ')})"><circle r="12"/><circle r="22"/></g>
-    <path class="commute-wait-leader" aria-hidden="true" d="M${nishi.join(' ')}l24 15h34"/>
-    <text class="commute-wait-caption" x="${nishi[0]+64}" y="${nishi[1]+21}" aria-hidden="true" data-map-wait></text>
+    <path class="commute-wait-leader" aria-hidden="true" d="M${nishi.join(' ')}l14 19h14"/>
+    <text class="commute-wait-caption" x="${nishi[0]+34}" y="${nishi[1]+25}" aria-hidden="true" data-map-wait></text>
     <g data-racer="a" class="commute-racer-a" transform="translate(${origin[0]-7} ${origin[1]})"><circle r="9"/></g>
     <g data-racer="b" class="commute-racer-b" transform="translate(${origin[0]+7} ${origin[1]})"><path d="M0 -9 L9 0 0 9 -9 0Z"/></g>
+    </svg>
+    <text class="commute-map-compass" x="37" y="47">↑ N</text>
     <a href="${tokyoMapSource}" target="_blank" rel="noopener noreferrer"><text class="commute-map-credit" x="608" y="517" text-anchor="end">${ja?'地理院タイル（加工）・国土数値情報 鉄道':'GSI basemap · MLIT railway data'}</text></a>
    </svg>`;
 }
@@ -88,12 +99,18 @@ export function bindTokyo(root,ja){
   if(!root)return;
   const get=q=>root.querySelector(q),control=get('input'),play=get('[data-tokyo-play]'),walkLabel=get('[data-tokyo-walk]');
   const clock=get('[data-tokyo-clock]'),result=get('[data-tokyo-result]'),timeline=get('[data-tokyo-chart]');
+  const camera=get('[data-tokyo-camera]'),motion=matchMedia('(prefers-reduced-motion: reduce)');
   const waitText=get('[data-map-wait]'),phaseA=get('[data-commute-a]'),phaseB=get('[data-commute-b]');
   const routes=Object.fromEntries(Object.keys(geographicPaths).map(id=>{const path=get('[data-path="'+id+'"]');return [id,[path,path.getTotalLength()]];}));
   const riders=['a','b'].map(id=>get('[data-racer="'+id+'"]'));
   let elapsed=0,frame=0,last=null,paused=false;
   function draw(){
     const walk=Number(control.value),out=tokyoRace(walk),model=tokyoFrame(elapsed,walk);
+    const view=tokyoMapFrame(elapsed,{reducedMotion:motion.matches}),box=view.join(' ');
+    if(camera.getAttribute('viewBox')!==box){
+      camera.setAttribute('viewBox',box);
+      camera.style.setProperty('--commute-map-scale',fullMap[2]/view[2]);
+    }
     [model.a,model.b].forEach(({phase,progress},i)=>{
       const key=phase==='transfer'?'shared':phase,[path,length]=routes[key];
       const pos=path.getPointAtLength(length*(phase==='transfer'?1:progress));
@@ -145,7 +162,7 @@ export function bindTokyo(root,ja){
     if(frame){cancelAnimationFrame(frame);frame=0;paused=true;play.textContent=ja?'▶ 続ける':'▶ Resume';return;}
     if(!paused)reset();
     paused=false;last=null;
-    if(matchMedia('(prefers-reduced-motion: reduce)').matches){
+    if(motion.matches){
       elapsed=tokyoRace(Number(control.value)).duration;draw();play.textContent=ja?'↻ もう一度':'↻ Replay';return;
     }
     play.textContent=ja?'Ⅱ 一時停止':'Ⅱ Pause';
