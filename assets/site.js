@@ -382,8 +382,10 @@ function renderAgenda() {
     const inClass = activityTabs(week, activityLinks, returnTo) || (week.in_class ? `<article class="assignment-card assignment-card--in-class"><p class="assignment-label">${copy('IN CLASS', '授業内課題')}</p><h4>${copy('Try it with the class', 'クラスで試す')}</h4><p>${escapeHtml(copy(week.in_class, week.in_class_ja))}</p>${activityLinks}<div class="activity-tools"><span>${copy('TOOLS', '使うツール')}</span><strong>${escapeHtml(copy(week.tools, week.tools_ja))}</strong></div></article>` : '');
     const timing = classAgenda(week);
     const nextClassDate = weeks[index + 1]?.course_date || addDays(week.course_date, 7);
-    const deadlineMs = submissionDeadlineMs(nextClassDate);
-    const deadline = formatSubmissionDeadline(deadlineMs);
+    const closing = Date.parse(week.submission_closes_at);
+    const hasCustomDeadline = Number.isFinite(closing);
+    const deadlineMs = hasCustomDeadline ? closing : submissionDeadlineMs(nextClassDate);
+    const deadline = formatSubmissionDeadline(deadlineMs - (hasCustomDeadline ? 1 : 0));
     const submission = configuredFormUrl()
       ? `<div class="assignment-submit" data-submission-deadline="${deadlineMs}" data-submit-url="${escapeHtml(formUrl(week.week, week.challenge_ja || week.challenge))}"><a class="button" target="_blank" rel="noopener" href="${escapeHtml(formUrl(week.week, week.challenge_ja || week.challenge))}">${copy('Submit homework', '宿題を提出する')}</a><p class="assignment-deadline"><strong>${copy('DEADLINE', '締切')}</strong> ${escapeHtml(deadline)}</p><p class="assignment-resubmit">${copy('Made a mistake or want to submit a better version? Submit again before the deadline. Your newest submission will be used.', '間違えた場合や、よりよい作品を提出したい場合は、締切まで何度でも再提出できます。最新の提出を使用します。')}</p></div>`
       : `<div class="assignment-submit"><p class="assignment-note">${copy('The submission link will appear here.', '提出リンクはここに表示されます。')}</p><p class="assignment-deadline"><strong>${copy('DEADLINE', '締切')}</strong> ${escapeHtml(deadline)}</p></div>`;

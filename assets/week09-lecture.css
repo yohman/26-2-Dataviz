@@ -260,20 +260,29 @@ html[lang=ja] .w9-fifa-missing h1{font-size:56px;line-height:1.16}
 .w9-fifa-drafts figcaption{margin-top:21px;color:#312821;font:750 33px/1.18 var(--sans)}
 .w9-fifa-evidence{height:100%;position:relative;background:#f8f4ea;color:#29251d}
 .w9-fifa-evidence h1{position:absolute;z-index:1;left:84px;top:46px;margin:0;font:650 59px/1.08 var(--serif);letter-spacing:-.036em}
-.w9-fifa-controls{position:absolute;z-index:2;top:48px;right:120px;display:grid;grid-template-columns:auto auto auto;justify-items:end;align-items:center;gap:7px 14px;color:#793b49}
+.w9-fifa-controls{position:absolute;z-index:2;top:48px;right:120px;display:grid;justify-items:end;gap:7px;color:#793b49}
 .w9-fifa-controls button{border:0;background:transparent;color:inherit;padding:6px 7px;font:850 21px/1.25 var(--sans);cursor:pointer}
 .w9-fifa-controls button:hover:not(:disabled){background:#e7d9d2}
 .w9-fifa-controls button:focus-visible{outline:2px solid currentColor;outline-offset:2px}
 .w9-fifa-controls button:disabled{opacity:.35;cursor:default}
-.w9-fifa-controls output{grid-column:1/-1;font:700 18px/1.2 var(--sans);color:#695d52}
+.w9-fifa-controls output{font:700 18px/1.2 var(--sans);color:#695d52}
 .html-lecture-page .html-deck:not(.is-fullscreen) .pdf-stage.is-tall-slide{aspect-ratio:var(--lecture-slide-ratio);max-height:calc(130dvh - 221px)}
 .html-slide .w9-fifa-plot{position:absolute;inset:0;width:100%;height:100%}
+.w9-fifa-evidence:not([data-fifa-stage="4"]) .w9-fifa-plot{cursor:pointer}
+.w9-fifa-probe{fill:none;stroke:#392e27;stroke-width:2.5;pointer-events:none}
+.w9-fifa-tooltip{position:absolute;z-index:3;pointer-events:none;transform:translate(19px,-50%);width:max-content;min-width:218px;max-width:343px;padding:14px 17px;border:1px solid #ad9b89;background:#fffaf0;color:#3e3127;box-shadow:0 4px 16px #392e271f;font:700 17px/1.2 var(--sans)}
+.w9-fifa-tooltip.is-left{transform:translate(calc(-100% - 19px),-50%)}
+.w9-fifa-tooltip[hidden]{display:none}
+.w9-fifa-tooltip strong{display:block;margin-bottom:9px;color:#793b49;font-size:25px;line-height:1.15}
+.w9-fifa-tooltip dl{display:grid;gap:5px;margin:0}
+.w9-fifa-tooltip dl div{display:flex;justify-content:space-between;gap:17px}
+.w9-fifa-tooltip dt{color:#645448}
+.w9-fifa-tooltip dd{margin:0;font-weight:850;font-variant-numeric:tabular-nums}
 .w9-fifa-plot [data-fifa-layer]{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .48s ease}
 .w9-fifa-plot [data-fifa-layer].is-visible{opacity:1;visibility:visible}
 .w9-fifa-plot [data-fifa-layer].is-visible .w9-fifa-top{pointer-events:auto}
-.w9-fifa-plot :is(.w9-fifa-dot,.w9-fifa-top):hover{stroke:#332a26;stroke-width:2;fill-opacity:1}
 @media (prefers-reduced-motion:reduce){.w9-fifa-plot [data-fifa-layer]{transition:none}}
-@media print{.w9-fifa-controls{display:none}.w9-fifa-plot [data-fifa-layer]{opacity:1;visibility:visible}}
+@media print{.w9-fifa-controls,.w9-fifa-tooltip,.w9-fifa-probe{display:none}.w9-fifa-plot [data-fifa-layer]{opacity:1;visibility:visible}}
 .w9-fifa-less{color:#a13c53}
 .w9-fifa-more{color:#226e58}
 .w9-fifa-top-band{fill:currentColor;fill-opacity:.095}

@@ -2,6 +2,8 @@
 week: 10
 act: QUESTION
 course_date: 2026-12-04
+submission_opens_at: 2026-11-27T00:00:00+09:00
+submission_closes_at: 2026-12-04T00:00:00+09:00
 date: Fri 4 Dec 2026 · P2 · 10:50–12:20
 date_ja: 2026年12月4日（金） · 2限 · 10:50–12:20
 title: Midterm Group Presentations

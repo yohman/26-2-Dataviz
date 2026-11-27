@@ -38,12 +38,13 @@ const weeks=[];
 for (const file of (await readdir(join(root,'content/weeks'))).filter(f=>f.endsWith('.md')).sort()) {
   const text=await readFile(join(root,'content/weeks',file),'utf8');
   const field=name=>text.match(new RegExp(`^${name}: (.+)$`,'m'))?.[1];
-  weeks.push({week:Number(field('week')),date:field('course_date'),opens:field('opens_at'),challenge:field('challenge_ja') || field('challenge')});
+  weeks.push({week:Number(field('week')),date:field('course_date'),opens:field('submission_opens_at') || field('opens_at'),closes:field('submission_closes_at'),challenge:field('challenge_ja') || field('challenge')});
 }
 for (let i=0;i<weeks.length;i++) {
   const w=weeks[i], next=weeks[i+1]?.date || new Date(Date.parse(w.date+'T00:00:00Z')+7*86400000).toISOString().slice(0,10);
-  const deadline=Date.parse(next+'T00:00:00+09:00')-60000;
+  const deadline=w.closes?Date.parse(w.closes):Date.parse(next+'T00:00:00+09:00')-60000;
   const opens=w.opens?Date.parse(w.opens):Date.parse(w.date+'T00:00:00+09:00')-86400000;
+  if(!Number.isFinite(opens)||!Number.isFinite(deadline)||opens>=deadline)throw new Error(`Invalid submission window for Week ${w.week}`);
   statements.push(`INSERT OR REPLACE INTO week_schedule(week,challenge,opens_ms,deadline_ms) VALUES(${w.week},${sql(`第${w.week}週｜${w.challenge}`)},${opens},${deadline});`);
 }
 await writeFile(output,statements.join('\n')+'\n',{mode:0o600});

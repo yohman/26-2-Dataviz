@@ -5,6 +5,7 @@ import vm from 'node:vm';
 import {safeDeckReturn,studioDeckOpening} from '../assets/html-lecture-model.mjs';
 import {fifaEvidence,renderWeek9} from '../assets/week09-visuals.mjs';
 import {fifaSnapshot} from '../assets/week09-fifa-data.mjs';
+import {fifaTeamName} from '../assets/week09-fifa-regions.mjs';
 import {tubeBreakEven,tubeJourney,tubeRaceFrame,tubeTimeline,tubeUrls} from '../assets/week09-tube.mjs';
 import {tubeStations} from '../assets/week09-tube-data.mjs';
 import {tokyoTimes,tokyoRace,tokyoFrame,tokyoMapFrame} from '../assets/week09-tokyo-race.mjs';
@@ -219,19 +220,41 @@ test('the final slide and Week 10 guidelines tell the same design journey and li
   assert.match(midterm,/10:50–11:22[^\n]*2-minute[^\n]*11:22–11:32\|Intermission/);
   assert.match(midterm,/one initial design from each member[\s\S]*reveal the single final graphic[\s\S]*explain the answer/);
   assert.match(midterm,/link: homework-submit\.html\?week=10/);
+  assert.match(midterm,/submission_opens_at: 2026-11-27T00:00:00\+09:00/);
+  assert.match(midterm,/submission_closes_at: 2026-12-04T00:00:00\+09:00/);
 });
 
-test('the classroom chart has sixteen themed groups and never embeds names in its public source',()=>{
+test('the public seating chart has sixteen themed groups and 63 names without student IDs',()=>{
   const slide=deck.slides.find(s=>s.id==='studio-seating');
   const numbers=[1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17];
   assert.deepEqual(slide.groups.map(([n])=>n),numbers);
   assert.ok(slide.groups.every(([,en,ja])=>en.split(' ').length<=2&&ja.length>1));
-  const pub=renderWeek9(slide,{ja:false});
+  const seating=JSON.parse(fs.readFileSync('data/week09-seating.json','utf8'));
+  assert.deepEqual(Object.keys(seating).map(Number),numbers);
+  assert.equal(Object.values(seating).flat().length,63);
+  assert.ok(Object.values(seating).flat().every(name=>typeof name==='string'&&!/\d{6,}/.test(name)));
+  const pub=renderWeek9(slide,{ja:false,seating});
   const classroom=renderWeek9(slide,{ja:false,seating:{1:['Example <Private>']}});
   assert.equal((pub.match(/data-group=/g)||[]).length,16);
-  assert.doesNotMatch(pub,/<ul>|Example/);
+  assert.equal((pub.match(/<li>/g)||[]).length,63);
+  assert.doesNotMatch(pub,/\d{6,}|Example/);
   assert.match(classroom,/Example &lt;Private&gt;/);
   assert.match(fs.readFileSync('.gitignore','utf8'),/week09-seating\.local\.json/);
+});
+
+test('all FIFA marks have an inspectable localized name and the build has only a Next control',()=>{
+  for(const [code] of fifaSnapshot.rows){
+    assert.notEqual(fifaTeamName(code),code);
+    assert.notEqual(fifaTeamName(code,true),code);
+  }
+  assert.equal(fifaTeamName('CPV'),'Cabo Verde');
+  assert.equal(fifaTeamName('ISL'),'Iceland');
+  assert.equal(fifaTeamName('JPN',true),'日本');
+  const html=renderWeek9(deck.slides.find(s=>s.id==='fifa-evidence'),{ja:false});
+  assert.match(html,/data-fifa-next/);
+  assert.doesNotMatch(html,/data-fifa-play|data-fifa-prev/);
+  assert.match(html,/data-fifa-tooltip role="tooltip" hidden/);
+  assert.match(html,/data-fifa-team="CPV"/);
 });
 
 test('the taller FIFA plot links both names to their existing data points',()=>{

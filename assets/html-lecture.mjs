@@ -1,6 +1,6 @@
 import {clampSlide,scatterMarks,lineSegments,safeDeckReturn,studioDeckOpening} from './html-lecture-model.mjs?v=week9-beck-20261126';
 import {renderWeek8,bindWeek8} from './week08-visuals.mjs?v=marker-20261120';
-import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=w9-reveals-midterm-20261127';
+import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=w9-data-hover-20261127';
 const $=s=>document.querySelector(s),params=new URLSearchParams(location.search),stage=$('[data-stage]'),surface=$('[data-surface]'),slide=$('[data-slide]'),viewer=$('.html-deck');
 const requestedWeek=Number(params.get('week')),week=[8,9].includes(requestedWeek)?requestedWeek:7;
 const allowedReturn=safeDeckReturn(params.get('return'),week);
@@ -54,7 +54,7 @@ function renderVisual(s){
  if(s.kind==='homework')return layout(`<div class="homework-number">2–3</div><h1>${esc(tr(s.title))}</h1><div class="homework-bottom"><ul>${tr(s.steps).map(v=>`<li>${esc(v)}</li>`).join('')}</ul><div class="homework-submit"><a href="homework-submit.html?week=7">${ja()?'宿題を提出する':'Submit homework'} ↗</a><br><a href="${esc(deckReturn())}">${ja()?'課題の説明':'Assignment details'} ↗</a><time datetime="2026-11-19T23:59:00+09:00">11.19 Thu · 23:59 JST</time></div></div>`);
  return '';
 }
-let viewportControl,ink,seating;
+let viewportControl,ink,seating,advanceBuild;
 function resize(reset=false){
  if(!deck)return;
  const current=deck.slides[page-1],width=1600,height=current.canvasHeight??900;
@@ -66,7 +66,7 @@ function resize(reset=false){
  viewportControl.layout(width*fit,height*fit,{reset});ink.rendered(current.annotationPage??page);
 }
 function render(value=page,{url=true}={}){
- if(!deck)return;const next=clampSlide(value,deck.slides.length),changed=next!==page;page=next;const s=deck.slides[page-1];ink.loading();slide.className=`html-slide slide-${s.kind}`;slide.dataset.slideId=s.id;slide.innerHTML=renderVisual(s);slide.setAttribute('aria-label',`${page}. ${tr(s.title)}`);if(week===8)bindWeek8(slide,{s,data,ja:ja()});if(week===9)bindWeek9(slide,{s,ja:ja()});surface.hidden=false;$('[data-loading]').hidden=true;resize(changed);
+ if(!deck)return;const next=clampSlide(value,deck.slides.length),changed=next!==page;page=next;const s=deck.slides[page-1];ink.loading();slide.className=`html-slide slide-${s.kind}`;slide.dataset.slideId=s.id;slide.innerHTML=renderVisual(s);slide.setAttribute('aria-label',`${page}. ${tr(s.title)}`);if(week===8)bindWeek8(slide,{s,data,ja:ja()});advanceBuild=week===9?bindWeek9(slide,{s,ja:ja()}):null;surface.hidden=false;$('[data-loading]').hidden=true;resize(changed);
  $('[data-page-input]').value=page;$('[data-page-input]').max=deck.slides.length;$('[data-page-total]').textContent=`/ ${deck.slides.length}`;$('[data-previous]').disabled=page===1;$('[data-next]').disabled=page===deck.slides.length;
  document.documentElement.lang=lang;document.title=`Week ${week} · ${tr(deck.title)}`;$('[data-deck-title]').textContent=tr(deck.title);$('[data-back]').textContent=ja()?`← 第${week}週`:`← Week ${week}`;$('[data-back]').href=deckReturn();$('.wordmark').innerHTML=`<span>DV / 26–2</span> ${ja()?'データを見る':'Seeing Data'}`;$('[data-language-toggle]').textContent=ja()?'EN':'JP';$('[data-language-toggle]').setAttribute('aria-label',ja()?'Switch to English':'日本語に切り替える');
  const edit=$('[data-deck-edit]');
@@ -100,8 +100,7 @@ async function start(){
   }
   const path=`content/slides/week${String(week).padStart(2,'0')}.json`;
   const load=async url=>{const response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('Unavailable');return response.json();};
-  const classroom=week===9&&['127.0.0.1','localhost','[::1]'].includes(location.hostname);
-  [deck,data,seating]=await Promise.all([load(week===9?`${path}?v=w9-reveals-midterm-20261127`:path),week===9?null:load('data/week07-examples.json?v=20261112'),classroom?load('content/slides/week09-seating.local.json').catch(()=>null):null]);
+  [deck,data,seating]=await Promise.all([load(week===9?`${path}?v=w9-reveals-midterm-20261127`:path),week===9?null:load('data/week07-examples.json?v=20261112'),week===9?load('data/week09-seating.json').catch(()=>null):null]);
   if(week===9)for(const item of deck.slides.filter((item,i)=>item.image&&((i>0&&i<7)||item.kind==='studio-opening'))){
    const img=new Image();img.referrerPolicy='no-referrer';img.src=item.image;
   }
@@ -112,13 +111,14 @@ async function start(){
   window.installSlideSwipes(stage,{canSwipe:()=>stage.dataset.slideDrawing!=='true'&&zoom<=1.01&&stage.dataset.pinching!=='true'&&(window.visualViewport?.scale||1)<=1.01,next:()=>render(page+1),previous:()=>render(page-1)});
  }catch(error){console.error(error);$('[data-loading]').className='lecture-load-error';$('[data-loading]').textContent=ja()?'スライドを読み込めませんでした。再読み込みしてください。':'Could not load the slides. Please reload.';}
 }
-$('[data-previous]').onclick=()=>render(page-1);$('[data-next]').onclick=()=>render(page+1);$('[data-page-input]').onchange=e=>render(e.target.value);$('[data-page-input]').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();render(e.target.value);e.target.blur();}};$('[data-language-toggle]').onclick=()=>{lang=ja()?'en':'ja';try{localStorage.setItem('dv-language',lang);}catch{}render();};
+const forward=()=>{if(!advanceBuild?.())render(page+1);};
+$('[data-previous]').onclick=()=>render(page-1);$('[data-next]').onclick=forward;$('[data-page-input]').onchange=e=>render(e.target.value);$('[data-page-input]').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();render(e.target.value);e.target.blur();}};$('[data-language-toggle]').onclick=()=>{lang=ja()?'en':'ja';try{localStorage.setItem('dv-language',lang);}catch{}render();};
 $('[data-fullscreen]').onclick=toggleFullscreen;$('[data-zoom-in]').onclick=()=>viewportControl?.zoomTo(zoom*1.2);$('[data-zoom-out]').onclick=()=>viewportControl?.zoomTo(zoom/1.2);$('[data-zoom-reset]').onclick=()=>viewportControl?.fit();
 $('[data-toc]').onclick=()=>{if($('[data-toc-dialog]').open)$('[data-toc-dialog]').close();else $('[data-toc-dialog]').showModal();};
 $('[data-toc-close]').onclick=()=>$('[data-toc-dialog]').close();
 $('[data-toc-list]').onclick=e=>{const a=e.target.closest('[data-go]');if(!a)return;e.preventDefault();$('[data-toc-dialog]').close();render(a.dataset.go);};
 $('[data-chapters]').onclick=e=>{const a=e.target.closest('[data-go]');if(!a)return;e.preventDefault();render(a.dataset.go);};
 document.addEventListener('fullscreenchange',()=>{fullscreen(Boolean(document.fullscreenElement));});
-document.addEventListener('keydown',e=>{if($('[data-toc-dialog]').open)return;if(e.target.closest('input,textarea,select,[contenteditable="true"]')||e.isComposing||stage.dataset.slideDrawing==='true'||e.ctrlKey||e.metaKey||e.altKey||(e.target.closest('a,button,summary')&&[' ','Enter'].includes(e.key)))return;if(e.key.toLowerCase()==='c'){$('[data-toc-dialog]').showModal();return;}if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();render(page+1);}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();render(page-1);}if(e.key==='Home'){e.preventDefault();render(1);}if(e.key==='End'){e.preventDefault();render(deck?.slides.length||1);}if(e.key==='Escape')fullscreen(false);if(e.key.toLowerCase()==='f')toggleFullscreen();});
+document.addEventListener('keydown',e=>{if($('[data-toc-dialog]').open)return;if(e.target.closest('input,textarea,select,[contenteditable="true"]')||e.isComposing||stage.dataset.slideDrawing==='true'||e.ctrlKey||e.metaKey||e.altKey||(e.target.closest('a,button,summary')&&[' ','Enter'].includes(e.key)))return;if(e.key.toLowerCase()==='c'){$('[data-toc-dialog]').showModal();return;}if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();forward();}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();render(page-1);}if(e.key==='Home'){e.preventDefault();render(1);}if(e.key==='End'){e.preventDefault();render(deck?.slides.length||1);}if(e.key==='Escape')fullscreen(false);if(e.key.toLowerCase()==='f')toggleFullscreen();});
 window.addEventListener('popstate',()=>{const p=new URLSearchParams(location.search),i=deck?.slides.findIndex(s=>s.id===p.get('slide'));render(i>=0?i+1:p.get('page'),{url:false});});
 start();

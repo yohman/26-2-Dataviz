@@ -1,4 +1,5 @@
 import {fifaSnapshot} from './week09-fifa-data.mjs?v=20261127';
+import {fifaTeamName} from './week09-fifa-regions.mjs';
 import {renderTubeSlide,bindTubeSlide} from './week09-tube.mjs?v=night-race-tokyo-20261127';
 import {renderTokyo,bindTokyo} from './week09-tokyo-race.mjs?v=w9-tokyo-group-20261127';
 
@@ -23,8 +24,7 @@ function fifaPlot(ja,height=1160) {
   const split=x(cut);
   const ticks=ja?['10万','100万','1,000万','1億','10億']:['100k','1m','10m','100m','1bn'];
   const label=(x,y,text,cls='',anchor='start')=>`<text class="${cls}" x="${x}" y="${y}" text-anchor="${anchor}">${esc(text)}</text>`;
-  const count=new Intl.NumberFormat(ja?'ja-JP':'en');
-  const drawDot=([code,rank,pop],highlight=false)=>`<circle class="${highlight?'w9-fifa-top '+(pop<cut?'w9-fifa-less':'w9-fifa-more'):'w9-fifa-dot'}" cx="${x(pop)}" cy="${y(rank)}" r="${highlight?7:4.2}"><title>${esc(ja?`${code}：${rank}位、人口 ${count.format(pop)}`:`${code}: rank ${rank}, population ${count.format(pop)}`)}</title></circle>`;
+  const drawDot=([code,rank,pop],highlight=false)=>`<circle class="${highlight?'w9-fifa-top '+(pop<cut?'w9-fifa-less':'w9-fifa-more'):'w9-fifa-dot'}" cx="${x(pop)}" cy="${y(rank)}" r="${highlight?7:4.2}" data-fifa-team="${esc(code)}"/>`;
   const marks=rows.map(row=>drawDot(row)).join('');
   const top=rows.filter(row=>row[1]<=50);
   const layer=(index,content)=>`<g data-fifa-layer="${index}" aria-hidden="true">${content}</g>`;
@@ -72,6 +72,7 @@ function fifaPlot(ja,height=1160) {
     ${layer(2,top.filter(row=>row[2]>=cut).map(row=>drawDot(row,true)).join(''))}
     ${layer(3,totals.map(item=>item.count).join(''))}
     ${layer(4,callouts.map(item=>item.svg).join(''))}
+    <circle class="w9-fifa-probe" data-fifa-probe r="11" visibility="hidden" aria-hidden="true"/>
     ${label((start+end)/2,height-57,ja?'人口（対数軸）':'Population (log scale)','w9-fifa-axis-title','middle')}
     </svg>`;
 }
@@ -113,12 +114,17 @@ export function renderWeek9(slide,{ja=true,seating=null}={}) {
   if(slide.kind==='fifa-evidence') {
     return `<section class="w9-fifa-evidence" data-fifa-build><h1>${title}</h1>
       <div class="w9-fifa-controls" aria-label="${ja?'図の表示ステップ':'Chart reveal'}" role="group">
-        <button type="button" data-fifa-prev aria-label="${ja?'前のレイヤー':'Previous layer'}" disabled>‹</button>
-        <button type="button" data-fifa-play>${ja?'▶ 再生':'▶ Play'}</button>
         <button type="button" data-fifa-next aria-label="${ja?'次のレイヤー':'Next layer'}">${ja?'次へ ›':'Next layer ›'}</button>
         <output data-fifa-step aria-live="polite">1 / 5　${fifaStages(ja)[0]}</output>
       </div>
-      ${fifaPlot(ja,slide.canvasHeight)}<p class="w9-fifa-source">${ja?'第6班の公開データ：FIFA順位 2026年10月7日・人口 2025年':'Group 6 data · FIFA ranking 7 Oct 2026 · 2025 population'}</p></section>`;
+      ${fifaPlot(ja,slide.canvasHeight)}
+      <aside class="w9-fifa-tooltip" data-fifa-tooltip role="tooltip" hidden>
+        <strong data-fifa-name></strong><dl>
+          <div><dt>${ja?'FIFA順位':'FIFA rank'}</dt><dd data-fifa-rank></dd></div>
+          <div><dt>${ja?'人口（2025年）':'Population (2025)'}</dt><dd data-fifa-population></dd></div>
+        </dl>
+      </aside>
+      <p class="w9-fifa-source">${ja?'第6班の公開データ：FIFA順位 2026年10月7日・人口 2025年':'Group 6 data · FIFA ranking 7 Oct 2026 · 2025 population'}</p></section>`;
   }
   if(slide.kind==='combined-route')return renderTubeSlide(slide,ja);
   if(slide.kind==='archive') {
@@ -152,7 +158,7 @@ export function renderWeek9(slide,{ja=true,seating=null}={}) {
 export function bindWeek9(slide,{s,ja}={}) {
   if(s.kind==='tokyo-reveal')bindTokyo(slide.querySelector('[data-tokyo-race]'),ja);
   if(s?.kind==='combined-route')bindTubeSlide(slide.querySelector('[data-tube-slide]'),s,ja);
-  if(s.kind==='fifa-evidence')bindFifa(slide.querySelector('[data-fifa-build]'),ja);
+  if(s.kind==='fifa-evidence')return bindFifa(slide.querySelector('[data-fifa-build]'),ja);
   const img=slide.querySelector('.w9-archive img,.w9-match-photo img');
   if(!img)return;
   const fallback=()=>{img.hidden=true;slide.querySelector('.w9-image-fallback').hidden=false;};
@@ -164,10 +170,14 @@ function bindFifa(root,ja){
   if(!root)return;
   const stages=fifaStages(ja),last=stages.length-1;
   const get=name=>root.querySelector(`[data-fifa-${name}]`);
-  const [prev,next,play,status]=['prev','next','play','step'].map(get);
+  const [next,status,probe,tooltip,name,rank,population]=['next','step','probe','tooltip','name','rank','population'].map(get);
   const plot=root.querySelector('.w9-fifa-plot'),layers=[...plot.querySelectorAll('[data-fifa-layer]')];
-  let step=0,timer=0;
-  const controls=()=>{play.textContent=timer?(ja?'Ⅱ 一時停止':'Ⅱ Pause'):step===last?(ja?'↻ もう一度':'↻ Replay'):(ja?'▶ 再生':'▶ Play');};
+  const count=new Intl.NumberFormat(ja?'ja-JP':'en');
+  const teams=new Map(fifaSnapshot.rows.map(row=>[row[0],row]));
+  const points=[...plot.querySelectorAll('.w9-fifa-dot')].map(dot=>({
+    x:Number(dot.getAttribute('cx')),y:Number(dot.getAttribute('cy')),row:teams.get(dot.dataset.fifaTeam)
+  }));
+  let step=0,active=null,press=null;
   function show(value){
     step=Math.max(0,Math.min(last,value));
     root.dataset.fifaStage=step;
@@ -176,31 +186,53 @@ function bindFifa(root,ja){
       layer.classList.toggle('is-visible',visible);
       layer.setAttribute('aria-hidden',String(!visible));
     }
-    prev.disabled=step===0;
     next.disabled=step===last;
     status.textContent=`${step+1} / ${stages.length}　${stages[step]}`;
     const description=step===last?`${plot.dataset.fifaSummary} ${plot.dataset.fifaCountries}`:step===3?plot.dataset.fifaSummary:`${plot.dataset.fifaBase} ${stages[step]}.`;
     plot.setAttribute('aria-label',description);
-    controls();
   }
-  function stop(){clearTimeout(timer);timer=0;controls();}
   function advance(){
-    if(!root.isConnected){stop();return;}
+    if(step===last)return false;
     show(step+1);
-    if(step===last)stop();
-    else timer=setTimeout(advance,1500);
+    return true;
   }
-  prev.addEventListener('click',()=>{stop();show(step-1);});
-  next.addEventListener('click',()=>{stop();show(step+1);});
-  root.querySelector('.w9-fifa-controls').addEventListener('keydown',event=>{
-    if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;
-    event.preventDefault();event.stopPropagation();stop();show(step+(event.key==='ArrowRight'?1:-1));
+  function inspect(point){
+    if(point===active)return;
+    active=point;
+    tooltip.hidden=!point;
+    probe.setAttribute('visibility',point?'visible':'hidden');
+    if(!point)return;
+    const {x,y,row:[code,ranking,pop]}=point;
+    probe.setAttribute('cx',x);probe.setAttribute('cy',y);
+    tooltip.style.left=`${x}px`;tooltip.style.top=`${y}px`;
+    tooltip.classList.toggle('is-left',x>1150);
+    name.textContent=fifaTeamName(code,ja);
+    rank.textContent=count.format(ranking);
+    population.textContent=count.format(pop);
+  }
+  next.addEventListener('click',advance);
+  plot.addEventListener('pointerdown',event=>{press=[event.clientX,event.clientY];});
+  plot.addEventListener('click',event=>{
+    const moved=press&&Math.hypot(event.clientX-press[0],event.clientY-press[1])>7;
+    press=null;
+    if(event.detail<=1&&!moved)advance();
   });
-  play.addEventListener('click',()=>{
-    if(timer){stop();return;}
-    if(step===last)show(0);
-    timer=setTimeout(advance,900);
-    controls();
+  plot.addEventListener('pointermove',event=>{
+    if(event.pointerType==='touch')return;
+    const transform=plot.getScreenCTM();
+    if(!transform)return;
+    const scale=Math.hypot(transform.a,transform.b);
+    if(!scale)return;
+    const pos=new DOMPoint(event.clientX,event.clientY).matrixTransform(transform.inverse());
+    const radius=Math.min(42,10/scale);
+    let nearest=null,distance=radius*radius;
+    for(const point of points){
+      const d=(pos.x-point.x)**2+(pos.y-point.y)**2;
+      if(d<=distance){nearest=point;distance=d;}
+    }
+    inspect(nearest);
   });
+  plot.addEventListener('pointerleave',()=>inspect(null));
   show(0);
+  return advance;
 }

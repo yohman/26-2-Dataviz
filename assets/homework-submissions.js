@@ -63,7 +63,8 @@
     const open=Date.now()>=schedule.opensAt && Date.now()<schedule.deadline;
     const date=new Intl.DateTimeFormat(window.courseLanguage==='en'?'en-GB':'ja-JP',{timeZone:'Asia/Tokyo',dateStyle:'full',timeStyle:'short'});
     const opening=isMidterm&&Date.now()<schedule.opensAt?`${text('受付開始','Opens')}: ${date.format(schedule.opensAt)} JST · `:'';
-    document.querySelector('#homework-deadline').textContent=`${opening}${text('締切','Deadline')}: ${date.format(schedule.deadline)} JST${open||opening?'':text(' · 受付時間外',' · Submissions closed')}`;
+    const lastMinute=isMidterm?schedule.deadline-1:schedule.deadline;
+    document.querySelector('#homework-deadline').textContent=`${opening}${text('締切','Deadline')}: ${date.format(lastMinute)} JST${open||opening?'':text(' · 受付時間外',' · Submissions closed')}`;
     button.disabled=!open;
   }
   async function compress(file) {
