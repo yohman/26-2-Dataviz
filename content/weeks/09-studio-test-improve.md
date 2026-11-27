@@ -9,13 +9,13 @@ title: Studio Day: Test and Improve
 title_ja: スタジオデー：試して改善する
 look: From a question to evidence
 look_ja: 問いから根拠へ
-learn: combine your team’s ideas into one graphic, then give it a question title worth reading
-learn_ja: チームの案を一つの図にまとめ、続きを見たくなる問いをタイトルにする
+learn: choose a question, then combine your team’s ideas into one graphic that answers it
+learn_ja: 問いを一つ選び、班の案を組み合わせて、その問いに答える図をつくる
 lecture_gallery_week: 8
-schedule: 10:40–11:00|From a question to evidence|Beck’s Tube map and the FIFA group;11:00–11:20|One group graphic|Combine ideas from your Week 8 drafts;11:20–12:20|Question title|Find the question, then make the answer visible
-schedule_ja: 10:40–11:00|問いから根拠へ|ベックの地下鉄路線図とFIFAの班;11:00–11:20|グループで一つの図|第8週の案を組み合わせる;11:20–12:20|問いをタイトルに|問いを見つけ、答えが伝わる図にする
-in_class: Stay with your project team. Use your Week 8 revisions to make one better graphic together. Give it a question title the graphic can answer.
-in_class_ja: いつものプロジェクト班で、第8週の改訂案をもとに一つの図をつくる。その図から答えが読み取れる問いをタイトルにする。
+schedule: 10:40–11:00|From a question to evidence|London, Tokyo, and the FIFA group;11:00–11:25|Share drafts and choose a question|15 min show-and-tell, 10 min for the question;11:25–12:20|Sketch, build, and prepare|20 min sketch, 25 min build, 10 min midterm prep
+schedule_ja: 10:40–11:00|問いから根拠へ|ロンドン・東京・FIFAの班の例;11:00–11:25|案を見せ合い、問いを選ぶ|共有15分・問い10分;11:25–12:20|スケッチ・制作・発表準備|スケッチ20分・制作25分・発表準備10分
+in_class: In your usual team, show your Week 8 revisions, choose one question, and create one group graphic that answers it.
+in_class_ja: いつもの班で第8週の改訂案を見せ合い、問いを一つ選ぶ。その問いに答える図を班で一つつくる。
 homework: Finish your group graphic and its question title. One person submits for the group.
 homework_ja: グループの図と、問いを使ったタイトルを仕上げる。代表者が1回提出する。
 requirements: Upload your final graphic with its question title and your first group draft from today. Include the data link.;Start with your group name. In 3–5 sentences, explain which ideas you combined, why you chose the question, and where the graphic shows the answer.
@@ -33,40 +33,40 @@ tools_ja: 第8週の改訂案・共有ドキュメントやスライド・プロ
 ## In Class Activities
 
 ### Activity 1
-title: One group graphic · 20 min
-title_ja: グループで一つの図 · 20分
-text: Stay with your project team. Show your Week 8 individual revisions and say what each draft does well.
-text_ja: いつものプロジェクト班で、第8週の改訂案を見せ合い、それぞれのよいところを話す。
+title: Show your drafts and choose a question · 25 min
+title_ja: 案を見せ合い、問いを選ぶ · 25分
+text: Work in your usual project team. By 11:25, agree on one question your data can answer.
+text_ja: いつものプロジェクト班で集まり、11:25までにデータで答えられる問いを一つ選ぶ。
 steps:
-- Combine the strongest ideas into one graphic. You can build on one member’s draft, but change it together.
-- Save a screenshot of this first group draft before working on the title.
+- 11:00–11:15 · Everyone shows their Week 8 revision. Say what you changed and what your graphic makes easy to see.
+- 11:15–11:25 · Write two possible question titles and pick one. “FIFA rankings” is a topic. “Are more populous countries more likely to make FIFA’s top 50?” gives the audience something to find out.
 steps_ja:
-- よいところを一つの図に取り入れる。一人の案を出発点にしてもよいが、班で話し合って手を加える。
-- タイトルに取りかかる前に、班の最初の試作を画像で保存する。
+- 11:00〜11:15：全員が第8週の改訂案を見せる。何を変え、何が読み取りやすくなったかを話す。
+- 11:15〜11:25：問いの形でタイトル案を二つ書き、一つ選ぶ。「FIFAランキング」はテーマ。「人口の多い国ほど、FIFAランキングの上位50位に入りやすい？」なら、見る人が答えを探せる。
 
 ### Activity 2
-title: The question in the title · 20 min
-title_ja: 問いをタイトルに · 20分
-text: “FIFA rankings” names a topic. A question title tells the audience what the graphic will help them find out.
-text_ja: 「FIFAランキング」はテーマの名前。問いをタイトルにすると、この図で何が分かるのか伝わる。
+title: Discuss and sketch one graphic · 20 min
+title_ja: 話し合い、一つの図をスケッチする · 20分
+text: 11:25–11:45 · Use the question to decide which ideas from the individual drafts to keep.
+text_ja: 11:25〜11:45：選んだ問いをもとに、各自の案のどこを残すか話し合う。
 steps:
-- Look at your shared draft. What’s the most interesting question it can actually answer?
-- Write two or three possible titles. Read them aloud and choose one that makes someone outside the team curious.
+- Combine the strongest ideas into one rough sketch. Write the question at the top and point to the marks that answer it.
+- If you can’t point to the answer, change the sketch or narrow the question. Save a photo or screenshot as your first group draft.
 steps_ja:
-- 班でまとめた図を見て、実際に答えが読み取れる問いの中で、いちばん面白いものを探す。
-- タイトル案を二つか三つ声に出して読み、班の外の人も答えが気になる問いを選ぶ。
+- よいところを組み合わせ、一つのスケッチにする。上に問いを書き、図のどこが答えの根拠かを指し示す。
+- 答えを指し示せなければ、図を変えるか、問いを絞る。写真かスクリーンショットを班の最初の試作として保存する。
 
 ### Activity 3
-title: The answer in the graphic · 40 min
-title_ja: 答えが伝わる図 · 40分
-text: Put the question on the graphic. Can you point to the evidence that answers it?
-text_ja: 問いを図のタイトルにする。答えの根拠は、図のどこにある？
+title: Build and prepare for the midterm · 35 min
+title_ja: 制作と中間発表の準備 · 35分
+text: Turn your sketch into one group prototype. Use the question as its title.
+text_ja: スケッチをもとに、問いをタイトルにした班の試作を一つつくる。
 steps:
-- If the answer is hard to see, change what the graphic emphasizes or narrow the question.
-- Save one titled prototype for the December 4 midterm. In the final 10 minutes, a few volunteers can read their old and new titles from their seats.
+- 11:45–12:10 · Build the graphic in your chosen tool. Make the evidence easy to spot and save the prototype.
+- 12:10–12:20 · For the December 4 midterm, decide who will speak. Rehearse: state the question, show what you combined, then point to the answer. Keep the sketch and a screenshot ready to show.
 steps_ja:
-- 答えが伝わりにくければ、強調する箇所を変えるか、問いを絞る。
-- 12月4日の中間発表に向け、タイトル付きの試作を一つ保存する。最後の10分で、希望する数班が席から変更前と変更後のタイトルを紹介する。
+- 11:45〜12:10：使いやすいツールで図にする。答えの根拠がひと目で分かるようにし、試作を保存する。
+- 12:10〜12:20：12月4日の中間発表に向けて、発表者を決める。問い、組み合わせた案、図の答えの順で話す練習をする。スケッチとスクリーンショットを用意する。
 
 ## Mori's Corner
 

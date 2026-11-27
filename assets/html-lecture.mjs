@@ -100,7 +100,7 @@ async function start(){
   }
   const path=`content/slides/week${String(week).padStart(2,'0')}.json`;
   const load=async url=>{const response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('Unavailable');return response.json();};
-  [deck,data]=await Promise.all([load(week===9?`${path}?v=w9-fifa-poster-20261127`:path),week===9?null:load('data/week07-examples.json?v=20261112')]);
+  [deck,data]=await Promise.all([load(week===9?`${path}?v=w9-activity-clock-20261127`:path),week===9?null:load('data/week07-examples.json?v=20261112')]);
   if(week===9)for(const item of deck.slides.slice(1,7).filter(item=>item.image)){
    const img=new Image();img.referrerPolicy='no-referrer';img.src=item.image;
   }

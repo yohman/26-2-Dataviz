@@ -58,7 +58,7 @@ test('historical sources, bilingual slides, chapters and homework render in the 
   assert.match(streetMap,/#141823/);
   assert.match(streetMap,/opacity="\.22"/);
   assert.deepEqual(deck.slides.map((slide,i)=>slide.annotationPage??i+1).sort((a,b)=>a-b),[1,2,4,5,6,7,8,9,10,14,15,16,17,18,19,24,25,26,27]);
-  assert.deepEqual(deck.slides.filter(slide=>slide.kind==='activity').map(slide=>slide.duration),[20,20,40]);
+  assert.deepEqual(deck.slides.filter(slide=>slide.kind==='activity').map(slide=>slide.duration),[25,20,35]);
   assert.deepEqual(deck.slides.slice(15,18).map(slide=>slide.id),['design-task','viewer-test','one-change']);
   const example=renderWeek9(deck.slides.find(s=>s.id==='title-example'),{ja:false});
   assert.match(example,/more likely to make FIFA’s top 50\?/);
@@ -215,6 +215,23 @@ test('the taller FIFA plot links both names to their existing data points',()=>{
       const [,x,y]=group.match(/class="w9-fifa-callout-point" cx="([^"]+)" cy="([^"]+)"/);
       assert.ok(group.includes(`L${x} ${y}"`));
       assert.ok(html.includes(`class="w9-fifa-dot" cx="${x}" cy="${y}"`));
+    }
+  }
+});
+
+test('Week 9 activities have the same continuous schedule in the agenda and slides',()=>{
+  const context=vm.createContext({document:{addEventListener(){}},window:{},URL,URLSearchParams});
+  vm.runInContext(fs.readFileSync('assets/site.js','utf8'),context);
+  const activities=vm.runInContext('parseInClassActivities',context)(source);
+  const slides=deck.slides.filter(slide=>slide.kind==='activity');
+  const intervals=['11:00–11:15','11:15–11:25','11:25–11:45','11:45–12:10','12:10–12:20'];
+  assert.equal(activities.length,3);
+  for(const [field,lang] of [['steps','en'],['steps_ja','ja']]){
+    const copy=activities.map(a=>[a[lang==='ja'?'text_ja':'text'],...a[field]].join(' ')).join(' ');
+    const deckCopy=slides.map(s=>[...s.steps[lang],s.notes[lang]].join(' ')).join(' ');
+    for(const range of intervals.map(span=>lang==='ja'?span.replace('–','〜'):span)){
+      assert.ok(copy.includes(range),range);
+      assert.ok(deckCopy.includes(range),range);
     }
   }
 });

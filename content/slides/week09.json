@@ -151,28 +151,28 @@
       "sources":[{"label":"Group 6 · project and data","href":"https://a250829s-code.github.io/fifa-and-population/"},{"label":"Group 6 · exact data snapshot source","href":"https://a250829s-code.github.io/fifa-and-population/data.js"},{"label":"World Bank · population indicator","href":"https://data.worldbank.org/indicator/SP.POP.TOTL"}]
     },
     {
-      "id":"design-task", "kind":"activity", "duration":20, "annotationPage":6,
-      "title":{"en":"One group graphic","ja":"グループで一つの図"},
-      "steps":{"en":["In your usual team, show your Week 8 revisions.","Combine their strongest ideas in one graphic. Build on a draft if useful.","Save a screenshot of this first group draft."],"ja":["いつもの班で、第8週の改訂案を見せ合う。","それぞれのよいところを一つの図に取り入れる。既存の案を土台にしてもよい。","班の最初の試作を画像で保存する。"]},
-      "notes":{"en":"11:00–11:20. Keep the existing project teams. As in the Tube example, name something each draft makes easy to see, keep the strongest choices and combine them in one rough graphic. The first group draft becomes the “before” image. The question title comes next.","ja":"11:00〜11:20。いつものプロジェクト班で作業する。地下鉄の例と同じように、各案で見やすいものを挙げ、よいところを一つの試作に取り入れる。この試作が「改訂前」の画像になる。問いのタイトルは次の活動で考える。"}
+      "id":"design-task", "kind":"activity", "duration":25, "annotationPage":6,
+      "title":{"en":"Show and tell, then pick a question","ja":"案を見せ合い、問いを選ぶ"},
+      "steps":{"en":["11:00–11:15 · Everyone shows their Week 8 revision. What does each draft make easy to see?","11:15–11:25 · Write two question titles. Pick one that makes people curious and that your data can answer."],"ja":["11:00〜11:15：全員が第8週の改訂案を見せる。何が読み取りやすくなった？","11:15〜11:25：問いの形でタイトル案を二つ書く。答えが気になり、データで答えられるものを一つ選ぶ。"]},
+      "notes":{"en":"Use existing project teams. “FIFA rankings” is a topic; “Are more populous countries more likely to make FIFA’s top 50?” is a question. The answer must come from the group’s data. By 11:25, agree on one question before sketching.","ja":"いつもの班で活動する。「FIFAランキング」はテーマ。「人口の多い国ほど、FIFAランキングの上位50位に入りやすい？」は問い。班のデータで答えられるものを、スケッチに入る前の11:25までに一つ選ぶ。"}
     },
     {
       "id":"viewer-test", "kind":"activity", "duration":20, "annotationPage":8,
-      "title":{"en":"The question in the title","ja":"問いをタイトルに"},
-      "steps":{"en":["What’s the most interesting question your graphic can answer?","Write two or three titles as questions. Read them aloud.","Choose the one that makes someone outside the team want to look."],"ja":["いまの図から答えが読み取れる、一番面白い問いは何か。","問いの形でタイトル案を二つか三つ書き、声に出して読む。","班の外の人も答えを知りたくなる問いを一つ選ぶ。"]},
-      "notes":{"en":"11:20–11:40. Start from the prototype your team just built. The question title can reveal a surprising comparison, change, or exception. Make it specific and match it to what the data can show. The graphic should make sense to someone who has not heard the presentation.","ja":"11:20〜11:40。班でつくった試作を見ながら、意外な比較や変化、例外を問いにする。問いは具体的にし、データから分かることに絞る。発表を聞いていない人にも、図だけで伝わるようにする。"}
+      "title":{"en":"Combine ideas in one sketch","ja":"班の案を一つのスケッチに"},
+      "steps":{"en":["Discuss which parts of the individual drafts help answer your question.","Combine those ideas in one sketch. Write the question on it and point to the evidence.","Save a photo or screenshot as your first group draft."],"ja":["各自の案のどこが問いに答えるのに役立つか話し合う。","よいところを一つの図にまとめる。問いを書き、答えの根拠を指し示す。","写真かスクリーンショットを、班の最初の試作として保存する。"]},
+      "notes":{"en":"11:25–11:45. In the Tokyo example, the group kept the side-by-side comparison, route map, and common clock. Choose what serves your question. If nobody can point to its answer in the sketch, change the sketch or narrow the question before building.","ja":"11:25〜11:45。東京の例では、経路を並べて比べる発想、地図、同じ時計を組み合わせた。班の問いに役立つ案を残す。答えが図のどこにあるかを指し示せないなら、制作に入る前に図を変えるか、問いを絞る。"}
     },
     {
-      "id":"one-change", "kind":"activity", "duration":40, "annotationPage":9,
-      "title":{"en":"The answer in the graphic","ja":"答えが伝わる図"},
-      "steps":{"en":["Put the question on the graphic. Point to the evidence that answers it.","If the answer is hard to see, change the emphasis or narrow the question.","Save one titled prototype for the midterm."],"ja":["問いをタイトルにする。答えの根拠が図のどこにあるか確かめる。","答えが見えにくければ、強調する箇所を変えるか、問いを絞る。","中間発表に向け、タイトル付きの試作を一つ保存する。"]},
-      "notes":{"en":"11:40–12:20. The final 10 minutes are available for a few volunteers to read their old and new titles from their seats. No team pairing or room movement is needed. One group graphic and its question form the opening of the Dec. 4 midterm presentation. Dec. 11 turns to maps, and Dec. 18 to networks and multiple views.","ja":"11:40〜12:20。最後の10分は、希望する数班が席から変更前と変更後のタイトルを紹介できる。班同士のペアや教室内の移動は不要。班でまとめた一つの図と問いが、12月4日の中間発表の出発点になる。12月11日は地図、12月18日はネットワークと複数ビュー。"}
+      "id":"one-change", "kind":"activity", "duration":35, "annotationPage":9,
+      "title":{"en":"Build the graphic and rehearse","ja":"図をつくり、発表を練習する"},
+      "steps":{"en":["11:45–12:10 · Build one graphic from the sketch. Use the question as its title and make the evidence easy to spot.","12:10–12:20 · Choose who will speak on Dec. 4. Rehearse the question, what you combined, and where the graphic answers it."],"ja":["11:45〜12:10：スケッチをもとに一つの図をつくる。問いをタイトルにし、答えの根拠がひと目で分かるようにする。","12:10〜12:20：12月4日の発表者を決める。問い、組み合わせた案、図の答えの順で話す練習をする。"]},
+      "notes":{"en":"Save the prototype and a static screenshot as a backup. Keep the first group sketch to show what changed. Next week’s presentation starts with a question, then shows the group’s combined graphic and its evidence.","ja":"試作を保存し、予備にスクリーンショットも残す。どこを変えたか説明できるよう、班の最初のスケッチも残す。次回は問いから始め、班でまとめた図と答えの根拠を見せる。"}
     },
     {
       "id":"homework", "kind":"homework", "annotationPage":10,
       "title":{"en":"One group graphic, one question","ja":"グループで一つの図、一つの問い"},
       "steps":{"en":["One person submits for the group.","Upload the final graphic with its question title, your first group draft, and the data link.","In 3–5 sentences: what did you combine, why this question, and where is the answer?"],"ja":["代表者がグループで1回提出する。","問いをタイトルにした完成版、班の最初の試作、データのリンクを提出する。","組み合わせた案、問いを選んだ理由、図のどこから答えが読めるかを3〜5文で書く。"]},
-      "notes":{"en":"Put the group name at the start of the explanation. The final graphic goes in image 1 so it appears first in the gallery. Image 2 is the first group draft, before the title and final changes. The title on the final graphic is the question that opens next week’s midterm presentation.","ja":"説明の冒頭にグループ名を書く。ギャラリーの最初に表示されるよう、画像1に完成版を入れる。画像2はタイトルや仕上げの変更を加える前の、班でつくった最初の試作。完成版に付けた問いが、次回の中間発表の導入になる。"}
+      "notes":{"en":"Put the group name at the start of the explanation. The final graphic goes in image 1 so it appears first in the gallery. Image 2 is the first group sketch, before building the final graphic. The title on the final graphic is the question that opens next week’s midterm presentation.","ja":"説明の冒頭にグループ名を書く。ギャラリーの最初に表示されるよう、画像1に完成版を入れる。画像2は完成版をつくる前に、班でまとめた最初のスケッチ。完成版に付けた問いが、次回の中間発表の導入になる。"}
     }
   ]
 }
