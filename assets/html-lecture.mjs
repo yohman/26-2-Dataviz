@@ -102,7 +102,7 @@ async function start(){
   }
   const path=`content/slides/week${String(week).padStart(2,'0')}.json`;
   const load=async url=>{const response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('Unavailable');return response.json();};
-  [deck,data,seating]=await Promise.all([load(week===9?`${path}?v=w9-reveals-midterm-20261127`:path),week===9?null:load('data/week07-examples.json?v=20261112'),week===9?load('data/week09-seating.json?v=bilingual-20261127').catch(()=>null):null]);
+  [deck,data,seating]=await Promise.all([load(week===9?`${path}?v=w9-reveals-midterm-20261127`:path),week===9?null:load('data/week07-examples.json?v=20261112'),week===9?load('data/week09-seating.json?v=group17-20261127').catch(()=>null):null]);
   if(week===9)for(const item of deck.slides.filter((item,i)=>item.image&&((i>0&&i<7)||item.kind==='studio-opening'))){
    const img=new Image();img.referrerPolicy='no-referrer';img.src=item.image;
   }

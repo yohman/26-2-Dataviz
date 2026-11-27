@@ -232,6 +232,8 @@ test('the public seating chart keeps sixteen themed groups and localizes all 63 
   const seating=JSON.parse(fs.readFileSync('data/week09-seating.json','utf8'));
   assert.deepEqual(Object.keys(seating).map(Number),numbers);
   assert.equal(Object.values(seating).flat().length,63);
+  assert.deepEqual(seating['17'].find(({en})=>en==='Yoshino Shota'),{ja:'吉野 翔大',en:'Yoshino Shota'});
+  assert.equal(Object.values(seating).flat().filter(({en})=>en==='Yoshino Shota').length,1);
   assert.ok(Object.values(seating).flat().every(({ja,en})=>typeof ja==='string'&&typeof en==='string'&&/^[\p{Script=Latin}\p{M}\p{P} ]+$/u.test(en)&&!/\d{6,}/.test(ja)));
   const pub=renderWeek9(slide,{ja:false,seating});
   const japanese=renderWeek9(slide,{ja:true,seating});
