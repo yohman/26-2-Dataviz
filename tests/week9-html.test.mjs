@@ -57,9 +57,9 @@ test('historical sources, bilingual slides, chapters and homework render in the 
   const streetMap=fs.readFileSync(deck.slides[4].image,'utf8');
   assert.match(streetMap,/#141823/);
   assert.match(streetMap,/opacity="\.22"/);
-  assert.deepEqual(deck.slides.map((slide,i)=>slide.annotationPage??i+1).sort((a,b)=>a-b),[1,2,4,5,6,7,8,9,10,14,15,16,17,18,19,24,25,26,27]);
+  assert.deepEqual(deck.slides.map((slide,i)=>slide.annotationPage??i+1).sort((a,b)=>a-b),[1,2,4,5,6,7,8,9,10,14,15,16,17,18,19,24,25,26,27,28,29]);
   assert.deepEqual(deck.slides.filter(slide=>slide.kind==='activity').map(slide=>slide.duration),[25,20,35]);
-  assert.deepEqual(deck.slides.slice(15,18).map(slide=>slide.id),['design-task','viewer-test','one-change']);
+  assert.deepEqual(deck.slides.slice(15,20).map(slide=>slide.id),['studio-opening','studio-seating','design-task','viewer-test','one-change']);
   const example=renderWeek9(deck.slides.find(s=>s.id==='title-example'),{ja:false});
   assert.match(example,/more likely to make FIFA’s top 50\?/);
   assert.doesNotMatch(example,/8 of 101|39 of 102/);
@@ -188,7 +188,11 @@ test('FIFA evidence uses the dated Group 6 data and appears after the question',
   assert.match(chart,/w9-fifa-plot[\s\S]+8 of 101 teams[\s\S]+39 of 102 teams[\s\S]+<\/svg>/);
   assert.equal([...chart.matchAll(/<circle class="w9-fifa-top w9-fifa-less"/g)].length,8);
   assert.equal([...chart.matchAll(/<circle class="w9-fifa-top w9-fifa-more"/g)].length,39);
-  assert.equal([...chart.matchAll(/<circle class="w9-fifa-dot"/g)].length,156);
+  assert.equal([...chart.matchAll(/<circle class="w9-fifa-dot"/g)].length,203);
+  assert.match(chart,/data-fifa-layer="1" aria-hidden="true"><circle class="w9-fifa-top w9-fifa-less"/);
+  assert.match(chart,/data-fifa-layer="2" aria-hidden="true"><circle class="w9-fifa-top w9-fifa-more"/);
+  assert.match(chart,/data-fifa-layer="3" aria-hidden="true">[\s\S]*8%[\s\S]*38%/);
+  assert.match(chart,/data-fifa-layer="4" aria-hidden="true">[\s\S]*Cabo Verde[\s\S]*Iceland/);
   for(const s of deck.slides){
     for(const path of [s.image,...(s.images||[]).map(i=>i.src)].filter(path=>path?.startsWith('assets/'))){
       assert.ok(fs.statSync(path).size>1000,path);
@@ -196,11 +200,38 @@ test('FIFA evidence uses the dated Group 6 data and appears after the question',
   }
 });
 
-test('Week 9 ends on slide 19 with no project showcase navigation',()=>{
-  assert.equal(deck.slides.length,19);
+test('Week 9 has a studio opener and ends on midterm preparation with no project showcase navigation',()=>{
+  assert.equal(deck.slides.length,21);
   assert.equal(deck.slides.at(-1).id,'homework');
   assert.equal(deck.chapters.at(-1).id,'homework');
   assert.ok(!deck.slides.some(slide=>/^team-.*-2025$/.test(slide.id)));
+});
+
+test('the final slide and Week 10 guidelines tell the same design journey and link the separate forms',()=>{
+  const final=deck.slides.at(-1);
+  const midterm=fs.readFileSync('content/weeks/10-midterm-presentations.md','utf8');
+  for(const ja of [true,false]){
+    const html=renderWeek9(final,{ja});
+    assert.match(html,/homework-submit\.html\?week=10/);
+    assert.match(html,/homework-submit\.html\?week=9/);
+    assert.match(html,ja?/各メンバーの初期案[\s\S]*班の最終版[\s\S]*根拠/:/initial design from each member[\s\S]*reveal one final group graphic[\s\S]*the evidence/);
+  }
+  assert.match(midterm,/10:50–11:22[^\n]*2-minute[^\n]*11:22–11:32\|Intermission/);
+  assert.match(midterm,/one initial design from each member[\s\S]*reveal the single final graphic[\s\S]*explain the answer/);
+  assert.match(midterm,/link: homework-submit\.html\?week=10/);
+});
+
+test('the classroom chart has sixteen themed groups and never embeds names in its public source',()=>{
+  const slide=deck.slides.find(s=>s.id==='studio-seating');
+  const numbers=[1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17];
+  assert.deepEqual(slide.groups.map(([n])=>n),numbers);
+  assert.ok(slide.groups.every(([,en,ja])=>en.split(' ').length<=2&&ja.length>1));
+  const pub=renderWeek9(slide,{ja:false});
+  const classroom=renderWeek9(slide,{ja:false,seating:{1:['Example <Private>']}});
+  assert.equal((pub.match(/data-group=/g)||[]).length,16);
+  assert.doesNotMatch(pub,/<ul>|Example/);
+  assert.match(classroom,/Example &lt;Private&gt;/);
+  assert.match(fs.readFileSync('.gitignore','utf8'),/week09-seating\.local\.json/);
 });
 
 test('the taller FIFA plot links both names to their existing data points',()=>{

@@ -1,2 +1,4 @@
 # Local Cloudflare runtime/deployment cache (not course content).
 .wrangler/
+# Classroom seating names are local only; never add the roster to the public site.
+/content/slides/week09-seating.local.json

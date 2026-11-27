@@ -1,6 +1,6 @@
 import {clampSlide,scatterMarks,lineSegments,safeDeckReturn,studioDeckOpening} from './html-lecture-model.mjs?v=week9-beck-20261126';
 import {renderWeek8,bindWeek8} from './week08-visuals.mjs?v=marker-20261120';
-import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=w9-fifa-poster-20261127';
+import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=w9-reveals-midterm-20261127';
 const $=s=>document.querySelector(s),params=new URLSearchParams(location.search),stage=$('[data-stage]'),surface=$('[data-surface]'),slide=$('[data-slide]'),viewer=$('.html-deck');
 const requestedWeek=Number(params.get('week')),week=[8,9].includes(requestedWeek)?requestedWeek:7;
 const allowedReturn=safeDeckReturn(params.get('return'),week);
@@ -38,7 +38,7 @@ function bars(){const rows=data.scatter.filter(r=>names[r.country]&&Number.isFin
 function table(headers,rows,classes=''){return `<table class="slide-table ${classes}"><thead><tr>${headers.map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(row=>`<tr>${row.map(v=>`<td${v===''?' class="missing-cell"':''}>${v===''?(ja()?'空欄':'blank'):esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;}
 const layout=html=>`<div class="slide-layout">${html}</div>`;
 function renderVisual(s){
- if(week===9)return renderWeek9(s,{ja:ja()});
+ if(week===9)return renderWeek9(s,{ja:ja(),seating});
  if(week===8)return renderWeek8(s,{ja:ja(),data,returnTo:deckReturn()});
  if(s.kind==='scatter')return scatter();if(s.kind==='line')return lineChart();if(s.kind==='bars')return bars();
  if(s.kind==='row'){const r=data.row;return layout(`<h1>${esc(tr(s.title))}</h1>${table(['Country','Year','Population','Region','Life<br>Expectancy'],[[r.Country,r.Year,number(Number(r.Population)),r.Region,r['Life Expectancy']]])}<p class="row-answer">${ja()?'日本 × 2018年':'Japan × 2018'}</p>`);}
@@ -54,7 +54,7 @@ function renderVisual(s){
  if(s.kind==='homework')return layout(`<div class="homework-number">2–3</div><h1>${esc(tr(s.title))}</h1><div class="homework-bottom"><ul>${tr(s.steps).map(v=>`<li>${esc(v)}</li>`).join('')}</ul><div class="homework-submit"><a href="homework-submit.html?week=7">${ja()?'宿題を提出する':'Submit homework'} ↗</a><br><a href="${esc(deckReturn())}">${ja()?'課題の説明':'Assignment details'} ↗</a><time datetime="2026-11-19T23:59:00+09:00">11.19 Thu · 23:59 JST</time></div></div>`);
  return '';
 }
-let viewportControl,ink;
+let viewportControl,ink,seating;
 function resize(reset=false){
  if(!deck)return;
  const current=deck.slides[page-1],width=1600,height=current.canvasHeight??900;
@@ -100,8 +100,9 @@ async function start(){
   }
   const path=`content/slides/week${String(week).padStart(2,'0')}.json`;
   const load=async url=>{const response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('Unavailable');return response.json();};
-  [deck,data]=await Promise.all([load(week===9?`${path}?v=w9-activity-clock-20261127`:path),week===9?null:load('data/week07-examples.json?v=20261112')]);
-  if(week===9)for(const item of deck.slides.slice(1,7).filter(item=>item.image)){
+  const classroom=week===9&&['127.0.0.1','localhost','[::1]'].includes(location.hostname);
+  [deck,data,seating]=await Promise.all([load(week===9?`${path}?v=w9-reveals-midterm-20261127`:path),week===9?null:load('data/week07-examples.json?v=20261112'),classroom?load('content/slides/week09-seating.local.json').catch(()=>null):null]);
+  if(week===9)for(const item of deck.slides.filter((item,i)=>item.image&&((i>0&&i<7)||item.kind==='studio-opening'))){
    const img=new Image();img.referrerPolicy='no-referrer';img.src=item.image;
   }
   viewportControl=window.createSlideViewport({viewport:stage,surface,onChange:value=>{zoom=value;$('[data-zoom-level]').textContent=`${Math.round(value*100)}%`;}});

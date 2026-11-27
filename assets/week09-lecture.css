@@ -220,6 +220,24 @@ html[lang=ja] .w9-fifa-missing h1{font-size:56px;line-height:1.16}
 .w9-task--homework ol{gap:20px;font-size:38px}
 .w9-submit{display:flex;flex-wrap:wrap;gap:24px;align-items:baseline;margin:40px 0 0 85px;font-size:27px;color:#584d40}
 .w9-submit a{font-weight:800;color:#9c3044;text-underline-offset:.18em}
+.w9-studio-opening{height:100%;display:grid;align-content:center;justify-items:start;gap:12px;padding:66px 124px;background:#f9f4e8;color:#27211d}
+.w9-studio-opening h1{margin:0;font:650 115px/1.04 var(--serif);letter-spacing:-.055em}
+.w9-studio-opening img{display:block;width:100%;height:auto}
+.w9-studio-opening p{margin:0;color:#773545;font:800 36px/1.22 var(--sans)}
+.w9-seating-chart{height:100%;display:grid;grid-template-rows:auto auto 1fr;gap:18px;padding:43px 64px 55px;background:#f8f4ea;color:#2f2a23}
+.w9-seating-chart header{display:flex;align-items:baseline;justify-content:space-between;gap:28px}
+.w9-seating-chart h1{margin:0;font:650 65px/1.12 var(--serif);letter-spacing:-.04em}
+.w9-seating-chart header p{margin:0;color:#584e41;font:800 25px/1.2 var(--sans)}
+.w9-room-front{background:#413833;color:#fff7e9;text-align:center;padding:8px;font:750 22px/1.25 var(--sans)}
+.w9-seat-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:14px}
+.w9-seat-card{--seat-accent:#884153;min-width:0;min-height:0;border-top:4px solid var(--seat-accent);background:#fffaf0;padding:10px 12px 12px}
+.w9-seat-card:nth-child(3n+2){--seat-accent:#537065}
+.w9-seat-card:nth-child(3n){--seat-accent:#946120}
+.w9-seat-card p{margin:0;color:var(--seat-accent);font:850 18px/1 var(--sans);letter-spacing:.04em}
+.w9-seat-card h2{margin:6px 0 10px;font:850 25px/1.12 var(--sans)}
+.w9-seat-card ul{margin:0;padding:0;list-style:none;display:grid;gap:5px;font:750 21px/1.16 var(--sans)}
+.w9-seat-card li{overflow-wrap:anywhere}
+.w9-seat-open{grid-column:5/7;align-self:start;margin:0;padding:28px;text-align:center;color:#756858;border:1px dashed #baa98f;font:750 20px/1.1 var(--sans)}
 .w9-match-photo{margin:0;position:relative;height:100%;background:#161d26;color:#fff}
 .w9-match-photo>a{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden}
 .w9-match-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 90%;display:block}
@@ -242,8 +260,20 @@ html[lang=ja] .w9-fifa-missing h1{font-size:56px;line-height:1.16}
 .w9-fifa-drafts figcaption{margin-top:21px;color:#312821;font:750 33px/1.18 var(--sans)}
 .w9-fifa-evidence{height:100%;position:relative;background:#f8f4ea;color:#29251d}
 .w9-fifa-evidence h1{position:absolute;z-index:1;left:84px;top:46px;margin:0;font:650 59px/1.08 var(--serif);letter-spacing:-.036em}
+.w9-fifa-controls{position:absolute;z-index:2;top:48px;right:120px;display:grid;grid-template-columns:auto auto auto;justify-items:end;align-items:center;gap:7px 14px;color:#793b49}
+.w9-fifa-controls button{border:0;background:transparent;color:inherit;padding:6px 7px;font:850 21px/1.25 var(--sans);cursor:pointer}
+.w9-fifa-controls button:hover:not(:disabled){background:#e7d9d2}
+.w9-fifa-controls button:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.w9-fifa-controls button:disabled{opacity:.35;cursor:default}
+.w9-fifa-controls output{grid-column:1/-1;font:700 18px/1.2 var(--sans);color:#695d52}
 .html-lecture-page .html-deck:not(.is-fullscreen) .pdf-stage.is-tall-slide{aspect-ratio:var(--lecture-slide-ratio);max-height:calc(130dvh - 221px)}
 .html-slide .w9-fifa-plot{position:absolute;inset:0;width:100%;height:100%}
+.w9-fifa-plot [data-fifa-layer]{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .48s ease}
+.w9-fifa-plot [data-fifa-layer].is-visible{opacity:1;visibility:visible}
+.w9-fifa-plot [data-fifa-layer].is-visible .w9-fifa-top{pointer-events:auto}
+.w9-fifa-plot :is(.w9-fifa-dot,.w9-fifa-top):hover{stroke:#332a26;stroke-width:2;fill-opacity:1}
+@media (prefers-reduced-motion:reduce){.w9-fifa-plot [data-fifa-layer]{transition:none}}
+@media print{.w9-fifa-controls{display:none}.w9-fifa-plot [data-fifa-layer]{opacity:1;visibility:visible}}
 .w9-fifa-less{color:#a13c53}
 .w9-fifa-more{color:#226e58}
 .w9-fifa-top-band{fill:currentColor;fill-opacity:.095}

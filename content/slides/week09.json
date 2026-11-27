@@ -6,6 +6,8 @@
     {"id":"tokyo-geography","label":{"en":"Tokyo Station","ja":"東京駅"}},
     {"id":"iceland-2018","label":{"en":"World Cup and Group 6","ja":"ワールドカップと第6班"}},
     {"id":"fifa-evidence","label":{"en":"FIFA evidence","ja":"FIFAランキングの根拠"}},
+    {"id":"studio-opening","label":{"en":"In-class studio","ja":"授業内スタジオ"}},
+    {"id":"studio-seating","label":{"en":"Seating chart","ja":"座席表"}},
     {"id":"design-task","label":{"en":"Activity 1","ja":"活動1"}},
     {"id":"viewer-test","label":{"en":"Activity 2","ja":"活動2"}},
     {"id":"one-change","label":{"en":"Activity 3","ja":"活動3"}},
@@ -151,6 +153,25 @@
       "sources":[{"label":"Group 6 · project and data","href":"https://a250829s-code.github.io/fifa-and-population/"},{"label":"Group 6 · exact data snapshot source","href":"https://a250829s-code.github.io/fifa-and-population/data.js"},{"label":"World Bank · population indicator","href":"https://data.worldbank.org/indicator/SP.POP.TOTL"}]
     },
     {
+      "id":"studio-opening", "kind":"studio-opening", "annotationPage":28,
+      "title":{"en":"In-class studio","ja":"授業内スタジオ"},
+      "image":"assets/images/lecture/week08-group-marker.png",
+      "notes":{"en":"One question. One graphic that combines the group’s strongest ideas. The studio begins with individual show-and-tell.","ja":"問いを一つ。班の案を組み合わせた図を一つ。まずは各自の案を見せ合う。"}
+    },
+    {
+      "id":"studio-seating", "kind":"studio-seating", "annotationPage":29,
+      "title":{"en":"Find your group","ja":"グループ座席表"},
+      "groups":[
+        [1,"Country Comparisons","国際比較"],[2,"Music Trends","音楽の流行"],[3,"AI Work","AIと仕事"],
+        [4,"Life Expectancy","平均寿命"],[5,"Pokémon","ポケモン"],[6,"FIFA Rankings","FIFAランキング"],
+        [7,"Bear Sightings","クマの目撃"],[8,"European Protests","欧州の抗議活動"],[9,"Yo-kai Watch","妖怪ウォッチ"],
+        [10,"Gender Gaps","男女格差"],[11,"Energy Use","エネルギー消費"],[12,"Population Change","人口の変化"],
+        [13,"Working Hours","労働時間"],[15,"Living Costs","生活費"],[16,"Game Platforms","ゲーム機"],[17,"Football","サッカー"]
+      ],
+      "notes":{"en":"The classroom plan has 16 groups and 63 students. Number 14 is not assigned. Each card combines the two desks for a group, except Group 17, which uses one desk. Topics are short descriptions of gallery submissions; the final inquiry can change.","ja":"16班、63人。14班は欠番。各カードは班の前後の机をまとめたもの。17班だけは1卓を使う。見出しはギャラリー提出作から付けた短いテーマで、最終的な問いは変えてよい。"},
+      "sources":[{"label":"Week 8 gallery","href":"gallery.html?week=8"},{"label":"Week 7 gallery","href":"gallery.html?week=7"}]
+    },
+    {
       "id":"design-task", "kind":"activity", "duration":25, "annotationPage":6,
       "title":{"en":"Show and tell, then pick a question","ja":"案を見せ合い、問いを選ぶ"},
       "steps":{"en":["11:00–11:15 · Everyone shows their Week 8 revision. What does each draft make easy to see?","11:15–11:25 · Write two question titles. Pick one that makes people curious and that your data can answer."],"ja":["11:00〜11:15：全員が第8週の改訂案を見せる。何が読み取りやすくなった？","11:15〜11:25：問いの形でタイトル案を二つ書く。答えが気になり、データで答えられるものを一つ選ぶ。"]},
@@ -166,13 +187,13 @@
       "id":"one-change", "kind":"activity", "duration":35, "annotationPage":9,
       "title":{"en":"Build the graphic and rehearse","ja":"図をつくり、発表を練習する"},
       "steps":{"en":["11:45–12:10 · Build one graphic from the sketch. Use the question as its title and make the evidence easy to spot.","12:10–12:20 · Choose who will speak on Dec. 4. Rehearse the question, what you combined, and where the graphic answers it."],"ja":["11:45〜12:10：スケッチをもとに一つの図をつくる。問いをタイトルにし、答えの根拠がひと目で分かるようにする。","12:10〜12:20：12月4日の発表者を決める。問い、組み合わせた案、図の答えの順で話す練習をする。"]},
-      "notes":{"en":"Save the prototype and a static screenshot as a backup. Keep the first group sketch to show what changed. Next week’s presentation starts with a question, then shows the group’s combined graphic and its evidence.","ja":"試作を保存し、予備にスクリーンショットも残す。どこを変えたか説明できるよう、班の最初のスケッチも残す。次回は問いから始め、班でまとめた図と答えの根拠を見せる。"}
+      "notes":{"en":"Save the prototype and a static screenshot as a backup. Keep one initial design from each member so the audience can see what the group combined. Save the final graphic for the reveal, then point to where it answers the inquiry.","ja":"試作を保存し、予備にスクリーンショットも残す。何を組み合わせたか伝えられるよう、各メンバーの初期案を一つずつ残す。最終版は後から見せ、図のどこから問いの答えが読み取れるかを指し示す。"}
     },
     {
-      "id":"homework", "kind":"homework", "annotationPage":10,
-      "title":{"en":"One group graphic, one question","ja":"グループで一つの図、一つの問い"},
-      "steps":{"en":["One person submits for the group.","Upload the final graphic with its question title, your first group draft, and the data link.","In 3–5 sentences: what did you combine, why this question, and where is the answer?"],"ja":["代表者がグループで1回提出する。","問いをタイトルにした完成版、班の最初の試作、データのリンクを提出する。","組み合わせた案、問いを選んだ理由、図のどこから答えが読めるかを3〜5文で書く。"]},
-      "notes":{"en":"Put the group name at the start of the explanation. The final graphic goes in image 1 so it appears first in the gallery. Image 2 is the first group sketch, before building the final graphic. The title on the final graphic is the question that opens next week’s midterm presentation.","ja":"説明の冒頭にグループ名を書く。ギャラリーの最初に表示されるよう、画像1に完成版を入れる。画像2は完成版をつくる前に、班でまとめた最初のスケッチ。完成版に付けた問いが、次回の中間発表の導入になる。"}
+      "id":"homework", "kind":"homework", "annotationPage":10, "duration":2,
+      "title":{"en":"Your group’s design journey","ja":"班のデザインができるまで"},
+      "steps":{"en":["Start with what your group decided to investigate.","Show one initial design from each member.","Explain what you combined, then reveal one final group graphic.","State the inquiry. Point to the evidence and explain the answer."],"ja":["班で何を取り上げると決めたかを話す。","各メンバーの初期案を一つずつ見せる。","どの案を組み合わせたかを説明し、班の最終版を一つ見せる。","問いを伝え、図の中の根拠を指し示して答えを説明する。"]},
+      "notes":{"en":"Dec. 4, first presentations at 10:50. Put the individual designs side by side so there’s time for the reveal. The final graphic should stand on its own and use the inquiry as its title. One representative uploads one final graphic to the Week 10 form. A viewable Google Slides link is optional. Week 9 homework is separate: submit the final graphic and first group sketch by Dec. 3 at 23:59 JST.","ja":"12月4日は10:50に発表を開始。各自の案を並べて見せ、最終版を伝える時間を確保する。最終版は問いをタイトルにし、図だけでも伝わるようにする。代表者が第10週のフォームに最終版の図を1枚提出する。閲覧できるGoogleスライドのリンクは任意。第9週の宿題は別で、完成版と最初のスケッチを12月3日23:59（日本時間）までに提出する。"}
     }
   ]
 }

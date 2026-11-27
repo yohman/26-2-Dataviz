@@ -46,6 +46,20 @@ test('gallery pagination retrieves more than 1000 works without truncation',asyn
     assert.equal(items.length,1005);assert.equal(new Set(items.map(i=>i.imageIndex)).size,1005);
   }finally{db.close();}
 });
+test('the midterm uses the class form to store one final image with or without a Slides link',async()=>{
+  const {db,env}=fixture();
+  try {
+    db.prepare('INSERT INTO week_schedule VALUES(?,?,?,?)').run(10,'Midterm',0,Date.now()+3600000);
+    const slides='https://docs.google.com/presentation/d/example-deck/edit';
+    const entry={...body,week:10,notebookUrl:slides,requestId:crypto.randomUUID()};
+    assert.equal((await worker.fetch(request('/homework?week=10','POST',entry),env)).status,201);
+    const gallery=()=>worker.fetch(new Request('https://test/gallery'),env).then(r=>r.json());
+    const [{imageCount,notebookUrl}]=(await gallery()).items;
+    assert.equal(imageCount,1);assert.equal(notebookUrl,slides);
+    assert.equal((await worker.fetch(request('/homework?week=10','POST',{...entry,notebookUrl:'',requestId:crypto.randomUUID()}),env)).status,201);
+    assert.equal((await gallery()).items[0].notebookUrl,'');
+  } finally {db.close();}
+});
 test('active client, homework links and snapshot job have no Apps Script dependency',()=>{
   for(const path of ['assets/site.js','assets/homework-submissions.js','scripts/sync-gallery.mjs'])assert.doesNotMatch(fs.readFileSync(path,'utf8'),/script\.google\.com|docs\.google\.com\/forms|JSONP|courseGalleryReceive/);
   assert.match(fs.readFileSync('assets/site.js','utf8'),/HOMEWORK_URL: 'homework-submit.html'/);

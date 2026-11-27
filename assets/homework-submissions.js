@@ -5,6 +5,7 @@
   const text=(ja,en)=>window.courseLanguage==='en'?en:ja;
   const isIndividualRevision=week===8;
   const isStudioRevision=week===9;
+  const isMidterm=week===10;
   const label=(el,ja,en)=>{
     el.querySelector('[data-course-lang="ja"]').textContent=ja;
     el.querySelector('[data-course-lang="en"]').textContent=en;
@@ -28,6 +29,23 @@
     label(form.elements.image2.labels[0],'班でつくった最初の試作','First group draft');
     form.elements.image2.required=true;
   }
+  if(isMidterm) {
+    const hint=document.querySelector('#homework-week-note');
+    label(document.querySelector('main h1'),'中間発表の作品を提出する','Submit your midterm graphic');
+    label(hint,'代表者が、班の最終版の図を1枚提出します。学籍番号と氏名は代表者のものを入力してください。Googleスライドを添える場合は、教員が閲覧できる設定にしてください。',
+      'One representative submits one final graphic for the group. Enter the representative’s own ID and name. If you add a Google Slides link, make sure the instructor can view it.');
+    hint.hidden=false;
+    label(form.elements.title.labels[0],'作品タイトル（問いの形で）','Your inquiry as a title');
+    label(form.elements.description.labels[0],'班名を冒頭に書く。何を組み合わせ、最終版のどこから問いの答えが読み取れるかを短く説明する。',
+      'Start with your group name. Briefly explain what you combined and where the final graphic answers your question.');
+    label(form.elements.notebookUrl.labels[0],'Googleスライドのリンク（任意）','Google Slides link (optional)');
+    form.elements.notebookUrl.placeholder='https://docs.google.com/presentation/d/…';
+    form.elements.tools.placeholder='Tableau, Python, Flourish…';
+    label(form.elements.image1.closest('fieldset').querySelector('legend'),'班の最終版','Final group graphic');
+    label(form.elements.image1.labels[0],'最終版の図（1枚）','Upload one image of the final graphic');
+    form.elements.image2.labels[0].hidden=true;
+    form.elements.image2.disabled=true;
+  }
   let schedule, deadlineTimer, pending;
   const browser=localStorage.getItem('dataviz-heart-browser') || crypto.randomUUID();
   localStorage.setItem('dataviz-heart-browser',browser);
@@ -39,11 +57,13 @@
   function updateDeadline() {
     if(isIndividualRevision) document.querySelector('#homework-week').textContent=text('第8週 · 個人で改訂','Week 8 · Individual revision');
     else if(isStudioRevision) document.querySelector('#homework-week').textContent=text('第9週 · グループで一つの図、一つの問い','Week 9 · One group graphic, one question');
+    else if(isMidterm) document.querySelector('#homework-week').textContent=text('第10週 · 中間グループ発表','Week 10 · Midterm group presentations');
     else if(schedule) document.querySelector('#homework-week').textContent=schedule.challenge;
     if(!schedule) return;
     const open=Date.now()>=schedule.opensAt && Date.now()<schedule.deadline;
-    const date=new Intl.DateTimeFormat(window.courseLanguage==='en'?'en-GB':'ja-JP',{timeZone:'Asia/Tokyo',dateStyle:'full',timeStyle:'short'}).format(new Date(schedule.deadline));
-    document.querySelector('#homework-deadline').textContent=`${text('締切','Deadline')}: ${date} JST${open?'':text(' · 受付時間外',' · Submissions closed')}`;
+    const date=new Intl.DateTimeFormat(window.courseLanguage==='en'?'en-GB':'ja-JP',{timeZone:'Asia/Tokyo',dateStyle:'full',timeStyle:'short'});
+    const opening=isMidterm&&Date.now()<schedule.opensAt?`${text('受付開始','Opens')}: ${date.format(schedule.opensAt)} JST · `:'';
+    document.querySelector('#homework-deadline').textContent=`${opening}${text('締切','Deadline')}: ${date.format(schedule.deadline)} JST${open||opening?'':text(' · 受付時間外',' · Submissions closed')}`;
     button.disabled=!open;
   }
   async function compress(file) {
@@ -62,7 +82,7 @@
       const savedKey=`dataviz-revision-${week}-${body.studentId.toLowerCase()}`;
       body.revisionToken=form.elements.revisionCode.value.trim() || localStorage.getItem(savedKey) || crypto.randomUUID();
       localStorage.setItem(savedKey,body.revisionToken);
-      const imageInputs=isIndividualRevision?['image1']:['image1','image2'];
+      const imageInputs=isIndividualRevision||isMidterm?['image1']:['image1','image2'];
       const images=imageInputs.map(name=>form.elements[name].files[0]).filter(Boolean);
       if(isStudioRevision&&images.length!==2) throw new Error(text('完成版と最初の試作の画像を両方選んでください。','Choose both the final graphic and the first group draft.'));
       body.images=await Promise.all(images.map(compress));
