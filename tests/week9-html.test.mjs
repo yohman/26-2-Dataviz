@@ -57,7 +57,7 @@ test('historical sources, bilingual slides, chapters and homework render in the 
   const streetMap=fs.readFileSync(deck.slides[4].image,'utf8');
   assert.match(streetMap,/#141823/);
   assert.match(streetMap,/opacity="\.22"/);
-  assert.deepEqual(deck.slides.map((slide,i)=>slide.annotationPage??i+1).sort((a,b)=>a-b),[1,2,...Array.from({length:16},(_,i)=>i+4),24,25,26,27]);
+  assert.deepEqual(deck.slides.map((slide,i)=>slide.annotationPage??i+1).sort((a,b)=>a-b),[1,2,4,5,6,7,8,9,10,14,15,16,17,18,19,24,25,26,27]);
   assert.deepEqual(deck.slides.filter(slide=>slide.kind==='activity').map(slide=>slide.duration),[20,20,40]);
   assert.deepEqual(deck.slides.slice(15,18).map(slide=>slide.id),['design-task','viewer-test','one-change']);
   const example=renderWeek9(deck.slides.find(s=>s.id==='title-example'),{ja:false});
@@ -196,10 +196,25 @@ test('FIFA evidence uses the dated Group 6 data and appears after the question',
   }
 });
 
-test('the 2025 showcases follow homework and link to the original archive pages',()=>{
-  const slides=deck.slides.slice(-3);
-  assert.equal(deck.slides.at(-4).id,'homework');
-  assert.deepEqual(slides.map(s=>s.credit.en),['Team Snow','Team Tukey','Team Minard']);
-  assert.deepEqual(slides.map(s=>new URL(s.sources[0].href,'https://example.test').searchParams.get('page')),['3','4','7']);
-  for(const s of slides) assert.ok(fs.statSync(s.image).size>50_000);
+test('Week 9 ends on slide 19 with no project showcase navigation',()=>{
+  assert.equal(deck.slides.length,19);
+  assert.equal(deck.slides.at(-1).id,'homework');
+  assert.equal(deck.chapters.at(-1).id,'homework');
+  assert.ok(!deck.slides.some(slide=>/^team-.*-2025$/.test(slide.id)));
+});
+
+test('the taller FIFA plot links both names to their existing data points',()=>{
+  const slide=deck.slides.find(s=>s.id==='fifa-evidence');
+  assert.equal(slide.canvasHeight,1160);
+  for(const ja of [true,false]){
+    const html=renderWeek9(slide,{ja});
+    assert.match(html,/viewBox="0 0 1600 1160"/);
+    for(const [code,en,jp] of [['CPV','Cabo Verde','カーボベルデ'],['ISL','Iceland','アイスランド']]){
+      const group=html.split(`data-team="${code}">`)[1].split('</g>')[0];
+      assert.ok(group.includes(ja?jp:en));
+      const [,x,y]=group.match(/class="w9-fifa-callout-point" cx="([^"]+)" cy="([^"]+)"/);
+      assert.ok(group.includes(`L${x} ${y}"`));
+      assert.ok(html.includes(`class="w9-fifa-dot" cx="${x}" cy="${y}"`));
+    }
+  }
 });

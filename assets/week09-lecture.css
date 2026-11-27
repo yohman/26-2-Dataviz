@@ -242,7 +242,8 @@ html[lang=ja] .w9-fifa-missing h1{font-size:56px;line-height:1.16}
 .w9-fifa-drafts figcaption{margin-top:21px;color:#312821;font:750 33px/1.18 var(--sans)}
 .w9-fifa-evidence{height:100%;position:relative;background:#f8f4ea;color:#29251d}
 .w9-fifa-evidence h1{position:absolute;z-index:1;left:84px;top:46px;margin:0;font:650 59px/1.08 var(--serif);letter-spacing:-.036em}
-.w9-fifa-plot{position:absolute;inset:0}
+.html-lecture-page .html-deck:not(.is-fullscreen) .pdf-stage.is-tall-slide{aspect-ratio:var(--lecture-slide-ratio);max-height:calc(130dvh - 221px)}
+.html-slide .w9-fifa-plot{position:absolute;inset:0;width:100%;height:100%}
 .w9-fifa-less{color:#a13c53}
 .w9-fifa-more{color:#226e58}
 .w9-fifa-top-band{fill:currentColor;fill-opacity:.095}
@@ -253,6 +254,10 @@ html[lang=ja] .w9-fifa-missing h1{font-size:56px;line-height:1.16}
 .w9-fifa-axis-title{color:#685e52;font-size:23px;font-weight:740}
 .w9-fifa-band-label{color:#493d34;font-size:24px;font-weight:850}
 .w9-fifa-dot{fill:#7c7569;fill-opacity:.26}
+.w9-fifa-callout{color:#7c3046}
+.w9-fifa-leader{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.w9-fifa-callout-point{fill:currentColor;stroke:#f8f4ea;stroke-width:2.3}
+.w9-fifa-country-label{font-size:29px;font-weight:850;paint-order:stroke fill;stroke:#f8f4ea;stroke-width:7;stroke-linejoin:round}
 .w9-fifa-top{fill:currentColor;stroke:#f8f4ea;stroke-width:1.45}
 .w9-fifa-half-label{color:#473f35;font-size:29px;font-weight:790}
 .w9-fifa-evidence .w9-fifa-plot .w9-fifa-percent{font:650 136px/1 var(--serif);font-variant-numeric:lining-nums;letter-spacing:-.055em}

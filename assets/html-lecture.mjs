@@ -1,6 +1,6 @@
 import {clampSlide,scatterMarks,lineSegments,safeDeckReturn,studioDeckOpening} from './html-lecture-model.mjs?v=week9-beck-20261126';
 import {renderWeek8,bindWeek8} from './week08-visuals.mjs?v=marker-20261120';
-import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=w9-tokyo-group-20261127';
+import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=w9-fifa-poster-20261127';
 const $=s=>document.querySelector(s),params=new URLSearchParams(location.search),stage=$('[data-stage]'),surface=$('[data-surface]'),slide=$('[data-slide]'),viewer=$('.html-deck');
 const requestedWeek=Number(params.get('week')),week=[8,9].includes(requestedWeek)?requestedWeek:7;
 const allowedReturn=safeDeckReturn(params.get('return'),week);
@@ -55,7 +55,16 @@ function renderVisual(s){
  return '';
 }
 let viewportControl,ink;
-function resize(reset=false){if(!deck)return;const fit=Math.min(stage.clientWidth/1600,stage.clientHeight/900);surface.style.width=`${1600*fit}px`;surface.style.height=`${900*fit}px`;slide.style.transform=`scale(${fit})`;viewportControl.layout(1600*fit,900*fit,{reset});ink.rendered(deck.slides[page-1].annotationPage??page);}
+function resize(reset=false){
+ if(!deck)return;
+ const current=deck.slides[page-1],width=1600,height=current.canvasHeight??900;
+ stage.classList.toggle('is-tall-slide',height>900);
+ stage.style.setProperty('--lecture-slide-ratio',`${width} / ${height}`);
+ const fit=Math.min(stage.clientWidth/width,stage.clientHeight/height);
+ surface.style.width=`${width*fit}px`;surface.style.height=`${height*fit}px`;
+ slide.style.height=`${height}px`;slide.style.transform=`scale(${fit})`;
+ viewportControl.layout(width*fit,height*fit,{reset});ink.rendered(current.annotationPage??page);
+}
 function render(value=page,{url=true}={}){
  if(!deck)return;const next=clampSlide(value,deck.slides.length),changed=next!==page;page=next;const s=deck.slides[page-1];ink.loading();slide.className=`html-slide slide-${s.kind}`;slide.dataset.slideId=s.id;slide.innerHTML=renderVisual(s);slide.setAttribute('aria-label',`${page}. ${tr(s.title)}`);if(week===8)bindWeek8(slide,{s,data,ja:ja()});if(week===9)bindWeek9(slide,{s,ja:ja()});surface.hidden=false;$('[data-loading]').hidden=true;resize(changed);
  $('[data-page-input]').value=page;$('[data-page-input]').max=deck.slides.length;$('[data-page-total]').textContent=`/ ${deck.slides.length}`;$('[data-previous]').disabled=page===1;$('[data-next]').disabled=page===deck.slides.length;
@@ -91,7 +100,7 @@ async function start(){
   }
   const path=`content/slides/week${String(week).padStart(2,'0')}.json`;
   const load=async url=>{const response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('Unavailable');return response.json();};
-  [deck,data]=await Promise.all([load(week===9?`${path}?v=w9-tokyo-group-20261127`:path),week===9?null:load('data/week07-examples.json?v=20261112')]);
+  [deck,data]=await Promise.all([load(week===9?`${path}?v=w9-fifa-poster-20261127`:path),week===9?null:load('data/week07-examples.json?v=20261112')]);
   if(week===9)for(const item of deck.slides.slice(1,7).filter(item=>item.image)){
    const img=new Image();img.referrerPolicy='no-referrer';img.src=item.image;
   }

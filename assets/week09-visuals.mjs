@@ -14,11 +14,11 @@ export function fifaEvidence(rows=fifaSnapshot.rows) {
   }))};
 }
 
-function fifaPlot(ja) {
+function fifaPlot(ja,height=1160) {
   const {rows}=fifaSnapshot,{cut,halves}=fifaEvidence(rows);
   const start=164,end=1479;
   const x=pop=>start+Math.log10(pop/30000)/Math.log10(1600000000/30000)*(end-start);
-  const y=rank=>407+(rank-1)/210*349;
+  const y=rank=>407+(rank-1)/210*(height-540);
   const split=x(cut);
   const ticks=ja?['10万','100万','1,000万','1億','10億']:['100k','1m','10m','100m','1bn'];
   const label=(x,y,text,cls='',anchor='start')=>`<text class="${cls}" x="${x}" y="${y}" text-anchor="${anchor}">${esc(text)}</text>`;
@@ -37,8 +37,22 @@ function fifaPlot(ja) {
     </g>`;
   }).join('');
   const rates=halves.map(({teams,top})=>Math.round(top/teams*100));
+  const callouts=[
+    {code:'CPV',name:ja?'カーボベルデ':'Cabo Verde',dx:-116,dy:-39},
+    {code:'ISL',name:ja?'アイスランド':'Iceland',dx:-80,dy:56}
+  ].flatMap(({code,name,dx,dy})=>{
+    const row=rows.find(([team])=>team===code);
+    if(!row)return [];
+    const [,rank,pop]=row,px=x(pop),py=y(rank),lx=px+dx,ly=py+dy;
+    return [{name,rank,svg:`<g class="w9-fifa-callout" data-team="${code}">
+      <path class="w9-fifa-leader" d="M${lx+13} ${ly}H${lx+38}L${px} ${py}"/>
+      <circle class="w9-fifa-callout-point" cx="${px}" cy="${py}" r="8"/>
+      ${label(lx,ly+8,name,'w9-fifa-country-label','end')}
+    </g>`}];
+  });
   const alt=ja?`人口が少ない方の半分では${rates[0]}%、多い方の半分では${rates[1]}%が男子FIFA上位50位に入った。`:`Scatterplot: ${rates[0]}% of the less populous half and ${rates[1]}% of the more populous half rank in the FIFA men’s top 50.`;
-  return `<svg class="w9-fifa-plot" viewBox="0 0 1600 900" role="img" aria-label="${alt}">
+  const named=callouts.map(({name,rank})=>ja?`${name}${rank}位`:`${name} is ranked ${rank}`).join(ja?'、':'; ');
+  return `<svg class="w9-fifa-plot" viewBox="0 0 1600 ${height}" role="img" aria-label="${esc(alt+' '+named)}">
     ${[50,100,200].map(rank=>`<path class="w9-fifa-grid" d="M${start} ${y(rank)}H${end}"/>`).join('')}
     ${[1e5,1e6,1e7,1e8,1e9].map((pop,i)=>label(x(pop),y(211)+31,ticks[i],'w9-fifa-axis','middle')).join('')}
     ${totals}
@@ -47,7 +61,8 @@ function fifaPlot(ja) {
     ${label(start,386,ja?'男子FIFA順位':'FIFA men’s rank','w9-fifa-axis-title')}
     ${label(start-16,(y(1)+y(50))/2+6,ja?'上位50位':'Top 50','w9-fifa-band-label','end')}
     ${marks}
-    ${label((start+end)/2,833,ja?'人口（対数軸）':'Population (log scale)','w9-fifa-axis-title','middle')}
+    ${callouts.map(item=>item.svg).join('')}
+    ${label((start+end)/2,height-57,ja?'人口（対数軸）':'Population (log scale)','w9-fifa-axis-title','middle')}
     </svg>`;
 }
 
@@ -86,7 +101,7 @@ export function renderWeek9(slide,{ja=true}={}) {
     return `<section class="w9-fifa-drafts"><h1>${title}</h1><div>${slide.images.map((img,i)=>`<figure>${external(slide.sources[i].href,`<img src="${esc(img.src)}" alt="${esc(t(img.alt))}">`)}<figcaption>${esc(t(img.label))}</figcaption></figure>`).join('')}</div></section>`;
   }
   if(slide.kind==='fifa-evidence') {
-    return `<section class="w9-fifa-evidence"><h1>${title}</h1>${fifaPlot(ja)}<p class="w9-fifa-source">${ja?'第6班の公開データ：FIFA順位 2026年10月7日・人口 2025年':'Group 6 data · FIFA ranking 7 Oct 2026 · 2025 population'}</p></section>`;
+    return `<section class="w9-fifa-evidence"><h1>${title}</h1>${fifaPlot(ja,slide.canvasHeight)}<p class="w9-fifa-source">${ja?'第6班の公開データ：FIFA順位 2026年10月7日・人口 2025年':'Group 6 data · FIFA ranking 7 Oct 2026 · 2025 population'}</p></section>`;
   }
   if(slide.kind==='combined-route')return renderTubeSlide(slide,ja);
   if(slide.kind==='archive') {
