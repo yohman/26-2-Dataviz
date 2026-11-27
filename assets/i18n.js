@@ -1,6 +1,17 @@
 // English remains in each HTML page for searchability and no-JavaScript fallback.
 // Add or revise Japanese copy here; weekly dynamic content lives in site.js.
 window.COURSE_TRANSLATIONS = { ja: {
+  'WEEK 9': '第9週',
+  'One question.': '一つの問い。',
+  'One graphic.': '一つの図。',
+  'Open Week 9 →': '第9週を開く →',
+  'Two routes from Minami-Kashiwa to Tokyo Station': '南柏から東京駅までの二つの経路',
+  'Minami-Kashiwa': '南柏',
+  'Nishi-Nippori': '西日暮里',
+  'Tokyo Station': '東京駅',
+  'GSI basemap · MLIT railway data': '地理院タイル（加工）・国土数値情報 鉄道',
+  'One group graphic, one question': 'グループで一つの図、一つの問い',
+  'Finish your group graphic and its question title. One person submits for the group.': 'グループの図と、問いを使ったタイトルを仕上げる。代表者が1回提出する。',
   'WEEK 8': '第8週',
   'Open Week 8 →': '第8週を開く →',
   'Develop the group prototype': 'グループの試作を進める',
