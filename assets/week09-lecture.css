@@ -117,17 +117,27 @@ html[lang=en] .w9-commute-planner h1{font-size:58px;text-wrap:normal}
 .w9-commute-planner figure{margin:0}
 .w9-commute-planner img{display:block;width:100%;height:auto;box-shadow:0 3px 28px #59493727}
 .w9-commute-planner figcaption{margin-top:18px;color:#62584b;font:700 21px/1.3 var(--sans)}
+.commute-draft{margin-bottom:18px;color:var(--commute-gold,#86303f);font:800 22px/1.18 var(--sans)}
 .w9-commute,.w9-commute-schematic,.w9-commute-question{--commute-a:#8de0d0;--commute-b:#ffbd9d;--commute-gold:#f2d18e;height:100%;margin:0;background:#181f2a;color:#faf0df;position:relative}
 .w9-commute-schematic{display:grid;grid-template-columns:580px 1fr;align-items:center;gap:15px;padding:75px}
 .w9-commute-schematic h1{margin-bottom:46px}
 .w9-commute-schematic p{margin:18px 0;font:800 32px/1.2 var(--sans)}
 .commute-a{color:var(--commute-a)}
 .commute-b{color:var(--commute-b)}
-.w9-commute-question{display:grid;align-content:center;justify-items:start;gap:27px;padding:105px}
-.w9-commute-question strong{color:var(--commute-gold);font:650 193px/.93 var(--serif);letter-spacing:-.065em;font-variant-numeric:lining-nums}
-.w9-commute-question p{margin:0;font:750 39px/1.25 var(--sans)}
-.w9-commute-question h1{margin:0;font:650 72px/1.14 var(--serif);letter-spacing:-.034em}
+.w9-commute-question{display:grid;align-content:center;justify-items:start;gap:24px;padding:70px}
+.w9-commute-question .commute-draft{margin-bottom:0}
+.w9-commute-question p{margin:0;color:#d4c9b9;font:750 24px/1.25 var(--sans)}
+.w9-commute-question h1{margin:0;font:650 67px/1.1 var(--serif);letter-spacing:-.034em}
+.html-slide .commute-transfer-sketch{display:block;justify-self:center;width:min(100%,1060px);height:auto;margin:20px 0}
+.commute-transfer-sketch text{font:750 27px/1 var(--sans);fill:#f7ead6}
+.commute-transfer-sketch .commute-sketch-a{fill:var(--commute-a)}
+.commute-transfer-sketch .commute-sketch-wait{fill:var(--commute-gold)}
+.commute-transfer-sketch .commute-sketch-tick{fill:none;stroke:#9b9ca280;stroke-width:2;stroke-dasharray:4 7}
+.commute-transfer-sketch .commute-sketch-track{fill:none;stroke-width:9;stroke-linecap:round}
+.commute-sketch-track.commute-sketch-a{stroke:var(--commute-a)}
+.commute-sketch-track.commute-sketch-wait{stroke:var(--commute-gold);stroke-dasharray:2 22}
 .w9-commute header{position:absolute;top:50px;left:70px;right:74px;display:flex;align-items:center;justify-content:space-between}
+.w9-commute header .commute-draft{margin-bottom:8px;font-size:20px}
 .w9-commute h1{margin:0;font:650 66px/1.09 var(--serif);letter-spacing:-.047em}
 .w9-commute header p{margin:12px 0 0;color:#d4c9b9;font:700 26px/1.2 var(--sans)}
 .w9-commute time{color:var(--commute-gold);font:650 86px/1 var(--serif);letter-spacing:-.05em;font-variant-numeric:lining-nums tabular-nums}

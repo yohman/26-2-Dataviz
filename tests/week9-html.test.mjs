@@ -80,9 +80,14 @@ test('Tokyo opens with the real planner summary and stages the same-train race i
   assert.ok(fs.statSync(lead.image).size>10000);
   for(const ja of [true,false]){
     assert.match(renderWeek9(lead,{ja}),/transit\.yahoo\.co\.jp/);
+    assert.match(renderWeek9(lead,{ja}),ja?/1班・3つの案/:/One team, three drafts/);
     assert.match(renderWeek9(deck.slides.find(s=>s.id==='tokyo-schematic'),{ja}),/data-path="shared" d="M486 86 L353 159/);
-    assert.match(renderWeek9(deck.slides.find(s=>s.id==='tokyo-connection'),{ja}),/09:03/);
+    assert.match(renderWeek9(deck.slides.find(s=>s.id==='tokyo-schematic'),{ja}),ja?/案 B/:/Draft B/);
+    const clockDraft=renderWeek9(deck.slides.find(s=>s.id==='tokyo-connection'),{ja});
+    assert.match(clockDraft,ja?/案 C/:/Draft C/);
+    assert.match(clockDraft,/09:38[\s\S]*09:45[\s\S]*09:03/);
     const model=renderWeek9(deck.slides.find(s=>s.id==='tokyo-reveal'),{ja});
+    assert.match(model,ja?/経路＋地図＋時間軸/:/Route options \+ map \+ shared clock/);
     assert.match(model,/data-tokyo-play/);
     assert.match(model,/data-tokyo-scrub min="0" max="58" step="0.25" value="0" aria-valuetext="09:03"/);
     assert.match(model,/data-tokyo-walk-input min="4" max="16"/);

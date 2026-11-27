@@ -1,6 +1,6 @@
 import {fifaSnapshot} from './week09-fifa-data.mjs?v=20261127';
 import {renderTubeSlide,bindTubeSlide} from './week09-tube.mjs?v=night-race-tokyo-20261127';
-import {renderTokyo,bindTokyo} from './week09-tokyo-race.mjs?v=w9-scrub-chart-20261127';
+import {renderTokyo,bindTokyo} from './week09-tokyo-race.mjs?v=w9-tokyo-group-20261127';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const external=(href,body,attrs='')=>`<a href="${esc(href)}" target="_blank" rel="noopener noreferrer" ${attrs}>${body}</a>`;

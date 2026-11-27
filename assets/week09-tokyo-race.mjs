@@ -85,12 +85,23 @@ function chart(ja,walk){
       <text data-lane-arrival="b" x="${x(b)+17}" y="289" class="commute-arrival commute-b" visibility="hidden">${stamp(b)}</text>
     </svg>`;
 }
+function transferSketch(ja){
+  return `<svg class="commute-transfer-sketch" viewBox="0 0 1040 320" role="img" aria-label="${ja?'西日暮里の同じ7分間。片方は走る電車に乗り、もう片方は乗り換えて待つ。':'The same seven minutes at Nishi-Nippori: one rider stays on a moving train, the other transfers and waits.'}">
+    <text x="84" y="42">${stamp(T.nishi)}</text><text x="956" y="42" text-anchor="end">${stamp(T.board)}</text>
+    <path class="commute-sketch-tick" d="M84 61V282M956 61V282"/>
+    <text x="84" y="109" class="commute-sketch-a">${ja?'千代田線に乗ったまま':'Stay on the Chiyoda Line'}</text>
+    <path class="commute-sketch-track commute-sketch-a" d="M84 137H956"/>
+    <text x="84" y="221" class="commute-sketch-wait">${ja?'西日暮里で乗換・待ち':'Transfer and wait at Nishi-Nippori'}</text>
+    <path class="commute-sketch-track commute-sketch-wait" d="M84 249H956"/>
+    <text x="956" y="303" text-anchor="end" class="commute-sketch-wait">${T.board-T.nishi}${ja?'分':' min'}</text>
+  </svg>`;
+}
 export function renderTokyo(slide,ja){
   const title=esc(slide.title[ja?'ja':'en']);
-  if(slide.kind==='tokyo-planner')return `<section class="w9-commute-planner"><div><h1>${title}</h1><p>${ja?'「乗換0回」でも、東京駅まで歩く。':'Zero transfers can still mean a walk.'}</p></div><figure><a href="${esc(slide.sources[0].href)}" target="_blank" rel="noopener noreferrer"><img src="${esc(slide.image)}" alt="${esc(slide.alt[ja?'ja':'en'])}"></a><figcaption>Yahoo!路線情報 · ${ja?'検索結果の一覧（抜粋）':'Cropped search summary'}</figcaption></figure></section>`;
-  if(slide.kind==='tokyo-schematic')return `<section class="w9-commute-schematic"><div><h1>${title}</h1>${routeNames(ja).map((s,i)=>`<p class="commute-${i?'b':'a'}">${i?'◆':'●'} ${s}</p>`).join('')}</div>${routeMap(ja)}</section>`;
-  if(slide.kind==='tokyo-question')return `<section class="w9-commute-question"><strong>${stamp(0)}</strong><p>${ja?'二人とも南柏から同じ電車に乗る。':'Same train out of Minami-Kashiwa.'}</p><h1>${title}</h1></section>`;
-  return `<section class="w9-commute" data-tokyo-race><header><div><h1>${title}</h1><p>${ja?'ゴール：東京駅 丸の内北口付近':'Finish: the Marunouchi North Gate area'}</p></div><time data-tokyo-clock aria-hidden="true">${stamp(0)}</time></header>
+  if(slide.kind==='tokyo-planner')return `<section class="w9-commute-planner"><div><div class="commute-draft">${ja?'1班・3つの案 ／ A　経路を比べる':'One team, three drafts / A · List the options'}</div><h1>${title}</h1><p>${ja?'「乗換0回」でも、東京駅まで歩く。':'Zero transfers can still mean a walk.'}</p></div><figure><a href="${esc(slide.sources[0].href)}" target="_blank" rel="noopener noreferrer"><img src="${esc(slide.image)}" alt="${esc(slide.alt[ja?'ja':'en'])}"></a><figcaption>Yahoo!路線情報 · ${ja?'検索結果の一覧（抜粋）':'Cropped search summary'}</figcaption></figure></section>`;
+  if(slide.kind==='tokyo-schematic')return `<section class="w9-commute-schematic"><div><div class="commute-draft">${ja?'案 B　地図にする':'Draft B · Map the routes'}</div><h1>${title}</h1>${routeNames(ja).map((s,i)=>`<p class="commute-${i?'b':'a'}">${i?'◆':'●'} ${s}</p>`).join('')}</div>${routeMap(ja)}</section>`;
+  if(slide.kind==='tokyo-question')return `<section class="w9-commute-question"><div class="commute-draft">${ja?'案 C　時間を並べる':'Draft C · Put both on one clock'}</div><h1>${title}</h1>${transferSketch(ja)}<p>${ja?`同じ出発：南柏 ${stamp(0)}　　同じゴール：東京駅 丸の内北口`:`Same start: Minami-Kashiwa ${stamp(0)}　　Same finish: Marunouchi North Gate`}</p></section>`;
+  return `<section class="w9-commute" data-tokyo-race><header><div><div class="commute-draft">${ja?'班の改訂案　経路＋地図＋時間軸':'Group redesign · Route options + map + shared clock'}</div><h1>${title}</h1><p>${ja?'ゴール：東京駅 丸の内北口付近':'Finish: the Marunouchi North Gate area'}</p></div><time data-tokyo-clock aria-hidden="true">${stamp(0)}</time></header>
     <div class="w9-commute-graphic">${geographicMap(ja)}<div class="commute-chart"><div data-tokyo-chart>${chart(ja,T.defaultWalk)}</div><label class="commute-scrubber"><span>${ja?'時刻をドラッグ':'Drag to scrub'}</span><input type="range" data-tokyo-scrub min="0" max="${tokyoRace().duration}" step="0.25" value="0" aria-valuetext="${stamp(0)}"></label></div><div class="commute-phase" aria-hidden="true"><span class="commute-a" data-commute-a></span><span class="commute-b" data-commute-b></span></div></div>
     <div class="w9-commute-control"><button type="button" data-tokyo-play>${ja?'▶ 再生':'▶ Play race'}</button><label>${ja?'大手町からの徒歩':'Walk from Ōtemachi'} <output data-tokyo-walk>${T.defaultWalk} ${ja?'分':'min'}</output><input type="range" data-tokyo-walk-input min="4" max="16" value="${T.defaultWalk}"></label><p data-tokyo-result aria-live="polite"></p></div>
     <footer>${ja?'2026年12月の平日時刻表。徒歩は試算。':'Dec. 2026 weekday timetable. Walking times are estimates.'}</footer>
