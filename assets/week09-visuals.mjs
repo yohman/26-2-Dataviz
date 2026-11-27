@@ -142,7 +142,7 @@ export function renderWeek9(slide,{ja=true,seating=null}={}) {
     return `<section class="w9-seating-chart"><header><h1>${title}</h1><p>${ja?'16班・63人':'16 groups · 63 students'}</p></header>
       <div class="w9-room-front">${ja?'黒板・スクリーン（教室の前方）':'Board / screen (front of the room)'}</div>
       <div class="w9-seat-grid">${slide.groups.map(([number,en,jp])=>`<article class="w9-seat-card" data-group="${number}"><p>${ja?`第${number}班`:`GROUP ${String(number).padStart(2,'0')}`}</p><h2>${esc(ja?jp:en)}</h2>
-      ${names(number).length?`<ul>${names(number).map(name=>`<li>${esc(name)}</li>`).join('')}</ul>`:''}</article>`).join('')}
+      ${names(number).length?`<ul>${names(number).map(name=>`<li>${esc(t(name))}</li>`).join('')}</ul>`:''}</article>`).join('')}
       <p class="w9-seat-open">${ja?'空き机':'Open desks'}</p></div></section>`;
   }
   if(slide.kind==='activity'||slide.kind==='homework') {

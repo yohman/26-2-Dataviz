@@ -1,6 +1,6 @@
 import {clampSlide,scatterMarks,lineSegments,safeDeckReturn,studioDeckOpening} from './html-lecture-model.mjs?v=week9-beck-20261126';
 import {renderWeek8,bindWeek8} from './week08-visuals.mjs?v=marker-20261120';
-import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=w9-data-hover-20261127';
+import {renderWeek9,bindWeek9} from './week09-visuals.mjs?v=w9-seating-en-20261127';
 const $=s=>document.querySelector(s),params=new URLSearchParams(location.search),stage=$('[data-stage]'),surface=$('[data-surface]'),slide=$('[data-slide]'),viewer=$('.html-deck');
 const requestedWeek=Number(params.get('week')),week=[8,9].includes(requestedWeek)?requestedWeek:7;
 const allowedReturn=safeDeckReturn(params.get('return'),week);
@@ -8,6 +8,8 @@ const returnParams=new URL(allowedReturn,location.href).searchParams;
 const preview=['127.0.0.1','localhost','[::1]'].includes(location.hostname)||params.has('p')||returnParams.has('p');
 const deckReturn=()=>week===9&&params.has('p')&&!returnParams.has('p')?'agenda.html?p#week-9':allowedReturn;
 let lang='ja';try{lang=localStorage.getItem('dv-language')==='en'?'en':'ja';}catch{}
+const linkedLanguage=params.get('lang');
+if(linkedLanguage==='en'||linkedLanguage==='ja')lang=linkedLanguage;
 let deck,data,page=1,zoom=1,layoutFrame;
 const tr=v=>typeof v==='string'?v:v?.[lang]||'',ja=()=>lang==='ja',esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),number=v=>new Intl.NumberFormat(lang).format(v);
 const colors={Asia:'#b88631',Europe:'#64805c',Americas:'#ad3d50',Africa:'#85617d',Oceania:'#4e7d84'},countryColors=['#ad3d50','#b88631','#4e7d84','#64805c','#85617d'];
@@ -75,7 +77,7 @@ function render(value=page,{url=true}={}){
   edit.textContent=ja()?'スライドを編集':'Edit slides';edit.hidden=false;
  }
  $('[data-notes]').hidden=false;$('[data-notes-heading]').textContent=ja()?`スライドノート · ${page}`:`Slide notes · ${page}`;$('[data-notes-text]').textContent=tr(s.notes);$('[data-sources]').innerHTML=(s.sources||[]).map(source=>{const u=new URL(source.href,location.href),external=u.origin!==location.origin;return `<a href="${esc(u.href)}"${external?' target="_blank" rel="noopener"':''}>${esc(tr(source.label))} ↗</a>`;}).join('');
- const pageHref=(key,value)=>`?week=${week}&${key}=${encodeURIComponent(value)}&return=${encodeURIComponent(deckReturn())}`;
+ const pageHref=(key,value)=>`?week=${week}&${key}=${encodeURIComponent(value)}&return=${encodeURIComponent(deckReturn())}${params.has('lang')?`&lang=${lang}`:''}`;
  const chapters=deck.chapters?.map(c=>({p:deck.slides.findIndex(s=>s.id===c.id)+1,label:tr(c.label)}))||[{p:1,label:ja()?'講義 · 20分':'Lecture · 20 min'},{p:13,label:ja()?'活動1':'Activity 1'},{p:14,label:ja()?'活動2':'Activity 2'},{p:15,label:ja()?'活動3':'Activity 3'},{p:16,label:ja()?'宿題':'Homework'}];
  $('[data-chapters]').innerHTML=chapters.map(c=>`<a href="${esc(pageHref('page',c.p))}" data-go="${c.p}" aria-current="${page===c.p}">${esc(c.label)}</a>`).join('');
  $('[data-toc-title]').textContent=ja()?'スライド一覧':'Slides';
@@ -100,7 +102,7 @@ async function start(){
   }
   const path=`content/slides/week${String(week).padStart(2,'0')}.json`;
   const load=async url=>{const response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('Unavailable');return response.json();};
-  [deck,data,seating]=await Promise.all([load(week===9?`${path}?v=w9-reveals-midterm-20261127`:path),week===9?null:load('data/week07-examples.json?v=20261112'),week===9?load('data/week09-seating.json').catch(()=>null):null]);
+  [deck,data,seating]=await Promise.all([load(week===9?`${path}?v=w9-reveals-midterm-20261127`:path),week===9?null:load('data/week07-examples.json?v=20261112'),week===9?load('data/week09-seating.json?v=bilingual-20261127').catch(()=>null):null]);
   if(week===9)for(const item of deck.slides.filter((item,i)=>item.image&&((i>0&&i<7)||item.kind==='studio-opening'))){
    const img=new Image();img.referrerPolicy='no-referrer';img.src=item.image;
   }
@@ -112,7 +114,7 @@ async function start(){
  }catch(error){console.error(error);$('[data-loading]').className='lecture-load-error';$('[data-loading]').textContent=ja()?'スライドを読み込めませんでした。再読み込みしてください。':'Could not load the slides. Please reload.';}
 }
 const forward=()=>{if(!advanceBuild?.())render(page+1);};
-$('[data-previous]').onclick=()=>render(page-1);$('[data-next]').onclick=forward;$('[data-page-input]').onchange=e=>render(e.target.value);$('[data-page-input]').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();render(e.target.value);e.target.blur();}};$('[data-language-toggle]').onclick=()=>{lang=ja()?'en':'ja';try{localStorage.setItem('dv-language',lang);}catch{}render();};
+$('[data-previous]').onclick=()=>render(page-1);$('[data-next]').onclick=forward;$('[data-page-input]').onchange=e=>render(e.target.value);$('[data-page-input]').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();render(e.target.value);e.target.blur();}};$('[data-language-toggle]').onclick=()=>{lang=ja()?'en':'ja';if(params.has('lang'))params.set('lang',lang);try{localStorage.setItem('dv-language',lang);}catch{}render();};
 $('[data-fullscreen]').onclick=toggleFullscreen;$('[data-zoom-in]').onclick=()=>viewportControl?.zoomTo(zoom*1.2);$('[data-zoom-out]').onclick=()=>viewportControl?.zoomTo(zoom/1.2);$('[data-zoom-reset]').onclick=()=>viewportControl?.fit();
 $('[data-toc]').onclick=()=>{if($('[data-toc-dialog]').open)$('[data-toc-dialog]').close();else $('[data-toc-dialog]').showModal();};
 $('[data-toc-close]').onclick=()=>$('[data-toc-dialog]').close();

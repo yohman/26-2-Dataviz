@@ -224,7 +224,7 @@ test('the final slide and Week 10 guidelines tell the same design journey and li
   assert.match(midterm,/submission_closes_at: 2026-12-04T00:00:00\+09:00/);
 });
 
-test('the public seating chart has sixteen themed groups and 63 names without student IDs',()=>{
+test('the public seating chart keeps sixteen themed groups and localizes all 63 names',()=>{
   const slide=deck.slides.find(s=>s.id==='studio-seating');
   const numbers=[1,2,3,4,5,6,7,8,9,10,11,12,13,15,16,17];
   assert.deepEqual(slide.groups.map(([n])=>n),numbers);
@@ -232,11 +232,17 @@ test('the public seating chart has sixteen themed groups and 63 names without st
   const seating=JSON.parse(fs.readFileSync('data/week09-seating.json','utf8'));
   assert.deepEqual(Object.keys(seating).map(Number),numbers);
   assert.equal(Object.values(seating).flat().length,63);
-  assert.ok(Object.values(seating).flat().every(name=>typeof name==='string'&&!/\d{6,}/.test(name)));
+  assert.ok(Object.values(seating).flat().every(({ja,en})=>typeof ja==='string'&&typeof en==='string'&&/^[\p{Script=Latin}\p{M}\p{P} ]+$/u.test(en)&&!/\d{6,}/.test(ja)));
   const pub=renderWeek9(slide,{ja:false,seating});
-  const classroom=renderWeek9(slide,{ja:false,seating:{1:['Example <Private>']}});
+  const japanese=renderWeek9(slide,{ja:true,seating});
+  const classroom=renderWeek9(slide,{ja:false,seating:{1:[{ja:'例',en:'Example <Private>'}]}});
   assert.equal((pub.match(/data-group=/g)||[]).length,16);
   assert.equal((pub.match(/<li>/g)||[]).length,63);
+  assert.equal((japanese.match(/<li>/g)||[]).length,63);
+  assert.match(pub,/<li>Kurokawa Outa<\/li>/);
+  assert.match(japanese,/<li>黒川 旺汰<\/li>/);
+  assert.match(pub,/<li>Tim von Scharpen<\/li>/);
+  assert.match(japanese,/<li>Tim von Scharpen<\/li>/);
   assert.doesNotMatch(pub,/\d{6,}|Example/);
   assert.match(classroom,/Example &lt;Private&gt;/);
   assert.match(fs.readFileSync('.gitignore','utf8'),/week09-seating\.local\.json/);
