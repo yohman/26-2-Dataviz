@@ -50,7 +50,7 @@ test('historical sources, bilingual slides, chapters and homework render in the 
     assert.match(combined,/data-tube-play/);
     assert.match(combined,/data-chart-rail/);
     const missing=renderWeek9(deck.slides.find(s=>s.id==='fifa-missing'),{ja});
-    assert.match(missing,/week09-fifa-axis-detail\.webp/);
+    assert.match(missing,/week09-fifa-scatter\.webp/);
     assert.match(missing,ja?/100万人未満.*約300万人/:/under 1 million.*about 3 million/);
     assert.match(combined,/www\.openstreetmap\.org\/copyright/);
   }
@@ -84,6 +84,8 @@ test('Tokyo opens with the real planner summary and stages the same-train race i
     assert.match(renderWeek9(deck.slides.find(s=>s.id==='tokyo-connection'),{ja}),/09:03/);
     const model=renderWeek9(deck.slides.find(s=>s.id==='tokyo-reveal'),{ja});
     assert.match(model,/data-tokyo-play/);
+    assert.match(model,/data-tokyo-scrub min="0" max="58" step="0.25" value="0" aria-valuetext="09:03"/);
+    assert.match(model,/data-tokyo-walk-input min="4" max="16"/);
     assert.match(model,/week09-tokyo-commute-map\.webp/);
     assert.match(model,/data-tokyo-camera[^>]+viewBox="0 0 625 535"/);
     assert.match(model,/data-map-wait/);
@@ -104,6 +106,18 @@ test('Tokyo opens with the real planner summary and stages the same-train race i
   assert.equal(geographicStops.length,4);
   assert.match(geographicPaths.shared,/^M515\.53 48\.61L.*L126\.41 336\.27$/);
   assert.ok(geographicPaths.yamanote.split('L').length>10);
+});
+
+test('the FIFA draft inspection shows the entire original chart and still highlights 3 million',()=>{
+  const full=deck.slides.find(s=>s.id==='fifa-drafts').images[1].src;
+  const slide=deck.slides.find(s=>s.id==='fifa-missing');
+  assert.equal(slide.image,full);
+  for(const ja of [true,false]){
+    const html=renderWeek9(slide,{ja});
+    assert.match(html,/week09-fifa-scatter\.webp/);
+    assert.match(html,/viewBox="0 0 1879 1120"/);
+    assert.match(html,/cx="112" cy="921"/);
+  }
 });
 
 test('Tokyo map closes in at the transfer and holds both downtown routes through the finish',()=>{

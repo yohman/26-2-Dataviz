@@ -148,6 +148,7 @@ html[lang=en] .w9-commute-planner h1{font-size:58px;text-wrap:normal}
 .commute-map-camera .commute-map-shared{stroke:#d7e1e0}
 .commute-map-camera .commute-map-street,.commute-map-camera .commute-map-exit{stroke-width:calc(4px / var(--commute-map-scale));stroke-dasharray:calc(1px / var(--commute-map-scale)) calc(5px / var(--commute-map-scale))}
 .commute-map-camera text{font-size:calc(27px / var(--commute-map-scale));stroke-width:calc(6px / var(--commute-map-scale))}
+.commute-map-camera .commute-ote-label{font-size:calc(23px / var(--commute-map-scale))}
 .commute-map-camera .commute-mode{font-size:calc(18px / var(--commute-map-scale))}
 .w9-commute-map .commute-map-compass,.w9-commute-geographic .commute-map-credit{color:#bfc1c1;font-size:15px;font-weight:750;stroke-width:4}
 .commute-wait-ring,.commute-wait-leader,.commute-wait-caption{visibility:hidden}
@@ -165,6 +166,14 @@ html[lang=en] .w9-commute-planner h1{font-size:58px;text-wrap:normal}
 .commute-racer-a:not(.commute-a),.commute-racer-b:not(.commute-b){filter:drop-shadow(0 0 6px #fff8)}
 .w9-commute-map .is-transferring{fill:var(--commute-gold);stroke:#181f2a;stroke-width:2}
 .w9-commute-timeline{overflow:visible}
+.commute-chart{position:relative;min-width:0}
+.commute-scrubber{--scrub-span:72.13%;position:absolute;top:0;left:5.76923%;width:var(--scrub-span);color:#e0d7c7;font:750 19px/1 var(--sans)}
+.commute-scrubber input{appearance:none;display:block;margin:0 0 0 -10px;width:calc(100% + 20px);height:34px;padding:0;background:transparent;cursor:ew-resize;touch-action:none}
+.commute-scrubber input::-webkit-slider-runnable-track{height:3px;background:#d9dfdf59;border-radius:2px}
+.commute-scrubber input::-moz-range-track{height:3px;background:#d9dfdf59;border-radius:2px}
+.commute-scrubber input::-webkit-slider-thumb{appearance:none;width:20px;height:20px;margin-top:-8.5px;border:3px solid #181f2a;border-radius:50%;background:var(--commute-gold);box-shadow:0 0 0 1px var(--commute-gold)}
+.commute-scrubber input::-moz-range-thumb{box-sizing:border-box;width:20px;height:20px;border:3px solid #181f2a;border-radius:50%;background:var(--commute-gold);box-shadow:0 0 0 1px var(--commute-gold)}
+.commute-scrubber input:focus-visible{outline:2px solid var(--commute-gold);outline-offset:3px}
 .w9-commute-timeline [class^="commute-time-"]{fill:none;stroke-width:9;stroke-linecap:round}
 .commute-time-change{stroke:var(--commute-gold);stroke-dasharray:3 11}
 .commute-tick{fill:none;stroke:#a1a7ad43;stroke-width:1}
@@ -179,12 +188,12 @@ html[lang=en] .w9-commute-planner h1{font-size:58px;text-wrap:normal}
 .w9-commute-control input{display:block;width:100%;accent-color:var(--commute-a);cursor:ew-resize}
 .w9-commute-control p{margin:0;color:var(--commute-gold);font-size:26px}
 .w9-commute footer{position:absolute;bottom:25px;right:74px;color:#c2bcae;font:700 18px/1.2 var(--sans)}
-.w9-fifa-missing{height:100%;display:grid;grid-template-columns:680px 1fr;align-items:center;gap:55px;padding:76px 60px 76px 76px;background:#f4edde;color:#29251d}
-.w9-fifa-missing h1{margin:0;color:#86303f;font:650 79px/1.04 var(--serif);letter-spacing:-.05em;text-wrap:balance}
-html[lang=ja] .w9-fifa-missing h1{font-size:67px;line-height:1.16}
-.w9-fifa-missing-copy p{max-width:590px;margin:23px 0 0;font:700 30px/1.37 var(--sans)}
+.w9-fifa-missing{height:100%;display:grid;grid-template-columns:370px minmax(0,1fr);align-items:center;gap:38px;padding:56px 44px 56px 56px;background:#f4edde;color:#29251d}
+.w9-fifa-missing h1{margin:0;color:#86303f;font:650 61px/1.04 var(--serif);letter-spacing:-.05em;text-wrap:balance}
+html[lang=ja] .w9-fifa-missing h1{font-size:56px;line-height:1.16}
+.w9-fifa-missing-copy p{margin:23px 0 0;font:700 26px/1.37 var(--sans)}
 .w9-fifa-missing-copy p strong{font-weight:850;color:#86303f;white-space:nowrap}
-.w9-fifa-missing-copy p:last-child{margin-top:37px;padding-top:25px;border-top:1px solid #b69c83;color:#55463e;font-size:25px}
+.w9-fifa-missing-copy p:last-child{margin-top:27px;padding-top:19px;border-top:1px solid #b69c83;color:#55463e;font-size:22px}
 .w9-fifa-missing figure{margin:0;position:relative;min-width:0}
 .w9-fifa-missing figure a{display:block}
 .w9-fifa-missing figure img{display:block;width:100%;height:auto}

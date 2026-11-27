@@ -130,8 +130,8 @@
       "annotationPage":18,
       "title":{"en":"Two teams, off the chart","ja":"図にいない二つのチーム"},
       "subtitle":{"en":"If we widen the view, can we tell how the two teams compare with everyone else?","ja":"表示範囲を広げたら、この二つのチームを他の国とどう比べられる？"},
-      "image":"assets/images/lecture/week09-fifa-axis-detail.webp",
-      "alt":{"en":"Detail of Group 6’s original scatterplot. The first visible tick on the population axis is 3 million, highlighted by a dashed red line.","ja":"第6班が作った散布図の左端。表示されている人口軸の最初の目盛り、300万人に赤い破線を引いた。"},
+      "image":"assets/images/lecture/week09-fifa-scatter.webp",
+      "alt":{"en":"Group 6’s full original scatterplot. The first visible tick on the population axis is 3 million, highlighted by a dashed red line.","ja":"第6班が作った散布図の全体。表示されている人口軸の最初の目盛り、300万人に赤い破線を引いた。"},
       "notes":{"en":"In the displayed draft, the population axis starts around 3 million. Iceland and Cabo Verde each have fewer than 1 million residents. This screenshot does not tell us whether the original data includes them. To compare them with other teams, extend the range, show comparable observations from the same ranking date, and label the examples directly. The next slide states one question a wider view can answer.","ja":"表示されている案の人口軸は約300万人から始まる。アイスランドとカーボベルデの人口はいずれも100万人未満。この画像だけでは元データに両国が含まれるかは分からない。他のチームと比べるには、表示範囲を広げ、同じ時点のランキングを使い、注目する国に直接ラベルを付ける。次のスライドで、その図から答えられる問いを一つ示す。"},
       "sources":[{"label":"Week 8 gallery · Group 6’s original scatterplot","href":"gallery-work.html?id=8-442&week=8"}]
     },
