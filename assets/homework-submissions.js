@@ -6,6 +6,7 @@
   const isIndividualRevision=week===8;
   const isStudioRevision=week===9;
   const isMidterm=week===10;
+  const teammateSlots=[2,3,4];
   const label=(el,ja,en)=>{
     el.querySelector('[data-course-lang="ja"]').textContent=ja;
     el.querySelector('[data-course-lang="en"]').textContent=en;
@@ -32,9 +33,16 @@
   if(isMidterm) {
     const hint=document.querySelector('#homework-week-note');
     label(document.querySelector('main h1'),'中間発表の作品を提出する','Submit your midterm graphic');
-    label(hint,'代表者が、班の最終版の図を1枚提出します。学籍番号と氏名は代表者のものを入力してください。Googleスライドを添える場合は、教員が閲覧できる設定にしてください。',
-      'One representative submits one final graphic for the group. Enter the representative’s own ID and name. If you add a Google Slides link, make sure the instructor can view it.');
+    label(hint,'代表者が班の最終版の図を1枚提出します。学生1に代表者の学籍番号と氏名を入力してください。学生2〜4とGoogleスライドのリンクは任意です。',
+      'One representative submits one final graphic. Enter the representative’s ID and name as Student 1. Students 2–4 and the Google Slides link are optional.');
     hint.hidden=false;
+    label(document.querySelector('#homework-privacy'),
+      '代表者の氏名・作品・説明・リンクはギャラリーに公開されます。他のメンバーの氏名とすべての学籍番号は非公開です。画像や説明に個人情報・APIキーを含めないでください。',
+      'The submitter’s name, work, explanation, and links will be public in the gallery. Teammate details and all student IDs stay private. Remove private information and API keys from your work.');
+    label(document.querySelector('#homework-identity legend'),'班のメンバー','Group members');
+    document.querySelector('#midterm-student-1').hidden=false;
+    document.querySelector('#midterm-members').hidden=false;
+    for(const slot of teammateSlots)for(const key of ['studentId','studentName'])form.elements[key+slot].disabled=false;
     label(form.elements.title.labels[0],'作品タイトル（問いの形で）','Your inquiry as a title');
     label(form.elements.description.labels[0],'班名を冒頭に書く。何を組み合わせ、最終版のどこから問いの答えが読み取れるかを短く説明する。',
       'Start with your group name. Briefly explain what you combined and where the final graphic answers your question.');
@@ -80,6 +88,11 @@
     try {
       const fields=['studentId','studentName','title','tools','projectUrl','notebookUrl','description'];
       const body=Object.fromEntries(fields.map(key=>[key,form.elements[key].value.trim()])); body.week=week;
+      // The Worker keeps these in the private revision record, not the gallery item.
+      if(isMidterm)body.teammates=teammateSlots.map(slot=>({
+        studentId:form.elements['studentId'+slot].value.trim(),
+        studentName:form.elements['studentName'+slot].value.trim()
+      })).filter(member=>member.studentId||member.studentName);
       const savedKey=`dataviz-revision-${week}-${body.studentId.toLowerCase()}`;
       body.revisionToken=form.elements.revisionCode.value.trim() || localStorage.getItem(savedKey) || crypto.randomUUID();
       localStorage.setItem(savedKey,body.revisionToken);

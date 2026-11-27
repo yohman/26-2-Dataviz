@@ -46,19 +46,44 @@ test('gallery pagination retrieves more than 1000 works without truncation',asyn
     assert.equal(items.length,1005);assert.equal(new Set(items.map(i=>i.imageIndex)).size,1005);
   }finally{db.close();}
 });
-test('the midterm uses the class form to store one final image with or without a Slides link',async()=>{
+test('the midterm saves up to three optional teammates privately and accepts a blank Slides link',async()=>{
   const {db,env}=fixture();
   try {
     db.prepare('INSERT INTO week_schedule VALUES(?,?,?,?)').run(10,'Midterm',0,Date.now()+3600000);
     const slides='https://docs.google.com/presentation/d/example-deck/edit';
-    const entry={...body,week:10,notebookUrl:slides,requestId:crypto.randomUUID()};
+    const teammates=[
+      {studentId:'24680000',studentName:'Teammate Two'},
+      {studentId:'24680001',studentName:'Teammate Three'},
+      {studentId:'',studentName:'Teammate Four'},
+    ];
+    const entry={...body,week:10,notebookUrl:slides,teammates,requestId:crypto.randomUUID()};
     assert.equal((await worker.fetch(request('/homework?week=10','POST',entry),env)).status,201);
     const gallery=()=>worker.fetch(new Request('https://test/gallery'),env).then(r=>r.json());
-    const [{imageCount,notebookUrl}]=(await gallery()).items;
-    assert.equal(imageCount,1);assert.equal(notebookUrl,slides);
-    assert.equal((await worker.fetch(request('/homework?week=10','POST',{...entry,notebookUrl:'',requestId:crypto.randomUUID()}),env)).status,201);
+    const [published]=(await gallery()).items;
+    assert.equal(published.imageCount,1);assert.equal(published.notebookUrl,slides);
+    assert.equal(published.studentName,body.studentName);
+    assert.doesNotMatch(JSON.stringify(published),/teammates|Teammate|2468000/);
+    const privateRecord=({requestId})=>JSON.parse(db.prepare('SELECT private_json FROM submission_revisions WHERE request_id=?').get(requestId).private_json);
+    assert.deepEqual(privateRecord(entry).teammates,teammates);
+    const single={...entry,teammates:[],notebookUrl:'',requestId:crypto.randomUUID()};
+    assert.equal((await worker.fetch(request('/homework?week=10','POST',single),env)).status,201);
+    assert.deepEqual(privateRecord(single).teammates,[]);
     assert.equal((await gallery()).items[0].notebookUrl,'');
   } finally {db.close();}
+});
+test('midterm has four student slots and keeps the Slides field optional',()=>{
+  const html=fs.readFileSync('homework-submit.html','utf8');
+  const input=key=>html.match(new RegExp(`<input name="${key}"[^>]*>`))?.[0]||'';
+  for(const key of ['studentId','studentName']){
+    assert.match(input(key),/\brequired\b/);
+    for(const slot of [2,3,4]){
+      assert.match(input(key+slot),/\bdisabled\b/);
+      assert.doesNotMatch(input(key+slot),/\brequired\b/);
+    }
+  }
+  assert.match(input('notebookUrl'),/type="url"/);
+  assert.doesNotMatch(input('notebookUrl'),/\brequired\b/);
+  assert.match(fs.readFileSync('assets/homework-submissions.js','utf8'),/if\(isMidterm\)body\.teammates=teammateSlots/);
 });
 test('active client, homework links and snapshot job have no Apps Script dependency',()=>{
   for(const path of ['assets/site.js','assets/homework-submissions.js','scripts/sync-gallery.mjs'])assert.doesNotMatch(fs.readFileSync(path,'utf8'),/script\.google\.com|docs\.google\.com\/forms|JSONP|courseGalleryReceive/);

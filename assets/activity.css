@@ -16,6 +16,10 @@ body:has(.activity-main):not(.homework-page) .site-nav{display:flex}
 .homework-page .activity-form fieldset{min-width:0;margin:0;padding:1.3rem 0 0;border:0;border-top:1px solid var(--line);display:grid;gap:1.3rem}
 .homework-page .activity-form legend{padding:0 .7rem 0 0;font:700 1.05rem var(--sans)}
 .form-identity{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.midterm-student-label,.midterm-student>p{margin:0;font-size:.88rem;font-weight:750}
+.homework-page #homework-identity:has(#midterm-members:not([hidden])){gap:.7rem}
+#midterm-members{display:grid;gap:1rem;margin-top:.35rem}
+.midterm-student{display:grid;min-width:0;gap:.45rem;padding-top:.85rem;border-top:1px solid var(--line)}
 .homework-page .activity-form label{font-size:.85rem;line-height:1.6;gap:.5rem}
 .homework-page .activity-form label:has([required])>[data-course-lang]::after{content:" *";color:#b52f42;font-weight:800}
 .form-required-note{margin:0;font-size:.75rem;color:var(--muted)}
